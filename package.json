@@ -1,7 +1,19 @@
 {
   "name": "decentverse",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "license": "MIT",
+  "author": {
+    "name": "bassman",
+    "email": "bassman@akamir.com",
+    "url": "https://akamir.com"
+  },
+  "contributors": [],
+  "homepage": "https://github.com/akamir-bassman/decentverse",
+  "repository": {
+    "url": "https://github.com/akamir-bassman/decentverse",
+    "type": "git",
+    "directory": "libs/decentverse"
+  },
   "scripts": {
     "start": "nx serve",
     "build": "nx build",

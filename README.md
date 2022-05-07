@@ -24,10 +24,8 @@ await decentverse.init();
 
 ## Collaborators
 
-The project is operating by [Akamir](https://akamir.com), a NFT community to build decentralized content platform, and [DSC](https://dogesound.club), the first Klaytn-based NFT community in the world.
+The project is operating by [Akamir](https://akamir.com), a NFT community to build decentralized content platform, and [Doge Sound Club](https://dogesound.club), the first Klaytn-based NFT community in the world.
+
+To contribute this project, contact bassman#4247 in [Akamir](https://discord.gg/sQs9uEKQed)
 
 <p style="text-align: center;"><img src="https://lh3.googleusercontent.com/36j7nOlkOhcY8r6vbBhpYIlDOhp7Tx1XT6ukcpPZ4-TsYz7_lzFS4ODDdZFMy5N9Z20z2eJpEdUuJw1e6kk16FlTg9D8VsKvb3GD=s0"></p>
-
-[Akamir](https://discord.gg/sQs9uEKQed)
-
-[Doge-Sound-Club](https://discord.gg/79CqdTdu8w)
