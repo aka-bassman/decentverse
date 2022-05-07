@@ -1,6 +1,6 @@
 {
   "name": "decentverse",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "type": "commonjs",
   "license": "MIT",
   "author": {
@@ -14,5 +14,13 @@
     "url": "https://github.com/akamir-bassman/decentverse",
     "type": "git",
     "directory": "libs/decentverse"
-  }
+  },
+  "keywords": [
+    "metaverse",
+    "real-time",
+    "community",
+    "web3",
+    "NFT",
+    "decentralized"
+  ]
 }
