@@ -15,9 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@decentverse/client": ["libs/client/src/index.ts"],
-      "@decentverse/common": ["libs/common/src/index.ts"],
-      "@decentverse/server": ["libs/server/src/index.ts"]
+      "decentverse": ["libs/decentverse/src/index.ts"],
+      "reactverse": ["libs/reactverse/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

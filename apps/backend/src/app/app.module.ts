@@ -4,11 +4,9 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { join } from "path";
 
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { app } from "@decentverse/server";
 import { ScheduleModule } from "@nestjs/schedule";
-import * as modules from "./modules";
+// import * as modules from "./modules";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,8 +49,6 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
     //   inject: [ConfigService],
     // }),
     ScheduleModule.forRoot(),
-    app.AwsModule,
-    modules.RtModule,
   ],
   controllers: [],
   providers: [],

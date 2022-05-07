@@ -2,8 +2,7 @@
   "version": 2,
   "projects": {
     "backend": "apps/backend",
-    "client": "libs/client",
-    "common": "libs/common",
-    "server": "libs/server"
+    "decentverse": "libs/decentverse",
+    "reactverse": "libs/reactverse"
   }
 }

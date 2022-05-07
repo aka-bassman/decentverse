@@ -7,6 +7,7 @@ import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import { AppModule } from "./app/app.module";
+import { Decentverse } from "decentverse";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,8 @@ async function bootstrap() {
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
+  const decentverse = new Decentverse({ url: "redis://localhost:6379" });
+  await decentverse.init();
 }
 
 bootstrap();
