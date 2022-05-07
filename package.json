@@ -14,6 +14,14 @@
     "type": "git",
     "directory": "libs/decentverse"
   },
+  "keywords": [
+    "metaverse",
+    "real-time",
+    "community",
+    "web3",
+    "NFT",
+    "decentralized"
+  ],
   "scripts": {
     "start": "nx serve",
     "build": "nx build",

@@ -1,11 +1,31 @@
-# decentverse
+# Decentverse (In Development)
 
-This library was generated with [Nx](https://nx.dev).
+Decentverse is a Web3 Project for creating decentralized metaverses' server system.
+This library is using Redis, MongoDB, NestJS, and Nx for generate real-time 2D community space with metaverse-surfing contents.
 
-## Building
+The mission of this project is below.
 
-Run `nx build decentverse` to build the library.
+> To create own metaverse for every community without platform.
 
-## Running unit tests
+> To connect metaverses and walk-through between them.
 
-Run `nx test decentverse` to execute the unit tests via [Jest](https://jestjs.io).
+> To become next generation of user interface.
+
+## Get Started
+
+Run `npm i --save decentverse` to install.
+
+Run the code below.
+
+```
+const decentverse = new Decentverse();
+await decentverse.init();
+```
+
+## Collaborators
+
+The project is operating by [Akamir](https://akamir.com), a NFT community to build decentralized content platform, and [Doge Sound Club](https://dogesound.club), the first Klaytn-based NFT community in the world.
+
+To contribute this project, contact bassman#4247 in [Akamir](https://discord.gg/sQs9uEKQed)
+
+<p style="text-align: center;"><img src="https://lh3.googleusercontent.com/36j7nOlkOhcY8r6vbBhpYIlDOhp7Tx1XT6ukcpPZ4-TsYz7_lzFS4ODDdZFMy5N9Z20z2eJpEdUuJw1e6kk16FlTg9D8VsKvb3GD=s0"></p>
