@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model } from "mongoose";
-import * as dbConfig from "../../dbConfig";
-import * as gql from "../../gql";
+import { dbConfig } from "../db";
+import { scalar } from "../gql";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -22,14 +22,14 @@ export class Input extends dbConfig.DefaultSchemaFields {
   @Prop({ type: Number, required: true, default: 2000 })
   tileSize: number;
 
-  @Prop([[{ type: gql.TileSchema }]])
-  tiles: gql.TileType[][];
+  @Prop([[{ type: scalar.TileSchema }]])
+  tiles: scalar.TileType[][];
 
-  @Prop([{ type: gql.PlacementSchema }])
-  placements: gql.PlacementType[];
+  @Prop([{ type: scalar.PlacementSchema }])
+  placements: scalar.PlacementType[];
 
-  @Prop([{ type: gql.InteractionSchema }])
-  interactions: gql.InteractionType[];
+  @Prop([{ type: scalar.InteractionSchema }])
+  interactions: scalar.InteractionType[];
 }
 @Schema(dbConfig.defaultSchemaOptions)
 export class Map extends Input {

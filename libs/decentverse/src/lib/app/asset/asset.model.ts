@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model } from "mongoose";
-import * as dbConfig from "../../dbConfig";
-import * as gql from "../../gql";
+import { dbConfig } from "../db";
+import { scalar } from "../gql";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -16,8 +16,8 @@ import * as gql from "../../gql";
 
 @Schema()
 export class Input extends dbConfig.DefaultSchemaFields {
-  @Prop([{ type: gql.ArtLayerSchema }])
-  artLayers: gql.ArtLayerType[];
+  @Prop([{ type: scalar.ArtLayerSchema }])
+  artLayers: scalar.ArtLayerType[];
 }
 @Schema(dbConfig.defaultSchemaOptions)
 export class Asset extends Input {

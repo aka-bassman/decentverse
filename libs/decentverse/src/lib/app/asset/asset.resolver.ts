@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { AssetService } from "./asset.service";
 import { Allow, Account } from "../../middlewares";
-import * as gql from "../../gql";
+import * as gql from "../gql";
 import { UseGuards } from "@nestjs/common";
 
 @Resolver()

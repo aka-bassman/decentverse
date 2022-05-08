@@ -1,6 +1,25 @@
+import GraphQLJSON from "graphql-type-json";
+import { ReadStream } from "fs";
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+
+@ObjectType()
+export class AccessToken {
+  @Field(() => String)
+  accessToken: string;
+}
+
+export { GraphQLJSON as JSON };
+
+export interface FileUpload {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  createReadStream(): ReadStream;
+}
+export { GraphQLUpload } from "graphql-upload";
+
 // * OpenSea Attribute Schema Definition
 
 @ObjectType()

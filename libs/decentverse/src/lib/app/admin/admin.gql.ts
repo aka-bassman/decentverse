@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
 
 /**
- * * Puffin Planet MongoDB & GraphQL Schema V2.2
+ * * Akamir MongoDB & GraphQL Schema V2.2
  */
 
 /**

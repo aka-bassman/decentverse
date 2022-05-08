@@ -1,5 +1,5 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import * as gql from "./index";
+import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
+import { scalar } from "../gql";
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -11,9 +11,21 @@ import * as gql from "./index";
  */
 
 @InputType()
-export class AssetInput {
-  @Field(() => [gql.ArtLayerInput])
-  artLayers: gql.ArtLayerInputType[];
+export class MapInput {
+  @Field(() => String)
+  name: string;
+
+  @Field(() => Int)
+  tileSize: number;
+
+  @Field(() => [[scalar.TileInput]])
+  tiles: scalar.TileInputType[][];
+
+  @Field(() => [scalar.PlacementInput])
+  placements: scalar.PlacementInputType[];
+
+  @Field(() => [scalar.InteractionInput])
+  interactions: scalar.InteractionInputType[];
 }
 
 /**
@@ -23,12 +35,24 @@ export class AssetInput {
  */
 
 @ObjectType()
-export class Asset {
+export class Map {
   @Field(() => String)
   id: string;
 
-  @Field(() => [gql.ArtLayer])
-  artLayers: gql.ArtLayerType[];
+  @Field(() => String)
+  name: string;
+
+  @Field(() => Int)
+  tileSize: number;
+
+  @Field(() => [[scalar.Tile]])
+  tiles: scalar.TileType[][];
+
+  @Field(() => [scalar.Placement])
+  placements: scalar.PlacementType[];
+
+  @Field(() => [scalar.Interaction])
+  interactions: scalar.InteractionType[];
 
   @Field(() => String)
   status: "active" | "inactive";

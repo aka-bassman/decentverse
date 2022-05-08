@@ -1,10 +1,10 @@
 import { Module, DynamicModule } from "@nestjs/common";
 import { RtModule } from "./rt/rt.module";
 import { AssetModule } from "./asset/asset.module";
-// import { AwsModule } from "./rt/rt.module";
+import { AwsModule } from "./aws/aws.module";
 import { CharacterModule } from "./character/character.module";
 import { MapModule } from "./map/map.module";
-
+import { EventsModule } from "./events/events.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -50,6 +50,7 @@ export class DecentverseModule {
             autoSchemaFile: join(process.cwd(), "src/schema.gql"),
             sortSchema: true,
             playground: true,
+            uploads: false,
             // ["development", "local.development"].includes(
             //   config.get("ENVIRONMENT")
             // ),
@@ -58,9 +59,11 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
+        EventsModule,
         AssetModule,
         CharacterModule,
         MapModule,
+        AwsModule,
         RtModule.register(options),
         ScheduleModule.forRoot(),
       ],
