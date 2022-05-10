@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import * as asyncThunk from "./asyncThunk";
-import * as init from "./world.state";
-import { updateMe } from "./world.asyncThunk";
+import * as init from "./admin.state";
+import { updateMe } from "./admin.asyncThunk";
 
 export const slice = createSlice({
   name: init.SLICE_NAME,
   initialState: init.initialState,
   reducers: {
-    setWorld: (state, action: PayloadAction<any>) => {
+    setAdmin: (state, action: PayloadAction<any>) => {
       state.status = "idle";
     },
   },

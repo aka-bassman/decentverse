@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { AdminService } from "./admin.service";
 import { Allow, Account } from "../../middlewares";
 import * as gql from "../gql";
@@ -22,7 +22,7 @@ export class AdminResolver {
 
   @Query(() => gql.Admin)
   @UseGuards(Allow.Admin)
-  async admin(@Args({ name: "adminId", type: () => String }) adminId: string) {
+  async admin(@Args({ name: "adminId", type: () => ID }) adminId: string) {
     return this.adminService.admin(adminId);
   }
 

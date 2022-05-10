@@ -1,4 +1,4 @@
-export * from "./state";
-export * from "./reducer";
-import * as asyncThunk from "./asyncThunk";
+import * as asyncThunk from "./world.asyncThunk";
+export * from "./world.state";
+export * from "./world.reducer";
 export { asyncThunk };

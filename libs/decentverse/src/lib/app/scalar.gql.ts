@@ -73,7 +73,7 @@ export const OpenSeaMetaSchema = SchemaFactory.createForClass(OpenSeaMeta);
 
 @ObjectType()
 @Schema()
-export class TokenUrls {
+export class TokenUrl {
   @Field()
   @Prop({ type: String, required: true })
   url: string;
@@ -86,8 +86,8 @@ export class TokenUrls {
   @Prop({ type: OpenSeaMetaSchema })
   meta: OpenSeaMetaType;
 }
-export type TokenUrlType = TokenUrls;
-export const TokenUrlsSchema = SchemaFactory.createForClass(TokenUrls);
+export type TokenUrlType = TokenUrl;
+export const TokenUrlSchema = SchemaFactory.createForClass(TokenUrl);
 
 // * Art Layer Schema Definition
 
