@@ -2,26 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ArtLayer {
-  type: String!
-  url: String!
-}
-
-input ArtLayerInput {
-  type: String!
-  url: String!
-}
-
 type Asset {
-  artLayers: [ArtLayer!]!
+  bottom: ID
   createdAt: DateTime!
   id: String!
+  interactions: [Interaction!]!
+  lighting: ID
   status: String!
+  top: ID
   updatedAt: DateTime!
 }
 
 input AssetInput {
-  artLayers: [ArtLayerInput!]!
+  bottom: ID
+  interactions: [InteractionInput!]!
+  lighting: ID
+  top: ID
 }
 
 type Character {
@@ -50,6 +46,17 @@ input CharacterInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type File {
+  createdAt: DateTime!
+  encoding: String!
+  filename: String!
+  id: String!
+  mimetype: String!
+  status: String!
+  updatedAt: DateTime!
+  url: String!
+}
 
 type Interaction {
   bottomRight: [Int!]!
@@ -86,6 +93,7 @@ input MapInput {
 }
 
 type Mutation {
+  addFiles(files: [Upload!]!): File!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
   createMap(data: MapInput!): Map!
@@ -132,25 +140,28 @@ type Query {
 }
 
 type Sprite {
-  idle: String!
-  walk: String!
+  idle: ID!
+  walk: ID!
 }
 
 input SpriteInput {
-  idle: String!
-  walk: String!
+  idle: ID!
+  walk: ID!
 }
 
 type Tile {
-  bottom: String!
-  interactions: String!
-  lighting: String!
-  top: String!
+  bottom: ID!
+  interactions: [Interaction!]!
+  lighting: ID
+  top: ID
 }
 
 input TileInput {
-  bottom: String!
-  interactions: String!
-  lighting: String!
-  top: String!
+  bottom: ID!
+  interactions: [InteractionInput!]!
+  lighting: ID!
+  top: ID!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

@@ -63,8 +63,13 @@ export const adminQuery = gql`
     }
   }
 `;
-export const admin = async () =>
-  (await client.query<AdminQuery>({ query: adminQuery })).data.admin;
+export const admin = async (adminId: string) =>
+  (
+    await client.query<AdminQuery>({
+      query: adminQuery,
+      variables: { adminId },
+    })
+  ).data.admin;
 
 // * Admins Query
 export type AdminsQuery = { admins: Admin[] };

@@ -5,3 +5,4 @@ export { CharacterModule } from "./character/character.module";
 export { MapModule } from "./map/map.module";
 export { RtModule } from "./rt/rt.module";
 export { EventsModule } from "./events/events.module";
+export { FileModule } from "./file/file.module";

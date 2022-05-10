@@ -12,7 +12,11 @@ export class MapService {
     return await this.Map.find({ status: { $ne: "inactive" } });
   }
   async createMap(data: Map.Input) {
-    return await this.Map.create(data);
+    return await this.Map.create({
+      ...data,
+      totalWidth: data.tileSize * (data.tiles[0]?.length ?? 0),
+      totalHeight: data.tileSize * data.tiles.length,
+    });
   }
   async updateMap(mapId: string, data: Partial<Map.Raw>) {
     return await this.Map.pickAndWrite(mapId, data);

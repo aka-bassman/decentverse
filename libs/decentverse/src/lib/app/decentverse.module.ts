@@ -2,6 +2,8 @@ import { Module, DynamicModule } from "@nestjs/common";
 import { RtModule } from "./rt/rt.module";
 import { AssetModule } from "./asset/asset.module";
 import { AwsModule } from "./aws/aws.module";
+import { FileModule } from "./file/file.module";
+
 import { CharacterModule } from "./character/character.module";
 import { MapModule } from "./map/map.module";
 import { EventsModule } from "./events/events.module";
@@ -12,22 +14,34 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 
-export interface RedisOptions {
-  url?: string;
-  username?: string;
-  password?: string;
+export interface DecentverseOptions {
+  objectStorage: {
+    region: "ap-northeast-2";
+    accessKey: string;
+    secretAccessKey: string;
+    distributionId: string;
+  };
+  mongo?: {
+    uri: string;
+    replSet?: string;
+  };
+  redis?: {
+    url: string;
+    username?: string;
+    password?: string;
+  };
 }
 
 @Module({})
 export class DecentverseModule {
-  static register(options?: RedisOptions): DynamicModule {
+  static register(options: DecentverseOptions): DynamicModule {
     return {
       module: DecentverseModule,
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
           useFactory: async () => ({
-            uri: "mongodb://localhost:27017",
+            uri: options?.mongo?.uri ?? "mongodb://localhost:27017",
             // uri: `mongodb://${config.get("DB_USER")}:${config.get(
             //   "DB_PASS"
             // )}@${config.get("DB_HOST")}`,
@@ -63,8 +77,9 @@ export class DecentverseModule {
         AssetModule,
         CharacterModule,
         MapModule,
-        AwsModule,
-        RtModule.register(options),
+        AwsModule.register(options.objectStorage),
+        FileModule,
+        RtModule.register(options?.redis),
         ScheduleModule.forRoot(),
       ],
       controllers: [],

@@ -89,57 +89,29 @@ export class TokenUrl {
 export type TokenUrlType = TokenUrl;
 export const TokenUrlSchema = SchemaFactory.createForClass(TokenUrl);
 
-// * Art Layer Schema Definition
-
-export const layerTypes = ["bottom", "top", "lighting"] as const;
-export type LayerType = typeof layerTypes[number];
-@ObjectType()
-@Schema()
-export class ArtLayer {
-  @Field(() => String)
-  @Prop({ type: String, enum: layerTypes, required: true })
-  type: LayerType;
-
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  url: string;
-}
-export type ArtLayerType = ArtLayer;
-export const ArtLayerSchema = SchemaFactory.createForClass(ArtLayer);
-
-@InputType()
-export class ArtLayerInput {
-  @Field(() => String)
-  type: LayerType;
-
-  @Field(() => String)
-  url: string;
-}
-export type ArtLayerInputType = ArtLayerInput;
-
 // * Sprite Schema Definition
 
 @ObjectType()
 @Schema()
 export class Sprite {
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  idle: string;
+  @Field(() => ID)
+  @Prop({ type: Types.ObjectId, ref: "file", required: true })
+  idle: Types.ObjectId;
 
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  walk: string;
+  @Field(() => ID)
+  @Prop({ type: Types.ObjectId, ref: "file", required: true })
+  walk: Types.ObjectId;
 }
 export type SpriteType = Sprite;
 export const SpriteSchema = SchemaFactory.createForClass(Sprite);
 
 @InputType()
 export class SpriteInput {
-  @Field(() => String)
-  idle: string;
+  @Field(() => ID)
+  idle: Types.ObjectId;
 
-  @Field(() => String)
-  walk: string;
+  @Field(() => ID)
+  walk: Types.ObjectId;
 }
 export type SpriteInputType = SpriteInput;
 
@@ -217,20 +189,20 @@ export type PlacementInputType = PlacementInput;
 @ObjectType()
 @Schema()
 export class Tile {
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  top: string;
+  @Field(() => ID, { nullable: true })
+  @Prop({ type: Types.ObjectId, required: false })
+  top?: Types.ObjectId;
 
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  bottom: string;
+  @Field(() => ID)
+  @Prop({ type: Types.ObjectId, required: true })
+  bottom: Types.ObjectId;
 
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  lighting: string;
+  @Field(() => ID, { nullable: true })
+  @Prop({ type: Types.ObjectId, required: false })
+  lighting?: Types.ObjectId;
 
-  @Field(() => String)
-  @Prop({ type: String, required: true })
+  @Field(() => [Interaction])
+  @Prop([{ type: InteractionSchema, required: true }])
   interactions: InteractionType[];
 }
 export type TileType = Tile;
@@ -238,16 +210,16 @@ export const TileSchema = SchemaFactory.createForClass(Tile);
 
 @InputType()
 export class TileInput {
-  @Field(() => String)
-  top: string;
+  @Field(() => ID)
+  top?: Types.ObjectId;
 
-  @Field(() => String)
-  bottom: string;
+  @Field(() => ID)
+  bottom: Types.ObjectId;
 
-  @Field(() => String)
-  lighting: string;
+  @Field(() => ID)
+  lighting?: Types.ObjectId;
 
-  @Field(() => String)
+  @Field(() => [InteractionInput])
   interactions: InteractionType[];
 }
 export type TileInputType = TileInput;

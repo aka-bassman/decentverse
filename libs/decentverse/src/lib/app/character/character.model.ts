@@ -23,10 +23,10 @@ export class Input extends dbConfig.DefaultSchemaFields {
   tokenId: number;
 
   @Prop({ type: scalar.SpriteSchema })
-  left: scalar.SpriteType;
-
-  @Prop({ type: scalar.SpriteSchema })
   right: scalar.SpriteType;
+
+  @Prop({ type: scalar.SpriteSchema, required: false })
+  left?: scalar.SpriteType;
 
   @Prop({ type: scalar.SpriteSchema, required: false })
   up?: scalar.SpriteType;
