@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
 import { Types } from "mongoose";
-import { scalar } from "~app";
+import * as gql from "../gql";
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -22,8 +22,8 @@ export class AssetInput {
   @Field(() => ID, { nullable: true })
   lighting?: Types.ObjectId;
 
-  @Field(() => [scalar.InteractionInput])
-  interactions: scalar.InteractionType[];
+  @Field(() => [gql.InteractionInput])
+  interactions: gql.InteractionType[];
 }
 
 /**
@@ -37,17 +37,17 @@ export class Asset {
   @Field(() => String)
   id: string;
 
-  @Field(() => ID, { nullable: true })
-  top?: Types.ObjectId;
+  @Field(() => gql.File, { nullable: true })
+  top?: gql.File;
 
-  @Field(() => ID, { nullable: true })
+  @Field(() => gql.File, { nullable: true })
   bottom?: Types.ObjectId;
 
-  @Field(() => ID, { nullable: true })
+  @Field(() => gql.File, { nullable: true })
   lighting?: Types.ObjectId;
 
-  @Field(() => [scalar.Interaction])
-  interactions: scalar.InteractionType[];
+  @Field(() => [gql.Interaction])
+  interactions: gql.InteractionType[];
 
   @Field(() => String)
   status: "active" | "inactive";

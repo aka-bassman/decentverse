@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
-import { scalar } from "~app";
+import * as gql from "../gql";
 import { Types } from "mongoose";
 /**
  * * Akamir GraphQL Schema V2.1
@@ -19,17 +19,17 @@ export class CharacterInput {
   @Field()
   tokenId: number;
 
-  @Field(() => scalar.SpriteInput)
-  left: scalar.SpriteInputType;
+  @Field(() => gql.SpriteInput)
+  left: gql.SpriteInputType;
 
-  @Field(() => scalar.SpriteInput)
-  right: scalar.SpriteInputType;
+  @Field(() => gql.SpriteInput)
+  right: gql.SpriteInputType;
 
-  @Field(() => scalar.SpriteInput, { nullable: true })
-  up?: scalar.SpriteInputType;
+  @Field(() => gql.SpriteInput, { nullable: true })
+  up?: gql.SpriteInputType;
 
-  @Field(() => scalar.SpriteInput, { nullable: true })
-  down?: scalar.SpriteInputType;
+  @Field(() => gql.SpriteInput, { nullable: true })
+  down?: gql.SpriteInputType;
 }
 
 /**
@@ -49,17 +49,17 @@ export class Character {
   @Field()
   tokenId: number;
 
-  @Field(() => scalar.Sprite)
-  left: scalar.SpriteType;
+  @Field(() => gql.Sprite)
+  right: gql.SpriteType;
 
-  @Field(() => scalar.Sprite)
-  right: scalar.SpriteType;
+  @Field(() => gql.Sprite, { nullable: true })
+  left?: gql.SpriteType;
 
-  @Field(() => scalar.Sprite, { nullable: true })
-  up?: scalar.SpriteType;
+  @Field(() => gql.Sprite, { nullable: true })
+  up?: gql.SpriteType;
 
-  @Field(() => scalar.Sprite, { nullable: true })
-  down?: scalar.SpriteType;
+  @Field(() => gql.Sprite, { nullable: true })
+  down?: gql.SpriteType;
 
   @Field(() => String)
   status: "active" | "inactive";

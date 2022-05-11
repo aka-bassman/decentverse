@@ -131,3 +131,14 @@ export const tileFragment = gql`
     }
   }
 `;
+
+export type File = {
+  id: string;
+  url: string;
+};
+export const fileFragment = gql`
+  fragment fileFragment on File {
+    id
+    url
+  }
+`;

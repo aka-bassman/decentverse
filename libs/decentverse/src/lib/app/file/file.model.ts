@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model, Types } from "mongoose";
-import * as dbConfig from "~dbConfig";
-import { scalar } from "~app";
+import * as dbConfig from "../../dbConfig";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -15,7 +14,7 @@ import { scalar } from "~app";
  */
 
 @Schema()
-export class Input extends dbConfig.DefaultSchemaFields {
+export class Input {
   @Prop({ type: String, required: true, index: true })
   filename: string;
   @Prop({ type: String, required: true })
@@ -67,7 +66,7 @@ type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
 export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
-export type Doc = DocType & { _id: Types.ObjectId };
+export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model, Types } from "mongoose";
-import * as dbConfig from "~dbConfig";
+import * as dbConfig from "../../dbConfig";
 import * as bcrypt from "bcrypt";
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "") || 10;
 
@@ -17,7 +17,7 @@ const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "") || 10;
  */
 
 @Schema()
-export class Input extends dbConfig.DefaultSchemaFields {
+export class Input {
   @Prop({ type: String, required: true, unique: true, index: true })
   accountId: string;
 
@@ -83,7 +83,7 @@ type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
 export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
-export type Doc = DocType & { _id: Types.ObjectId };
+export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);

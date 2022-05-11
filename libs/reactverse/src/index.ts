@@ -1,1 +1,2 @@
-export * from "./lib/reactverse";
+import { Reactverse } from "./lib/reactverse";
+export default Reactverse;

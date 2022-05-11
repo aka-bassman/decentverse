@@ -9,7 +9,7 @@ export const defaultSchemaOptions: SchemaOptions = {
 
 // @Schema({ timestamps: true })
 export class DefaultSchemaFields {
-  // _id: Types.ObjectId;
+  _id: Types.ObjectId;
 
   // id: string;
 

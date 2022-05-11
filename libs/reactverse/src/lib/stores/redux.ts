@@ -1,11 +1,4 @@
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  combineReducers,
-  createSlice,
-  applyMiddleware,
-} from "@reduxjs/toolkit";
+import { configureStore, ThunkAction, Action, combineReducers, createSlice, applyMiddleware } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { HYDRATE } from "next-redux-wrapper";
 import { createWrapper } from "next-redux-wrapper";
@@ -15,6 +8,7 @@ import * as asset from "./asset";
 import * as character from "./character";
 import * as map from "./map";
 import * as world from "./world";
+import * as game from "./game";
 
 export type RootState = {
   admin: admin.AdminState;
@@ -22,6 +16,7 @@ export type RootState = {
   character: character.CharacterState;
   map: map.MapState;
   world: world.WorldState;
+  game: game.GameState;
 };
 
 const reducer = (state: any, action: any) => {
@@ -37,6 +32,7 @@ const reducer = (state: any, action: any) => {
     character: character.slice.reducer,
     map: map.slice.reducer,
     world: world.slice.reducer,
+    game: game.slice.reducer,
   })(state, action);
 };
 
@@ -52,6 +48,8 @@ export const actions = {
   ...map.asyncThunk,
   ...world.slice.actions,
   ...world.asyncThunk,
+  ...game.slice.actions,
+  ...game.asyncThunk,
 };
 
 export const select = {
@@ -60,15 +58,11 @@ export const select = {
   ...character.select,
   ...map.select,
   ...world.select,
+  ...game.select,
 };
 
 export type AppDispatch = typeof store.dispatch;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 

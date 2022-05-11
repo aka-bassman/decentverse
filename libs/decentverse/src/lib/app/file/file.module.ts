@@ -5,9 +5,8 @@ import { FileService } from "./file.service";
 import { FileResolver } from "./file.resolver";
 @Global()
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: File.File.name, schema: File.schema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: File.File.name, schema: File.schema }])],
   providers: [FileService, FileResolver],
+  exports: [FileService],
 })
 export class FileModule {}

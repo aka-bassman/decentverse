@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import Reactverse from "./reactverse";
+import { Reactverse } from "./reactverse";
 
 describe("Reactverse", () => {
   it("should render successfully", () => {

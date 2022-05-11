@@ -3,13 +3,13 @@
 # ------------------------------------------------------
 
 type Asset {
-  bottom: ID
+  bottom: File
   createdAt: DateTime!
   id: String!
   interactions: [Interaction!]!
-  lighting: ID
+  lighting: File
   status: String!
-  top: ID
+  top: File
   updatedAt: DateTime!
 }
 
@@ -25,7 +25,7 @@ type Character {
   createdAt: DateTime!
   down: Sprite
   id: String!
-  left: Sprite!
+  left: Sprite
   right: Sprite!
   status: String!
   tokenId: Float!
@@ -81,6 +81,8 @@ type Map {
   status: String!
   tileSize: Int!
   tiles: [[Tile!]!]!
+  totalHeight: Int!
+  totalWidth: Int!
   updatedAt: DateTime!
 }
 
@@ -120,7 +122,7 @@ type OpenSeaMeta {
 }
 
 type Placement {
-  asset: ID!
+  asset: Asset!
   position: [Int!]!
 }
 
@@ -140,8 +142,8 @@ type Query {
 }
 
 type Sprite {
-  idle: ID!
-  walk: ID!
+  idle: File!
+  walk: File!
 }
 
 input SpriteInput {
@@ -150,10 +152,10 @@ input SpriteInput {
 }
 
 type Tile {
-  bottom: ID!
+  bottom: File!
   interactions: [Interaction!]!
-  lighting: ID
-  top: ID
+  lighting: File
+  top: File
 }
 
 input TileInput {

@@ -1,19 +1,11 @@
 import { Module, DynamicModule } from "@nestjs/common";
-import { RtModule } from "./rt/rt.module";
-import { AssetModule } from "./asset/asset.module";
-import { AwsModule } from "./aws/aws.module";
-import { FileModule } from "./file/file.module";
-
-import { CharacterModule } from "./character/character.module";
-import { MapModule } from "./map/map.module";
-import { EventsModule } from "./events/events.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { MongooseModule } from "@nestjs/mongoose";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
-
+import * as module from "./module";
 export interface DecentverseOptions {
   objectStorage: {
     region: "ap-northeast-2";
@@ -73,13 +65,14 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
-        EventsModule,
-        AssetModule,
-        CharacterModule,
-        MapModule,
-        AwsModule.register(options.objectStorage),
-        FileModule,
-        RtModule.register(options?.redis),
+        module.EventsModule,
+        module.AssetModule,
+        module.CharacterModule,
+        module.MapModule,
+        module.AwsModule.register(options.objectStorage),
+        module.FileModule,
+        module.RtModule.register(options?.redis),
+        module.ScalarModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

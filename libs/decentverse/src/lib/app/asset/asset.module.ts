@@ -6,11 +6,8 @@ import { AssetResolver } from "./asset.resolver";
 
 @Global()
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Asset.Asset.name, schema: Asset.schema },
-    ]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: Asset.Asset.name, schema: Asset.schema }])],
   providers: [AssetService, AssetResolver],
+  exports: [AssetService],
 })
 export class AssetModule {}

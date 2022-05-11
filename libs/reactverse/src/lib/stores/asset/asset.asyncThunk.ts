@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { actions, RootState } from "../redux";
-import * as graphql from "../types";
+import * as graphql from "../type";
 
 import * as init from "./asset.state";
 

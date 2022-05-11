@@ -1,18 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./src/lib",
-    "paths": {
-      "~app": ["app/index.ts"],
-      "~dbConfig": ["dbConfig/index.ts"],
-      "~middlewares": ["middlewares/index.ts"]
-    }
+    "resolveJsonModule": true
   },
   "files": [],
   "include": [],

@@ -1,8 +1,10 @@
 import { Types, FilterQuery } from "mongoose";
+import * as DataLoader from "dataloader";
 export type ID = Types.ObjectId;
 export const ObjectId = Types.ObjectId;
 export { FilterQuery as Query };
-export * as dbConfig from "../dbConfig";
+export { DataLoader };
+export * from "../dbConfig";
 export * as Admin from "./admin/admin.model";
 export * as Asset from "./asset/asset.model";
 export * as Character from "./character/character.model";

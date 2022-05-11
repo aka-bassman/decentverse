@@ -1,15 +1,16 @@
+import dynamic from "next/dynamic";
 import styles from "./index.module.css";
-import { Reactverse } from "reactverse";
+
 export function Index() {
   /*
    * Replace the elements below with your own.
    *
    * Note: The corresponding styles are in the ./index.css file.
    */
-
+  const ReactverseWithNoSSR = dynamic(import("reactverse"), { ssr: false });
   return (
     <div className={styles.page}>
-      <Reactverse />
+      <ReactverseWithNoSSR />
     </div>
   );
 }

@@ -10,6 +10,9 @@ export const slice = createSlice({
     setWorld: (state, action: PayloadAction<any>) => {
       state.status = "idle";
     },
+    changeScreenSize: (state, action: PayloadAction<init.Screen>) => {
+      state.screen = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder

@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
-import { io, Socket } from "socket.io-client";
+import { io, Socket as Soc } from "socket.io-client";
 
-export const SocketProvider = ({
-  children,
-  uri,
-}: {
-  children: any;
-  uri: string;
-}) => {
+// 소켓 데이터 처리를 주로 진행
+export const Socket = ({ children, uri }: { children: any; uri: string }) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<Soc | null>(null);
   useEffect(() => {
     const socket = io(uri);
     setSocket(socket);

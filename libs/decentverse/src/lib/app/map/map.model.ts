@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model, Types } from "mongoose";
-import * as dbConfig from "~dbConfig";
-import { scalar, db } from "~app";
+import * as dbConfig from "../../dbConfig";
+import * as gql from "../gql";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -15,21 +15,21 @@ import { scalar, db } from "~app";
  */
 
 @Schema()
-export class Input extends dbConfig.DefaultSchemaFields {
+export class Input {
   @Prop({ type: String, required: true })
   name: string;
 
   @Prop({ type: Number, required: true, default: 2000 })
   tileSize: number;
 
-  @Prop([[{ type: scalar.TileSchema }]])
-  tiles: scalar.TileType[][];
+  @Prop([[{ type: gql.TileSchema }]])
+  tiles: gql.TileType[][];
 
-  @Prop([{ type: scalar.PlacementSchema }])
-  placements: scalar.PlacementType[];
+  @Prop([{ type: gql.PlacementSchema }])
+  placements: gql.PlacementType[];
 
-  @Prop([{ type: scalar.InteractionSchema }])
-  interactions: scalar.InteractionType[];
+  @Prop([{ type: gql.InteractionSchema }])
+  interactions: gql.InteractionType[];
 }
 @Schema(dbConfig.defaultSchemaOptions)
 export class Map extends Input {
@@ -80,7 +80,7 @@ type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
 export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
-export type Doc = DocType & { _id: Types.ObjectId };
+export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);
