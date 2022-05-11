@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
-import { scalar } from "../gql";
+import { scalar } from "~app";
 /**
  * * Akamir GraphQL Schema V2.1
  */

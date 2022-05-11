@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as fs from "fs";
 import * as File from "./file.model";
-import * as gql from "../gql";
+import { gql } from "~app";
 import * as srv from "../srv";
 @Injectable()
 export class FileService {

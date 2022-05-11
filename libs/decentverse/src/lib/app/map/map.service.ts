@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as Map from "./map.model";
-
 @Injectable()
 export class MapService {
   constructor(@InjectModel(Map.Map.name) private readonly Map: Map.Mdl) {}

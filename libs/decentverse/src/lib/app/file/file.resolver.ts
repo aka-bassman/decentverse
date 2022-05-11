@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { FileService } from "./file.service";
-import { Allow, Account } from "../../middlewares";
-import * as gql from "../gql";
+import { Allow, Account } from "~middlewares";
+import { gql } from "~app";
 import { UseGuards } from "@nestjs/common";
 import { GraphQLUpload, FileUpload } from "graphql-upload";
 import { createReadStream, createWriteStream, fstat } from "fs";

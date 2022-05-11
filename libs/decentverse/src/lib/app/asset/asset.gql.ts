@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
 import { Types } from "mongoose";
-import { scalar } from "../gql";
+import { scalar } from "~app";
 /**
  * * Akamir GraphQL Schema V2.1
  */

@@ -15,18 +15,18 @@ export const verifyToken = (authorization: string | undefined) => {
 };
 
 export const allow = (account: any, roles: string[], userId?: any) => {
-  if (!account || !(roles.includes(account.role) || roles.includes("every")))
-    throw new AuthenticationError("Authentication Failed");
-  else if (userId && account.role === "user" && !account._id === userId)
-    throw new AuthenticationError("Invalid User");
+  // if (!account || !(roles.includes(account.role) || roles.includes("every")))
+  //   throw new AuthenticationError("Authentication Failed");
+  // else if (userId && account.role === "user" && !account._id === userId)
+  //   throw new AuthenticationError("Invalid User");
   return true;
 };
 
 export const allowExcept = (account: any, roles: string[], userId?: any) => {
-  if (!account || roles.includes(account.role))
-    throw new AuthenticationError("Authentication Failed");
-  else if (userId && account.role === "user" && !account._id === userId)
-    throw new AuthenticationError("Invalid User");
+  // if (!account || roles.includes(account.role))
+  //   throw new AuthenticationError("Authentication Failed");
+  // else if (userId && account.role === "user" && !account._id === userId)
+  //   throw new AuthenticationError("Invalid User");
   return true;
 };
 

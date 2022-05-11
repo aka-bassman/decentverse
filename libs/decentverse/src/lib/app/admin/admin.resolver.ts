@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { AdminService } from "./admin.service";
-import { Allow, Account } from "../../middlewares";
-import * as gql from "../gql";
+import { Allow, Account } from "~middlewares";
+import { gql, scalar } from "~app";
 import { UseGuards } from "@nestjs/common";
 
 @Resolver()
@@ -55,7 +55,7 @@ export class AdminResolver {
     return await this.adminService.removeAdmin(adminId);
   }
 
-  @Mutation(() => gql.scalar.AccessToken)
+  @Mutation(() => scalar.AccessToken)
   async signinAdmin(
     @Args({ name: "accountId", type: () => String }) accountId: string,
     @Args({ name: "password", type: () => String }) password: string

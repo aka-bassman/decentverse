@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { scalar } from "../gql";
+import { scalar } from "~app";
 import { ReadStream } from "fs-capacitor";
 
 /**

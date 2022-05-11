@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Admin } from "../db";
+import * as Admin from "./admin.model";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 const secret = Buffer.from(process.env.JWT_SECRET || "", `base64`);

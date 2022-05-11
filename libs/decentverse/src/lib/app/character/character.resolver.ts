@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { CharacterService } from "./character.service";
-import { Allow, Account } from "../../middlewares";
-import * as gql from "../gql";
+import { Allow, Account } from "~middlewares";
+import { gql } from "~app";
 import { UseGuards } from "@nestjs/common";
 
 @Resolver()

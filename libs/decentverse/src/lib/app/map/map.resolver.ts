@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { MapService } from "./map.service";
-import { Allow, Account } from "../../middlewares";
-import * as gql from "../gql";
+import { Allow, Account } from "~middlewares";
+import { gql } from "~app";
 import { UseGuards } from "@nestjs/common";
 
 @Resolver()
@@ -9,13 +9,13 @@ export class MapResolver {
   constructor(private readonly mapService: MapService) {}
 
   @Query(() => gql.Map)
-  // @UseGuards(Allow.Every)
+  @UseGuards(Allow.Every)
   async map(@Args({ name: "mapId", type: () => String }) mapId: string) {
     return this.mapService.map(mapId);
   }
 
   @Query(() => [gql.Map])
-  // @UseGuards(Allow.Admin)
+  @UseGuards(Allow.Admin)
   async maps() {
     return this.mapService.maps();
   }
@@ -27,7 +27,7 @@ export class MapResolver {
   }
 
   @Mutation(() => gql.Map)
-  // @UseGuards(Allow.Admin)
+  @UseGuards(Allow.Admin)
   async updateMap(
     @Args({ name: "mapId", type: () => String }) mapId: string,
     @Args("data") data: gql.MapInput

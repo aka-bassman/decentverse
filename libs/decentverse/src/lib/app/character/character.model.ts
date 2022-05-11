@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model, Types } from "mongoose";
-import { dbConfig } from "../db";
-import { scalar } from "../gql";
+import * as dbConfig from "~dbConfig";
+import { scalar } from "~app";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -75,9 +75,10 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface Doc extends Document<Raw>, DocMtds, Raw {}
+export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export type Doc = DocType & { _id: Types.ObjectId };
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
-export const schema = SchemaFactory.createForClass(Raw);
+export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);
 Object.assign(schema.statics, modelStatics);
 Object.assign(schema.query, queryHelpers);
