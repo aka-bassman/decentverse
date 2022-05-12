@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import * as asyncThunk from "./asyncThunk";
 import * as init from "./map.state";
-import { updateMe } from "./map.asyncThunk";
+import { initMap } from "./map.asyncThunk";
 
 export const slice = createSlice({
   name: init.SLICE_NAME,
@@ -13,13 +13,13 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateMe.pending, (state) => {
+      .addCase(initMap.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateMe.rejected, (state) => {
+      .addCase(initMap.rejected, (state) => {
         state.status = "idle";
       })
-      .addCase(updateMe.fulfilled, (state) => {
+      .addCase(initMap.fulfilled, (state) => {
         state.status = "idle";
       });
   },

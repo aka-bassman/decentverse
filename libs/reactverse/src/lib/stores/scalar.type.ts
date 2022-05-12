@@ -1,3 +1,4 @@
+import * as types from "./types";
 import gql from "graphql-tag";
 
 export type AccessToken = {
@@ -59,29 +60,30 @@ export const tokenUrlFragment = gql`
     }
   }
 `;
-
-export const layerTypes = ["bottom", "top", "lighting"] as const;
-export type LayerType = typeof layerTypes[number];
-
-export type ArtLayer = {
-  type: LayerType;
+export type File = {
+  id: string;
   url: string;
 };
-export const artLayerFragment = gql`
-  fragment artLayerFragment on ArtLayer {
-    type
+export const fileFragment = gql`
+  fragment fileFragment on File {
+    id
     url
   }
 `;
 
 export type Sprite = {
-  idle: string;
-  walk: string;
+  idle: File;
+  walk: File;
 };
 export const spriteFragment = gql`
+  ${fileFragment}
   fragment spriteFragment on Sprite {
-    idle
-    walk
+    idle {
+      ...fileFragment
+    }
+    walk {
+      ...fileFragment
+    }
   }
 `;
 
@@ -108,8 +110,11 @@ export type Placement = {
   position: number[];
 };
 export const placementFragment = gql`
+  ${types.assetFragment}
   fragment placementFragment on Placement {
-    asset
+    asset {
+      ...assetFragment
+    }
     position
   }
 `;
@@ -121,24 +126,20 @@ export type Tile = {
   interactions: Interaction[];
 };
 export const tileFragment = gql`
+  ${fileFragment}
   ${interactionFragment}
   fragment tileFragment on Tile {
-    top
-    bottom
-    lighting
+    top {
+      ...fileFragment
+    }
+    bottom {
+      ...fileFragment
+    }
+    lighting {
+      ...fileFragment
+    }
     interactions {
       ...interactionFragment
     }
-  }
-`;
-
-export type File = {
-  id: string;
-  url: string;
-};
-export const fileFragment = gql`
-  fragment fileFragment on File {
-    id
-    url
   }
 `;

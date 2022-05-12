@@ -39,8 +39,7 @@ export const pingQuery = gql`
     ping
   }
 `;
-export const ping = async () =>
-  (await client.query<PingQuery>({ query: pingQuery })).data.ping;
+export const ping = async () => (await client.query<PingQuery>({ query: pingQuery })).data.ping;
 
 // * Me Query
 export type MeQuery = { me: Admin };
@@ -50,8 +49,7 @@ export const meQuery = gql`
     ...adminFragment
   }
 `;
-export const me = async () =>
-  (await client.query<MeQuery>({ query: meQuery })).data.me;
+export const me = async () => (await client.query<MeQuery>({ query: meQuery })).data.me;
 
 // * Admin Query
 export type AdminQuery = { admin: Admin };
@@ -81,8 +79,7 @@ export const adminsQuery = gql`
     }
   }
 `;
-export const admins = async () =>
-  (await client.query<AdminsQuery>({ query: adminsQuery })).data.admins;
+export const admins = async () => (await client.query<AdminsQuery>({ query: adminsQuery })).data.admins;
 
 // * Create Admin Mutation
 export type CreateAdminMutation = { createAdmin: Admin };
