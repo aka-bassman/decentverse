@@ -1,12 +1,20 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as Asset from "./asset.model";
-
+import * as db from "../db";
 @Injectable()
 export class AssetService {
-  constructor(
-    @InjectModel(Asset.Asset.name) private readonly Asset: Asset.Mdl
-  ) {}
+  private readonly logger = new Logger(AssetService.name);
+  private loader: db.DataLoader<db.ID, db.Asset.Doc>;
+  constructor(@InjectModel(Asset.Asset.name) private readonly Asset: Asset.Mdl) {
+    this.loader = db.createLoader(this.Asset);
+  }
+  async load(_id?: db.ID) {
+    return _id && (await this.loader.load(_id));
+  }
+  async loadMany(_ids: db.ID[]) {
+    return await this.loader.loadMany(_ids);
+  }
   async asset(assetId: string) {
     return await this.Asset.pickById(assetId);
   }

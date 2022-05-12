@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Model } from "mongoose";
+import { Document, Model, Types } from "mongoose";
 import * as dbConfig from "../../dbConfig";
-import * as gql from "../../gql";
+import * as gql from "../gql";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -15,7 +15,7 @@ import * as gql from "../../gql";
  */
 
 @Schema()
-export class Input extends dbConfig.DefaultSchemaFields {
+export class Input {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -54,6 +54,7 @@ export class Raw extends Map {}
  * ? 도큐먼트의 유틸리티를 위한 method 함수를 작성하세요.
  * ? 모델의 유틸리티를 위한 static 함수를 작성하세요.
  */
+
 const documentMethods = {
   //   testMethod: function (): IDocument {
   //     return this;
@@ -78,9 +79,10 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface Doc extends Document<Raw>, DocMtds, Raw {}
+export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
-export const schema = SchemaFactory.createForClass(Raw);
+export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);
 Object.assign(schema.statics, modelStatics);
 Object.assign(schema.query, queryHelpers);
@@ -94,5 +96,6 @@ Object.assign(schema.query, queryHelpers);
 schema.pre<Doc>("save", async function (next) {
   this.totalWidth = this.tileSize * (this.tiles[0]?.length ?? 0);
   this.totalHeight = this.tileSize * this.tiles.length;
+  console.log("prepre");
   next();
 });

@@ -5,29 +5,38 @@ import { ConfigService } from "@nestjs/config";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import * as dto from "./aws.dto";
 
+export interface ObjectStorageOptionss {
+  region: string;
+  accessKey: string;
+  secretAccessKey: string;
+  distributionId: string;
+}
+
 @Injectable()
 export class AwsService {
   s3: aws.S3;
   distributionId: string;
   cloudFront: aws.CloudFront;
-  constructor(configService: ConfigService) {
+  constructor(
+    @Inject("OBJECT_STORAGE_OPTIONS") private options: ObjectStorageOptionss
+  ) {
     this.s3 = new aws.S3({ apiVersion: "2006-03-01" });
     aws.config.update({
-      region: "ap-northeast-2",
-      accessKeyId: configService.get("AWS_ACCESS_KEY_ID"),
-      secretAccessKey: configService.get("AWS_SECRET_ACCESS_KEY"),
+      region: this.options.region,
+      accessKeyId: this.options.accessKey,
+      secretAccessKey: this.options.secretAccessKey,
     });
     this.cloudFront = new aws.CloudFront();
-    this.distributionId = configService.get("AWS_CLOUDFRONT_DIST_ID");
+    this.distributionId = this.options.distributionId;
   }
-  async getObject({ bucket, path, fileName }: dto.GetObjectRequest) {
+  async getObject({ bucket, path, filename }: dto.GetObjectRequest) {
     return await this.s3
-      .getObject({ Bucket: bucket, Key: `${path}/${fileName}` })
+      .getObject({ Bucket: bucket, Key: `${path}/${filename}` })
       .promise();
   }
-  async getJsonObject({ bucket, path, fileName }: dto.GetObjectRequest) {
+  async getJsonObject({ bucket, path, filename }: dto.GetObjectRequest) {
     const data = await this.s3
-      .getObject({ Bucket: bucket, Key: `${path}/${fileName}` })
+      .getObject({ Bucket: bucket, Key: `${path}/${filename}` })
       .promise();
     return JSON.parse(data.Body.toString("utf-8"));
   }
@@ -35,8 +44,8 @@ export class AwsService {
     return await this.s3.listObjects({ Bucket: bucket }).promise();
   }
   async getFileList(bucket: string, prefix: string | undefined = undefined) {
-    const fileNames: string[] = [];
-    return await this.getAllKeys({ Bucket: bucket, Prefix: prefix }, fileNames);
+    const filenames: string[] = [];
+    return await this.getAllKeys({ Bucket: bucket, Prefix: prefix }, filenames);
   }
   async getAllKeys(
     params: aws.S3.ListObjectsV2Request,
@@ -59,13 +68,13 @@ export class AwsService {
   async uploadFile({
     bucket,
     path,
-    fileName,
+    filename,
     rename,
     localPath,
     meta,
     host,
   }: dto.AwsUploadRequest) {
-    const key = `${path}/${rename ?? fileName}`;
+    const key = `${path}/${rename ?? filename}`;
     // const metadata = { ...(meta ?? {}) };
     await this.s3
       .putObject({
@@ -73,8 +82,8 @@ export class AwsService {
         Key: key,
         Metadata: meta,
         ACL: "public-read",
-        Body: fs.createReadStream(`${localPath}/${fileName}`),
-        ContentType: this.getContentType(fileName),
+        Body: fs.createReadStream(`${localPath}/${filename}`),
+        ContentType: this.getContentType(filename),
       })
       .promise();
     return host
@@ -85,7 +94,7 @@ export class AwsService {
   async saveFile({
     bucket,
     path,
-    fileName,
+    filename,
     localPath,
     rename,
   }: dto.DownloadRequest): Promise<dto.LocalFilePath> {
@@ -93,16 +102,16 @@ export class AwsService {
     const stream = this.s3
       .getObject({
         Bucket: bucket,
-        Key: `${path}/${fileName}`,
+        Key: `${path}/${filename}`,
       })
       .createReadStream();
-    stream.pipe(fs.createWriteStream(`${localPath}/${fileName}`));
+    stream.pipe(fs.createWriteStream(`${localPath}/${filename}`));
     return new Promise((resolve, reject) => {
       stream.on("end", () => {
         rename &&
-          fs.renameSync(`${localPath}/${fileName}`, `${localPath}/${rename}`);
+          fs.renameSync(`${localPath}/${filename}`, `${localPath}/${rename}`);
         setTimeout(
-          () => resolve({ fileName: rename ?? fileName, localPath }),
+          () => resolve({ filename: rename ?? filename, localPath }),
           100
         );
       });
@@ -115,13 +124,13 @@ export class AwsService {
     bucket,
     copyPath,
     pastePath,
-    fileName,
+    filename,
     host,
   }: dto.CopyRequest) {
-    const key = `${pastePath}/${fileName}`;
+    const key = `${pastePath}/${filename}`;
     await this.s3
       .copyObject({
-        CopySource: `${bucket}/${copyPath}/${fileName}`,
+        CopySource: `${bucket}/${copyPath}/${filename}`,
         Bucket: bucket,
         Key: key,
         ACL: "public-read",
@@ -146,17 +155,17 @@ export class AwsService {
   async makePublic({
     bucket,
     path,
-    fileName,
+    filename,
   }: {
     bucket: string;
     path: string;
-    fileName: string;
+    filename: string;
   }) {
     await this.s3
       .putObjectAcl({
         ACL: "public-read",
         Bucket: bucket,
-        Key: `${path}/${fileName}`,
+        Key: `${path}/${filename}`,
       })
       .promise();
     return true;
@@ -164,25 +173,25 @@ export class AwsService {
   async makePrivate({
     bucket,
     path,
-    fileName,
+    filename,
   }: {
     bucket: string;
     path: string;
-    fileName: string;
+    filename: string;
   }) {
     await this.s3
       .putObjectAcl({
         ACL: "private",
         Bucket: bucket,
-        Key: `${path}/${fileName}`,
+        Key: `${path}/${filename}`,
       })
       .promise();
     return true;
   }
-  getContentType(fileName: string) {
-    return fileName.includes(".png")
+  getContentType(filename: string) {
+    return filename.includes(".png")
       ? "image/jpeg"
-      : fileName.includes(".json")
+      : filename.includes(".json")
       ? "application/json"
       : undefined;
   }

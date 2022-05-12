@@ -1,33 +1,39 @@
 import { Module, DynamicModule } from "@nestjs/common";
-import { RtModule } from "./rt/rt.module";
-import { AssetModule } from "./asset/asset.module";
-// import { AwsModule } from "./rt/rt.module";
-import { CharacterModule } from "./character/character.module";
-import { MapModule } from "./map/map.module";
-
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { MongooseModule } from "@nestjs/mongoose";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
-
-export interface RedisOptions {
-  url?: string;
-  username?: string;
-  password?: string;
+import * as module from "./module";
+export interface DecentverseOptions {
+  objectStorage: {
+    region: "ap-northeast-2";
+    accessKey: string;
+    secretAccessKey: string;
+    distributionId: string;
+  };
+  mongo?: {
+    uri: string;
+    replSet?: string;
+  };
+  redis?: {
+    url: string;
+    username?: string;
+    password?: string;
+  };
 }
 
 @Module({})
 export class DecentverseModule {
-  static register(options?: RedisOptions): DynamicModule {
+  static register(options: DecentverseOptions): DynamicModule {
     return {
       module: DecentverseModule,
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
           useFactory: async () => ({
-            uri: "mongodb://localhost:27017",
+            uri: options?.mongo?.uri ?? "mongodb://localhost:27017",
             // uri: `mongodb://${config.get("DB_USER")}:${config.get(
             //   "DB_PASS"
             // )}@${config.get("DB_HOST")}`,
@@ -50,6 +56,7 @@ export class DecentverseModule {
             autoSchemaFile: join(process.cwd(), "src/schema.gql"),
             sortSchema: true,
             playground: true,
+            uploads: false,
             // ["development", "local.development"].includes(
             //   config.get("ENVIRONMENT")
             // ),
@@ -58,10 +65,14 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
-        AssetModule,
-        CharacterModule,
-        MapModule,
-        RtModule.register(options),
+        module.EventsModule,
+        module.AssetModule,
+        module.CharacterModule,
+        module.MapModule,
+        module.AwsModule.register(options.objectStorage),
+        module.FileModule,
+        module.RtModule.register(options?.redis),
+        module.ScalarModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

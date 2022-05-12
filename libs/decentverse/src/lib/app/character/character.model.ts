@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Model, Types } from "mongoose";
 import * as dbConfig from "../../dbConfig";
-import * as gql from "../../gql";
+import * as gql from "../gql";
 /**
  * * Akamir MongoDB Schema V2.2
  */
@@ -15,7 +15,7 @@ import * as gql from "../../gql";
  */
 
 @Schema()
-export class Input extends dbConfig.DefaultSchemaFields {
+export class Input {
   @Prop({ type: Types.ObjectId, required: false, index: true })
   contract?: Types.ObjectId;
 
@@ -23,10 +23,10 @@ export class Input extends dbConfig.DefaultSchemaFields {
   tokenId: number;
 
   @Prop({ type: gql.SpriteSchema })
-  left: gql.SpriteType;
-
-  @Prop({ type: gql.SpriteSchema })
   right: gql.SpriteType;
+
+  @Prop({ type: gql.SpriteSchema, required: false })
+  left?: gql.SpriteType;
 
   @Prop({ type: gql.SpriteSchema, required: false })
   up?: gql.SpriteType;
@@ -75,9 +75,10 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface Doc extends Document<Raw>, DocMtds, Raw {}
+export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
-export const schema = SchemaFactory.createForClass(Raw);
+export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);
 Object.assign(schema.methods, documentMethods);
 Object.assign(schema.statics, modelStatics);
 Object.assign(schema.query, queryHelpers);

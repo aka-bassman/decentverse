@@ -1,0 +1,169 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Asset {
+  bottom: File
+  createdAt: DateTime!
+  id: String!
+  interactions: [Interaction!]!
+  lighting: File
+  status: String!
+  top: File
+  updatedAt: DateTime!
+}
+
+input AssetInput {
+  bottom: ID
+  interactions: [InteractionInput!]!
+  lighting: ID
+  top: ID
+}
+
+type Character {
+  contract: String
+  createdAt: DateTime!
+  down: Sprite
+  id: String!
+  left: Sprite
+  right: Sprite!
+  status: String!
+  tokenId: Float!
+  up: Sprite
+  updatedAt: DateTime!
+}
+
+input CharacterInput {
+  contract: ID
+  down: SpriteInput
+  left: SpriteInput!
+  right: SpriteInput!
+  tokenId: Float!
+  up: SpriteInput
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type File {
+  createdAt: DateTime!
+  encoding: String!
+  filename: String!
+  id: String!
+  mimetype: String!
+  status: String!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type Interaction {
+  bottomRight: [Int!]!
+  topLeft: [Int!]!
+  type: String!
+  url: String
+}
+
+input InteractionInput {
+  bottomRight: [Int!]!
+  topLeft: [Int!]!
+  type: String!
+  url: String
+}
+
+type Map {
+  createdAt: DateTime!
+  id: String!
+  interactions: [Interaction!]!
+  name: String!
+  placements: [Placement!]!
+  status: String!
+  tileSize: Int!
+  tiles: [[Tile!]!]!
+  totalHeight: Int!
+  totalWidth: Int!
+  updatedAt: DateTime!
+}
+
+input MapInput {
+  interactions: [InteractionInput!]!
+  name: String!
+  placements: [PlacementInput!]!
+  tileSize: Int!
+  tiles: [[TileInput!]!]!
+}
+
+type Mutation {
+  addFiles(files: [Upload!]!): File!
+  createAsset(data: AssetInput!): Asset!
+  createCharacter(data: CharacterInput!): Character!
+  createMap(data: MapInput!): Map!
+  removeAsset(assetId: String!): Asset!
+  removeCharacter(characterId: String!): Character!
+  removeMap(mapId: String!): Map!
+  updateAsset(assetId: String!, data: AssetInput!): Asset!
+  updateCharacter(characterId: String!, data: CharacterInput!): Character!
+  updateMap(data: MapInput!, mapId: String!): Map!
+}
+
+type OpenSeaAttribute {
+  display_type: String
+  trait_type: String!
+  value: String!
+}
+
+type OpenSeaMeta {
+  attributes: [OpenSeaAttribute!]!
+  description: String!
+  external_url: String!
+  image: String!
+  name: String!
+}
+
+type Placement {
+  asset: Asset!
+  position: [Int!]!
+}
+
+input PlacementInput {
+  asset: ID!
+  position: [Int!]!
+}
+
+type Query {
+  asset(assetId: String!): Asset!
+  assets: [Asset!]!
+  character(characterId: String!): Character!
+  characters: [Character!]!
+  map(mapId: String!): Map!
+  maps: [Map!]!
+  sayHello: String!
+}
+
+type Sprite {
+  idle: File!
+  walk: File!
+}
+
+input SpriteInput {
+  idle: ID!
+  walk: ID!
+}
+
+type Tile {
+  bottom: File!
+  interactions: [Interaction!]!
+  lighting: File
+  top: File
+}
+
+input TileInput {
+  bottom: ID!
+  interactions: [InteractionInput!]!
+  lighting: ID!
+  top: ID!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

@@ -10,7 +10,12 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "~hooks": ["src/lib/hooks/index.ts"]
+    }
   },
   "files": [],
   "include": [],
