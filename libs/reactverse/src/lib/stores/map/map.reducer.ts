@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import * as asyncThunk from "./asyncThunk";
 import * as init from "./map.state";
+import * as types from "../types";
 import { initMap } from "./map.asyncThunk";
 
 export const slice = createSlice({
   name: init.SLICE_NAME,
   initialState: init.initialState,
   reducers: {
-    setMap: (state, action: PayloadAction<any>) => {
+    setMap: (state: init.MapState, action: PayloadAction<any>) => {
       state.status = "idle";
     },
   },

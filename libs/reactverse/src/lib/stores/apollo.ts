@@ -8,24 +8,21 @@ export const getUploadLink = (uri?: string) => {
     headers: {
       authorization: token ? `Bearer ${token}` : "",
     },
-    uri: uri ?? "localhost:3333",
+    uri: uri ?? "http://localhost:3333/graphql",
   });
 };
 
-const getSplitLink = (uri?: string) =>
-  process.browser
-    ? split(({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === "OperationDefinition" &&
-          definition.operation === "subscription"
-        );
-      }, getUploadLink())
-    : getUploadLink();
+// const getSplitLink = (uri?: string) =>
+//   process.browser
+//     ? split(({ query }) => {
+//         const definition = getMainDefinition(query);
+//         return definition.kind === "OperationDefinition" && definition.operation === "subscription";
+//       }, getUploadLink())
+//     : getUploadLink();
 
 const client = new ApolloClient({
-  link: getSplitLink(),
+  link: getUploadLink(),
   cache: new InMemoryCache(),
 });
-export const setLink = (uri: string) => client.setLink(getSplitLink(uri));
+export const setLink = (uri: string) => client.setLink(getUploadLink(uri));
 export default client;

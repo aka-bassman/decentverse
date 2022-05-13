@@ -1,25 +1,13 @@
 import { RootState } from "../redux";
+import * as types from "../types";
 export const SLICE_NAME = "world";
 
-export type WorldQuery = {
-  min: number[];
-  max: number[];
-  serialized: string;
-};
-
-export type Screen = {
-  size: number[];
-  offset: number[];
-};
-export type WorldRender = {
-  tiles: any[];
-  players: any[];
-};
-
 export interface WorldState {
-  query: WorldQuery;
-  screen: Screen;
-  render: WorldRender;
+  query: types.WorldQuery;
+  screen: types.Screen;
+  render: types.WorldRender;
+  map?: types.Map;
+  me?: types.Player;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const initialState: WorldState = {
@@ -34,11 +22,14 @@ export const initialState: WorldState = {
   },
   render: {
     tiles: [],
-    players: [],
+    players: {},
   },
   status: "none",
 };
 export const select = {
+  me: (state: RootState) => state.world.me,
+  renderTiles: (state: RootState) => state.world.render.tiles,
+  renderPlayers: (state: RootState) => state.world.render.players,
   worldStatus: (state: RootState) => state.world.status,
   screen: (state: RootState) => state.world.screen,
 };

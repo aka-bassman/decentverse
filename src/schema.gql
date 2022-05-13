@@ -36,7 +36,7 @@ type Character {
 input CharacterInput {
   contract: ID
   down: SpriteInput
-  left: SpriteInput!
+  left: SpriteInput
   right: SpriteInput!
   tokenId: Float!
   up: SpriteInput

@@ -1,22 +1,31 @@
 import client from "../apollo";
 import gql from "graphql-tag";
 import * as scalar from "../scalar.type";
+import { placementFragment, Placement } from "../asset/asset.types";
+
+export type MapInput = {
+  name: string;
+  tileSize: number;
+  tiles: scalar.Tile[];
+  placements: Placement[];
+  interactions: scalar.Interaction[];
+};
 
 export type Map = {
   id: string;
   name: string;
   tileSize: number;
+  totalWidth: number;
+  totalHeight: number;
   tiles: scalar.Tile[][];
-  placements: scalar.Placement[];
+  placements: Placement[];
   interactions: scalar.Interaction[];
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 export const mapFragment = gql`
   ${scalar.tileFragment}
-  ${scalar.placementFragment}
+  ${placementFragment}
   ${scalar.interactionFragment}
   fragment mapFragment on Map {
     id
@@ -32,7 +41,5 @@ export const mapFragment = gql`
       ...interactionFragment
     }
     status
-    createdAt
-    updatedAt
   }
 `;

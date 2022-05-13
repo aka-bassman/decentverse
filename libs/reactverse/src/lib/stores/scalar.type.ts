@@ -1,6 +1,4 @@
-import * as types from "./types";
 import gql from "graphql-tag";
-
 export type AccessToken = {
   accessToken: string;
 };
@@ -105,24 +103,10 @@ export const interactionFragment = gql`
   }
 `;
 
-export type Placement = {
-  asset: string;
-  position: number[];
-};
-export const placementFragment = gql`
-  ${types.assetFragment}
-  fragment placementFragment on Placement {
-    asset {
-      ...assetFragment
-    }
-    position
-  }
-`;
-
 export type Tile = {
-  top: string;
-  bottom: string;
-  lighting: string;
+  top: File;
+  bottom: File;
+  lighting: File;
   interactions: Interaction[];
 };
 export const tileFragment = gql`

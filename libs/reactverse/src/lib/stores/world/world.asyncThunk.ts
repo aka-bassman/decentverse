@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { actions, RootState } from "../redux";
 import * as init from "./world.state";
-
-export const updateMe = createAsyncThunk<void, void, { state: RootState }>(
-  `${init.SLICE_NAME}/updateMe`,
+import * as gql from "../gql";
+import * as types from "../types";
+export const initWorld = createAsyncThunk<any, void, { state: RootState }>(
+  `${init.SLICE_NAME}/initWorld`,
   async (payload, { getState, dispatch }) => {
-    return;
+    const { maps, characters } = await gql.world();
+    dispatch(actions.setWorld({ map: maps[0], character: characters[0] }));
   }
 );
 

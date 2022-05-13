@@ -1,25 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import * as asyncThunk from "./asyncThunk";
 import * as init from "./character.state";
-import { updateMe } from "./character.asyncThunk";
+import * as types from "../types";
+import { initCharacters } from "./character.asyncThunk";
 
 export const slice = createSlice({
   name: init.SLICE_NAME,
   initialState: init.initialState,
   reducers: {
-    setCharacter: (state, action: PayloadAction<any>) => {
-      state.status = "idle";
+    setCharacter: (state: init.CharacterState, action: PayloadAction<types.Character[]>) => {
+      state.characters = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateMe.pending, (state) => {
+      .addCase(initCharacters.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateMe.rejected, (state) => {
+      .addCase(initCharacters.rejected, (state) => {
         state.status = "idle";
       })
-      .addCase(updateMe.fulfilled, (state) => {
+      .addCase(initCharacters.fulfilled, (state) => {
         state.status = "idle";
       });
   },

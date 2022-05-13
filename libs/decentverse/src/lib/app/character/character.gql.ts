@@ -20,10 +20,10 @@ export class CharacterInput {
   tokenId: number;
 
   @Field(() => gql.SpriteInput)
-  left: gql.SpriteInputType;
-
-  @Field(() => gql.SpriteInput)
   right: gql.SpriteInputType;
+
+  @Field(() => gql.SpriteInput, { nullable: true })
+  left?: gql.SpriteInputType;
 
   @Field(() => gql.SpriteInput, { nullable: true })
   up?: gql.SpriteInputType;

@@ -7,7 +7,7 @@ export const slice = createSlice({
   name: init.SLICE_NAME,
   initialState: init.initialState,
   reducers: {
-    setAdmin: (state, action: PayloadAction<any>) => {
+    setAdmin: (state: init.AdminState, action: PayloadAction<any>) => {
       state.status = "idle";
     },
   },
