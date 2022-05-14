@@ -28,6 +28,7 @@ export const initialState: WorldState = {
 };
 export const select = {
   me: (state: RootState) => state.world.me,
+  meRender: (state: RootState) => state.world.me?.render,
   renderTiles: (state: RootState) => state.world.render.tiles,
   renderPlayers: (state: RootState) => state.world.render.players,
   worldStatus: (state: RootState) => state.world.status,

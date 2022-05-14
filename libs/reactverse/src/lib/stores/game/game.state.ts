@@ -1,12 +1,10 @@
 import { RootState } from "../redux";
+import * as types from "../types";
 export const SLICE_NAME = "world";
 
-export const keyTypes = ["left", "right", "up", "down"] as const;
-export type KeyType = typeof keyTypes[number];
-export type Keyboard = { [key in KeyType]: boolean };
 export interface GameState {
   loopInterval: number;
-  keyboard: Keyboard;
+  keyboard: types.Keyboard;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const initialState: GameState = {

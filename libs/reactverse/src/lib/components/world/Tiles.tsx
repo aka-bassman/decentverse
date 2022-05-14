@@ -6,10 +6,10 @@ export interface TileProps {
 export const Tiles = ({ tiles }: TileProps) => {
   return (
     <>
-      {tiles.map((tileArr) => (
-        <div style={{ display: "flex" }}>
-          {tileArr.map((tile) => (
-            <div style={{ display: "flex" }}>
+      {tiles.map((tileArr, idx) => (
+        <div key={idx} style={{ display: "flex" }}>
+          {tileArr.map((tile, idx) => (
+            <div key={idx} style={{ display: "flex" }}>
               <img src={tile.bottom.url} />
             </div>
           ))}
