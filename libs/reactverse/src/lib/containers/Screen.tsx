@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useWindowDimensions, useKeyboard } from "../hooks";
-import { actions, select, useAppDispatch, useAppSelector } from "../stores";
+import { useGame, useWorld } from "../stores";
 
 // export interface ReactverseProps {
 //   a: any;
 // }
 
 export const Screen = ({ children }: any) => {
-  const dispatch = useAppDispatch();
-  const [width, height] = useWindowDimensions();
-  useKeyboard();
+  const initWorld = useWorld((state) => state.initWorld);
+  useWindowDimensions();
   useEffect(() => {
     (async () => {
-      console.log(await dispatch(actions.initWorld()));
+      await initWorld();
     })();
   }, []);
   return children;

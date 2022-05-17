@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { actions, select, useAppDispatch, useAppSelector } from "../stores";
+import { useGame } from "../stores";
 
 const keyMap = {
   KeyW: "up",
@@ -13,7 +13,7 @@ const keyMap = {
 } as const;
 type Key = keyof typeof keyMap;
 export const useKeyboard = () => {
-  const dispatch = useAppDispatch();
+  const setKey = useGame((state) => state.setKey);
   const keyState = useRef({
     left: false,
     right: false,
@@ -28,7 +28,7 @@ export const useKeyboard = () => {
       if (!key) return;
       else if (keyState.current[key] === state) return;
       keyState.current[key] = state;
-      dispatch(actions.setKey({ key, state }));
+      setKey(key, state);
     };
     const handleKeyDown = (event: any) => handleKeyEvent(event, true);
     const handleKeyUp = (event: any) => handleKeyEvent(event, false);
@@ -39,4 +39,5 @@ export const useKeyboard = () => {
       document.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
+  return keyState;
 };

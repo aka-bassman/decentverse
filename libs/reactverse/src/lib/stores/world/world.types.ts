@@ -1,6 +1,6 @@
 import * as scalar from "../scalar.type";
 import { Character } from "../character/character.types";
-export type WorldQuery = {
+export type WorldScope = {
   min: number[];
   max: number[];
   serialized: string;
@@ -21,12 +21,12 @@ export type RenderCharacter = {
   flip: boolean;
   position: number[];
   velocity: number[];
+  state: PlayerState;
+  direction: Direction;
 };
 export type Player = {
   userId: string;
   character: Character;
-  state: PlayerState;
-  direction: Direction;
   maxSpeed: number;
   acceleration: number;
   deceleration: number;

@@ -2,31 +2,33 @@ import { useEffect, useRef, useState } from "react";
 import { useInterval } from "../../hooks";
 import * as scalar from "../../stores/scalar.type";
 import * as types from "../../stores/types";
-import { actions, select, useAppDispatch, useAppSelector } from "../../stores";
+import { useGame, useWorld } from "../../stores";
 
 // export interface PlayerProps {
 //   // player: types.Player;
 // }
 
 export const Player = () => {
-  const keyboard = useAppSelector(select.keyboard);
-  const render = useAppSelector(select.meRender);
-  const dispatch = useAppDispatch();
+  const keyboard = useGame((state) => state.keyboard);
+  const me = useWorld((state) => state.me);
+  const accelMe = useWorld((state) => state.accelMe);
   // const position = useRef<number[]>(player.render.position);
   const x = useRef<number>(0);
   useInterval(() => {
-    dispatch(actions.accelMe(keyboard));
+    accelMe(keyboard);
   }, 15);
-  return render ? (
+  return me ? (
     <div
       style={{
         position: "absolute",
         left: 0,
         top: 0,
-        transform: `translate(${render.position[0]}px, ${render.position[1]}px) scaleX(${render.flip ? -1 : 1})`,
+        transform: `translate(${me.render.position[0]}px, ${me.render.position[1]}px) scaleX(${
+          me.render.flip ? -1 : 1
+        })`,
       }}
     >
-      <img src={render.src} alt="" />
+      <img width={200} height={200} src={me.render.src} alt="" />
     </div>
   ) : (
     <div />
