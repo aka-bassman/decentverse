@@ -1,46 +1,36 @@
 import { useState, useEffect, Suspense, useRef } from "react";
-import { useFrame, Canvas, useLoader } from "@react-three/fiber";
-import { useWorld, RenderCharacter } from "../stores";
+import { useFrame, useThree, useLoader } from "@react-three/fiber";
+import { useWorld, RenderCharacter, scalar } from "../stores";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { Material, Sprite, SpriteMaterial, MirroredRepeatWrapping, RepeatWrapping } from "three";
 import { useTexture, Html, useProgress } from "@react-three/drei";
-import { useKeyboard } from "../hooks";
+import { useKeyboard, useDuration, useInterval } from "../hooks";
 
 export function tiledToR3FTextureTranspiler(
-  tileValue: number,
-  imageWidth: number,
-  imageHeight: number,
-  tileSize: number | [number, number]
+  tilePosition: number[],
+  tilesAmountX: number,
+  tilesAmountY: number
+  // tileSize: number[]
 ) {
-  const tileSizeVector = Array.isArray(tileSize) ? tileSize : [tileSize, tileSize];
-
   // image width and height size (e.g 512px) / tile width and height size (e.g. 32px)
-  const tilesAmountX = imageWidth / tileSizeVector[0];
-  const tilesAmountY = imageHeight / tileSizeVector[1];
-
-  // X coordinate position of the texture based on the tilesetValue for this tile
-  const texturePositionX = Math.floor(tileValue % tilesAmountX);
-
-  // X coordinate position of the texture based on the tilesetValue for this tile
-  const texturePositionY = -1 + tilesAmountY - Math.floor(tileValue / tilesAmountX);
+  // const tilesAmountX = imageWidth / tileSize[0];
+  // const tilesAmountY = imageHeight / tileSize[1];
 
   return {
-    repeat: { x: 1 / tilesAmountX, y: 1 / tilesAmountY },
+    // repeat: { x: 1 / tilesAmountX, y: 1 / tilesAmountY },
     offset: {
-      x: texturePositionX / tilesAmountX,
-      y: texturePositionY / tilesAmountY,
+      x: tilePosition[1] / tilesAmountY,
+      y: (tilesAmountX - tilePosition[0] - 1) / tilesAmountX,
     },
   };
 }
 
-export function createTileTextureAnimator(texture: THREE.Texture, tileSize: number | [number, number], startValue = 0) {
+export function createTileTextureAnimator(texture: THREE.Texture, tileSize: number[], startValue = 0) {
   texture.wrapS = texture.wrapT = RepeatWrapping;
 
-  const tileSizeVector = Array.isArray(tileSize) ? tileSize : [tileSize, tileSize];
-
   // image width and height size (e.g 512px) / tile width and height size (e.g. 32px)
-  const tilesAmountX = texture.image.width / tileSizeVector[0];
-  const tilesAmountY = texture.image.height / tileSizeVector[1];
+  const tilesAmountX = texture.image.width / tileSize[0];
+  const tilesAmountY = texture.image.height / tileSize[1];
 
   // X coordinate position of the texture based on the tilesetValue for this tile
   const texturePositionX = Math.floor(startValue % tilesAmountX);
@@ -53,9 +43,13 @@ export function createTileTextureAnimator(texture: THREE.Texture, tileSize: numb
   texture.offset.x = texturePositionX / tilesAmountX;
   texture.offset.y = texturePositionY / tilesAmountY;
 
-  return (value: number) => {
-    const { offset } = tiledToR3FTextureTranspiler(value, texture.image.width, texture.image.height, tileSize);
-
+  return (tilePosition: number[]) => {
+    const { offset } = tiledToR3FTextureTranspiler(
+      tilePosition,
+      tilesAmountX,
+      tilesAmountY
+      // texture.image.width, texture.image.height , tileSize
+    );
     texture.offset.x = offset.x;
     texture.offset.y = offset.y;
   };
@@ -63,6 +57,11 @@ export function createTileTextureAnimator(texture: THREE.Texture, tileSize: numb
 
 // 게임 루프를 관리함. 렉 발생 시 핸들링 처리
 export const Player = ({ children }: any) => {
+  const { camera, set } = useThree();
+  useFrame(() => {
+    camera.position.setX(camera.position.x + 1);
+    // set({ camera: { ...camera, position: [camera.position[0] + 1, camera.position[1], 1000] } });
+  });
   const me = useWorld((state) => state.me);
   const [url] = useTexture([
     "/sprite.png",
@@ -70,8 +69,9 @@ export const Player = ({ children }: any) => {
   ]);
   const spriteRef = useRef<Sprite>(null);
   const materialRef = useRef<SpriteMaterial>(null);
+  const animationRef = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
-
+  const interval = useRef(500);
   const player = useRef<RenderCharacter>({
     position: [0, 0],
     velocity: [0, 0],
@@ -94,26 +94,27 @@ export const Player = ({ children }: any) => {
       ? "up"
       : keyboard.current.down && me.character.down
       ? "down"
-      : me.render.direction;
+      : player.current.direction;
     player.current = { position, velocity, direction, state: characterState };
-    // spriteRef.current.position.x = position[0] * 0.01;
-    // spriteRef.current.position.y = position[1] * 0.01;
-    spriteRef.current.translateX(velocity[0] * 0.01);
-    spriteRef.current.translateY(velocity[1] * 0.01);
-    // spriteRef.current.scale.setX(1);
+    spriteRef.current.translateX(velocity[0]);
+    spriteRef.current.translateY(velocity[1]);
+    const character = me.character as any;
+    animationRef.current = character[player.current.direction][player.current.state];
+    if (direction === "up") interval.current = 100;
   });
-  // url.wrapS = MirroredRepeatWrapping;
-  // url.repeat.set(1, 1);
-  // url.offset.x = 0.5;
-  const tileSize = [2, 1];
   const animator = createTileTextureAnimator(url, [418, 626]);
-  animator(5);
+  useDuration((p) => {
+    animator([animationRef.current.row, p]);
+  }, animationRef);
+  useInterval(() => {
+    console.log(spriteRef.current?.position.x);
+  }, interval.current);
   console.log("player render");
 
   return (
     <Suspense fallback={null}>
       <sprite ref={spriteRef}>
-        <planeGeometry args={[418 / 626, 1]} />
+        <planeGeometry args={[418, 626]} />
         <spriteMaterial ref={materialRef} map={url} />
       </sprite>
     </Suspense>

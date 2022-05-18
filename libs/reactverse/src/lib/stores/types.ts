@@ -1,4 +1,4 @@
-// export * from "./scalar.type";
+export * as scalar from "./scalar.type";
 export * from "./admin/admin.types";
 export * from "./asset/asset.types";
 export * from "./character/character.types";

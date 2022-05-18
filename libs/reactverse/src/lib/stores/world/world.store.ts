@@ -7,7 +7,7 @@ export interface WorldState {
   screen: types.Screen;
   render: types.WorldRender;
   map?: types.Map;
-  me?: types.Player;
+  me: types.Player;
   initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
@@ -29,26 +29,50 @@ export const useWorld = create<WorldState>((set, get) => ({
       totalSize: [1673, 2505],
       right: {
         idle: {
-          row: 0,
-          column: 4,
-          duration: 1000,
+          row: 3,
+          column: 1,
+          duration: 300,
         },
         walk: {
-          row: 1,
+          row: 3,
           column: 4,
-          duration: 1000,
+          duration: 300,
         },
       },
       left: {
         idle: {
           row: 2,
-          column: 4,
-          duration: 1000,
+          column: 1,
+          duration: 300,
         },
         walk: {
-          row: 3,
+          row: 2,
           column: 4,
-          duration: 1000,
+          duration: 300,
+        },
+      },
+      up: {
+        idle: {
+          row: 1,
+          column: 1,
+          duration: 300,
+        },
+        walk: {
+          row: 1,
+          column: 4,
+          duration: 300,
+        },
+      },
+      down: {
+        idle: {
+          row: 0,
+          column: 1,
+          duration: 300,
+        },
+        walk: {
+          row: 0,
+          column: 4,
+          duration: 300,
         },
       },
     },
