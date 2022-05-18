@@ -6,35 +6,19 @@ import { Game, Loop, Screen, Socket, Player, Map } from "./containers";
 import { ApolloProvider } from "@apollo/client";
 import { PixiTest } from "./components";
 import { useApp, AppContext, AppProvider } from "@inlet/react-pixi";
-import * as PIXI from "pixi.js";
-
-// export interface ReactverseProps {
-//   a: any;
-// }
-
-const app = new PIXI.Application({
-  width: 800,
-  height: 600,
-  backgroundColor: 0x5bba6f,
-});
+import { Canvas } from "@react-three/fiber";
 
 export const Reactverse = () => {
-  const ref = useRef<any>(null);
-
   return (
     <ApolloProvider client={client}>
       <div>
         <h1>Welcome to Reactverse!</h1>
       </div>
-      {/* <AppProvider value={app}>
-          <PixiTest />
-        </AppProvider> */}
-      {/* <div style={{ width: 1000, height: 1000 }}></div> */}
-      {/* <World /> */}
-      <Game>
-        <Map />
-        <Player />
-      </Game>
+      <div style={{ width: 1000, height: 1000 }}>
+        <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 1000] }}>
+          <Game />
+        </Canvas>
+      </div>
       <Socket uri="localhost:3333">
         <Loop>loop</Loop>
       </Socket>

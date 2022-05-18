@@ -1,30 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "../stores";
+import { scalar } from "../stores";
 
-const keyMap = {
-  KeyW: "up",
-  KeyA: "left",
-  KeyS: "down",
-  KeyD: "right",
-  ArrowUp: "up",
-  ArrowLeft: "left",
-  ArrowDown: "down",
-  ArrowRight: "right",
-} as const;
-type Key = keyof typeof keyMap;
 export const useKeyboard = () => {
   const setKey = useGame((state) => state.setKey);
-  const keyState = useRef({
-    left: false,
-    right: false,
-    up: false,
-    down: false,
-  });
+  const keyState = useRef(scalar.keyboard);
   useEffect(() => {
     const handleKeyEvent = (event: any, state: boolean) => {
       if (event.repeat) return;
-      const code: Key = event.code;
-      const key = keyMap[code];
+      const code: scalar.Key = event.code;
+      const key = scalar.keyMap[code];
       if (!key) return;
       else if (keyState.current[key] === state) return;
       keyState.current[key] = state;

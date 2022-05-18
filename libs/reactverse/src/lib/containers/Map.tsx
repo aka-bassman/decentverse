@@ -10,14 +10,8 @@ function Loader() {
 // import * as THREE from "three";
 // 게임 루프를 관리함. 렉 발생 시 핸들링 처리
 export const Map = () => {
-  // const tiles = useWorld((state) => state.render.tiles);
-  const tiles = useTexture([
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    // tiles[0][0].bottom.url.split("/").slice(-2).join("/")
-  ]);
+  const tileMap = useWorld((state) => state.render.tiles);
+  const tiles = useTexture([tileMap[0][0].bottom.url.split("/").slice(-2).join("/")]);
 
   return (
     <Suspense fallback={<Loader />}>
@@ -30,4 +24,3 @@ export const Map = () => {
     </Suspense>
   );
 };
-useTexture.preload("/decentverse/azure-sky.png");

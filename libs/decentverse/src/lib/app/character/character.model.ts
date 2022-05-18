@@ -25,10 +25,10 @@ export class Input {
   @Prop({ type: Types.ObjectId, required: true, ref: "file", index: true })
   file: Types.ObjectId;
 
-  @Prop([{ type: Number, required: trusted }])
+  @Prop([{ type: Number, required: true }])
   tileSize: number[];
 
-  @Prop([{ type: Number, required: trusted }])
+  @Prop([{ type: Number, required: true }])
   totalSize: number[];
 
   @Prop({ type: gql.SpriteSchema })

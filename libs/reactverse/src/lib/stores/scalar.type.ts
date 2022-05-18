@@ -136,3 +136,25 @@ export const tileFragment = gql`
     }
   }
 `;
+
+export const keyMap = {
+  KeyW: "up",
+  KeyA: "left",
+  KeyS: "down",
+  KeyD: "right",
+  ArrowUp: "up",
+  ArrowLeft: "left",
+  ArrowDown: "down",
+  ArrowRight: "right",
+} as const;
+export type Key = keyof typeof keyMap;
+
+export const keyTypes = ["up", "left", "down", "right"] as const;
+export type KeyType = typeof keyTypes[number];
+export const keyboard = {
+  left: false,
+  right: false,
+  up: false,
+  down: false,
+};
+export type Keyboard = { [key in KeyType]: boolean };
