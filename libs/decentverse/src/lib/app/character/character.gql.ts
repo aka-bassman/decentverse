@@ -19,11 +19,20 @@ export class CharacterInput {
   @Field()
   tokenId: number;
 
+  @Field(() => ID)
+  file: Types.ObjectId;
+
+  @Field()
+  tileSize: number[];
+
+  @Field()
+  totalSize: number[];
+
   @Field(() => gql.SpriteInput)
   right: gql.SpriteInputType;
 
-  @Field(() => gql.SpriteInput, { nullable: true })
-  left?: gql.SpriteInputType;
+  @Field(() => gql.SpriteInput)
+  left: gql.SpriteInputType;
 
   @Field(() => gql.SpriteInput, { nullable: true })
   up?: gql.SpriteInputType;
@@ -49,11 +58,20 @@ export class Character {
   @Field()
   tokenId: number;
 
+  @Field(() => gql.File)
+  file: gql.File;
+
+  @Field()
+  tileSize: number[];
+
+  @Field()
+  totalSize: number[];
+
   @Field(() => gql.Sprite)
   right: gql.SpriteType;
 
-  @Field(() => gql.Sprite, { nullable: true })
-  left?: gql.SpriteType;
+  @Field(() => gql.Sprite)
+  left: gql.SpriteType;
 
   @Field(() => gql.Sprite, { nullable: true })
   up?: gql.SpriteType;

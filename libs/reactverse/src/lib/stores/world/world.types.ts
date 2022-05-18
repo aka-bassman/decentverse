@@ -17,8 +17,6 @@ export type PlayerState = typeof playerStates[number];
 export const directions = ["left", "right", "up", "down"] as const;
 export type Direction = typeof directions[number];
 export type RenderCharacter = {
-  src: string;
-  flip: boolean;
   position: number[];
   velocity: number[];
   state: PlayerState;

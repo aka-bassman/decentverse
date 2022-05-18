@@ -15,6 +15,60 @@ export interface WorldState {
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
+  me: {
+    userId: "",
+    character: {
+      id: "",
+      tokenId: 0,
+      status: "active",
+      file: {
+        id: "",
+        url: "",
+      },
+      tileSize: [418, 626],
+      totalSize: [1673, 2505],
+      right: {
+        idle: {
+          row: 0,
+          column: 4,
+          duration: 1000,
+        },
+        walk: {
+          row: 1,
+          column: 4,
+          duration: 1000,
+        },
+      },
+      left: {
+        idle: {
+          row: 2,
+          column: 4,
+          duration: 1000,
+        },
+        walk: {
+          row: 3,
+          column: 4,
+          duration: 1000,
+        },
+      },
+    },
+
+    // right?: scalar.Sprite;
+    // up?: scalar.Sprite;
+    // down?: scalar.Sprite;
+    maxSpeed: 5,
+    acceleration: 1,
+    deceleration: 1,
+
+    render: {
+      src: "",
+      flip: false,
+      position: [0, 0],
+      velocity: [0, 0],
+      state: "idle",
+      direction: "right",
+    },
+  },
   scope: {
     min: [0, 0],
     max: [0, 0],
@@ -35,8 +89,6 @@ export const useWorld = create<WorldState>((set, get) => ({
       userId: "userId",
       character: characters[0],
       render: {
-        src: characters[0].right.idle.url,
-        flip: false,
         position: [50, 50],
         velocity: [0, 0],
         state: "idle",
@@ -51,7 +103,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     return set({ map: maps[0], me, render, status });
   },
   accelMe: (keyboard: types.Keyboard) => {
-    const state = get();
+    const state: WorldState = get();
     if (!state.me) return;
     // const decelSpeed = [
     //   Math.min(Math.abs(state.me.render.velocity[0]), state.me.deceleration),
@@ -93,10 +145,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       : keyboard.down && state.me.character.down
       ? "down"
       : state.me.render.direction;
-    const flip = keyboard.left && !state.me.character.left ? true : keyboard.right ? false : state.me.render.flip;
-    const character = state.me.character as any;
-    const src = character[direction][characterState].url;
-    return set({ me: { ...state.me, render: { src, flip, position, velocity, direction, state: characterState } } });
+    return set({ me: { ...state.me, render: { position, velocity, direction, state: characterState } } });
   },
   moveMe: () => {
     const state = get();

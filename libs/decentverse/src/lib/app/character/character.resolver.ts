@@ -1,12 +1,14 @@
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
 import { CharacterService } from "./character.service";
 import { Allow, Account } from "../../middlewares";
 import * as gql from "../../app/gql";
+import * as srv from "../srv";
+import * as db from "../db";
 import { UseGuards } from "@nestjs/common";
 
 @Resolver(() => gql.Character)
 export class CharacterResolver {
-  constructor(private readonly characterService: CharacterService) {}
+  constructor(private readonly characterService: CharacterService, private readonly fileService: srv.FileService) {}
 
   @Query(() => gql.Character)
   @UseGuards(Allow.Every)
@@ -39,5 +41,10 @@ export class CharacterResolver {
   @UseGuards(Allow.Admin)
   async removeCharacter(@Args({ name: "characterId", type: () => String }) characterId: string) {
     return await this.characterService.removeCharacter(characterId);
+  }
+
+  @ResolveField()
+  async file(@Parent() character: db.Character.Character) {
+    return await this.fileService.load(character.file);
   }
 }

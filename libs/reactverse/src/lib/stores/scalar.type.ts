@@ -69,18 +69,27 @@ export const fileFragment = gql`
   }
 `;
 
+export type SpriteDef = {
+  row: number;
+  column: number;
+  duration: number;
+};
+
 export type Sprite = {
-  idle: File;
-  walk: File;
+  idle: SpriteDef;
+  walk: SpriteDef;
 };
 export const spriteFragment = gql`
-  ${fileFragment}
   fragment spriteFragment on Sprite {
     idle {
-      ...fileFragment
+      row
+      column
+      duration
     }
     walk {
-      ...fileFragment
+      row
+      column
+      duration
     }
   }
 `;

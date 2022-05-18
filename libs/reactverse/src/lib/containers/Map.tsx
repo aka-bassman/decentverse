@@ -11,7 +11,10 @@ function Loader() {
 // 게임 루프를 관리함. 렉 발생 시 핸들링 처리
 export const Map = () => {
   const tiles = useWorld((state) => state.render.tiles);
-  const [tile] = useTexture([tiles[0][0].bottom.url.split("/").slice(-2).join("/")]);
+  const [tile] = useTexture([
+    "/decentverse/azure-sky.png",
+    // tiles[0][0].bottom.url.split("/").slice(-2).join("/")
+  ]);
 
   return (
     <Suspense fallback={<Loader />}>

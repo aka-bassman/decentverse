@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Model, Types } from "mongoose";
+import { Document, Model, trusted, Types } from "mongoose";
 import * as dbConfig from "../../dbConfig";
 import * as gql from "../gql";
 /**
@@ -22,11 +22,20 @@ export class Input {
   @Prop({ type: Number, required: true, index: true, default: -1 })
   tokenId: number;
 
+  @Prop({ type: Types.ObjectId, required: true, ref: "file", index: true })
+  file: Types.ObjectId;
+
+  @Prop([{ type: Number, required: trusted }])
+  tileSize: number[];
+
+  @Prop([{ type: Number, required: trusted }])
+  totalSize: number[];
+
   @Prop({ type: gql.SpriteSchema })
   right: gql.SpriteType;
 
-  @Prop({ type: gql.SpriteSchema, required: false })
-  left?: gql.SpriteType;
+  @Prop({ type: gql.SpriteSchema })
+  left: gql.SpriteType;
 
   @Prop({ type: gql.SpriteSchema, required: false })
   up?: gql.SpriteType;

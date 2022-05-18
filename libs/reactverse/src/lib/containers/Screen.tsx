@@ -11,7 +11,7 @@ export const Screen = ({ children }: any) => {
   useWindowDimensions();
   useEffect(() => {
     (async () => {
-      await initWorld();
+      // await initWorld();
     })();
   }, []);
   return children;
