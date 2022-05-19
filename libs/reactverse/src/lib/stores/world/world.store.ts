@@ -25,17 +25,17 @@ export const useWorld = create<WorldState>((set, get) => ({
         id: "",
         url: "",
       },
-      tileSize: [418, 626],
-      totalSize: [1673, 2505],
+      tileSize: [129, 194],
+      totalSize: [388, 581],
       right: {
         idle: {
-          row: 3,
+          row: 2,
           column: 1,
           duration: 300,
         },
         walk: {
-          row: 3,
-          column: 4,
+          row: 2,
+          column: 3,
           duration: 300,
         },
       },
@@ -47,7 +47,7 @@ export const useWorld = create<WorldState>((set, get) => ({
         },
         walk: {
           row: 2,
-          column: 4,
+          column: 3,
           duration: 300,
         },
       },
@@ -59,7 +59,7 @@ export const useWorld = create<WorldState>((set, get) => ({
         },
         walk: {
           row: 1,
-          column: 4,
+          column: 3,
           duration: 300,
         },
       },
@@ -71,7 +71,7 @@ export const useWorld = create<WorldState>((set, get) => ({
         },
         walk: {
           row: 0,
-          column: 4,
+          column: 3,
           duration: 300,
         },
       },
@@ -80,7 +80,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     // right?: scalar.Sprite;
     // up?: scalar.Sprite;
     // down?: scalar.Sprite;
-    maxSpeed: 5,
+    maxSpeed: 10,
     acceleration: 1,
     deceleration: 1,
 

@@ -15,7 +15,7 @@ export interface PlayerProp {
 export const Player = ({ sprite, animation, keyboard, player }: PlayerProp) => {
   const { camera, get } = useThree();
   const me = useWorld((state) => state.me);
-  const [url] = useTexture(["/sprite.png"]);
+  const [url] = useTexture(["/sprite5.png"]);
 
   useFrame(() => {
     if (!sprite.current || !me) return;
@@ -40,7 +40,7 @@ export const Player = ({ sprite, animation, keyboard, player }: PlayerProp) => {
     const character = me.character as any;
     animation.current = character[player.current.direction][player.current.state];
   });
-  const animator = createTileTextureAnimator(url, [418, 626]);
+  const animator = createTileTextureAnimator(url, [129, 194]);
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
@@ -55,7 +55,7 @@ export const Player = ({ sprite, animation, keyboard, player }: PlayerProp) => {
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
-        <planeGeometry args={[418, 626]} />
+        <planeGeometry args={[129, 194]} />
         <spriteMaterial map={url} />
       </sprite>
     </Suspense>
