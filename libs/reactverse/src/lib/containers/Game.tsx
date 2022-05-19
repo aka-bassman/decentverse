@@ -1,4 +1,4 @@
-import { Suspense, useRef, MutableRefObject } from "react";
+import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useWorld, RenderCharacter, scalar } from "../stores";
 import { Sprite, SpriteMaterial } from "three";
@@ -7,6 +7,12 @@ import { useKeyboard, useDuration, createTileTextureAnimator } from "../hooks";
 import { Map, Player } from "./index";
 // 게임 루프를 관리함. 렉 발생 시 핸들링 처리
 export const Game = () => {
+  const initWorld = useWorld((state) => state.initWorld);
+  useEffect(() => {
+    (async () => {
+      await initWorld();
+    })();
+  }, []);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
@@ -19,7 +25,7 @@ export const Game = () => {
 
   return (
     <Suspense fallback={null}>
-      <Map />
+      <Map player={player} />
       <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} />
     </Suspense>
   );

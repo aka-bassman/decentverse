@@ -14,8 +14,8 @@ export const Reactverse = () => {
       <div>
         <h1>Welcome to Reactverse!</h1>
       </div>
-      <div style={{ width: 1000, height: 1000 }}>
-        <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 1000] }}>
+      <div style={{ width: 1500, height: 1500 }}>
+        <Canvas camera={{ fov: 75, near: 0.1, far: 3000, position: [0, 0, 2500] }}>
           <Game />
         </Canvas>
       </div>

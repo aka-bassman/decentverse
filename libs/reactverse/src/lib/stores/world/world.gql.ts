@@ -5,14 +5,14 @@ import * as types from "../types";
 export type WorldQuery = { maps: types.Map[]; characters: types.Character[] };
 export const worldQuery = gql`
   ${types.mapFragment}
-  ${types.characterFragment}
+
   query world {
     maps {
       ...mapFragment
     }
-    characters {
-      ...characterFragment
-    }
+    # characters {
+    #   ...characterFragment
+    # }
   }
 `;
 export const world = async () =>

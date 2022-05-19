@@ -1,6 +1,7 @@
 import create from "zustand";
 import * as types from "../types";
 import * as gql from "../gql";
+import { devtools } from "zustand/middleware";
 
 export interface WorldState {
   scope: types.WorldScope;
@@ -102,21 +103,24 @@ export const useWorld = create<WorldState>((set, get) => ({
   },
   status: "none",
   initWorld: async () => {
-    const { maps, characters } = await gql.world();
+    const {
+      maps,
+      // , characters
+    } = await gql.world();
     const me: types.Player = {
       userId: "userId",
-      character: characters[0],
+      character: get().me.character,
       render: {
         position: [50, 50],
         velocity: [0, 0],
         state: "idle",
         direction: "right",
       },
-      maxSpeed: 5,
+      maxSpeed: 10,
       acceleration: 1,
       deceleration: 1,
     };
-    const render = { tiles: maps[0].tiles.slice(0, 2).map((tiles) => tiles.slice(0, 2)), players: {} };
+    const render = { tiles: maps[0].tiles, players: {} };
     const status = "idle";
     return set({ map: maps[0], me, render, status });
   },

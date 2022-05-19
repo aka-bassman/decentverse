@@ -7,12 +7,7 @@ import { useGame, useWorld } from "../stores";
 // }
 
 export const Screen = ({ children }: any) => {
-  const initWorld = useWorld((state) => state.initWorld);
   useWindowDimensions();
-  useEffect(() => {
-    (async () => {
-      // await initWorld();
-    })();
-  }, []);
+
   return children;
 };

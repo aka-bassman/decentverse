@@ -13,7 +13,6 @@ export function tiledToR3FTextureTranspiler(tilePosition: number[], tilesAmountX
 export function createTileTextureAnimator(texture: THREE.Texture, tileSize: number[], startValue = 0) {
   texture.wrapS = texture.wrapT = RepeatWrapping;
   // image width and height size (e.g 512px) / tile width and height size (e.g. 32px)
-  console.log(texture.image.width, texture.image.height);
   const tilesAmountX = texture.image.width / tileSize[0];
   const tilesAmountY = texture.image.height / tileSize[1];
   // X coordinate position of the texture based on the tilesetValue for this tile
