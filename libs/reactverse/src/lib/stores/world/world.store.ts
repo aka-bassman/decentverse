@@ -4,14 +4,12 @@ import * as gql from "../gql";
 
 export interface WorldState {
   scope: types.WorldScope;
-  screen: types.Screen;
   render: types.WorldRender;
   map?: types.Map;
   me: types.Player;
   initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
-  changeScreenSize: (screen: types.Screen) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -98,10 +96,6 @@ export const useWorld = create<WorldState>((set, get) => ({
     max: [0, 0],
     serialized: "00",
   },
-  screen: {
-    size: [0, 0],
-    offset: [0, 0],
-  },
   render: {
     tiles: [],
     players: {},
@@ -180,5 +174,4 @@ export const useWorld = create<WorldState>((set, get) => ({
     ];
     return set({ me: { ...state.me, render: { ...state.me.render, position } } });
   },
-  changeScreenSize: (screen: types.Screen) => set({ screen }),
 }));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useWorld } from "../stores";
+import { useGame, useWorld } from "../stores";
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -7,8 +7,8 @@ const getWindowDimensions = () => {
 };
 
 export const useWindowDimensions = () => {
-  const screen = useWorld((state) => state.screen);
-  const changeScreenSize = useWorld((state) => state.changeScreenSize);
+  const screen = useGame((state) => state.screen);
+  const changeScreenSize = useGame((state) => state.changeScreenSize);
   useEffect(() => {
     const handleResize = () => changeScreenSize({ size: getWindowDimensions(), offset: [0, 0] });
     handleResize();

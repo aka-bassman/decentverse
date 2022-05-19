@@ -16,6 +16,7 @@ export const Game = () => {
     state: "idle",
     direction: "right",
   });
+
   return (
     <Suspense fallback={null}>
       <Map />
