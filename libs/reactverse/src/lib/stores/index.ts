@@ -5,5 +5,6 @@ export * from "./map";
 export * from "./game";
 export * from "./world";
 export { default as client } from "./apollo";
-export * from "./types";
+export * as types from "./types";
+export * as scalar from "./scalar.type";
 // export * from "./gameState";

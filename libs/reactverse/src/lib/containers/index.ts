@@ -4,5 +4,6 @@ export * from "./Loop";
 export * from "./World";
 export * from "./Game";
 export * from "./Character";
-export * from "./Map";
+export * from "./TileMap";
 export * from "./Player";
+export * from "./Players";

@@ -73,6 +73,7 @@ export class DecentverseModule {
         module.FileModule,
         module.RtModule.register(options?.redis),
         module.ScalarModule,
+        module.BatchModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

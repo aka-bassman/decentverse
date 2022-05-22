@@ -1,15 +1,16 @@
 import { Suspense, useRef, MutableRefObject, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame } from "../stores";
+import { types, useWorld, RenderCharacter, scalar, useGame } from "../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3 } from "three";
 import { useTexture } from "@react-three/drei";
 import { useKeyboard, useDuration, createTileTextureAnimator, useInterval } from "../hooks";
-
+import { makeScope } from "../utils";
 export interface MapProp {
   player: MutableRefObject<RenderCharacter>;
+  scope: MutableRefObject<types.WorldScope>;
 }
 
-export const Map = ({ player }: MapProp) => {
+export const TileMap = ({ player, scope }: MapProp) => {
   const tileMap = useGame((state) => state.tileMap);
   const screen = useGame((state) => state.screen);
   const render = useGame((state) => state.render);
@@ -45,6 +46,7 @@ export const Map = ({ player }: MapProp) => {
     []
   );
   useInterval(() => {
+    // 1. Update Tiles
     const tilePos = [
       player.current.position[0] % tileMap.tileSize[0],
       player.current.position[1] % tileMap.tileSize[1],
@@ -70,6 +72,13 @@ export const Map = ({ player }: MapProp) => {
       return;
     }
     setTiles(tiles);
+
+    // 2. Update Scope
+    const showBox = {
+      min: [player.current.position[0] - screen.size[0], player.current.position[1] - screen.size[1]],
+      max: [player.current.position[0] + screen.size[0], player.current.position[1] + screen.size[1]],
+    };
+    scope.current = makeScope(showBox);
   }, 500);
   return (
     <Suspense fallback={null}>

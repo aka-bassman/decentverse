@@ -8,9 +8,13 @@ export interface WorldState {
   render: types.WorldRender;
   map?: types.Map;
   me: types.Player;
+  otherPlayerIds: string[];
+  otherPlayers: Map<string, types.OtherPlayer>;
   initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
+  setOtherPlayerIds: (ids: string[]) => void;
+  addOtherPlayers: (players: types.OtherPlayer[]) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -22,7 +26,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       status: "active",
       file: {
         id: "",
-        url: "",
+        url: "/sprite5.png",
       },
       tileSize: [129, 194],
       totalSize: [388, 581],
@@ -75,27 +79,22 @@ export const useWorld = create<WorldState>((set, get) => ({
         },
       },
     },
-
-    // right?: scalar.Sprite;
-    // up?: scalar.Sprite;
-    // down?: scalar.Sprite;
     maxSpeed: 10,
     acceleration: 1,
     deceleration: 1,
-
     render: {
-      src: "",
-      flip: false,
+      id: "",
       position: [0, 0],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
     },
   },
+  otherPlayerIds: [],
+  otherPlayers: new Map(),
   scope: {
     min: [0, 0],
-    max: [0, 0],
-    serialized: "00",
+    max: [2048, 2048],
   },
   render: {
     tiles: [],
@@ -111,6 +110,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       userId: "userId",
       character: get().me.character,
       render: {
+        id: "AAAA",
         position: [50, 50],
         velocity: [0, 0],
         state: "idle",
@@ -167,7 +167,9 @@ export const useWorld = create<WorldState>((set, get) => ({
       : keyboard.down && state.me.character.down
       ? "down"
       : state.me.render.direction;
-    return set({ me: { ...state.me, render: { position, velocity, direction, state: characterState } } });
+    return set({
+      me: { ...state.me, render: { id: state.me.render.id, position, velocity, direction, state: characterState } },
+    });
   },
   moveMe: () => {
     const state = get();
@@ -178,4 +180,13 @@ export const useWorld = create<WorldState>((set, get) => ({
     ];
     return set({ me: { ...state.me, render: { ...state.me.render, position } } });
   },
+  setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
+  addOtherPlayers: (players: types.OtherPlayer[]) =>
+    set((state) => {
+      const otherPlayers = new Map(state.otherPlayers);
+      players.map((player) => {
+        if (!otherPlayers.get(player.id)) otherPlayers.set(player.id, player);
+      });
+      return { otherPlayers };
+    }),
 }));
