@@ -7,4 +7,5 @@ export * from "./world";
 export { default as client } from "./apollo";
 export * as types from "./types";
 export * as scalar from "./scalar.type";
+export * from "./gossip";
 // export * from "./gameState";

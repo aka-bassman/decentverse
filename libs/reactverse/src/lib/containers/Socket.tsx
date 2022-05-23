@@ -9,19 +9,15 @@ export interface SocketProp {
   uri: string;
   player: MutableRefObject<types.RenderCharacter>;
   scope: MutableRefObject<types.WorldScope>;
+  socket: Soc;
 }
 
 // 소켓 데이터 처리를 주로 진행
-export const Socket = ({ uri, player, scope }: SocketProp) => {
+export const Socket = ({ uri, player, scope, socket }: SocketProp) => {
   const addOtherPlayers = useWorld((state) => state.addOtherPlayers);
   const setOtherPlayerIds = useWorld((state) => state.setOtherPlayerIds);
-  const [isConnected, setIsConnected] = useState(false);
-  const [socket, setSocket] = useState<Soc | null>(null);
   const me = useWorld((state) => state.me);
   useEffect(() => {
-    const socket = io(uri);
-    setSocket(socket);
-    socket.on("connect", () => setIsConnected(true));
     socket.emit("register", player.current.id, makeCharacterMessage(me.character));
     socket.on("players", (data) => {
       const players = data.map((dat: string) => decodeProtocolV1(dat));
@@ -53,5 +49,5 @@ export const Socket = ({ uri, player, scope }: SocketProp) => {
     socket.emit("player", ...encodeProtocolV1(player.current, scope.current));
   }, 250);
 
-  return isConnected ? <div>connected</div> : <div>Connecting Socket...</div>;
+  return <div>connected</div>;
 };

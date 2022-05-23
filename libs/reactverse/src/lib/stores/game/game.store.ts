@@ -1,5 +1,6 @@
 import create from "zustand";
 import * as types from "../types";
+import { Socket } from "socket.io-client";
 
 export interface GameState {
   loopInterval: number;

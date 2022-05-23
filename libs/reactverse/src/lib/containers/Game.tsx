@@ -5,15 +5,13 @@ import { Sprite, SpriteMaterial } from "three";
 import { useTexture } from "@react-three/drei";
 import { useKeyboard, useDuration, createTileTextureAnimator, useInterval } from "../hooks";
 import { TileMap, Player, Socket, Loop, Screen, Players } from "./index";
-// 게임 루프를 관리함. 렉 발생 시 핸들링 처리
+import { Socket as Soc } from "socket.io-client";
 
-export type OtherPlayer = {
-  prev: RenderCharacter;
-  next: RenderCharacter;
-  sprite: scalar.SpriteDef;
-};
+export interface GameProps {
+  socket: Soc;
+}
 
-export const Game = () => {
+export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
   useEffect(() => {
     (async () => {
@@ -43,7 +41,7 @@ export const Game = () => {
           <Players playerId={player.current.id} />
         </Suspense>
       </Canvas>
-      <Socket uri="localhost:3333" player={player} scope={scope} />
+      <Socket uri="localhost:3333" player={player} scope={scope} socket={socket} />
       <Screen />
     </div>
   );

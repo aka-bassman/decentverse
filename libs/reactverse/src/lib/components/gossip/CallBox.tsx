@@ -1,51 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { ShareScreenIcon, MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "../components";
 import { Socket as Soc } from "socket.io-client";
-import Peer from "simple-peer";
-const stunServer = "stun:stun4.l.google.com:19302";
-export class Call {
-  peer: Peer.Instance;
-  constructor(stream: MediaStream, initiator: boolean) {
-    console.log(initiator);
-    const opt: any = {
-      reconnectTimer: 1000,
-      iceTransportPolicy: "relay",
-    };
-    this.peer = new Peer({
-      initiator,
-      streams: [stream],
-      trickle: false,
-      ...opt,
-      config: { iceServers: [{ urls: stunServer }] },
-    });
-  }
-  connect(otherId: string) {
-    this.peer.signal(otherId);
-  }
-}
+import { useGossip } from "src/lib/stores";
 
-export interface CallRoomProps {
+export interface CallBoxProps {
   socket: Soc;
+  roomId: string;
 }
 
-export const CallRoom = ({ socket }: CallRoomProps) => {
-  const call = useRef<Call>();
-  const localStream = useRef<MediaStream>();
-  const initiator = useRef(false);
-  const [full, setFull] = useState(false);
-  const [connecting, setConnecting] = useState(false);
-  const [waiting, setWaiting] = useState(true);
-  const [micState, setMicState] = useState(true);
-  const [camState, setCamState] = useState(true);
-  const [roomId, setRoomId] = useState("aaa");
-  const localVideo = useRef<HTMLVideoElement>(null);
-  const remoteVideo = useRef<HTMLVideoElement>(null);
-
+export const CallBox = ({ socket, roomId }: CallBoxProps) => {
+  const peers = useGossip((state) => state.peers);
+  const callRoom = useGossip((state) => state.callRoom);
+  const addPeer = useGossip((state) => state.addPeer);
   useEffect(() => {
     (async () => {
       const stream = await getUserMedia();
       socket.emit("join", { roomId });
-      socket.on("init", () => (initiator.current = true));
+      socket.on("init", () => addPeer(true, stream));
       socket.on("ready", () => {
         console.log("entering..");
         enter(roomId);
@@ -57,7 +28,7 @@ export const CallRoom = ({ socket }: CallRoomProps) => {
         startCall(data);
       });
       socket.on("disconnected", () => (initiator.current = false));
-      socket.on("full", () => setFull(true));
+      //   socket.on("full", () => setFull(true));
     })();
   }, []);
 
@@ -134,33 +105,5 @@ export const CallRoom = ({ socket }: CallRoomProps) => {
     call.current.connect(otherId);
   };
 
-  return (
-    <div className="video-wrapper">
-      <div className="local-video-wrapper">
-        <video autoPlay id="localVideo" muted ref={localVideo} />
-      </div>
-      <video autoPlay className={`${connecting || waiting ? "hide" : ""}`} id="remoteVideo" ref={remoteVideo} />
-      <div className="controls">
-        <button className="control-btn" onClick={getDisplay}>
-          <ShareScreenIcon />
-        </button>
-        <button className="control-btn" onClick={setAudioLocal}>
-          {micState ? <MicOnIcon /> : <MicOffIcon />}
-        </button>
-        <button className="control-btn" onClick={setVideoLocal}>
-          {camState ? <CamOnIcon /> : <CamOffIcon />}
-        </button>
-      </div>
-      {connecting && (
-        <div className="status">
-          <p>Establishing connection...</p>
-        </div>
-      )}
-      {waiting && (
-        <div className="status">
-          <p>Waiting for someone...</p>
-        </div>
-      )}
-    </div>
-  );
+  return <div className="video-wrapper"></div>;
 };
