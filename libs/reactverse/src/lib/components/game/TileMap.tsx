@@ -1,10 +1,10 @@
 import { Suspense, useRef, MutableRefObject, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar, useGame } from "../stores";
+import { types, useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3 } from "three";
 import { useTexture } from "@react-three/drei";
-import { useKeyboard, useDuration, createTileTextureAnimator, useInterval } from "../hooks";
-import { makeScope } from "../utils";
+import { useInterval } from "../../hooks";
+import { makeScope } from "../../utils";
 export interface MapProp {
   player: MutableRefObject<RenderCharacter>;
   scope: MutableRefObject<types.WorldScope>;
@@ -25,7 +25,6 @@ export const TileMap = ({ player, scope }: MapProp) => {
     // tiles[0][0].bottom.url.split("/").slice(-2).join("/")
   ]);
   const scene = useRef<Scene>(new Scene());
-  const sprites = useRef<{ sprite: Sprite; id: string }[]>([]);
   const renderLines = useMemo(
     () => [
       [

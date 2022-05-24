@@ -1,10 +1,9 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
-import { useFrame, useThree, Canvas } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar } from "../stores";
+import { Canvas } from "@react-three/fiber";
+import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
-import { useTexture } from "@react-three/drei";
-import { useKeyboard, useDuration, createTileTextureAnimator, useInterval } from "../hooks";
-import { TileMap, Player, Socket, Screen, Players } from "./index";
+import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
+import { TileMap, Player, Players } from "./index";
 import { Socket as Soc } from "socket.io-client";
 
 export interface GameProps {
@@ -32,6 +31,8 @@ export const Game = ({ socket }: GameProps) => {
     min: [0, 0],
     max: [2048, 2048],
   });
+  useGameConnection({ player, scope, socket });
+  useWindowDimensions();
   return (
     <div style={{ width: 1500, height: 1500 }}>
       <Canvas camera={{ fov: 75, near: 0.1, far: 3000, position: [0, 0, 2500] }}>
@@ -41,8 +42,6 @@ export const Game = ({ socket }: GameProps) => {
           <Players playerId={player.current.id} />
         </Suspense>
       </Canvas>
-      <Socket uri="localhost:3333" player={player} scope={scope} socket={socket} />
-      <Screen />
     </div>
   );
 };

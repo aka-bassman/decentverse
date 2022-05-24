@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useWindowDimensions } from "./hooks";
-import { Provider } from "react-redux";
 import { client } from "./stores";
 import { ApolloProvider } from "@apollo/client";
-import { PixiTest, Stream } from "./components";
-import { Game } from "./containers";
-import { Canvas } from "@react-three/fiber";
+import { Stream, Game } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 
 export const Reactverse = () => {

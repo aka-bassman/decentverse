@@ -6,14 +6,13 @@ import { encodeProtocolV1, decodeProtocolV1, makeCharacterMessage } from "../uti
 import PubSub from "pubsub-js";
 
 export interface SocketProp {
-  uri: string;
   player: MutableRefObject<types.RenderCharacter>;
   scope: MutableRefObject<types.WorldScope>;
   socket: Soc;
 }
 
 // 소켓 데이터 처리를 주로 진행
-export const Socket = ({ uri, player, scope, socket }: SocketProp) => {
+export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   const addOtherPlayers = useWorld((state) => state.addOtherPlayers);
   const setOtherPlayerIds = useWorld((state) => state.setOtherPlayerIds);
   const me = useWorld((state) => state.me);
@@ -48,6 +47,4 @@ export const Socket = ({ uri, player, scope, socket }: SocketProp) => {
     if (!socket) return;
     socket.emit("player", ...encodeProtocolV1(player.current, scope.current));
   }, 250);
-
-  return <div>connected</div>;
 };
