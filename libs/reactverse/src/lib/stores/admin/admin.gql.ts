@@ -76,17 +76,17 @@ export const createAdmin = async (data: types.AdminInput) =>
 export type UpdateAdminMutation = { updateAdmin: types.Admin };
 export const updateAdminMutation = gql`
   ${types.adminFragment}
-  mutation updateAdmin($data: AdminInput) {
-    updateAdmin(data: $data) {
+  mutation updateAdmin($adminId: ID, $data: AdminInput) {
+    updateAdmin(adminId: $adminId, data: $data) {
       ...adminFragment
     }
   }
 `;
-export const updateAdmin = async (data: types.AdminInput) =>
+export const updateAdmin = async (adminId: string, data: types.AdminInput) =>
   (
     await client.mutate<UpdateAdminMutation>({
       mutation: updateAdminMutation,
-      variables: { data },
+      variables: { adminId, data },
     })
   ).data?.updateAdmin;
 
@@ -94,17 +94,17 @@ export const updateAdmin = async (data: types.AdminInput) =>
 export type RemoveAdminMutation = { removeAdmin: types.Admin };
 export const removeAdminMutation = gql`
   ${types.adminFragment}
-  mutation removeAdmin($data: AdminInput) {
-    removeAdmin(data: $data) {
+  mutation removeAdmin($adminId: ID) {
+    removeAdmin(adminId: $adminId) {
       ...adminFragment
     }
   }
 `;
-export const removeAdmin = async (data: types.AdminInput) =>
+export const removeAdmin = async (adminId: string) =>
   (
     await client.mutate<RemoveAdminMutation>({
       mutation: removeAdminMutation,
-      variables: { data },
+      variables: { adminId },
     })
   ).data?.removeAdmin;
 

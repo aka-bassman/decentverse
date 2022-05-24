@@ -2,13 +2,15 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { ApolloClient, InMemoryCache, split, from } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 
-export const getUploadLink = (uri?: string) => {
+let uri: string;
+export const getUploadLink = (connectUri?: string) => {
   const token = localStorage.getItem("currentUser");
+  uri = connectUri ?? "http://localhost:3333/graphql";
   return createUploadLink({
     headers: {
       authorization: token ? `Bearer ${token}` : "",
     },
-    uri: uri ?? "http://localhost:3333/graphql",
+    uri,
   });
 };
 
@@ -24,5 +26,5 @@ const client = new ApolloClient({
   link: getUploadLink(),
   cache: new InMemoryCache(),
 });
-export const setLink = (uri: string) => client.setLink(getUploadLink(uri));
+export const setLink = (uri?: string) => client.setLink(getUploadLink(uri));
 export default client;
