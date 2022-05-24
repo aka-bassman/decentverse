@@ -19,7 +19,7 @@ export interface WorldState {
 }
 export const useWorld = create<WorldState>((set, get) => ({
   me: {
-    userId: "",
+    userId: `${Math.random()}`,
     character: {
       id: "",
       tokenId: 0,

@@ -54,18 +54,24 @@ export class EventsGateway {
   }
 
   @SubscribeMessage("join")
-  async join(client: Socket, { roomId }: any) {
-    client.join(roomId);
-    client.rooms.add(roomId);
-    console.log(roomId);
+  async join(client: Socket, { roomId, userId, nickName }: any) {
     const sockets = this.server.of("/").in(roomId);
-    const allSockets = await sockets.allSockets();
-    if (allSockets.size === 1) {
-      sockets.emit("init");
-      console.log("init");
-    } else if (allSockets.size >= 2) {
+    const clients = await sockets.fetchSockets();
+    client.data = { roomId, userId, nickName };
+    if (clients.length === 0) {
+      client.join(roomId);
+      client.rooms.add(roomId);
+      // client.emit("init", true);
+    } else if (clients.length > 0) {
       console.log("reday");
-      this.server.to(roomId).emit("ready");
+      this.server.to(roomId).emit("init", true, [client.data]);
+      client.join(roomId);
+      client.rooms.add(roomId);
+      client.emit(
+        "init",
+        false,
+        clients.map((c) => c.data)
+      );
     } else {
       client.rooms.clear();
       client.leave(roomId);
@@ -79,9 +85,9 @@ export class EventsGateway {
   }
 
   @SubscribeMessage("signal")
-  async exchange(client: Socket, { room, desc }: any) {
+  async exchange(client: Socket, { room, desc, userId }: any) {
     console.log("signal");
-    this.server.to(room).emit("desc", desc);
+    this.server.to(room).emit(`desc:${userId}`, desc, userId);
   }
 
   @SubscribeMessage("disconnect")

@@ -1,5 +1,5 @@
 import { io, Socket as Soc } from "socket.io-client";
-import { useGossip } from "src/lib/stores";
+import { useGossip } from "../../stores";
 import { Chat } from "./Chat";
 export interface ChatBoxProps {
   socket: Soc;

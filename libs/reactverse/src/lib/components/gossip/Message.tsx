@@ -1,4 +1,4 @@
-import { types } from "src/lib/stores";
+import { types } from "../../stores";
 export const Message = ({ fromName, from, text, at }: types.Message) => {
   return (
     <div>

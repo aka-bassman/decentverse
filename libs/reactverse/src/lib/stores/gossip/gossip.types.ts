@@ -37,22 +37,13 @@ export type Message = {
 export const stunServer = "stun:stun4.l.google.com:19302";
 export class Call {
   initiator: boolean;
-  localStream: MediaStream;
-  screenStream?: MediaStream;
   peer: Peer.Instance;
   constructor(initiator: boolean, localStream: MediaStream, screenStream?: MediaStream) {
     this.initiator = initiator;
-    // const opt: any = {
-    //   reconnectTimer: 1000,
-    //   iceTransportPolicy: "relay",
-    // };
-    this.localStream = localStream;
-    this.screenStream = screenStream;
     this.peer = new Peer({
       initiator: this.initiator,
       streams: [localStream, ...(screenStream ? [screenStream] : [])],
       trickle: false,
-      // ...opt,
       config: { iceServers: [{ urls: stunServer }] },
     });
   }
@@ -68,7 +59,6 @@ export type PeerStream = {
   mic: number;
   cam: boolean;
   quality: number;
-  status: "none" | "waiting" | "connecting" | "connected";
 };
 export type CallRoom = {
   roomId: string;
@@ -78,4 +68,9 @@ export type CallRoom = {
   fullNum: number;
   localStream?: MediaStream;
   screenStream?: MediaStream;
+};
+export type InitForm = {
+  roomId: string;
+  userId: string;
+  nickName: string;
 };
