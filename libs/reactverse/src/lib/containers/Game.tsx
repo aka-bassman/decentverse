@@ -4,7 +4,7 @@ import { types, useWorld, RenderCharacter, scalar } from "../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useTexture } from "@react-three/drei";
 import { useKeyboard, useDuration, createTileTextureAnimator, useInterval } from "../hooks";
-import { TileMap, Player, Socket, Loop, Screen, Players } from "./index";
+import { TileMap, Player, Socket, Screen, Players } from "./index";
 import { Socket as Soc } from "socket.io-client";
 
 export interface GameProps {

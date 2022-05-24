@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useWindowDimensions } from "./hooks";
 import { Provider } from "react-redux";
 import { client } from "./stores";
-import { Game, Loop, Screen, Socket, Player } from "./containers";
 import { ApolloProvider } from "@apollo/client";
 import { PixiTest, Stream } from "./components";
+import { Game } from "./containers";
 import { Canvas } from "@react-three/fiber";
 import { io, Socket as Soc } from "socket.io-client";
 
@@ -23,7 +23,7 @@ export const Reactverse = () => {
           <div>
             <h1>Welcome to Reactverse!</h1>
           </div>
-          {/* <Game socket={socket} /> */}
+          <Game socket={socket} />
           <Stream socket={socket} />
         </>
       )}
