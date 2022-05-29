@@ -24,7 +24,7 @@ pipeline {
             steps{
                 sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && npm i"'
                 sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && sudo nx affected:build --all --parallel=5"'
-                sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && sudo cp apps/${BACKEND_APP}/.akamir.env dist/apps/${BACKEND_APP}/.akamir.env"'
+                // sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && sudo cp apps/${BACKEND_APP}/.akamir.env dist/apps/${BACKEND_APP}/.akamir.env"'
                 sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && sudo cp apps/${BACKEND_APP}/.ayias.env dist/apps/${BACKEND_APP}/.ayias.env"'
                 sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME} && sudo cp apps/${FRONTEND_APP}/.env dist/apps/${FRONTEND_APP}/.env"'
                 sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "cd ${PROJECT_NAME}/${REPO_NAME}/infra/${PROJECT_NAME} && sudo docker system prune -a -f && sudo docker-compose -f docker-compose.yml build --parallel"'
