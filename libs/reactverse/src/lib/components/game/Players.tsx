@@ -1,9 +1,9 @@
 import React, { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar, useGame } from "../stores";
+import { types, useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useTexture } from "@react-three/drei";
-import { useDuration, createTileTextureAnimator, useInterval } from "../hooks";
+import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import PubSub from "pubsub-js";
 
 export interface PlayersProp {

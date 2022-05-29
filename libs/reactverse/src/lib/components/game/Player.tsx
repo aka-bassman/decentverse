@@ -1,9 +1,9 @@
 import { Suspense, useRef, MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame } from "../stores";
+import { useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useTexture } from "@react-three/drei";
-import { useDuration, createTileTextureAnimator } from "../hooks";
+import { useDuration, createTileTextureAnimator } from "../../hooks";
 
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;

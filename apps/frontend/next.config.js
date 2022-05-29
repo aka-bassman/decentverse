@@ -10,7 +10,13 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
     images: {
-      domains: ["akamir.com", "www.testnetakamir.com", "asset.akamir.com", "s3.ap-northeast-2.amazonaws.com"],
+      domains: [
+        "akamir.com",
+        "asset.akamir.com",
+        "s3.ap-northeast-2.amazonaws.com",
+        "asset.ayias.io",
+        "dev-asset.ayias.io",
+      ],
     },
   },
   async rewrites() {

@@ -1,0 +1,12 @@
+version: "3.2"
+services:
+  akamir-db:
+    image: mongo:latest
+    container_name: akamir-db
+    restart: unless-stopped
+    ports:
+      - 17018:27017
+    volumes:
+      - ~/akamir-db/data:/data/db
+      - ~/akamir-db/auth/db.key:/auth/db.key
+    command: mongod --replSet akamir-repl --dbpath /data/db --auth --keyFile /auth/db.key
