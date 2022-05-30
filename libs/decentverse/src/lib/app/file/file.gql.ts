@@ -38,6 +38,7 @@ export class File {
   @Field(() => Date)
   updatedAt: Date;
 }
+export type FileType = File;
 export type FileStream = {
   filename: string;
   mimetype: string;

@@ -24,11 +24,14 @@ type Character {
   contract: String
   createdAt: DateTime!
   down: Sprite
+  file: File!
   id: String!
-  left: Sprite
+  left: Sprite!
   right: Sprite!
   status: String!
+  tileSize: [Int!]!
   tokenId: Float!
+  totalSize: [Int!]!
   up: Sprite
   updatedAt: DateTime!
 }
@@ -36,9 +39,12 @@ type Character {
 input CharacterInput {
   contract: ID
   down: SpriteInput
+  file: ID!
   left: SpriteInput!
   right: SpriteInput!
+  tileSize: [Int!]!
   tokenId: Float!
+  totalSize: [Int!]!
   up: SpriteInput
 }
 
@@ -142,13 +148,25 @@ type Query {
 }
 
 type Sprite {
-  idle: File!
-  walk: File!
+  idle: SpriteDef!
+  walk: SpriteDef!
+}
+
+type SpriteDef {
+  column: Int!
+  duration: Int!
+  row: Int!
+}
+
+input SpriteDefInput {
+  column: Int!
+  duration: Int!
+  row: Int!
 }
 
 input SpriteInput {
-  idle: ID!
-  walk: ID!
+  idle: SpriteDefInput!
+  walk: SpriteDefInput!
 }
 
 type Tile {

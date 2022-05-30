@@ -1,5 +1,4 @@
 import gql from "graphql-tag";
-
 export type AccessToken = {
   accessToken: string;
 };
@@ -59,29 +58,39 @@ export const tokenUrlFragment = gql`
     }
   }
 `;
-
-export const layerTypes = ["bottom", "top", "lighting"] as const;
-export type LayerType = typeof layerTypes[number];
-
-export type ArtLayer = {
-  type: LayerType;
+export type File = {
+  id: string;
   url: string;
 };
-export const artLayerFragment = gql`
-  fragment artLayerFragment on ArtLayer {
-    type
+export const fileFragment = gql`
+  fragment fileFragment on File {
+    id
     url
   }
 `;
 
+export type SpriteDef = {
+  row: number;
+  column: number;
+  duration: number;
+};
+
 export type Sprite = {
-  idle: string;
-  walk: string;
+  idle: SpriteDef;
+  walk: SpriteDef;
 };
 export const spriteFragment = gql`
   fragment spriteFragment on Sprite {
-    idle
-    walk
+    idle {
+      row
+      column
+      duration
+    }
+    walk {
+      row
+      column
+      duration
+    }
   }
 `;
 
@@ -103,42 +112,49 @@ export const interactionFragment = gql`
   }
 `;
 
-export type Placement = {
-  asset: string;
-  position: number[];
-};
-export const placementFragment = gql`
-  fragment placementFragment on Placement {
-    asset
-    position
-  }
-`;
-
 export type Tile = {
-  top: string;
-  bottom: string;
-  lighting: string;
+  top: File;
+  bottom: File;
+  lighting: File;
   interactions: Interaction[];
 };
 export const tileFragment = gql`
+  ${fileFragment}
   ${interactionFragment}
   fragment tileFragment on Tile {
-    top
-    bottom
-    lighting
+    top {
+      ...fileFragment
+    }
+    bottom {
+      ...fileFragment
+    }
+    lighting {
+      ...fileFragment
+    }
     interactions {
       ...interactionFragment
     }
   }
 `;
 
-export type File = {
-  id: string;
-  url: string;
+export const keyMap = {
+  KeyW: "up",
+  KeyA: "left",
+  KeyS: "down",
+  KeyD: "right",
+  ArrowUp: "up",
+  ArrowLeft: "left",
+  ArrowDown: "down",
+  ArrowRight: "right",
+} as const;
+export type Key = keyof typeof keyMap;
+
+export const keyTypes = ["up", "left", "down", "right"] as const;
+export type KeyType = typeof keyTypes[number];
+export const keyboard = {
+  left: false,
+  right: false,
+  up: false,
+  down: false,
 };
-export const fileFragment = gql`
-  fragment fileFragment on File {
-    id
-    url
-  }
-`;
+export type Keyboard = { [key in KeyType]: boolean };

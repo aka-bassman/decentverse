@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, ID, Int } from "@nestjs/graphql";
 import * as gql from "../gql";
 import { Types } from "mongoose";
 /**
@@ -19,11 +19,20 @@ export class CharacterInput {
   @Field()
   tokenId: number;
 
-  @Field(() => gql.SpriteInput)
-  left: gql.SpriteInputType;
+  @Field(() => ID)
+  file: Types.ObjectId;
+
+  @Field(() => [Int])
+  tileSize: number[];
+
+  @Field(() => [Int])
+  totalSize: number[];
 
   @Field(() => gql.SpriteInput)
   right: gql.SpriteInputType;
+
+  @Field(() => gql.SpriteInput)
+  left: gql.SpriteInputType;
 
   @Field(() => gql.SpriteInput, { nullable: true })
   up?: gql.SpriteInputType;
@@ -49,11 +58,20 @@ export class Character {
   @Field()
   tokenId: number;
 
+  @Field(() => gql.File)
+  file: gql.File;
+
+  @Field(() => [Int])
+  tileSize: number[];
+
+  @Field(() => [Int])
+  totalSize: number[];
+
   @Field(() => gql.Sprite)
   right: gql.SpriteType;
 
-  @Field(() => gql.Sprite, { nullable: true })
-  left?: gql.SpriteType;
+  @Field(() => gql.Sprite)
+  left: gql.SpriteType;
 
   @Field(() => gql.Sprite, { nullable: true })
   up?: gql.SpriteType;

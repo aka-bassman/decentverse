@@ -1,23 +1,57 @@
+import client from "../apollo";
 import gql from "graphql-tag";
 import * as scalar from "../scalar.type";
 
+export type AssetInput = {
+  top?: string;
+  bottom?: string;
+  lighting?: string;
+  interactions: scalar.Interaction[];
+};
 export type Asset = {
   id: string;
-  artLayers: scalar.ArtLayer[];
+  top: scalar.File;
+  bottom?: scalar.File;
+  lighting?: scalar.File;
+  interactions: scalar.Interaction[];
   status: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
 export const assetFragment = gql`
-  ${scalar.artLayerFragment}
+  ${scalar.fileFragment}
+  ${scalar.interactionFragment}
   fragment assetFragment on Asset {
     id
-    artLayers {
-      ...artLayerFragment
+    top {
+      ...fileFragment
+    }
+    bottom {
+      ...fileFragment
+    }
+    lighting {
+      ...fileFragment
+    }
+    interactions {
+      ...interactionFragment
     }
     status
     createdAt
     updatedAt
+  }
+`;
+
+export type Placement = {
+  asset: string;
+  position: number[];
+};
+export const placementFragment = gql`
+  ${assetFragment}
+  fragment placementFragment on Placement {
+    asset {
+      ...assetFragment
+    }
+    position
   }
 `;

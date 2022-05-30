@@ -18,9 +18,16 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
+  console.log({
+    objectStorage: {
+      region: "ap-northeast-2",
+      accessKey: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      distributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID,
+    },
+    redis: { url: process.env.REDIS_URL },
+  });
   const decentverse = new Decentverse({
     objectStorage: {
       region: "ap-northeast-2",
@@ -28,7 +35,7 @@ async function bootstrap() {
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       distributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID,
     },
-    redis: { url: "redis://localhost:6379" },
+    redis: { url: process.env.REDIS_URL },
   });
   await decentverse.init();
   // const fileService = decentverse.app.get<srv.FileService>(srv.FileService);

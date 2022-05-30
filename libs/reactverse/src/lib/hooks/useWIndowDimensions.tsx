@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { actions, select, useAppDispatch, useAppSelector } from "../stores";
+import { useGame, useWorld } from "../stores";
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -7,10 +7,10 @@ const getWindowDimensions = () => {
 };
 
 export const useWindowDimensions = () => {
-  const dispatch = useAppDispatch();
-  const screen = useAppSelector(select.screen);
+  const screen = useGame((state) => state.screen);
+  const changeScreenSize = useGame((state) => state.changeScreenSize);
   useEffect(() => {
-    const handleResize = () => dispatch(actions.changeScreenSize({ size: getWindowDimensions(), offset: [0, 0] }));
+    const handleResize = () => changeScreenSize({ size: getWindowDimensions(), offset: [0, 0] });
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
