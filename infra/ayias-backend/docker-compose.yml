@@ -1,6 +1,7 @@
 version: "3.2"
 services:
   backend:
+    image: decentverse_backend
     container_name: decentverse-backend
     network_mode: host
     command: node main.js --max-old-space-size=8192

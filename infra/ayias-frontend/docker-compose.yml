@@ -1,6 +1,7 @@
 version: "3.2"
 services:
   frontend: 
+    image: decentverse_frontend
     container_name: decentverse-frontend
     network_mode: host
     restart: unless-stopped
