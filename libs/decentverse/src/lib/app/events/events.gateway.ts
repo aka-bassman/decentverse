@@ -5,7 +5,7 @@ import { map } from "rxjs/operators";
 import { Server, Socket } from "socket.io";
 import * as srv from "../srv";
 
-@WebSocketGateway({ origin: "*" })
+@WebSocketGateway({ cors: { origin: "*" } })
 export class EventsGateway {
   @WebSocketServer()
   server: Server;
