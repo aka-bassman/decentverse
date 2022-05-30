@@ -15,6 +15,7 @@ export interface DecentverseOptions {
   };
   mongo?: {
     uri: string;
+    dbName: string;
     replSet?: string;
   };
   redis?: {
@@ -34,21 +35,8 @@ export class DecentverseModule {
         MongooseModule.forRootAsync({
           useFactory: async () => ({
             uri: options?.mongo?.uri ?? "mongodb://localhost:27017",
-            // uri: `mongodb://${config.get("DB_USER")}:${config.get(
-            //   "DB_PASS"
-            // )}@${config.get("DB_HOST")}`,
-            // dbName: config.get("DB_NAME"),
-            // authSource: "admin",
-            // // // ...(connection === "replicaSet" ? { replicaSet } : {}),
-            // ssl: false,
-            // useNewUrlParser: true,
-            // directConnection: true,
-            // useUnifiedTopology: true,
-            // readPreference: "primary",
-            // connectTimeoutMS: 30000,
-            // retryWrites: true,
+            dbName: options?.mongo?.dbName ?? "test",
           }),
-          // inject: [],
         }),
         GraphQLModule.forRootAsync<ApolloDriverConfig>({
           imports: [ConfigModule],

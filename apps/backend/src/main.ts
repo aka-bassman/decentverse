@@ -36,6 +36,11 @@ async function bootstrap() {
       distributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID,
     },
     redis: { url: process.env.REDIS_URL },
+    mongo: {
+      uri: process.env.MONGO_URI,
+      dbName: process.env.DB_NAME,
+      replSet: process.env.DB_REPLICA_SET,
+    },
   });
   await decentverse.init();
   // const fileService = decentverse.app.get<srv.FileService>(srv.FileService);
