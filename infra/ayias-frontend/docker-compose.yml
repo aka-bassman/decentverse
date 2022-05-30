@@ -4,7 +4,7 @@ services:
     container_name: decentverse-frontend
     build:
       context: ../../dist/apps/frontend
-      dockerfile: ../../../apps/frontend/Dockerfile
+      dockerfile: ../../apps/frontend/Dockerfile
     network_mode: host
     restart: unless-stopped
     environment:
