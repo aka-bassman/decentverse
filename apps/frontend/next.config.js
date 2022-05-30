@@ -16,6 +16,7 @@ const nextConfig = {
         "s3.ap-northeast-2.amazonaws.com",
         "asset.ayias.io",
         "dev-asset.ayias.io",
+        "api.ayias.io",
       ],
     },
   },

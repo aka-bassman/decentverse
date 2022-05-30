@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { client } from "./stores";
+import { client, setLink } from "./stores";
 import { ApolloProvider } from "@apollo/client";
 import { Stream, Game } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 
-export const Reactverse = () => {
+export interface ReactverseProps {
+  uri: string;
+  ws: string;
+}
+
+export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Soc>();
   useEffect(() => {
-    const socket = io("localhost:3333");
+    setLink(uri);
+    const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
   }, []);
