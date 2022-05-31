@@ -101,7 +101,9 @@ input MapInput {
 }
 
 type Mutation {
-  addFiles(files: [Upload!]!): File!
+  addAssetFiles(files: [Upload!]!, group: String!): File!
+  addCharacterFiles(files: [Upload!]!, group: String!): File!
+  addMapFiles(files: [Upload!]!, group: String!): File!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
   createMap(data: MapInput!): Map!
