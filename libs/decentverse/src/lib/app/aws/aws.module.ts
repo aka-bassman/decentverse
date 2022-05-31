@@ -1,11 +1,5 @@
 import { Global, Module, DynamicModule } from "@nestjs/common";
-import { AwsService } from "./aws.service";
-export interface ObjectStorageOptions {
-  region: string;
-  accessKey: string;
-  secretAccessKey: string;
-  distributionId: string;
-}
+import { AwsService, ObjectStorageOptions } from "./aws.service";
 @Global()
 @Module({})
 export class AwsModule {

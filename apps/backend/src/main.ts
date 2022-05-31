@@ -19,20 +19,13 @@ async function bootstrap() {
   const port = process.env.PORT || 8080;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
-  console.log({
-    objectStorage: {
-      region: "ap-northeast-2",
-      accessKey: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      distributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID,
-    },
-    redis: { url: process.env.REDIS_URL },
-  });
   const decentverse = new Decentverse({
     objectStorage: {
       region: "ap-northeast-2",
       accessKey: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      bucket: process.env.ASSET_BUCKET_NAME,
+      host: process.env.ASSET_BUCKET_HOST,
       distributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID,
     },
     redis: { url: process.env.REDIS_URL },

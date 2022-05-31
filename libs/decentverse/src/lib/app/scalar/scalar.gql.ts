@@ -129,3 +129,6 @@ export class InteractionInput {
   url?: string;
 }
 export type InteractionInputType = InteractionInput;
+
+export const filePurposes = ["asset", "character", "map"] as const;
+export type FilePurpose = typeof filePurposes[number];

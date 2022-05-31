@@ -15,7 +15,7 @@ export class Decentverse {
     this.app.setGlobalPrefix(globalPrefix);
     this.app.enableCors();
     const redisIoAdapter = new RedisIoAdapter(this.app);
-    await redisIoAdapter.connectToRedis();
+    await redisIoAdapter.connectToRedis(this.options?.redis?.url);
     this.app.useWebSocketAdapter(redisIoAdapter);
     const port = process.env.PORT || 3333;
     await this.app.listen(port);
