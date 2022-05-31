@@ -12,25 +12,25 @@ export class FileResolver {
   @Mutation(() => gql.File)
   @UseGuards(Allow.Admin)
   async addAssetFiles(
-    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[],
-    @Args({ name: "group", type: () => String }) group: string
+    @Args({ name: "assetId", type: () => String }) assetId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
   ) {
-    return await this.fileService.addFiles(files, "asset", group);
+    return await this.fileService.addFiles(files, "asset", assetId);
   }
   @Mutation(() => gql.File)
   @UseGuards(Allow.Admin)
   async addMapFiles(
-    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[],
-    @Args({ name: "group", type: () => String }) group: string
+    @Args({ name: "mapId", type: () => String }) mapId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
   ) {
-    return await this.fileService.addFiles(files, "map", group);
+    return await this.fileService.addFiles(files, "map", mapId);
   }
   @Mutation(() => gql.File)
   @UseGuards(Allow.Admin)
   async addCharacterFiles(
-    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[],
-    @Args({ name: "group", type: () => String }) group: string
+    @Args({ name: "characterId", type: () => String }) characterId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
   ) {
-    return await this.fileService.addFiles(files, "character", group);
+    return await this.fileService.addFiles(files, "character", characterId);
   }
 }
