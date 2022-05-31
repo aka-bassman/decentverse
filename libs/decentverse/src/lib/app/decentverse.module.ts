@@ -11,6 +11,8 @@ export interface DecentverseOptions {
     region: "ap-northeast-2";
     accessKey: string;
     secretAccessKey: string;
+    bucket: string;
+    host?: string;
     distributionId: string;
   };
   mongo?: {

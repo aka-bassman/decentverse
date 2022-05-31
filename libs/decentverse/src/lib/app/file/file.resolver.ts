@@ -11,10 +11,26 @@ export class FileResolver {
   constructor(private readonly fileService: FileService) {}
   @Mutation(() => gql.File)
   @UseGuards(Allow.Admin)
-  async addFiles(
-    @Args({ name: "files", type: () => [GraphQLUpload] })
-    files: FileUpload[]
+  async addAssetFiles(
+    @Args({ name: "assetId", type: () => String }) assetId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
   ) {
-    return await this.fileService.addFiles(files);
+    return await this.fileService.addFiles(files, "asset", assetId);
+  }
+  @Mutation(() => gql.File)
+  @UseGuards(Allow.Admin)
+  async addMapFiles(
+    @Args({ name: "mapId", type: () => String }) mapId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
+  ) {
+    return await this.fileService.addFiles(files, "map", mapId);
+  }
+  @Mutation(() => gql.File)
+  @UseGuards(Allow.Admin)
+  async addCharacterFiles(
+    @Args({ name: "characterId", type: () => String }) characterId: string,
+    @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
+  ) {
+    return await this.fileService.addFiles(files, "character", characterId);
   }
 }

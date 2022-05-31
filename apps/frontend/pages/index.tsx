@@ -7,7 +7,7 @@ export function Index() {
    *
    * Note: The corresponding styles are in the ./index.css file.
    */
-  const ReactverseWithNoSSR = dynamic(import("reactverse"), { ssr: false });
+  const ReactverseWithNoSSR = dynamic(import("../components/ReactverseWrapper"), { ssr: false });
   return (
     <div className={styles.page}>
       <ReactverseWithNoSSR />
