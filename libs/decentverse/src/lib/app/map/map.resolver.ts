@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { MapService } from "./map.service";
 import { Allow, Account } from "../../middlewares";
 import * as gql from "../../app/gql";
@@ -29,7 +29,7 @@ export class MapResolver {
   @Mutation(() => gql.Map)
   // @UseGuards(Allow.Admin)
   @UseGuards(Allow.Every) //! TODO
-  async updateMap(@Args({ name: "mapId", type: () => String }) mapId: string, @Args("data") data: gql.MapInput) {
+  async updateMap(@Args({ name: "mapId", type: () => ID }) mapId: string, @Args("data") data: gql.MapInput) {
     return await this.mapService.updateMap(mapId, data);
   }
 

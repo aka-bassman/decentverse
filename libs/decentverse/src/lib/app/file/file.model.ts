@@ -23,6 +23,8 @@ export class Input {
   encoding: string;
   @Prop({ type: String, required: true, unique: true })
   url: string;
+  @Prop([{ type: Number, required: true }])
+  imageSize: number[];
 }
 @Schema(dbConfig.defaultSchemaOptions)
 export class File extends Input {

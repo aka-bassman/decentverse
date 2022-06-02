@@ -21,9 +21,10 @@ export class FileResolver {
   @UseGuards(Allow.Admin)
   async addMapFiles(
     @Args({ name: "mapId", type: () => String }) mapId: string,
+    @Args({ name: "subGroup", type: () => String }) subGroup: string,
     @Args({ name: "files", type: () => [GraphQLUpload] }) files: FileUpload[]
   ) {
-    return await this.fileService.addFiles(files, "map", mapId);
+    return await this.fileService.addFiles(files, "map", `${mapId}/${subGroup}`);
   }
   @Mutation(() => gql.File)
   @UseGuards(Allow.Admin)

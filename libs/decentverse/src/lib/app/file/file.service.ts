@@ -1,5 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { promisify } from "util";
+import imageSize from "image-size";
+const sizeOf = promisify(imageSize);
 import * as fs from "fs";
 import * as File from "./file.model";
 import * as gql from "../../app/gql";
@@ -29,7 +32,10 @@ export class FileService {
       filename: localFile.filename,
       localPath: localFile.localPath,
     });
-    return await this.File.create({ ...localFile, url });
+    const { width, height } = localFile.mimetype.includes("image")
+      ? await sizeOf(`${localFile.localPath}/${localFile.filename}`)
+      : { width: 0, height: 0 };
+    return await this.File.create({ ...localFile, imageSize: [width, height], url });
   }
   async addFile(fileStream: gql.FileStream, purpose: gql.FilePurpose, group: string) {
     const localFile = await this.saveLocalStorage(fileStream);
