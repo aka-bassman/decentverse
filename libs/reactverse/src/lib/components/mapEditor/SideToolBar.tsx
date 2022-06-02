@@ -2,12 +2,21 @@ import { Suspense, useRef, MutableRefObject, useEffect, useState } from "react";
 import styled from "styled-components";
 import { EditOutlined, DeleteOutlined, CopyOutlined } from "@ant-design/icons";
 import { Button, Space, Row, Col, Segmented, Card, List, Checkbox } from "antd";
-import { useMapEditor } from "../../stores";
+import { useMapEditor, TMainTool } from "../../stores";
 
 export const SideToolBar = () => {
-  const [toolMenu, setToolMenu] = useState<any>("Map");
-
-  const { isActiveViewMode, toggleViewMode } = useMapEditor();
+  const {
+    isActiveViewMode,
+    toggleViewMode,
+    assetsData,
+    mainTool,
+    setMainTool,
+    selectedAssetId,
+    setSelectedAssetId,
+    subTool,
+    setSubTool,
+    isEdited,
+  } = useMapEditor();
 
   const data = [
     {
@@ -30,7 +39,15 @@ export const SideToolBar = () => {
 
   return (
     <SideToolBarContainer>
-      <Segmented block options={["Map", "Assets", "Interaction"]} onChange={(value) => setToolMenu(value)} />
+      <Button block style={{ marginBottom: 10 }} disabled={!isEdited}>
+        SAVE
+      </Button>
+      <Segmented
+        block
+        // options={["Map", "Assets", "Interaction"]}
+        options={["Assets", "Interaction"]}
+        onChange={(value) => setMainTool(value as TMainTool)}
+      />
       {/* <Row gutter={0}>
         <Col className="gutter-row" span={8}>
           <Button block>Map</Button>
@@ -43,7 +60,7 @@ export const SideToolBar = () => {
         </Col>
       </Row> */}
       <ToolContainer>
-        {toolMenu === "Map" && (
+        {mainTool === "Map" && (
           <Card title="Map" size="small">
             {/* <Button size="small" block>
               <EditOutlined />
@@ -64,9 +81,30 @@ export const SideToolBar = () => {
             />
           </Card>
         )}
-        {toolMenu === "Assets" && (
+        {mainTool === "Assets" && (
           <Card title="Assets" size="small">
-            <Button size="small" block>
+            <Segmented
+              block
+              options={["Add", "Remove"]}
+              value={subTool}
+              onChange={(value) => setSubTool(value as string)}
+            />
+            {subTool === "Add" && (
+              <AssetList>
+                {assetsData?.map((asset) => (
+                  <div
+                    key={asset.id}
+                    onClick={() => setSelectedAssetId(asset.id)}
+                    style={selectedAssetId === asset.id ? { border: "1px solid black" } : {}}
+                  >
+                    <div>bottom: {asset?.bottom?.url && <img src={asset?.bottom?.url} width={100} height={100} />}</div>
+                    <div>top: {asset?.top?.url && <img src={asset?.top?.url} width={100} height={100} />}</div>
+                    <div></div>
+                  </div>
+                ))}
+              </AssetList>
+            )}
+            {/* <Button size="small" block>
               <EditOutlined />
               추가
             </Button>
@@ -77,10 +115,10 @@ export const SideToolBar = () => {
             <Button size="small" block>
               <CopyOutlined />
               요소복사
-            </Button>
+            </Button> */}
           </Card>
         )}
-        {toolMenu === "Interaction" && (
+        {mainTool === "Interaction" && (
           <Card title="Interaction" size="small">
             <Button size="small" block>
               <EditOutlined />
@@ -121,4 +159,9 @@ export const SideToolBar = () => {
 const SideToolBarContainer = styled.div``;
 const ToolContainer = styled.div`
   margin-top: 10px;
+`;
+
+const AssetList = styled.div`
+  max-height: 400px;
+  overflow: scroll;
 `;

@@ -5,3 +5,4 @@ export * from "./character/character.gql";
 // export * from "./game/game.types";
 export * from "./map/map.gql";
 export * from "./world/world.gql";
+export * from "./mapEditor/mapEditor.gql";

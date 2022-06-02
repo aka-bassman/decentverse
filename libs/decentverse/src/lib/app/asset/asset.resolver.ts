@@ -20,7 +20,8 @@ export class AssetResolver {
   }
 
   @Query(() => [gql.Asset])
-  @UseGuards(Allow.Admin)
+  // @UseGuards(Allow.Admin)
+  @UseGuards(Allow.Every) //! TODO
   async assets() {
     return this.assetService.assets();
   }
