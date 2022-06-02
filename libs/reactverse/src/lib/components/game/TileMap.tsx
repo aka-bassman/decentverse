@@ -80,13 +80,17 @@ export const TileMap = ({ player, scope }: MapProp) => {
     };
     scope.current = makeScope(showBox);
   }, 500);
+  console.log("tiles", renderTiles.length, renderTiles[0].length);
   return (
     <Suspense fallback={null}>
       <scene ref={scene}>
-        {renderTiles.slice(...render.tiles[1]).map((tileArr, y) =>
-          tileArr.slice(...render.tiles[0]).map((tile, x) => {
-            const offsetX = tileMap.tileSize[0] / 2 + (x + render.tiles[0][0]) * tileMap.tileSize[0];
-            const offsetY = tileMap.tileSize[1] / 2 + (y + render.tiles[1][0]) * tileMap.tileSize[1];
+        {renderTiles.slice(...render.tiles[1]).map((tileArr, idxy) =>
+          tileArr.slice(...render.tiles[0]).map((tile, idxx) => {
+            const x = idxx + render.tiles[0][0];
+            const y = idxy + render.tiles[1][0];
+            const offsetX = tileMap.tileSize[0] / 2 + (idxx + render.tiles[0][0]) * tileMap.tileSize[0];
+            const offsetY = tileMap.tileSize[1] / 2 + (idxy + render.tiles[1][0]) * tileMap.tileSize[1];
+            console.log(x, y, offsetX, offsetY);
             return <Tile key={`${x}/${y}`} x={x} y={y} offsetX={offsetX} offsetY={offsetY} />;
           })
         )}

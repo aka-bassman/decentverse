@@ -35,10 +35,10 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // {
-      //   source: "/path/:path*",
-      //   destination: "https://:path*",
-      // },
+      {
+        source: "/ayias/:path*",
+        destination: "https://asset.ayias.io/:path*",
+      },
     ];
   },
 };
