@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [],
+  "include": ["src"],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015"
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

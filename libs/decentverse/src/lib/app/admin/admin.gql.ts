@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
 
 /**
  * * Akamir MongoDB & GraphQL Schema V2.2
@@ -13,7 +13,7 @@ import { Field, InputType, ObjectType } from "@nestjs/graphql";
 
 @InputType()
 export class AdminInput {
-  @Field(() => String)
+  @Field(() => ID)
   accountId: string;
 
   @Field(() => String)

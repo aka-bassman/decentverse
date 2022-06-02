@@ -16,12 +16,14 @@ import * as gql from "../gql";
 
 @Schema()
 export class Input {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: Number, required: true, default: 2000 })
   tileSize: number;
-
+}
+@Schema(dbConfig.defaultSchemaOptions)
+export class Map extends Input {
   @Prop([[{ type: gql.TileSchema }]])
   tiles: gql.TileType[][];
 
@@ -30,13 +32,11 @@ export class Input {
 
   @Prop([{ type: gql.InteractionSchema }])
   interactions: gql.InteractionType[];
-}
-@Schema(dbConfig.defaultSchemaOptions)
-export class Map extends Input {
-  @Prop({ type: Number, required: true })
+
+  @Prop({ type: Number, required: true, default: 0 })
   totalWidth: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   totalHeight: number;
 
   @Prop({

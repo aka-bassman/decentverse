@@ -15,16 +15,16 @@ export class MapInput {
   @Field(() => String)
   name: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   tileSize: number;
 
-  @Field(() => [[gql.TileInput]])
+  @Field(() => [[gql.TileInput]], { nullable: true })
   tiles: gql.TileInputType[][];
 
-  @Field(() => [gql.PlacementInput])
+  @Field(() => [gql.PlacementInput], { nullable: true })
   placements: gql.PlacementInputType[];
 
-  @Field(() => [gql.InteractionInput])
+  @Field(() => [gql.InteractionInput], { nullable: true })
   interactions: gql.InteractionInputType[];
 }
 
