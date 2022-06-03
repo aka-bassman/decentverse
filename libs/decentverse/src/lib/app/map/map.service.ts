@@ -22,14 +22,17 @@ export class MapService {
     return await this.Map.find({ status: { $ne: "inactive" } });
   }
   async createMap(data: Map.Input) {
-    return await this.Map.create({
-      ...data,
-      totalWidth: data.tileSize * (data.tiles[0]?.length ?? 0),
-      totalHeight: data.tileSize * data.tiles.length,
-    });
+    return await this.Map.create(data);
   }
-  async updateMap(mapId: string, data: Partial<Map.Raw>) {
-    return await this.Map.pickAndWrite(mapId, data);
+  async updateMap(mapId: db.ID | string, data: Partial<Map.Raw>) {
+    const map = await this.Map.pickById(mapId);
+    return await map
+      .merge({
+        ...data,
+        totalWidth: map.tileSize * (data.tiles[0]?.length ?? 0),
+        totalHeight: map.tileSize * data.tiles.length,
+      })
+      .save();
   }
   async removeMap(mapId: string) {
     return await this.Map.pickAndWrite(mapId, { status: "inactive" });

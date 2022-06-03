@@ -39,7 +39,7 @@ export const useGame = create<GameState>((set, get) => ({
   render: {
     cameraPos: [0, 0, 1000],
     tiles: [
-      [0, 2],
+      [0, 1],
       [0, 1],
     ],
   },

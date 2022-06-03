@@ -120,7 +120,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       acceleration: 1,
       deceleration: 1,
     };
-    const render = { tiles: maps[0].tiles, players: {} };
+    const render = { tiles: maps[1].tiles, players: {} };
     const status = "idle";
     return set({ map: maps[0], me, render, status });
   },

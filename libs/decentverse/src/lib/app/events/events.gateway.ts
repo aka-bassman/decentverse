@@ -5,12 +5,7 @@ import { map } from "rxjs/operators";
 import { Server, Socket } from "socket.io";
 import * as srv from "../srv";
 
-
-@WebSocketGateway({
-  cors: {
-    origin: "*",
-  },
-})
+@WebSocketGateway({ cors: { origin: "*" } })
 export class EventsGateway {
   @WebSocketServer()
   server: Server;
@@ -63,7 +58,6 @@ export class EventsGateway {
       console.log("create Room");
       client.join(roomId);
       client.rooms.add(roomId);
-      // client.emit("init", true);
     } else if (clients.length > 0) {
       console.log("Ready");
       for(const client_ of clients) {
@@ -78,8 +72,7 @@ export class EventsGateway {
     
     client.on("disconnect", () => {
        this.server.to(roomId).emit(`disconnected:${userId}`);
-      // else client.rooms.clear();
-      // client.leave(roomId);
+    
     });
   }
 

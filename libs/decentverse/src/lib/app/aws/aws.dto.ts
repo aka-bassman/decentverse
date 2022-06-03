@@ -16,7 +16,6 @@ export interface LocalTokenPath {
   assetPath: LocalFilePath;
 }
 export interface AwsUploadRequest {
-  bucket: string;
   path: string;
   filename: string;
   localPath: string;

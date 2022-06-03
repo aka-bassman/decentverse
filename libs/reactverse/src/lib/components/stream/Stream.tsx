@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ShareScreenIcon, MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "..";
+import { MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "..";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types } from "../../stores";
 import { CallBox, MyCall } from "./";

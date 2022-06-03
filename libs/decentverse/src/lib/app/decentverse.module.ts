@@ -5,12 +5,14 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
-import * as module from "./module";
+import * as modules from "./module";
 export interface DecentverseOptions {
   objectStorage: {
     region: "ap-northeast-2";
     accessKey: string;
     secretAccessKey: string;
+    bucket: string;
+    host?: string;
     distributionId: string;
   };
   mongo?: {
@@ -53,15 +55,15 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
-        module.EventsModule,
-        module.AssetModule,
-        module.CharacterModule,
-        module.MapModule,
-        module.AwsModule.register(options.objectStorage),
-        module.FileModule,
-        module.RtModule.register(options?.redis),
-        module.ScalarModule,
-        module.BatchModule,
+        modules.EventsModule,
+        modules.AssetModule,
+        modules.CharacterModule,
+        modules.MapModule,
+        modules.AwsModule.register(options.objectStorage),
+        modules.FileModule,
+        modules.RtModule.register(options?.redis),
+        modules.ScalarModule,
+        modules.BatchModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

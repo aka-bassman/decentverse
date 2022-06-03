@@ -1,9 +1,6 @@
 import { INestApplication, Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import {
-  DecentverseModule,
-  DecentverseOptions,
-} from "./lib/app/decentverse.module";
+import { DecentverseModule, DecentverseOptions } from "./lib/app/decentverse.module";
 import { RedisIoAdapter } from "./lib/middlewares/redis-io.adapter";
 
 export class Decentverse {
@@ -13,13 +10,12 @@ export class Decentverse {
     this.options = options;
   }
   async init() {
-    this.app = await NestFactory.create(
-      DecentverseModule.register(this.options)
-    );
+    this.app = await NestFactory.create(DecentverseModule.register(this.options));
     const globalPrefix = "decentverse";
     this.app.setGlobalPrefix(globalPrefix);
+    this.app.enableCors();
     const redisIoAdapter = new RedisIoAdapter(this.app);
-    await redisIoAdapter.connectToRedis();
+    await redisIoAdapter.connectToRedis(this.options?.redis?.url);
     this.app.useWebSocketAdapter(redisIoAdapter);
     const port = process.env.PORT || 3333;
     await this.app.listen(port);

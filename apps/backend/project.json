@@ -26,6 +26,16 @@
         }
       }
     },
+    "script": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "cross-env  SERVICE_ENV=script ENVIRONMENT={args.env} ts-node  -r tsconfig-paths/register ./{args.name}.ts "
+        ],
+        "cwd": "apps/backend/src",
+        "parallel": false
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

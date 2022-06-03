@@ -2,9 +2,7 @@ import { useEffect, useRef } from "react";
 import { MicOnIcon, MicOffIcon, MicOffSmallIcon, CamOnIcon, CamOffIcon } from "..";
 import { types, useGossip, useWorld } from "../../stores";
 import { Socket as Soc } from "socket.io-client";
-import { Video } from "./";
 import styled from "styled-components";
-import { transcode } from "buffer";
 
 export interface CallProps {
   peer: types.PeerStream;
@@ -67,22 +65,10 @@ export const Call = ({ peer, socket }: CallProps) => {
       remoteTrack.current = stream;
     });
     peer.call.peer.on("error", (err) => console.log(err));
-    // peer.call.peer.on("close", () => {
-    //   // console.log("CLOSE");
-    //   socket.off(`desc:${peer.id}`);
-    //   socket.off(`disconnected:${peer.id}`);
-    //   removePeer(peer.id);
-    // });
-    // peer.call.peer.on("end", () => {
-    //   // console.log("END");
-    //   socket.off(`desc:${peer.id}`);
-    //   socket.off(`disconnected:${peer.id}`);
-    //   removePeer(peer.id);
-    // });
   };
 
   const toggleMic = () => {
-    if (!remoteTrack.current) return {};
+    if (!remoteTrack.current) return;
     if (!peer.muted) {
       if (remoteTrack.current.getAudioTracks().length > 0)
         remoteTrack.current.getAudioTracks().forEach((track) => (track.enabled = false));
@@ -94,7 +80,7 @@ export const Call = ({ peer, socket }: CallProps) => {
     }
   };
   const toggleCam = () => {
-    if (!remoteTrack.current) return {};
+    if (!remoteTrack.current) return;
     if (!peer.blind) {
       if (remoteTrack.current.getVideoTracks().length > 0)
         remoteTrack.current.getVideoTracks().forEach((track) => (track.enabled = false));

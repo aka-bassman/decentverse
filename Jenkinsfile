@@ -49,14 +49,14 @@ pipeline {
                 stage("Distribute Ayias Backend"){
                     steps{    
                         sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -o StrictHostKeyChecking=no -P ${BACKEND_PORT} ~/${PROJECT_NAME}/${BACKEND_APP}.tar ${BACKEND_USER}@${BACKEND_INNER_HOST}:~/${BACKEND_APP}.tar"'
-                        sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -P ${BACKEND_PORT} ~/${PROJECT_NAME}/${REPO_NAME}/infra/main/docker-compose.yml ${BACKEND_USER}@${BACKEND_INNER_HOST}:~/${PROJECT_NAME}/docker-compose.yml"'
+                        sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -P ${BACKEND_PORT} ~/${PROJECT_NAME}/${REPO_NAME}/infra/ayias-backend/docker-compose.yml ${BACKEND_USER}@${BACKEND_INNER_HOST}:~/${PROJECT_NAME}/docker-compose.yml"'
                         sh 'ssh -v -o StrictHostKeyChecking=no ${BACKEND_USER}@${BACKEND_HOST} -p ${BACKEND_PORT} "docker load < ${BACKEND_APP}.tar"'
                     }
                 }
                 stage("Distribute Ayias Frontend"){
                     steps{
                         sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -o StrictHostKeyChecking=no -P ${FRONTEND_PORT} ~/${PROJECT_NAME}/${FRONTEND_APP}.tar ${FRONTEND_USER}@${FRONTEND_INNER_HOST}:~/${FRONTEND_APP}.tar"'
-                        sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -P ${FRONTEND_PORT} ~/${PROJECT_NAME}/${REPO_NAME}/infra/web/docker-compose.yml ${FRONTEND_USER}@${FRONTEND_INNER_HOST}:~/${PROJECT_NAME}/docker-compose.yml"'
+                        sh 'ssh -v ${TEST_USER}@${TEST_HOST} -p ${TEST_PORT} "scp -v -P ${FRONTEND_PORT} ~/${PROJECT_NAME}/${REPO_NAME}/infra/ayias-frontend/docker-compose.yml ${FRONTEND_USER}@${FRONTEND_INNER_HOST}:~/${PROJECT_NAME}/docker-compose.yml"'
                         sh 'ssh -v -o StrictHostKeyChecking=no ${FRONTEND_USER}@${FRONTEND_HOST} -p ${FRONTEND_PORT} "docker load < ${FRONTEND_APP}.tar"'
                     }
                 }

@@ -16,6 +16,11 @@ import * as gql from "../gql";
 
 @Schema()
 export class Input {
+  @Prop({ type: String, required: true, unique: true, index: true })
+  name: string;
+}
+@Schema(dbConfig.defaultSchemaOptions)
+export class Asset extends Input {
   @Prop({ type: Types.ObjectId, ref: "file", required: false })
   top?: Types.ObjectId;
 
@@ -27,9 +32,7 @@ export class Input {
 
   @Prop([{ type: gql.InteractionSchema }])
   interactions: gql.InteractionType[];
-}
-@Schema(dbConfig.defaultSchemaOptions)
-export class Asset extends Input {
+
   @Prop({
     type: String,
     enum: ["active", "inactive"],

@@ -5,9 +5,10 @@
 type Asset {
   bottom: File
   createdAt: DateTime!
-  id: String!
-  interactions: [Interaction!]!
+  id: ID!
+  interactions: [Interaction!]
   lighting: File
+  name: String!
   status: String!
   top: File
   updatedAt: DateTime!
@@ -15,8 +16,9 @@ type Asset {
 
 input AssetInput {
   bottom: ID
-  interactions: [InteractionInput!]!
+  interactions: [InteractionInput!]
   lighting: ID
+  name: String!
   top: ID
 }
 
@@ -93,15 +95,17 @@ type Map {
 }
 
 input MapInput {
-  interactions: [InteractionInput!]!
+  interactions: [InteractionInput!]
   name: String!
-  placements: [PlacementInput!]!
-  tileSize: Int!
-  tiles: [[TileInput!]!]!
+  placements: [PlacementInput!]
+  tileSize: Int
+  tiles: [[TileInput!]!]
 }
 
 type Mutation {
-  addFiles(files: [Upload!]!): File!
+  addAssetFiles(assetId: String!, files: [Upload!]!): File!
+  addCharacterFiles(characterId: String!, files: [Upload!]!): File!
+  addMapFiles(files: [Upload!]!, mapId: String!, subGroup: String!): File!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
   createMap(data: MapInput!): Map!
@@ -110,7 +114,7 @@ type Mutation {
   removeMap(mapId: String!): Map!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
-  updateMap(data: MapInput!, mapId: String!): Map!
+  updateMap(data: MapInput!, mapId: ID!): Map!
 }
 
 type OpenSeaAttribute {

@@ -5,6 +5,5 @@ export * from "./MessageBox";
 export * from "./Call";
 export * from "./CallBox";
 export * from "./MyCall";
-export * from "./Video";
 export * from "./MyVideo";
 export * from "./Stream";

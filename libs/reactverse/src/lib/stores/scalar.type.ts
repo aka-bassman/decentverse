@@ -115,7 +115,7 @@ export const interactionFragment = gql`
 export type Tile = {
   top: File;
   bottom: File;
-  lighting: File;
+  lighting?: File;
   interactions: Interaction[];
 };
 export const tileFragment = gql`

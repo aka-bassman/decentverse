@@ -13,6 +13,9 @@ import * as gql from "../gql";
 
 @InputType()
 export class AssetInput {
+  @Field(() => String)
+  name: string;
+
   @Field(() => ID, { nullable: true })
   top?: Types.ObjectId;
 
@@ -22,8 +25,8 @@ export class AssetInput {
   @Field(() => ID, { nullable: true })
   lighting?: Types.ObjectId;
 
-  @Field(() => [gql.InteractionInput])
-  interactions: gql.InteractionType[];
+  @Field(() => [gql.InteractionInput], { nullable: true })
+  interactions: gql.InteractionInputType[];
 }
 
 /**
@@ -34,19 +37,22 @@ export class AssetInput {
 
 @ObjectType()
 export class Asset {
-  @Field(() => String)
+  @Field(() => ID)
   id: string;
+
+  @Field(() => String)
+  name: string;
 
   @Field(() => gql.File, { nullable: true })
   top?: gql.File;
 
   @Field(() => gql.File, { nullable: true })
-  bottom?: Types.ObjectId;
+  bottom?: gql.File;
 
   @Field(() => gql.File, { nullable: true })
-  lighting?: Types.ObjectId;
+  lighting?: gql.File;
 
-  @Field(() => [gql.Interaction])
+  @Field(() => [gql.Interaction], { nullable: true })
   interactions: gql.InteractionType[];
 
   @Field(() => String)

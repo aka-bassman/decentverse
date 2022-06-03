@@ -34,7 +34,7 @@ export const assetsQuery = gql`
 export const assets = async () =>
   (
     await client.query<AssetsQuery>({
-      query: assetQuery,
+      query: assetsQuery,
     })
   ).data.assets;
 

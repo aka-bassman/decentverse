@@ -16,14 +16,29 @@ const nextConfig = {
         "s3.ap-northeast-2.amazonaws.com",
         "asset.ayias.io",
         "dev-asset.ayias.io",
+        "api.ayias.io",
+        "dev.akamir.s3.ap-northeast-2.amazonaws.com",
       ],
     },
+  },
+  async headers() {
+    return [
+      {
+        source: "/path",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+        ],
+      },
+    ];
   },
   async rewrites() {
     return [
       {
-        source: "/decentverse/:path*",
-        destination: "https://asset.akamir.com/decentverse/:path*",
+        source: "/ayias/:path*",
+        destination: "https://asset.ayias.io/:path*",
       },
     ];
   },

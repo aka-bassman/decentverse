@@ -1,25 +1,23 @@
 import * as aws from "aws-sdk";
 import * as fs from "fs";
-
-import { ConfigService } from "@nestjs/config";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import * as dto from "./aws.dto";
 
-export interface ObjectStorageOptionss {
+export interface ObjectStorageOptions {
   region: string;
   accessKey: string;
   secretAccessKey: string;
   distributionId: string;
+  host?: string;
+  bucket: string;
 }
 
 @Injectable()
 export class AwsService {
   s3: aws.S3;
-  distributionId: string;
   cloudFront: aws.CloudFront;
-  constructor(
-    @Inject("OBJECT_STORAGE_OPTIONS") private options: ObjectStorageOptionss
-  ) {
+  private readonly logger = new Logger(AwsService.name);
+  constructor(@Inject("OBJECT_STORAGE_OPTIONS") private options: ObjectStorageOptions) {
     this.s3 = new aws.S3({ apiVersion: "2006-03-01" });
     aws.config.update({
       region: this.options.region,
@@ -27,17 +25,12 @@ export class AwsService {
       secretAccessKey: this.options.secretAccessKey,
     });
     this.cloudFront = new aws.CloudFront();
-    this.distributionId = this.options.distributionId;
   }
   async getObject({ bucket, path, filename }: dto.GetObjectRequest) {
-    return await this.s3
-      .getObject({ Bucket: bucket, Key: `${path}/${filename}` })
-      .promise();
+    return await this.s3.getObject({ Bucket: bucket, Key: `${path}/${filename}` }).promise();
   }
   async getJsonObject({ bucket, path, filename }: dto.GetObjectRequest) {
-    const data = await this.s3
-      .getObject({ Bucket: bucket, Key: `${path}/${filename}` })
-      .promise();
+    const data = await this.s3.getObject({ Bucket: bucket, Key: `${path}/${filename}` }).promise();
     return JSON.parse(data.Body.toString("utf-8"));
   }
   async getObjectList(bucket: string) {
@@ -47,10 +40,7 @@ export class AwsService {
     const filenames: string[] = [];
     return await this.getAllKeys({ Bucket: bucket, Prefix: prefix }, filenames);
   }
-  async getAllKeys(
-    params: aws.S3.ListObjectsV2Request,
-    allKeys: string[] = []
-  ) {
+  async getAllKeys(params: aws.S3.ListObjectsV2Request, allKeys: string[] = []) {
     const response = await this.s3.listObjectsV2(params).promise();
     response.Contents.forEach((obj) => allKeys.push(obj.Key));
     if (response.NextContinuationToken) {
@@ -65,20 +55,12 @@ export class AwsService {
   getServiceUrl(host: string, object: string) {
     return `https://${host}/${object}`;
   }
-  async uploadFile({
-    bucket,
-    path,
-    filename,
-    rename,
-    localPath,
-    meta,
-    host,
-  }: dto.AwsUploadRequest) {
+  async uploadFile({ path, filename, rename, localPath, meta }: dto.AwsUploadRequest) {
     const key = `${path}/${rename ?? filename}`;
     // const metadata = { ...(meta ?? {}) };
     await this.s3
       .putObject({
-        Bucket: bucket,
+        Bucket: this.options.bucket,
         Key: key,
         Metadata: meta,
         ACL: "public-read",
@@ -86,18 +68,10 @@ export class AwsService {
         ContentType: this.getContentType(filename),
       })
       .promise();
-    return host
-      ? this.getServiceUrl(host, key)
-      : this.getObjectUrl(bucket, key);
+    return this.options.host ? this.getServiceUrl(this.options.host, key) : this.getObjectUrl(this.options.bucket, key);
   }
 
-  async saveFile({
-    bucket,
-    path,
-    filename,
-    localPath,
-    rename,
-  }: dto.DownloadRequest): Promise<dto.LocalFilePath> {
+  async saveFile({ bucket, path, filename, localPath, rename }: dto.DownloadRequest): Promise<dto.LocalFilePath> {
     if (!fs.existsSync(localPath)) fs.mkdirSync(localPath, { recursive: true });
     const stream = this.s3
       .getObject({
@@ -108,25 +82,15 @@ export class AwsService {
     stream.pipe(fs.createWriteStream(`${localPath}/${filename}`));
     return new Promise((resolve, reject) => {
       stream.on("end", () => {
-        rename &&
-          fs.renameSync(`${localPath}/${filename}`, `${localPath}/${rename}`);
-        setTimeout(
-          () => resolve({ filename: rename ?? filename, localPath }),
-          100
-        );
+        rename && fs.renameSync(`${localPath}/${filename}`, `${localPath}/${rename}`);
+        setTimeout(() => resolve({ filename: rename ?? filename, localPath }), 100);
       });
       stream.on("error", (error) => {
         reject("File Download Error");
       });
     });
   }
-  async copyObject({
-    bucket,
-    copyPath,
-    pastePath,
-    filename,
-    host,
-  }: dto.CopyRequest) {
+  async copyObject({ bucket, copyPath, pastePath, filename, host }: dto.CopyRequest) {
     const key = `${pastePath}/${filename}`;
     await this.s3
       .copyObject({
@@ -136,13 +100,11 @@ export class AwsService {
         ACL: "public-read",
       })
       .promise();
-    return host
-      ? this.getServiceUrl(host, key)
-      : this.getObjectUrl(bucket, key);
+    return host ? this.getServiceUrl(host, key) : this.getObjectUrl(bucket, key);
   }
   async invalidateObjects(keys: string[]) {
     this.cloudFront.createInvalidation({
-      DistributionId: "",
+      DistributionId: this.options.distributionId,
       InvalidationBatch: {
         Paths: {
           Quantity: keys.length,
@@ -152,15 +114,7 @@ export class AwsService {
       },
     });
   }
-  async makePublic({
-    bucket,
-    path,
-    filename,
-  }: {
-    bucket: string;
-    path: string;
-    filename: string;
-  }) {
+  async makePublic({ bucket, path, filename }: { bucket: string; path: string; filename: string }) {
     await this.s3
       .putObjectAcl({
         ACL: "public-read",
@@ -170,15 +124,7 @@ export class AwsService {
       .promise();
     return true;
   }
-  async makePrivate({
-    bucket,
-    path,
-    filename,
-  }: {
-    bucket: string;
-    path: string;
-    filename: string;
-  }) {
+  async makePrivate({ bucket, path, filename }: { bucket: string; path: string; filename: string }) {
     await this.s3
       .putObjectAcl({
         ACL: "private",
@@ -189,10 +135,6 @@ export class AwsService {
     return true;
   }
   getContentType(filename: string) {
-    return filename.includes(".png")
-      ? "image/jpeg"
-      : filename.includes(".json")
-      ? "application/json"
-      : undefined;
+    return filename.includes(".png") ? "image/jpeg" : filename.includes(".json") ? "application/json" : undefined;
   }
 }

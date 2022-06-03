@@ -12,7 +12,9 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath:
-        process.env.SERVICE_ENV === "serve"
+        process.env.SERVICE_ENV === "script"
+          ? `../.${process.env.ENVIRONMENT ?? ""}.env`
+          : process.env.SERVICE_ENV === "serve"
           ? `apps/backend/.${process.env.ENVIRONMENT ?? ""}.env`
           : `${__dirname}/.${process.env.ENVIRONMENT ?? ""}.env`,
     }),
