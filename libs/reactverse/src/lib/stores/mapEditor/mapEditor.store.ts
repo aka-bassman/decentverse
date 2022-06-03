@@ -87,12 +87,12 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
 
     const assetsData = await gql.assets();
 
-    const assets = mapData.placements.map((placement) => ({
+    const assets = mapData.placements.map((placement: any) => ({
       x: placement.position[0],
       y: placement.position[1],
       width: placement.position[2],
       height: placement.position[3],
-      image: get().replaceImgUrl(placement.asset?.top.url),
+      image: get().replaceImgUrl(placement?.asset?.top?.url || ""),
       id: placement.asset.id,
     }));
 
@@ -119,8 +119,8 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     const { selectedAssetId, assetsData } = get();
     const selectedAsset = assetsData?.find((asset: types.Asset) => asset.id === selectedAssetId);
     const image = new Image();
-    image.src = selectedAsset?.top.url;
-    const imageSrc = get().replaceImgUrl(selectedAsset?.top.url);
+    image.src = selectedAsset?.top.url || "";
+    const imageSrc = get().replaceImgUrl(selectedAsset?.top.url || "");
     console.log("w,h", image.width, image.height);
     set({
       preview: { x, y, width: image.width, height: image.height, isPreview: true, image: imageSrc },
@@ -220,7 +220,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   },
   clearPreview: () => {
     set({
-      preview: { x: 0, y: 0, width: 0, hegiht: 0, isPreview: false, image: "" },
+      preview: { x: 0, y: 0, width: 0, height: 0, isPreview: false, image: "" },
     });
   },
   clearCollisionPreview: () => {
@@ -256,8 +256,8 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
 
     const newInteractions = get().collisions.map((collision) => ({
       type: "collision",
-      topLeft: [parseInt(collision.x - collision.width / 2), parseInt(collision.y + collision.height / 2)],
-      bottomRight: [parseInt(collision.x + collision.width / 2), parseInt(collision.y - collision.height / 2)],
+      topLeft: [(collision.x - collision.width / 2).toFixed(0), (collision.y + collision.height / 2).toFixed(0)],
+      bottomRight: [(collision.x + collision.width / 2).toFixed(0), (collision.y - collision.height / 2).toFixed(0)],
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
@@ -274,11 +274,11 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       });
     });
 
-    const assetPlacements = assets.map((asset: TAsset) => ({
+    const assetPlacements = assets.map((asset: types.TAsset) => ({
       asset: asset.id,
-      position: [parseInt(asset.x), parseInt(asset.y), parseInt(asset.width), parseInt(asset.height)],
+      position: [asset.x.toFixed(0), asset.y.toFixed(0), asset.width.toFixed(0), asset.height.toFixed(0)],
     }));
-    const data = {
+    const data: any = {
       name,
       tileSize,
       tiles: tilesInput,
