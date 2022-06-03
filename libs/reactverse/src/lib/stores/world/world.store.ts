@@ -107,7 +107,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       // , characters
     } = await gql.world();
     const me: types.Player = {
-      userId: "userId",
+      userId:  `${Math.random()}`,
       character: get().me.character,
       render: {
         id: "AAAA",
