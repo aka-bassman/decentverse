@@ -26,7 +26,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
             <h1>Welcome to Reactverse!</h1>
           </div>
           <Game socket={socket} />
-          {/* <Stream socket={socket} /> */}
+          <Stream socket={socket} />
         </>
       )}
     </ApolloProvider>

@@ -37,8 +37,8 @@ export const assetFragment = gql`
       ...interactionFragment
     }
     status
-    createdAt
-    updatedAt
+    # createdAt
+    # updatedAt
   }
 `;
 

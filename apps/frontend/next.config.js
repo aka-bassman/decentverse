@@ -17,6 +17,7 @@ const nextConfig = {
         "asset.ayias.io",
         "dev-asset.ayias.io",
         "api.ayias.io",
+        "dev.akamir.s3.ap-northeast-2.amazonaws.com",
       ],
     },
   },

@@ -80,7 +80,7 @@ export const TileMap = ({ player, scope }: MapProp) => {
     };
     scope.current = makeScope(showBox);
   }, 500);
-  console.log("tiles", renderTiles.length, renderTiles[0].length);
+  // console.log("tiles", renderTiles.length, renderTiles[0].length);
   return (
     <Suspense fallback={null}>
       <scene ref={scene}>
