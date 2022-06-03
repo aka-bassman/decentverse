@@ -77,6 +77,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   status: "none",
   init: async () => {
     setLink();
+    // const map = await gql.map("62989e5b2efe7546f62c35c1");
     const map = await gql.map("627ab2159ecc5480481c06cf");
     const assets = await gql.assets();
     set({ mapData: map, assetsData: assets });
@@ -204,16 +205,18 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     return !!(get().mainTool === "Assets" && get().subTool === "Remove");
   },
   saveMap: async () => {
-    const { isEdited, mapData } = get();
+    const { isEdited, mapData, assetPlacements } = get();
     if (!isEdited || !mapData) return;
-    const { name, tileSize, tiles, placements, interactions } = mapData;
-    // const data = {
-    //   name,
-    //   tileSize,
-    //   tiles,
-    //   placements,
-    //   interactions,
-    // };
+    const { name, tileSize, tiles, interactions } = mapData;
+    const data = {
+      name,
+      tileSize,
+      tiles,
+      placements: assetPlacements,
+      interactions,
+    };
+    console.log("data", data);
+
     // await gql.updateMap(mapData.id, data);
   },
 }));

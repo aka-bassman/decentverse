@@ -16,6 +16,7 @@ export const SideToolBar = () => {
     subTool,
     setSubTool,
     isEdited,
+    saveMap,
   } = useMapEditor();
 
   const data = [
@@ -39,7 +40,7 @@ export const SideToolBar = () => {
 
   return (
     <SideToolBarContainer>
-      <Button block style={{ marginBottom: 10 }} disabled={!isEdited}>
+      <Button block style={{ marginBottom: 10 }} disabled={!isEdited} onClick={saveMap}>
         SAVE
       </Button>
       <Segmented
