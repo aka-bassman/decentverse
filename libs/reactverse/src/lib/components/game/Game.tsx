@@ -33,8 +33,9 @@ export const Game = ({ socket }: GameProps) => {
   });
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
+  console.log(player.current.position);
   return (
-    <div style={{ width: 1500, height: 1500 }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <Canvas camera={{ fov: 75, near: 0.1, far: 3000, position: [0, 0, 2500] }}>
         <Suspense fallback={null}>
           <TileMap player={player} scope={scope} />

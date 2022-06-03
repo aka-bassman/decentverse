@@ -62,6 +62,7 @@
     "mongoose": "^6.3.2",
     "nestjs-redis": "^1.2.2",
     "next": "12.1.5",
+    "peerjs": "^1.4.6",
     "pubsub-js": "^1.9.4",
     "react": "18.1.0",
     "react-dom": "18.1.0",

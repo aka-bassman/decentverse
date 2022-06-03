@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { client, setLink } from "./stores";
 import { ApolloProvider } from "@apollo/client";
-import { Stream, Game } from "./components";
+import { Stream, Game, Interface } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 
 export interface ReactverseProps {
@@ -18,16 +18,15 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
   }, []);
+
   return (
     <ApolloProvider client={client}>
       {isConnected && socket && (
-        <>
-          <div>
-            <h1>Welcome to Reactverse!</h1>
-          </div>
+        <div style={{ width: "100%", height: "100vh" }}>
+          <Interface socket={socket} />
           <Game socket={socket} />
           <Stream socket={socket} />
-        </>
+        </div>
       )}
     </ApolloProvider>
   );
