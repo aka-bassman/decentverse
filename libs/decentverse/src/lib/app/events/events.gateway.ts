@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 import { Server, Socket } from "socket.io";
 import * as srv from "../srv";
 
+
 @WebSocketGateway({
   cors: {
     origin: "*",
@@ -63,15 +64,12 @@ export class EventsGateway {
       client.rooms.add(roomId);
       // client.emit("init", true);
     } else if (clients.length > 0) {
-      console.log("reday");
-      this.server.to(roomId).emit("init", true, [client.data]);
+      console.log("reday", client.data);
       client.join(roomId);
       client.rooms.add(roomId);
-      client.emit(
-        "init",
-        false,
-        clients.map((c) => c.data)
-      );
+      for(const client_ of clients) {
+        client_.emit("init", client.id, false, client.data);
+      }
     } else {
       client.rooms.clear();
       client.leave(roomId);
@@ -84,10 +82,29 @@ export class EventsGateway {
     // });
   }
 
+
+  @SubscribeMessage("receive")
+  async receive(client: Socket, {socketId, roomId, userId, nickName  }: any) {
+    const sockets = this.server.of("/").in(roomId);
+    const clients = await sockets.fetchSockets();
+    client.data = { roomId, userId, nickName };
+    console.log(roomId, userId, nickName, socketId);
+    const receiver = clients.find(client => client.id === socketId);
+    receiver.emit("receive",client.id, true, client.data);
+  }
+
   @SubscribeMessage("signal")
-  async exchange(client: Socket, { room, desc, userId }: any) {
-    console.log("signal");
-    this.server.to(room).emit(`desc:${userId}`, desc, userId);
+  async exchange(client: Socket, { socketId, desc, roomId,  nickName, userId }: any) {
+    console.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
+    const sockets = this.server.of("/").in(roomId);
+    const clients = await sockets.fetchSockets();
+    client.data = { roomId, userId, nickName };
+    const socket = clients.find(client => client.id === socketId);
+    if(!socket) return;
+
+    socket.emit(`signal`, {desc, userId});
+    let i =0;
+
   }
 
   @SubscribeMessage("disconnect")

@@ -36,6 +36,7 @@ export type Message = {
 
 export const stunServer = "stun:stun4.l.google.com:19302";
 export class Call {
+  
   initiator: boolean;
   peer: Peer.Instance;
   constructor(initiator: boolean, localStream: MediaStream, screenStream?: MediaStream) {
@@ -49,15 +50,20 @@ export class Call {
   }
   connect(otherId: string) {
     if (!this.peer) return;
+    if(this.peer.destroyed) return
     this.peer.signal(otherId);
   }
 }
 export type PeerStream = {
   id: string;
+  socketId:string;
   nickName: string;
   call: Call;
   mic: number;
   cam: boolean;
+  muted: boolean;
+  blind: boolean;
+  isTalk:boolean;
   quality: number;
 };
 export type CallRoom = {
@@ -65,6 +71,7 @@ export type CallRoom = {
   roomType: "none" | "room" | "user" | "peer";
   mic: number;
   cam: boolean;
+  isTalk : boolean;
   fullNum: number;
   localStream?: MediaStream;
   screenStream?: MediaStream;

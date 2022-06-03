@@ -2,7 +2,7 @@ import { Suspense, useRef, MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
-import { useTexture } from "@react-three/drei";
+import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator } from "../../hooks";
 
 export interface PlayerProp {
@@ -50,11 +50,21 @@ export const Player = ({ sprite, animation, keyboard, player }: PlayerProp) => {
     camera.translateX(Math.floor((playerPosition[0] - position.x) / 10));
     camera.translateY(Math.floor((playerPosition[1] - position.y) / 10));
   });
+
+  console.log(player.current.position);
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
         <planeGeometry args={[129, 194]} />
         <spriteMaterial map={url} />
+        <Text
+          // position={[player.current.position[0], player.current.position[1] + 100, 1]}
+          lineHeight={0.8}
+          fontSize={30}
+          material-toneMapped={false}
+        >
+          {player.current.id}
+        </Text>
       </sprite>
     </Suspense>
   );
