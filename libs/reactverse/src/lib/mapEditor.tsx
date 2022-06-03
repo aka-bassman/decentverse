@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { client, useMapEditor } from "./stores";
 import { ApolloProvider } from "@apollo/client";
-import { Map, SampleMap, SideToolBar } from "./components";
+import { Map, SideToolBar } from "./components";
 import { Layout } from "antd";
 import styled from "styled-components";
-const { Header, Footer, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 export const MapEditor = () => {
   const { init } = useMapEditor();
@@ -22,10 +22,8 @@ export const MapEditor = () => {
         </StyledSider>
         <Layout>
           <Content>
-            {/* <Map /> */}
-            <SampleMap />
+            <Map />
           </Content>
-          {/* <Footer>Footer</Footer> */}
         </Layout>
       </MapEditorLayout>
     </ApolloProvider>

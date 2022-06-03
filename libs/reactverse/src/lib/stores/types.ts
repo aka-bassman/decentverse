@@ -6,3 +6,4 @@ export * from "./game/game.types";
 export * from "./map/map.types";
 export * from "./world/world.types";
 export * from "./gossip/gossip.types";
+export * from "./mapEditor/mapEditor.types";

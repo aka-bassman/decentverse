@@ -41,8 +41,8 @@ export const createMap = async (data: types.MapInput) =>
 export type UpdateMapMutation = { updateMap: types.Map };
 export const updateMapMutation = gql`
   ${types.mapFragment}
-  mutation updateMap($mapId: ID, $data: MapInput) {
-    updateMap(mapId: $map, data: $data) {
+  mutation updateMap($mapId: ID!, $data: MapInput!) {
+    updateMap(mapId: $mapId, data: $data) {
       ...mapFragment
     }
   }

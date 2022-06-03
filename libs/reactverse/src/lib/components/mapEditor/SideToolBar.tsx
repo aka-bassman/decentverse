@@ -47,6 +47,7 @@ export const SideToolBar = () => {
         block
         // options={["Map", "Assets", "Interaction"]}
         options={["Assets", "Interaction"]}
+        value={mainTool}
         onChange={(value) => setMainTool(value as TMainTool)}
       />
       {/* <Row gutter={0}>
@@ -121,10 +122,12 @@ export const SideToolBar = () => {
         )}
         {mainTool === "Interaction" && (
           <Card title="Interaction" size="small">
-            <Button size="small" block>
-              <EditOutlined />
-              추가
-            </Button>
+            <Segmented
+              block
+              options={["Add", "Remove"]}
+              value={subTool}
+              onChange={(value) => setSubTool(value as string)}
+            />
           </Card>
         )}
       </ToolContainer>
@@ -163,6 +166,6 @@ const ToolContainer = styled.div`
 `;
 
 const AssetList = styled.div`
-  max-height: 400px;
+  max-height: 1000px;
   overflow: scroll;
 `;
