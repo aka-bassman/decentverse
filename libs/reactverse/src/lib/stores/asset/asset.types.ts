@@ -15,7 +15,7 @@ export type Asset = {
   lighting?: scalar.File;
   interactions: scalar.Interaction[];
   status: string;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt: Date;
 };
 
@@ -37,8 +37,8 @@ export const assetFragment = gql`
       ...interactionFragment
     }
     status
-    createdAt
-    updatedAt
+    # createdAt
+    # updatedAt
   }
 `;
 

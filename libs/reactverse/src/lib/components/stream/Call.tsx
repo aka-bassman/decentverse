@@ -4,6 +4,7 @@ import { types, useGossip, useWorld } from "../../stores";
 import { Socket as Soc } from "socket.io-client";
 import { Video } from "./";
 import styled from "styled-components";
+import { transcode } from "buffer";
 
 export interface CallProps {
   peer: types.PeerStream;
@@ -24,12 +25,9 @@ export const Call = ({ peer, socket }: CallProps) => {
 
   useEffect(() => {
     enter();
+
     peer.call.peer._debug = console.log;
-    socket.on("signal", (data) => {
-      console.log(new Date(), peer.id);
-
-      console.log(1, peer.id);
-
+    socket.on(`desc:${peer.id}`, (data) => {
       if (peer.call.peer.connected) return;
       console.log(2, data.userId === userId);
       peer.call.connect(data.desc);
@@ -37,11 +35,13 @@ export const Call = ({ peer, socket }: CallProps) => {
     });
     socket.on(`disconnected:${peer.id}`, () => {
       peer.call.peer.destroy();
-
       removePeer(peer.id);
     });
     return () => {
-      // console.log("EXIT");
+      console.log("EXIT");
+
+      const tracks = remoteTrack.current?.getTracks();
+      tracks?.forEach((track) => track.stop());
       socket.off(`desc:${peer.id}`);
       socket.off(`disconnected:${peer.id}`);
     };
@@ -66,20 +66,19 @@ export const Call = ({ peer, socket }: CallProps) => {
       // console.log("TRACK");
       remoteTrack.current = stream;
     });
-    peer.call.peer.on("close", () => {
-      // console.log("CLOSE");
-      peer.call.peer.destroy();
-      socket.off(`desc:${peer.id}`);
-      socket.off(`disconnected:${peer.id}`);
-      removePeer(peer.id);
-    });
-    peer.call.peer.on("end", () => {
-      // console.log("END");
-      peer.call.peer.destroy();
-      socket.off(`desc:${peer.id}`);
-      socket.off(`disconnected:${peer.id}`);
-      removePeer(peer.id);
-    });
+    peer.call.peer.on("error", (err) => console.log(err));
+    // peer.call.peer.on("close", () => {
+    //   // console.log("CLOSE");
+    //   socket.off(`desc:${peer.id}`);
+    //   socket.off(`disconnected:${peer.id}`);
+    //   removePeer(peer.id);
+    // });
+    // peer.call.peer.on("end", () => {
+    //   // console.log("END");
+    //   socket.off(`desc:${peer.id}`);
+    //   socket.off(`disconnected:${peer.id}`);
+    //   removePeer(peer.id);
+    // });
   };
 
   const toggleMic = () => {
@@ -96,7 +95,7 @@ export const Call = ({ peer, socket }: CallProps) => {
   };
   const toggleCam = () => {
     if (!remoteTrack.current) return {};
-    if (!peer.muted) {
+    if (!peer.blind) {
       if (remoteTrack.current.getVideoTracks().length > 0)
         remoteTrack.current.getVideoTracks().forEach((track) => (track.enabled = false));
       blindPeer(peer.id);
@@ -111,7 +110,9 @@ export const Call = ({ peer, socket }: CallProps) => {
     <Container>
       <VideoBox>
         <NameTag>
-          {!peer.mic && <MicOffSmallIcon />}
+          <div style={{ visibility: !peer.mic ? "visible" : "hidden" }}>
+            <MicOffSmallIcon />
+          </div>
           {peer.id}
         </NameTag>
         <BackLight color={peer.isTalk ? "#9ACD32" : "transparent"} />
@@ -126,11 +127,13 @@ export const Call = ({ peer, socket }: CallProps) => {
   );
 };
 
-const Container = styled.div``;
-
+const Container = styled.div`
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
 const VideoBox = styled.div`
-  width: 300px;
-  height: 200px;
+  width: 200px;
+  height: 130px;
   position: relative;
   border-radius: 10px;
   z-index: 2;
@@ -166,7 +169,7 @@ const Bilind = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  background: gray;
+  background: #3c3c3c;
   z-index: 3;
 `;
 
@@ -185,7 +188,7 @@ const NameTag = styled.div`
   align-items: center;
   color: white;
   border-radius: 10px;
-  background-color: rgba(59, 57, 57, 0.5);
+  background-color: rgba(178, 178, 178, 0.5);
 `;
 
 const Control = styled.div`

@@ -44,7 +44,7 @@ export class Call {
     this.peer = new Peer({
       initiator: this.initiator,
       streams: [localStream, ...(screenStream ? [screenStream] : [])],
-      trickle: false,
+      // trickle: false,
       config: { iceServers: [{ urls: stunServer }] },
     });
   }

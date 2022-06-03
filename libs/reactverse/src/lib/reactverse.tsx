@@ -8,7 +8,7 @@ export const Reactverse = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Soc>();
   useEffect(() => {
-    const socket = io("192.168.219.103:3333");
+    const socket = io("192.168.1.179:3333");
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
   }, []);
@@ -16,13 +16,10 @@ export const Reactverse = () => {
   return (
     <ApolloProvider client={client}>
       {isConnected && socket && (
-        <div style={{ width: "100%", height: "100vh", borderWidth: 2 }}>
-          <div>
-            <h1>Welcome to Reactverse!</h1>
-          </div>
-          {/* <Game socket={socket} /> */}
+        <div style={{ width: "100%", height: "100vh" }}>
+          <Interface socket={socket} />
+          <Game socket={socket} />
           <Stream socket={socket} />
-          {/* <Interface socket={socket} /> */}
         </div>
       )}
     </ApolloProvider>

@@ -30,13 +30,15 @@ export const MyCall = ({ socket }: MyCallProps) => {
   const setLocalStream = useGossip((state) => state.setLocalStream);
   const setIsTalk = useGossip((state) => state.setIsTalk);
   const toggleScreen = useGossip((state) => state.toggleScreen);
+  const addPeer = useGossip((state) => state.addPeer);
   const localVideo = useRef<HTMLVideoElement>(null);
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    getUserMedia();
+    getUserMedia().then(() => {
+      socket.emit("join", { roomId: "bbb", userId: me.userId, nickName: me.userId });
+    });
     return () => {
       peers.map((peer) => peer.call.peer.destroy());
-      // socket.emit("disconnect");
     };
   }, []);
 
@@ -54,7 +56,7 @@ export const MyCall = ({ socket }: MyCallProps) => {
   }, 500);
   const getUserMedia = async () => {
     const op = {
-      video: { width: 300, height: 200 },
+      video: { width: 200, height: 130 },
       audio: true,
     };
     const stream = await navigator.mediaDevices.getUserMedia(op);
@@ -108,7 +110,7 @@ export const MyCall = ({ socket }: MyCallProps) => {
     toggleScreen(stream);
     // if (localScreen.current) localScreen.current.srcObject = stream;
   };
-
+  console.log(me.userId);
   return (
     <Container>
       <VideoBox>
@@ -136,13 +138,13 @@ export const MyCall = ({ socket }: MyCallProps) => {
 
 const Container = styled.div`
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: 4%;
+  left: 1%;
 `;
 
 const VideoBox = styled.div`
-  width: 300px;
-  height: 200px;
+  width: 200px;
+  height: 130px;
   position: relative;
   border-radius: 10px;
   z-index: 2;
@@ -173,7 +175,7 @@ const Bilind = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  background: gray;
+  background: #acaaaa;
   z-index: 3;
 `;
 
@@ -190,10 +192,10 @@ const NameTag = styled.div`
   position: absolute;
   display: flex;
   padding-left: 4px;
-  padding-right: 12px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  margin-right: 3;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-right: 3px;
   z-index: 4;
   left: 10px;
   top: 10px;
@@ -207,7 +209,10 @@ const NameTag = styled.div`
 const Control = styled.div`
   position: absolute;
   left: 50%;
-  bottom: 0%;
+  bottom: 5%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   z-index: 3;
   transform: translate(-50%, 0);
 `;

@@ -11,7 +11,7 @@ export interface GossipState {
   messageText: string;
   chat: () => void;
   message: () => void;
-  addPeer: (socketId :string, initiator: boolean, form: types.InitForm, localStream?: MediaStream, screenStream?: MediaStream) => void;
+  addPeer: (socketId :string, initiator: boolean, form: types.InitForm, localStream: MediaStream, screenStream?: MediaStream) => void;
   updatePeer: (data: Partial<types.PeerStream>) => void;
   removePeer: (id: string) => void;
   setIsTalk:(isTalk:boolean) => void;
@@ -70,9 +70,9 @@ export const useGossip = create<GossipState>((set, get) => ({
       ],
     })),
   removePeer: (id: string) => set((state) => {
-    console.log("remove peer");
-    state.peers = state.peers.filter((p) => p.id !== id);
-    return { peers: state.peers.filter((p) => p.id !== id) }
+    const peers = state.peers.filter((p) => p.id !== id);
+
+    return { peers }
   }),
   setMic: (mic : number) =>
     set((state) => {
