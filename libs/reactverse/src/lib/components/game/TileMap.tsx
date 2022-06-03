@@ -5,6 +5,7 @@ import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3 } from "three";
 import { useTexture } from "@react-three/drei";
 import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
+import { Tile } from "./Tile";
 export interface MapProp {
   player: MutableRefObject<RenderCharacter>;
   scope: MutableRefObject<types.WorldScope>;
@@ -17,13 +18,13 @@ export const TileMap = ({ player, scope }: MapProp) => {
   const setTiles = useGame((state) => state.setTiles);
   const tileStatus = useRef({ state: [-5, -5], idx: [0, 0] });
   const renderTiles = useWorld((state) => state.render.tiles);
-  const [map] = useTexture([
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    "/decentverse/azure-sky.png",
-    // tiles[0][0].bottom.url.split("/").slice(-2).join("/")
-  ]);
+  // const [map] = useTexture([
+  //   "/decentverse/azure-sky.png",
+  //   "/decentverse/azure-sky.png",
+  //   "/decentverse/azure-sky.png",
+  //   "/decentverse/azure-sky.png",
+  //   // tiles[0][0].bottom.url.split("/").slice(-2).join("/")
+  // ]);
   const scene = useRef<Scene>(new Scene());
   const renderLines = useMemo(
     () => [
@@ -79,22 +80,18 @@ export const TileMap = ({ player, scope }: MapProp) => {
     };
     scope.current = makeScope(showBox);
   }, 500);
+  console.log("tiles", renderTiles.length, renderTiles[0].length);
   return (
     <Suspense fallback={null}>
       <scene ref={scene}>
-        {renderTiles.slice(...render.tiles[1]).map((tileArr, y) =>
-          tileArr.slice(...render.tiles[0]).map((tile, x) => {
-            const position = new Vector3(
-              (tileMap.tileSize[0] / 2 + (x + render.tiles[0][0]) * tileMap.tileSize[0]) / 1,
-              (tileMap.tileSize[1] / 2 + (y + render.tiles[1][0]) * tileMap.tileSize[1]) / 1,
-              -0.0000001
-            );
-            return (
-              <sprite key={`${x}${y}`} position={position}>
-                <planeGeometry args={[2000, 2000]} />
-                <spriteMaterial map={map} />
-              </sprite>
-            );
+        {renderTiles.slice(...render.tiles[1]).map((tileArr, idxy) =>
+          tileArr.slice(...render.tiles[0]).map((tile, idxx) => {
+            const x = idxx + render.tiles[0][0];
+            const y = idxy + render.tiles[1][0];
+            const offsetX = tileMap.tileSize[0] / 2 + (idxx + render.tiles[0][0]) * tileMap.tileSize[0];
+            const offsetY = tileMap.tileSize[1] / 2 + (idxy + render.tiles[1][0]) * tileMap.tileSize[1];
+            console.log(x, y, offsetX, offsetY);
+            return <Tile key={`${x}/${y}`} x={x} y={y} offsetX={offsetX} offsetY={offsetY} />;
           })
         )}
       </scene>

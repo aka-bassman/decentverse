@@ -21,11 +21,24 @@ const nextConfig = {
       ],
     },
   },
+  async headers() {
+    return [
+      {
+        source: "/path",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
-        source: "/decentverse/:path*",
-        destination: "https://asset.akamir.com/decentverse/:path*",
+        source: "/ayias/:path*",
+        destination: "https://asset.ayias.io/:path*",
       },
     ];
   },
