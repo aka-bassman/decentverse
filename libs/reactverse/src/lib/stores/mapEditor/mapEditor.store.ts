@@ -82,7 +82,8 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   status: "none",
   init: async () => {
     setLink();
-    const mapData = await gql.map("62989e5b2efe7546f62c35c1");
+    const mapData = await gql.map("629b51909fd96cc4c6f6adb1");
+    console.log();
     // const map = await gql.map("627ab2159ecc5480481c06cf");
 
     const assetsData = await gql.assets();
