@@ -183,8 +183,8 @@ type Tile {
 input TileInput {
   bottom: ID!
   interactions: [InteractionInput!]!
-  lighting: ID!
-  top: ID!
+  lighting: ID
+  top: ID
 }
 
 """The `Upload` scalar type represents a file upload."""

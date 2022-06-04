@@ -118,6 +118,7 @@ export type Tile = {
   lighting?: File;
   interactions: Interaction[];
 };
+
 export const tileFragment = gql`
   ${fileFragment}
   ${interactionFragment}

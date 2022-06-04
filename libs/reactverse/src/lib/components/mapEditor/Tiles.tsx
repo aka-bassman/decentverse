@@ -1,20 +1,19 @@
 import { Suspense, useRef, MutableRefObject, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Canvas, useLoader, useThree, useFrame } from "@react-three/fiber";
-import { useMapEditor } from "../../stores";
+import { useMapEditor, scalar } from "../../stores";
+import * as types from "../../stores/types";
 
 import * as THREE from "three";
 
-export const Tiles = ({ mapData, keyboard }: any) => {
+export const Tiles = ({ mapData, keyboard }: { mapData: types.Map; keyboard: MutableRefObject<scalar.Keyboard> }) => {
   const { camera, get } = useThree();
 
   const {
     isActiveViewMode,
-    mapData,
     tileSize,
     pointerMoveOnTile,
     pointerDownOnTile,
-    pointerUpOnTile,
     preview,
     assets,
     collisions,
@@ -31,10 +30,10 @@ export const Tiles = ({ mapData, keyboard }: any) => {
     keyboard.current.down && camera.translateY(-1 * offest);
   });
 
-  const tileImages = [];
-  const tilesPosition = [];
-  mapData?.tiles.forEach((cur, i) => {
-    cur.forEach((tile, j) => {
+  const tileImages: string[] = [];
+  const tilesPosition: { i: number; j: number; x: number; y: number }[] = [];
+  mapData?.tiles.forEach((cur, i: number) => {
+    cur.forEach((tile, j: number) => {
       tileImages.push(tile.bottom.url.replace("https://asset.ayias.io/", "ayias/"));
       tilesPosition.push({
         i: i,
@@ -60,7 +59,6 @@ export const Tiles = ({ mapData, keyboard }: any) => {
             position={[position.x, position.y, 0]}
             onPointerDown={pointerDownOnTile}
             onPointerMove={pointerMoveOnTile}
-            onPointerUp={pointerUpOnTile}
           >
             <planeBufferGeometry attach="geometry" args={[tileSize, tileSize]} />
             <meshBasicMaterial attach="material" map={tileTexture[index] as THREE.Texture} />
@@ -92,7 +90,6 @@ export const Tiles = ({ mapData, keyboard }: any) => {
       <ambientLight />
       {collisionPreview.isPreview && (
         <mesh position={[collisionPreview.x, collisionPreview.y, 0]}>
-          {console.log("x,y,w,h", collisionPreview)}
           <planeBufferGeometry attach="geometry" args={[collisionPreview.width, collisionPreview.height]} />
           <meshPhongMaterial attach="material" color="#f19c9c" />
         </mesh>
