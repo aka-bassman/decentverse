@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, ID, Int } from "@nestjs/graphql";
 import * as gql from "../gql";
-import { Types } from "mongoose";
+import { Types, Schema as MongoSchema } from "mongoose";
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -14,13 +14,13 @@ import { Types } from "mongoose";
 @InputType()
 export class CharacterInput {
   @Field(() => ID, { nullable: true })
-  contract?: Types.ObjectId;
+  contract?: MongoSchema.Types.ObjectId;
 
   @Field()
   tokenId: number;
 
   @Field(() => ID)
-  file: Types.ObjectId;
+  file: MongoSchema.Types.ObjectId;
 
   @Field(() => [Int])
   tileSize: number[];

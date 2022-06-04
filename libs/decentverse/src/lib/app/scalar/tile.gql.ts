@@ -1,6 +1,6 @@
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Types } from "mongoose";
+import { Types, Schema as MongoSchema } from "mongoose";
 import { InteractionSchema } from "./scalar.gql";
 import * as gql from "../gql";
 
@@ -10,16 +10,16 @@ import * as gql from "../gql";
 @Schema()
 export class Tile {
   @Field(() => gql.File, { nullable: true })
-  @Prop({ type: Types.ObjectId, ref: "file", required: false })
-  top?: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
+  top?: MongoSchema.Types.ObjectId;
 
   @Field(() => gql.File)
-  @Prop({ type: Types.ObjectId, ref: "file", required: true })
-  bottom: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: true })
+  bottom: MongoSchema.Types.ObjectId;
 
   @Field(() => gql.File, { nullable: true })
-  @Prop({ type: Types.ObjectId, ref: "file", required: false })
-  lighting?: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
+  lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.Interaction])
   @Prop([{ type: InteractionSchema, required: true }])
@@ -31,13 +31,13 @@ export const TileSchema = SchemaFactory.createForClass(Tile);
 @InputType()
 export class TileInput {
   @Field(() => ID)
-  top?: Types.ObjectId;
+  top?: MongoSchema.Types.ObjectId;
 
   @Field(() => ID)
-  bottom: Types.ObjectId;
+  bottom: MongoSchema.Types.ObjectId;
 
   @Field(() => ID)
-  lighting?: Types.ObjectId;
+  lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.InteractionInput])
   interactions: gql.InteractionType[];

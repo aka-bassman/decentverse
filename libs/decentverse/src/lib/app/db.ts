@@ -1,7 +1,7 @@
-import { Types, FilterQuery } from "mongoose";
+import { Schema, Types, FilterQuery } from "mongoose";
 import * as DataLoader from "dataloader";
-export type ID = Types.ObjectId;
-export const ObjectId = Types.ObjectId;
+export type ID = Schema.Types.ObjectId;
+export const ObjectId = Schema.Types.ObjectId;
 export { FilterQuery as Query };
 export { DataLoader };
 export * from "../dbConfig";

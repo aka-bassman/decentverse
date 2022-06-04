@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Model, Types } from "mongoose";
+import { Document, Model, Types, Schema as MongoSchema } from "mongoose";
 import * as dbConfig from "../../dbConfig";
 import * as gql from "../gql";
 /**
@@ -21,14 +21,14 @@ export class Input {
 }
 @Schema(dbConfig.defaultSchemaOptions)
 export class Asset extends Input {
-  @Prop({ type: Types.ObjectId, ref: "file", required: false })
-  top?: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
+  top?: MongoSchema.Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: "file", required: false })
-  bottom?: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
+  bottom?: MongoSchema.Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: "file", required: false })
-  lighting?: Types.ObjectId;
+  @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
+  lighting?: MongoSchema.Types.ObjectId;
 
   @Prop([{ type: gql.InteractionSchema }])
   interactions: gql.InteractionType[];
@@ -72,7 +72,7 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export interface DocType extends Document<MongoSchema.Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
 export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);

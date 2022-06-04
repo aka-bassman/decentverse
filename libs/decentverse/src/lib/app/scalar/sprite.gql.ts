@@ -1,6 +1,6 @@
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Types } from "mongoose";
+import { Types, Schema as MongoSchema } from "mongoose";
 import * as gql from "../gql";
 
 // * Sprite Def Schema Definition
