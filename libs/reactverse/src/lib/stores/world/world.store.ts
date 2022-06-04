@@ -107,7 +107,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       // , characters
     } = await gql.world();
     const me: types.Player = {
-      userId:  `${Math.random()}`,
+      userId: `${Math.random()}`,
       character: get().me.character,
       render: {
         id: "AAAA",
@@ -122,7 +122,8 @@ export const useWorld = create<WorldState>((set, get) => ({
     };
     const render = { tiles: maps[1].tiles, players: {} };
     const status = "idle";
-    return set({ map: maps[0], me, render, status });
+    console.log(maps[1].placements);
+    return set({ map: maps[1], me, render, status });
   },
   accelMe: (keyboard: types.Keyboard) => {
     const state: WorldState = get();

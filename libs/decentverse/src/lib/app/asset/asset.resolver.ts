@@ -54,10 +54,10 @@ export class AssetResolver {
   }
   @ResolveField()
   async bottom(@Parent() asset: db.Asset.Asset) {
-    return await this.assetService.load(asset.bottom);
+    return await this.fileService.load(asset.bottom);
   }
   @ResolveField()
   async lighting(@Parent() asset: db.Asset.Asset) {
-    return await this.assetService.load(asset.lighting);
+    return await this.fileService.load(asset.lighting);
   }
 }

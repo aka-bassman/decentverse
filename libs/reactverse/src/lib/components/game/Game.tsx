@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
-import { TileMap, Player, Players } from "./index";
+import { TileMap, Player, Players, Placements } from "./index";
 import { Socket as Soc } from "socket.io-client";
 
 export interface GameProps {
@@ -35,12 +35,22 @@ export const Game = ({ socket }: GameProps) => {
   useWindowDimensions();
   console.log(player.current.position);
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Canvas camera={{ fov: 75, near: 0.1, far: 3000, position: [0, 0, 2500] }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        marginLeft: "0%",
+        marginTop: "0%",
+        borderColor: "black",
+        borderWidth: 2,
+      }}
+    >
+      <Canvas camera={{ fov: 50, near: 0.1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
         <Suspense fallback={null}>
           <TileMap player={player} scope={scope} />
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} />
           <Players playerId={player.current.id} />
+          <Placements />
         </Suspense>
       </Canvas>
     </div>

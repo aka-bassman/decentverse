@@ -43,7 +43,7 @@ export const assetFragment = gql`
 `;
 
 export type Placement = {
-  asset: string;
+  asset: Asset;
   position: number[];
 };
 export const placementFragment = gql`
