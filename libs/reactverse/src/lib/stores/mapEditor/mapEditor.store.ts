@@ -83,9 +83,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   init: async () => {
     setLink();
     const mapData = await gql.map("629b51909fd96cc4c6f6adb1");
-    console.log();
     // const map = await gql.map("627ab2159ecc5480481c06cf");
-
     const assetsData = await gql.assets();
 
     const assets = mapData.placements.map((placement: any) => ({
@@ -257,8 +255,8 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
 
     const newInteractions = get().collisions.map((collision) => ({
       type: "collision",
-      topLeft: [(collision.x - collision.width / 2).toFixed(0), (collision.y + collision.height / 2).toFixed(0)],
-      bottomRight: [(collision.x + collision.width / 2).toFixed(0), (collision.y - collision.height / 2).toFixed(0)],
+      topLeft: [Math.round(collision.x - collision.width / 2), Math.round(collision.y + collision.height / 2)],
+      bottomRight: [Math.round(collision.x + collision.width / 2), Math.round(collision.y - collision.height / 2)],
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
@@ -269,15 +267,15 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
         tilesInput[i][j] = {
           bottom: tile.bottom.id,
           interactions: tile.interactions,
-          lighting: tile.bottom.id,
-          top: tile.bottom.id,
+          lighting: tile.lighting?.id,
+          top: tile.top?.id,
         };
       });
     });
 
     const assetPlacements = assets.map((asset: types.TAsset) => ({
       asset: asset.id,
-      position: [asset.x.toFixed(0), asset.y.toFixed(0), asset.width.toFixed(0), asset.height.toFixed(0)],
+      position: [Math.round(asset.x), Math.round(asset.y), Math.round(asset.width), Math.round(asset.height)],
     }));
     const data: any = {
       name,
