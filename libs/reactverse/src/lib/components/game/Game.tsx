@@ -54,7 +54,7 @@ export const Game = ({ socket }: GameProps) => {
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
           <Players playerId={player.current.id} />
           <Placements />
-          {/* <Interactions engine={engine} /> */}
+          <Interactions engine={engine} />
         </Suspense>
       </Canvas>
     </div>
