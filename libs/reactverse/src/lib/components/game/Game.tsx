@@ -13,6 +13,8 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
+  const scene = useRef();
+  const engine = useRef(Engine.create());
   useEffect(() => {
     (async () => {
       await initWorld();
@@ -32,8 +34,6 @@ export const Game = ({ socket }: GameProps) => {
     min: [0, 0],
     max: [2048, 2048],
   });
-  const scene = useRef();
-  const engine = useRef(Engine.create());
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
   console.log(player.current.position);
@@ -51,10 +51,10 @@ export const Game = ({ socket }: GameProps) => {
       <Canvas camera={{ fov: 50, near: 0.1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
         <Suspense fallback={null}>
           <TileMap player={player} scope={scope} />
-          <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} />
+          <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
           <Players playerId={player.current.id} />
           <Placements />
-          {/* <Interactions /> */}
+          <Interactions engine={engine} />
         </Suspense>
       </Canvas>
     </div>

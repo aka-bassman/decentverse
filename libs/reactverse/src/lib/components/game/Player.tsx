@@ -1,22 +1,26 @@
-import { Suspense, useRef, MutableRefObject } from "react";
+import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator } from "../../hooks";
+import { Engine } from "matter-js";
 
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;
   animation: MutableRefObject<scalar.SpriteDef>;
   keyboard: MutableRefObject<scalar.Keyboard>;
   player: MutableRefObject<RenderCharacter>;
+  engine: MutableRefObject<Engine>;
 }
 
-export const Player = ({ sprite, animation, keyboard, player }: PlayerProp) => {
+export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get } = useThree();
   const me = useWorld((state) => state.me);
   const [url] = useTexture(["/sprite5.png"]);
-
+  useEffect(() => {
+    console.log("wip");
+  }, []);
   useFrame(() => {
     if (!sprite.current || !me) return;
     const velocity = [
