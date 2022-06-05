@@ -29,41 +29,41 @@ export const useWorld = create<WorldState>((set, get) => ({
         id: "",
         url: "/sprite5.png",
       },
-      tileSize: [129, 194],
-      totalSize: [388, 581],
+      tileSize: [240, 330],
+      totalSize: [960, 2640],
       right: {
         idle: {
-          row: 2,
+          row: 4,
           column: 1,
           duration: 300,
         },
         walk: {
-          row: 2,
-          column: 3,
+          row: 5,
+          column: 4,
           duration: 300,
         },
       },
       left: {
         idle: {
-          row: 2,
+          row: 6,
           column: 1,
           duration: 300,
         },
         walk: {
-          row: 2,
-          column: 3,
+          row: 7,
+          column: 4,
           duration: 300,
         },
       },
       up: {
         idle: {
-          row: 1,
+          row: 2,
           column: 1,
           duration: 300,
         },
         walk: {
-          row: 1,
-          column: 3,
+          row: 3,
+          column: 4,
           duration: 300,
         },
       },
@@ -74,8 +74,8 @@ export const useWorld = create<WorldState>((set, get) => ({
           duration: 300,
         },
         walk: {
-          row: 0,
-          column: 3,
+          row: 1,
+          column: 4,
           duration: 300,
         },
       },

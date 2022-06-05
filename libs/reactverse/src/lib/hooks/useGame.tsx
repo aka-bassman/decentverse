@@ -4,8 +4,8 @@ import { RepeatWrapping } from "three";
 export function tiledToR3FTextureTranspiler(tilePosition: number[], tilesAmountX: number, tilesAmountY: number) {
   return {
     offset: {
-      x: tilePosition[1] / tilesAmountY,
-      y: (tilesAmountX - tilePosition[0] - 1) / tilesAmountX,
+      x: tilePosition[1] / tilesAmountX,
+      y: (tilesAmountY - tilePosition[0] - 1) / tilesAmountY,
     },
   };
 }
@@ -24,7 +24,7 @@ export function createTileTextureAnimator(texture: THREE.Texture, tileSize: numb
   texture.offset.y = texturePositionY / tilesAmountY;
   return (tilePosition: number[]) => {
     const { offset } = tiledToR3FTextureTranspiler(tilePosition, tilesAmountX, tilesAmountY);
-    texture.offset.x = offset.x;
+    texture.offset.x = offset.x - 0.01;
     texture.offset.y = offset.y;
   };
 }

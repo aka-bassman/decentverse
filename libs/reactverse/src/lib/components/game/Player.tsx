@@ -17,8 +17,8 @@ export interface PlayerProp {
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get } = useThree();
   const me = useWorld((state) => state.me);
-  const [url] = useTexture(["/sprite5.png"]);
-  const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 129, 194));
+  const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
+  const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 240, 330));
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
@@ -59,7 +59,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const character = me.character as any;
     animation.current = character[player.current.direction][player.current.state];
   });
-  const animator = createTileTextureAnimator(url, [129, 194]);
+  const animator = createTileTextureAnimator(url, [240, 330]);
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
@@ -73,7 +73,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
-        <planeGeometry args={[129, 194]} />
+        <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
         <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
           {me.userId}

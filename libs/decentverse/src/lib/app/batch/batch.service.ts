@@ -5,7 +5,7 @@ import * as srv from "../srv";
 export class BatchService {
   private readonly logger = new Logger(BatchService.name);
   constructor(private readonly rtService: srv.RtService) {}
-  @Cron("*/5 * * * * *")
+  @Cron("*/2 * * * * *")
   async takeSnapshot() {
     const expireNum = await this.rtService.expirePlayers();
     if (expireNum) this.logger.log(`${expireNum} Players Expired`);
