@@ -13,12 +13,11 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
-  const me = useWorld((state) => state.me);
   const scene = useRef();
   const engine = useRef(Engine.create());
   useEffect(() => {
     (async () => {
-      await initWorld(me.userId);
+      await initWorld();
     })();
   }, []);
   const sprite = useRef<Sprite>(null);
@@ -26,8 +25,8 @@ export const Game = ({ socket }: GameProps) => {
   const keyboard = useKeyboard();
 
   const player = useRef<RenderCharacter>({
-    id: me.userId,
-    position: [0, 0],
+    id: `${Math.random()}`,
+    position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
     direction: "right",
@@ -39,6 +38,7 @@ export const Game = ({ socket }: GameProps) => {
   });
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
+  console.log("player id : ", player.current.id);
   return (
     <div
       style={{

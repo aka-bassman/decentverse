@@ -19,7 +19,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   useEffect(() => {
     socket.emit("register", player.current.id, makeCharacterMessage(me.character));
     socket.on("players", (data) => {
-      const players = data.map((dat: string) => decodeProtocolV1(dat));
+      const players = data.map((dat: string) => dat && decodeProtocolV1(dat)).filter((d: any) => !!d);
       const ids = players.map((player: types.RenderCharacter) => {
         PubSub.publish(player.id, player);
         return player.id;
@@ -29,6 +29,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
     });
     socket.on("characters", (ids, datas) => {
       const now = new Date().getTime();
+      console.log("joined player");
       const otherPlayers = datas
         .map((data: string, idx: number) => {
           if (!data) return null;

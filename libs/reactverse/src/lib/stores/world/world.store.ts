@@ -10,7 +10,7 @@ export interface WorldState {
   me: types.Player;
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
-  initWorld: (userId:string) => Promise<void>;
+  initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
@@ -85,7 +85,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     deceleration: 1,
     render: {
       id: "",
-      position: [0, 0],
+      position: [5000, 5000],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
@@ -102,17 +102,19 @@ export const useWorld = create<WorldState>((set, get) => ({
     players: {},
   },
   status: "none",
-  initWorld: async (userId:string) => {
+  initWorld: async () => {
+    const state = get();
+    console.log(state.me.userId);
     const {
       maps,
       // , characters
     } = await gql.world();
     const me: types.Player = {
-      userId,
+      ...state.me,
       character: get().me.character,
       render: {
         id: "AAAA",
-        position: [50, 50],
+        position: [5000, 5000],
         velocity: [0, 0],
         state: "idle",
         direction: "right",
@@ -124,7 +126,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     const render = { tiles: maps[1].tiles, players: {} };
     const status = "idle";
     console.log(maps[1].placements);
-    return set({ map: maps[1], me, render, status });
+    return set({ map: maps[1], me:{...me}, render, status });
   },
 
   accelMe: (keyboard: types.Keyboard) => {

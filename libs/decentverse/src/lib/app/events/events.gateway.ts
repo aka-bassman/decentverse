@@ -36,6 +36,7 @@ export class EventsGateway {
 
   @SubscribeMessage("characters")
   async chracters(client: Socket, ids: string[]) {
+    this.logger.log("Joined Player");
     client.emit("characters", ids, await this.rtService.characters(ids));
   }
 
