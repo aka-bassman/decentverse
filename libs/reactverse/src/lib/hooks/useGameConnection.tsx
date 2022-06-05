@@ -29,6 +29,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
     });
     socket.on("characters", (ids, datas) => {
       const now = new Date().getTime();
+      console.log("joined player");
       const otherPlayers = datas
         .map((data: string, idx: number) => {
           if (!data) return null;

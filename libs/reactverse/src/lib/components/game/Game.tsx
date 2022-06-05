@@ -23,6 +23,7 @@ export const Game = ({ socket }: GameProps) => {
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
+
   const player = useRef<RenderCharacter>({
     id: `${Math.random()}`,
     position: [5000, 5000],
@@ -30,13 +31,14 @@ export const Game = ({ socket }: GameProps) => {
     state: "idle",
     direction: "right",
   });
+  console.log(player.current.id);
   const scope = useRef<types.WorldScope>({
     min: [0, 0],
     max: [2048, 2048],
   });
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
-  console.log(player.current.position);
+  console.log("player id : ", player.current.id);
   return (
     <div
       style={{

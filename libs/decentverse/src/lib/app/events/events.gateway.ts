@@ -36,6 +36,7 @@ export class EventsGateway {
 
   @SubscribeMessage("characters")
   async chracters(client: Socket, ids: string[]) {
+    this.logger.log("Joined Player");
     client.emit("characters", ids, await this.rtService.characters(ids));
   }
 
@@ -87,18 +88,6 @@ export class EventsGateway {
     receiver.emit("receive",client.id,  client.data);
   }
 
-  // @SubscribeMessage("signal")
-  // async exchange(client: Socket, { socketId, desc, roomId,  nickName, userId }: any) {
-  //   console.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
-  //   const sockets = this.server.of("/").in(roomId);
-  //   const clients = await sockets.fetchSockets();
-  //   client.data = { roomId, userId, nickName };
-  //   const socket = clients.find(client => client.id === socketId);
-  //   if(!socket) return;
-
-  //   socket.emit(`signal`, {desc, userId});
-  //   let i =0;
-  // }
   @SubscribeMessage("signal")
   async exchange(client: Socket, { socketId, desc, roomId,  nickName, userId }: any) {
     console.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
@@ -109,7 +98,6 @@ export class EventsGateway {
     if(!socket) return;
 
     socket.emit(`desc:${userId}`, {desc, userId});
-    let i =0;
   }
 
   @SubscribeMessage("disconnect")

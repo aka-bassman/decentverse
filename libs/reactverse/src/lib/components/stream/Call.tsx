@@ -24,19 +24,19 @@ export const Call = ({ peer, socket }: CallProps) => {
   useEffect(() => {
     enter();
 
-    peer.call.peer._debug = console.log;
+    // peer.call.peer._debug = console.log;
     socket.on(`desc:${peer.id}`, (data) => {
       if (peer.call.peer.connected) return;
-      console.log(2, data.userId === userId);
+      // console.log(2, data.userId === userId);
       peer.call.connect(data.desc);
-      console.log(3, peer.id);
+      // console.log(3, peer.id);
     });
     socket.on(`disconnected:${peer.id}`, () => {
       peer.call.peer.destroy();
       removePeer(peer.id);
     });
     return () => {
-      console.log("EXIT");
+      // console.log("EXIT");
 
       const tracks = remoteTrack.current?.getTracks();
       tracks?.forEach((track) => track.stop());
@@ -46,7 +46,7 @@ export const Call = ({ peer, socket }: CallProps) => {
   }, []);
   const enter = () => {
     peer.call.peer.on("signal", (data) => {
-      console.log("SIGNAL", peer.id, peer.call.initiator, data, new Date());
+      // console.log("SIGNAL", peer.id, peer.call.initiator, data, new Date());
       const signal = { socketId: peer.socketId, desc: data, roomId, nickName: userId, userId };
       socket.emit("signal", signal);
     });
