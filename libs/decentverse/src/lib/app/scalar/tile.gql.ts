@@ -30,13 +30,13 @@ export const TileSchema = SchemaFactory.createForClass(Tile);
 
 @InputType()
 export class TileInput {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   top?: MongoSchema.Types.ObjectId;
 
   @Field(() => ID)
   bottom: MongoSchema.Types.ObjectId;
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.InteractionInput])
