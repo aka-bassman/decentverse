@@ -120,7 +120,6 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     const image = new Image();
     image.src = selectedAsset?.top.url || "";
     const imageSrc = get().replaceImgUrl(selectedAsset?.top.url || "");
-    console.log("w,h", image.width, image.height);
     set({
       preview: { x, y, width: image.width, height: image.height, isPreview: true, image: imageSrc },
     });
@@ -163,7 +162,6 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     }));
   },
   previewCollision: (x, y) => {
-    console.log("hi!!!", x, y);
     if (!get().collisionPreview.isPreview) {
       set((state) => ({
         collisionPreview: { ...state.collisionPreview, isPreview: true, startX: x, startY: y },

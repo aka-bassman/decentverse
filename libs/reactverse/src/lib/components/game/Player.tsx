@@ -76,7 +76,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
         <planeGeometry args={[129, 194]} />
         <spriteMaterial map={url} />
         <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
-          {player.current.id}
+          {me.userId}
         </Text>
       </sprite>
     </Suspense>

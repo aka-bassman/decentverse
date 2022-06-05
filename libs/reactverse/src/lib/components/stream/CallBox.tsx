@@ -20,7 +20,6 @@ export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxPr
   useEffect(() => {
     socket.on("init", (clientId: string, init: types.InitForm) => {
       if (init.userId === me.userId) return;
-      console.log("INIT");
       addPeer(clientId, false, init, localStream, screenStream);
       socket.emit("receive", { socketId: clientId, roomId, userId: me.userId, nickName: me.userId });
     });
@@ -38,16 +37,6 @@ export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxPr
       </TotalUserIconBox>
       {peers.map((peer, idx) => (
         <>
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
           <Call key={idx} peer={peer} socket={socket} />
         </>
       ))}

@@ -23,8 +23,6 @@ export const Call = ({ peer, socket }: CallProps) => {
 
   useEffect(() => {
     enter();
-
-    peer.call.peer._debug = console.log;
     socket.on(`desc:${peer.id}`, (data) => {
       if (peer.call.peer.connected) return;
       peer.call.connect(data.desc);
@@ -34,8 +32,6 @@ export const Call = ({ peer, socket }: CallProps) => {
       removePeer(peer.id);
     });
     return () => {
-      console.log("EXIT");
-
       const tracks = remoteTrack.current?.getTracks();
       tracks?.forEach((track) => track.stop());
       socket.off(`desc:${peer.id}`);
@@ -44,12 +40,10 @@ export const Call = ({ peer, socket }: CallProps) => {
   }, []);
   const enter = () => {
     peer.call.peer.on("signal", (data) => {
-      console.log("SIGNAL", peer.id, peer.call.initiator, data, new Date());
       const signal = { socketId: peer.socketId, desc: data, roomId, nickName: userId, userId };
       socket.emit("signal", signal);
     });
     peer.call.peer.on("stream", (stream) => {
-      // console.log("STREAM", stream);
       if (remoteVideo.current) remoteVideo.current.srcObject = stream;
     });
     peer.call.peer.on("data", (data) => {
@@ -59,7 +53,6 @@ export const Call = ({ peer, socket }: CallProps) => {
     });
     // peer.call.peer.on("error", (err) => console.log("ERR", err));
     peer.call.peer.on("track", (track, stream) => {
-      // console.log("TRACK");
       remoteTrack.current = stream;
     });
     peer.call.peer.on("error", (err) => console.log(err));
