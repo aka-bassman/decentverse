@@ -5,7 +5,7 @@ import { useMapEditor } from "../../stores";
 
 import * as THREE from "three";
 
-export const Tiles = ({ mapData, keyboard }: any) => {
+export const Tiles = ({ keyboard }: any) => {
   const { camera, get } = useThree();
 
   const {
@@ -14,7 +14,7 @@ export const Tiles = ({ mapData, keyboard }: any) => {
     tileSize,
     pointerMoveOnTile,
     pointerDownOnTile,
-    pointerUpOnTile,
+    // pointerUpOnTile,
     preview,
     assets,
     collisions,
@@ -31,8 +31,8 @@ export const Tiles = ({ mapData, keyboard }: any) => {
     keyboard.current.down && camera.translateY(-1 * offest);
   });
 
-  const tileImages = [];
-  const tilesPosition = [];
+  const tileImages: any = [];
+  const tilesPosition: any = [];
   mapData?.tiles.forEach((cur, i) => {
     cur.forEach((tile, j) => {
       tileImages.push(tile.bottom.url.replace("https://asset.ayias.io/", "ayias/"));
@@ -45,7 +45,7 @@ export const Tiles = ({ mapData, keyboard }: any) => {
     });
   });
 
-  const tileTexture = useLoader(THREE.TextureLoader, tileImages);
+  const tileTexture: any = useLoader(THREE.TextureLoader, tileImages);
   const previewTexture = useLoader(THREE.TextureLoader, preview.image || "https://i.imgur.com/RoNmD7W.png");
 
   const assetImages = assets.map((asset) => asset.image);
@@ -53,14 +53,14 @@ export const Tiles = ({ mapData, keyboard }: any) => {
 
   return (
     <Suspense fallback={null}>
-      {tilesPosition.map((position, index) => {
+      {tilesPosition.map((position: any, index: any) => {
         return (
           <mesh
             key={index}
             position={[position.x, position.y, 0]}
             onPointerDown={pointerDownOnTile}
             onPointerMove={pointerMoveOnTile}
-            onPointerUp={pointerUpOnTile}
+            // onPointerUp={pointerUpOnTile}
           >
             <planeBufferGeometry attach="geometry" args={[tileSize, tileSize]} />
             <meshBasicMaterial attach="material" map={tileTexture[index] as THREE.Texture} />
@@ -92,7 +92,6 @@ export const Tiles = ({ mapData, keyboard }: any) => {
       <ambientLight />
       {collisionPreview.isPreview && (
         <mesh position={[collisionPreview.x, collisionPreview.y, 0]}>
-          {console.log("x,y,w,h", collisionPreview)}
           <planeBufferGeometry attach="geometry" args={[collisionPreview.width, collisionPreview.height]} />
           <meshPhongMaterial attach="material" color="#f19c9c" />
         </mesh>
