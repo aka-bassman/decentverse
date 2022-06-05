@@ -18,7 +18,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   const { camera, get } = useThree();
   const me = useWorld((state) => state.me);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
-  const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 240, 330));
+  const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 120, 165));
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;

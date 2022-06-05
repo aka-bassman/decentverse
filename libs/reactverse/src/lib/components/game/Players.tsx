@@ -29,7 +29,7 @@ export interface OtherPlayerProp {
   player: types.OtherPlayer;
 }
 export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
-  const texture = useTexture(player.character.file.url);
+  const texture = useTexture(`ayias/decentverse/character/chinchin.png?id=${player.id}`);
   const animator = createTileTextureAnimator(texture, player.character.tileSize);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>(player.character.right.idle);
@@ -77,7 +77,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   }, animation);
   return (
     <sprite ref={sprite}>
-      <planeGeometry args={[player.character.tileSize[0], player.character.tileSize[1]]} />
+      <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
         {player.id}
