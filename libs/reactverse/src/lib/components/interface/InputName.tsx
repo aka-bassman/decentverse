@@ -4,11 +4,11 @@ import { useGossip, useWorld, types } from "../../stores";
 // import { CallBox, MyCall } from "./stream";
 import styled from "styled-components";
 
-export interface InterfaceProps {
+export interface InputNameProps {
   socket: Soc;
 }
 
-export const InputName = ({ socket }: InterfaceProps) => {
+export const InputName = ({ socket }: InputNameProps) => {
   const user = useWorld((state) => state.me);
   const updateUserId = useWorld((state) => state.updateUserId);
   const [nickname, setNickname] = useState<string>("");
