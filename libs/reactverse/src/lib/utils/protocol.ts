@@ -11,10 +11,12 @@ export type Scope = {
   max: number[];
 };
 export const encodeProtocolV1 = (p: PlayerProtocol, s: Scope) => {
-  const encodedPosition = convToScore(p.position[0], p.position[1]);
+  const encodedPosition = convToScore(Math.floor(p.position[0]), Math.floor(p.position[1]));
   const min = convToScore(s.min[0], s.min[1]);
   const max = convToScore(s.max[0], s.max[1]);
-  const encodedData = `${p.id},${p.position[0]},${p.position[1]},${p.velocity[0]},${p.velocity[1]},${p.state},${p.direction}`;
+  const encodedData = `${p.id},${Math.floor(p.position[0])},${Math.floor(p.position[1])},${p.velocity[0]},${
+    p.velocity[1]
+  },${p.state},${p.direction}`;
   return [p.id, encodedPosition, encodedData, min, max];
 };
 export const decodeProtocolV1 = (data: string): PlayerProtocol => {

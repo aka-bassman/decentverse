@@ -46,7 +46,6 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   useInterval(() => {
     if (!socket) return;
     const data = encodeProtocolV1(player.current, scope.current);
-    console.log(data);
-    // socket.emit("player", ...data);
+    socket.emit("player", ...data);
   }, 250);
 };

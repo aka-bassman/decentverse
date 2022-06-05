@@ -24,6 +24,7 @@ export class RtService implements OnModuleInit {
     await Promise.all(this.rootKeys.map(async (key) => await this.client.del(key)));
   }
   async updatePlayer(id: string, score: string, data: string) {
+    console.log(score, data);
     await Promise.all([
       this.client.hSet("players", id, data),
       this.client.zAdd("lastConnected", { score: new Date().getTime(), value: id }),

@@ -13,6 +13,7 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
+  const userId = useWorld((state) => state.me.userId);
   const scene = useRef();
   const engine = useRef(Engine.create());
   useEffect(() => {
@@ -25,20 +26,18 @@ export const Game = ({ socket }: GameProps) => {
   const keyboard = useKeyboard();
 
   const player = useRef<RenderCharacter>({
-    id: `${Math.random()}`,
+    id: userId,
     position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
     direction: "right",
   });
-  console.log(player.current.id);
   const scope = useRef<types.WorldScope>({
     min: [0, 0],
     max: [2048, 2048],
   });
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
-  console.log("player id : ", player.current.id);
   return (
     <div
       style={{
