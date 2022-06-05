@@ -84,7 +84,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     deceleration: 1,
     render: {
       id: "",
-      position: [0, 0],
+      position: [5000, 5000],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
@@ -111,7 +111,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       character: get().me.character,
       render: {
         id: "AAAA",
-        position: [50, 50],
+        position: [5000, 5000],
         velocity: [0, 0],
         state: "idle",
         direction: "right",

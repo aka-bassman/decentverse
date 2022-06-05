@@ -45,10 +45,10 @@ export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
 
   return (
     <Suspense fallback={null}>
-      <mesh position={position}>
+      {/* <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent />
-      </mesh>
+      </mesh> */}
     </Suspense>
   );
 });

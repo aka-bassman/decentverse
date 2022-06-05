@@ -25,7 +25,7 @@ export const Game = ({ socket }: GameProps) => {
   const keyboard = useKeyboard();
   const player = useRef<RenderCharacter>({
     id: `${Math.random()}`,
-    position: [0, 0],
+    position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
     direction: "right",
@@ -54,7 +54,7 @@ export const Game = ({ socket }: GameProps) => {
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
           <Players playerId={player.current.id} />
           <Placements />
-          <Interactions engine={engine} />
+          {/* <Interactions engine={engine} /> */}
         </Suspense>
       </Canvas>
     </div>
