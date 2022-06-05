@@ -65,7 +65,6 @@ export const MyCall = ({ socket }: MyCallProps) => {
 
     // stream.getVideoTracks()[0].
     if (localVideo.current) localVideo.current.srcObject = stream;
-    console.log(stream);
     setLocalStream(stream);
 
     const audioContext = new AudioContext();
@@ -111,7 +110,6 @@ export const MyCall = ({ socket }: MyCallProps) => {
     // if (localScreen.current) localScreen.current.srcObject = stream;
   };
 
-  console.log("my call : ", me.userId);
   return (
     <Container>
       <VideoBox>
