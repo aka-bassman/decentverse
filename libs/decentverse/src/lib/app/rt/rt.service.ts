@@ -24,7 +24,6 @@ export class RtService implements OnModuleInit {
     await Promise.all(this.rootKeys.map(async (key) => await this.client.del(key)));
   }
   async updatePlayer(id: string, score: string, data: string) {
-    console.log(score, data);
     await Promise.all([
       this.client.hSet("players", id, data),
       this.client.zAdd("lastConnected", { score: new Date().getTime(), value: id }),
@@ -34,7 +33,7 @@ export class RtService implements OnModuleInit {
   async expirePlayers(expireSeconds = 5) {
     const time = new Date();
     time.setSeconds(time.getSeconds() - expireSeconds);
-    const playerIds = await this.client.zRange("lastConnected", 0, time.getTime(), { BY: "SCORE" });
+    const playerIds = await this.client.zRangeByScore("lastConnected", 0, time.getTime());
     return await this.removePlayers(playerIds);
   }
   async removePlayers(playerIds: string | string[]) {
@@ -48,9 +47,7 @@ export class RtService implements OnModuleInit {
     return playerIds.length;
   }
   async getRange(min: string, max: string) {
-    const res = await this.client.zRange("world", min, max, {
-      BY: "SCORE",
-    });
+    const res = await this.client.zRangeByScore("world", min, max);
     return res.length ? await this.client.hmGet("players", res) : [];
   }
   async registerCharacter(id: string, data: string) {
