@@ -27,9 +27,7 @@ export const Call = ({ peer, socket }: CallProps) => {
     peer.call.peer._debug = console.log;
     socket.on(`desc:${peer.id}`, (data) => {
       if (peer.call.peer.connected) return;
-      console.log(2, data.userId === userId);
       peer.call.connect(data.desc);
-      console.log(3, peer.id);
     });
     socket.on(`disconnected:${peer.id}`, () => {
       peer.call.peer.destroy();

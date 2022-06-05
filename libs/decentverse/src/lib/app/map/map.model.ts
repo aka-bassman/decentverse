@@ -96,6 +96,5 @@ Object.assign(schema.query, queryHelpers);
 schema.pre<Doc>("save", async function (next) {
   this.totalWidth = this.tileSize * (this.tiles[0]?.length ?? 0);
   this.totalHeight = this.tileSize * this.tiles.length;
-  console.log("prepre");
   next();
 });

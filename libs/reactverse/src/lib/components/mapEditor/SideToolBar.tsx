@@ -72,7 +72,7 @@ export const SideToolBar = () => {
               itemLayout="horizontal"
               dataSource={data}
               renderItem={(item) => (
-                <List.Item onClick={() => console.log("item.id", item.id)} style={{ cursor: "pointer" }}>
+                <List.Item onClick={() => {}} style={{ cursor: "pointer" }}>
                   <List.Item.Meta
                     // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={item.title}

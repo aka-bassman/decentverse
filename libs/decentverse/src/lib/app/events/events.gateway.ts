@@ -14,7 +14,6 @@ export class EventsGateway {
 
   @SubscribeMessage("events")
   findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    console.log(data);
     return from([1, 2, 3]).pipe(map((item) => ({ event: "events", data: item })));
   }
 
@@ -55,13 +54,11 @@ export class EventsGateway {
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
     if (clients.length === 0) {
-      console.log("create Room");
       client.join(roomId);
       client.rooms.add(roomId);
     } else if (clients.length > 0) {
-      console.log("Ready");
-      for(const client_ of clients) {
-        client_.emit("init", client.id,  client.data);
+      for (const client_ of clients) {
+        client_.emit("init", client.id, client.data);
       }
       client.join(roomId);
     } else {
@@ -69,22 +66,19 @@ export class EventsGateway {
       client.leave(roomId);
       client.emit("full");
     }
-    
+
     client.on("disconnect", () => {
-       this.server.to(roomId).emit(`disconnected:${userId}`);
-    
+      this.server.to(roomId).emit(`disconnected:${userId}`);
     });
   }
 
-
   @SubscribeMessage("receive")
-  async receive(client: Socket, {socketId, roomId, userId, nickName  }: any) {
+  async receive(client: Socket, { socketId, roomId, userId, nickName }: any) {
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
-    console.log(roomId, userId, nickName, socketId);
-    const receiver = clients.find(client => client.id === socketId);
-    receiver.emit("receive",client.id,  client.data);
+    const receiver = clients.find((client) => client.id === socketId);
+    receiver.emit("receive", client.id, client.data);
   }
 
   // @SubscribeMessage("signal")
@@ -100,16 +94,16 @@ export class EventsGateway {
   //   let i =0;
   // }
   @SubscribeMessage("signal")
-  async exchange(client: Socket, { socketId, desc, roomId,  nickName, userId }: any) {
-    console.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
+  async exchange(client: Socket, { socketId, desc, roomId, nickName, userId }: any) {
+    console.log("SIGNAL", "receiver : ", socketId, "sender : ", userId, new Date());
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
-    const socket = clients.find(client => client.id === socketId);
-    if(!socket) return;
+    const socket = clients.find((client) => client.id === socketId);
+    if (!socket) return;
 
-    socket.emit(`desc:${userId}`, {desc, userId});
-    let i =0;
+    socket.emit(`desc:${userId}`, { desc, userId });
+    let i = 0;
   }
 
   @SubscribeMessage("disconnect")
