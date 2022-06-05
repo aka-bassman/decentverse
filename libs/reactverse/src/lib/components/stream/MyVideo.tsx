@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ShareScreenIcon, MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "..";
+import { ShareScreenOnIcon, ShareScreenOffIcon, MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "..";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types } from "../../stores";
 import styled from "styled-components";
@@ -42,7 +42,7 @@ export const MyVideo = ({ video, onToggleMic, onToggleCam, getDisplay }: MyVideo
         <div className="Control">
           {getDisplay && (
             <button className="control-btn" style={{ background: "transparent" }} onClick={getDisplay}>
-              <ShareScreenIcon />
+              <ShareScreenOnIcon />
             </button>
           )}
           <button className="control-btn" style={{ background: "transparent" }} onClick={onToggleMic}>

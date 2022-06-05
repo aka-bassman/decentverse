@@ -2,7 +2,7 @@ import React, { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
-import { useTexture } from "@react-three/drei";
+import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import PubSub from "pubsub-js";
 
@@ -79,6 +79,9 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
     <sprite ref={sprite}>
       <planeGeometry args={[player.character.tileSize[0], player.character.tileSize[1]]} />
       <spriteMaterial map={texture} />
+      <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
+        {player.id}
+      </Text>
     </sprite>
   );
 });

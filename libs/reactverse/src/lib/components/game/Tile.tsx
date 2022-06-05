@@ -23,25 +23,25 @@ export const Tile = React.memo(({ x, y, offsetX, offsetY }: TileProp) => {
     renderTiles[y][x].top && loader.load(renderTiles[y][x].top.url.replace("https://asset.ayias.io", "ayias"));
   const lighting =
     renderTiles[y][x].lighting &&
-    loader.load(renderTiles[y][x].lighting.url.replace("https://asset.ayias.io", "ayias"));
+    loader.load(renderTiles[y][x].lighting?.url.replace("https://asset.ayias.io", "ayias") ?? "");
   const position = new Vector3(offsetX, offsetY, -0.0000001);
   return (
     <Suspense fallback={null}>
-      <sprite position={position}>
+      <mesh position={position} visible={true}>
         <planeGeometry args={[2000, 2000]} />
-        <spriteMaterial map={bottom} />
-      </sprite>
+        <meshBasicMaterial map={bottom} transparent />
+      </mesh>
       {top && (
-        <sprite position={position}>
+        <mesh position={position}>
           <planeGeometry args={[2000, 2000]} />
-          <spriteMaterial map={top} />
-        </sprite>
+          <meshBasicMaterial map={top} transparent />
+        </mesh>
       )}
       {lighting && (
-        <sprite position={position}>
+        <mesh position={position}>
           <planeGeometry args={[2000, 2000]} />
-          <spriteMaterial map={lighting} />
-        </sprite>
+          <meshBasicMaterial map={lighting} transparent />
+        </mesh>
       )}
     </Suspense>
   );

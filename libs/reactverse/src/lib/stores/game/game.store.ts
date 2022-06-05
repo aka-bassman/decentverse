@@ -39,16 +39,16 @@ export const useGame = create<GameState>((set, get) => ({
   render: {
     cameraPos: [0, 0, 1000],
     tiles: [
-      [0, 1],
-      [0, 1],
+      [0, 2],
+      [0, 2],
     ],
   },
   tileMap: {
     tileSize: [2000, 2000],
-    lineTileNum: [2, 2], // 꼭지점에 있을 때 렌더되는 가로타일 수
+    lineTileNum: [3, 3], // 꼭지점에 있을 때 렌더되는 가로타일 수
     maxTileNum: [8, 5],
-    renderLimit: [0.2, 0.2], // 다음 타일을 렌더하는 리미트
-    derenderLimit: [0.4, 0.4], // 이전 타일을 없애는 리미트
+    renderLimit: [0.3, 0.3], // 다음 타일을 렌더하는 리미트
+    derenderLimit: [0.45, 0.45], // 이전 타일을 없애는 리미트
   },
   screen: {
     size: [1000, 1000],

@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
-import { Types } from "mongoose";
+import { Types, Schema as MongoSchema } from "mongoose";
 import * as gql from "../gql";
 /**
  * * Akamir GraphQL Schema V2.1
@@ -17,13 +17,13 @@ export class AssetInput {
   name: string;
 
   @Field(() => ID, { nullable: true })
-  top?: Types.ObjectId;
+  top?: MongoSchema.Types.ObjectId;
 
   @Field(() => ID, { nullable: true })
-  bottom?: Types.ObjectId;
+  bottom?: MongoSchema.Types.ObjectId;
 
   @Field(() => ID, { nullable: true })
-  lighting?: Types.ObjectId;
+  lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.InteractionInput], { nullable: true })
   interactions: gql.InteractionInputType[];

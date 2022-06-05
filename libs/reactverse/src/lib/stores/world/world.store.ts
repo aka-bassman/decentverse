@@ -15,6 +15,7 @@ export interface WorldState {
   moveMe: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
+  updateUserId: (userId: string) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -122,8 +123,10 @@ export const useWorld = create<WorldState>((set, get) => ({
     };
     const render = { tiles: maps[1].tiles, players: {} };
     const status = "idle";
-    return set({ map: maps[0], me, render, status });
+    console.log(maps[1].placements);
+    return set({ map: maps[1], me, render, status });
   },
+
   accelMe: (keyboard: types.Keyboard) => {
     const state: WorldState = get();
     if (!state.me) return;
@@ -179,6 +182,10 @@ export const useWorld = create<WorldState>((set, get) => ({
       state.me.render.position[1] + state.me.render.velocity[1],
     ];
     return set({ me: { ...state.me, render: { ...state.me.render, position } } });
+  },
+  updateUserId: (userId:string) => {
+    const state = get();
+    return set({ me: { ...state.me, userId}});
   },
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>
