@@ -39,16 +39,6 @@ export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxPr
       {peers.map((peer, idx) => (
         <>
           <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
-          <Call key={idx} peer={peer} socket={socket} />
         </>
       ))}
     </CallBoxContainer>

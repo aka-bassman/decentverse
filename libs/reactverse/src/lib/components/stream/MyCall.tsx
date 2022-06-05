@@ -110,6 +110,8 @@ export const MyCall = ({ socket }: MyCallProps) => {
     toggleScreen(stream);
     // if (localScreen.current) localScreen.current.srcObject = stream;
   };
+
+  console.log("my call : ", me.userId);
   return (
     <Container>
       <VideoBox>

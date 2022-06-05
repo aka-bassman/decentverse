@@ -10,7 +10,7 @@ export interface WorldState {
   me: types.Player;
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
-  initWorld: () => Promise<void>;
+  initWorld: (userId:string) => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
@@ -19,7 +19,7 @@ export interface WorldState {
 }
 export const useWorld = create<WorldState>((set, get) => ({
   me: {
-    userId: `${Math.random()}`,
+    userId: "",
     character: {
       id: "",
       tokenId: 0,
@@ -101,13 +101,13 @@ export const useWorld = create<WorldState>((set, get) => ({
     players: {},
   },
   status: "none",
-  initWorld: async () => {
+  initWorld: async (userId:string) => {
     const {
       maps,
       // , characters
     } = await gql.world();
     const me: types.Player = {
-      userId:  `${Math.random()}`,
+      userId,
       character: get().me.character,
       render: {
         id: "AAAA",

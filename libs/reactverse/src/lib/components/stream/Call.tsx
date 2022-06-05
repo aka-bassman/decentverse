@@ -51,7 +51,7 @@ export const Call = ({ peer, socket }: CallProps) => {
       socket.emit("signal", signal);
     });
     peer.call.peer.on("stream", (stream) => {
-      // console.log("STREAM", stream);
+      console.log("STREAM", stream);
       if (remoteVideo.current) remoteVideo.current.srcObject = stream;
     });
     peer.call.peer.on("data", (data) => {
