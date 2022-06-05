@@ -56,11 +56,11 @@ export class EventsGateway {
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
     if (clients.length === 0) {
-      console.log("create Room");
+      this.logger.log("create Room");
       client.join(roomId);
       client.rooms.add(roomId);
     } else if (clients.length > 0) {
-      console.log("Ready");
+      this.logger.log("Ready");
       for(const client_ of clients) {
         client_.emit("init", client.id,  client.data);
       }
@@ -83,14 +83,13 @@ export class EventsGateway {
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
-    console.log(roomId, userId, nickName, socketId);
     const receiver = clients.find(client => client.id === socketId);
     receiver.emit("receive",client.id,  client.data);
   }
 
   @SubscribeMessage("signal")
   async exchange(client: Socket, { socketId, desc, roomId,  nickName, userId }: any) {
-    console.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
+    this.logger.log("SIGNAL", "receiver : ", socketId,  "sender : ", userId, new Date());
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
@@ -102,7 +101,7 @@ export class EventsGateway {
 
   @SubscribeMessage("disconnect")
   async disconnect(client: Socket) {
-    console.log("disconnect");
+    this.logger.log("disconnect");
     const roomId = client.rooms.values()[0];
     if (roomId) this.server.to(roomId).emit(`disconnected:${client.id}`);
     client.rooms.clear();
