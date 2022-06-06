@@ -15,6 +15,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [socket, setSocket] = useState<Soc>();
   const me = useWorld((state) => state.me);
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);

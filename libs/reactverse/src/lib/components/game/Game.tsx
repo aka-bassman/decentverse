@@ -41,15 +41,15 @@ export const Game = ({ socket }: GameProps) => {
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        marginLeft: "0%",
-        marginTop: "0%",
+        width: "200%",
+        height: "200%",
+        marginLeft: "-50%",
+        marginTop: "-25%",
         borderColor: "black",
         borderWidth: 2,
       }}
     >
-      <Canvas camera={{ fov: 50, near: 0.1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
+      <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
         <Suspense fallback={null}>
           <TileMap player={player} scope={scope} />
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />

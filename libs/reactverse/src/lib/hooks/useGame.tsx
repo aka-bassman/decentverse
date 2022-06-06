@@ -24,7 +24,7 @@ export function createTileTextureAnimator(texture: THREE.Texture, tileSize: numb
   texture.offset.y = texturePositionY / tilesAmountY;
   return (tilePosition: number[]) => {
     const { offset } = tiledToR3FTextureTranspiler(tilePosition, tilesAmountX, tilesAmountY);
-    texture.offset.x = offset.x - 0.01;
+    texture.offset.x = offset.x;
     texture.offset.y = offset.y;
   };
 }
