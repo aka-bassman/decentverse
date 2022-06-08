@@ -27,7 +27,9 @@ export type TAsset = {
   y: number;
   width: number;
   height: number;
-  image: string;
+  top: string;
+  bottom: string;
+  lighting: string;
   id: string;
 };
 export type TCollision = {

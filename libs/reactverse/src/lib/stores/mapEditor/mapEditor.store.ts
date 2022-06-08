@@ -59,7 +59,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   assetsData: [], //
   assets: [],
   collisions: [],
-  viewMode: ["Grid", "Bottom"],
+  viewMode: ["Interaction", "Assets"],
   selectedAssetId: undefined,
   isEdited: false,
   preview: {
@@ -91,7 +91,9 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       y: placement.position[1],
       width: placement.position[2],
       height: placement.position[3],
-      image: get().replaceImgUrl(placement?.asset?.top?.url || ""),
+      top: placement?.asset?.top?.url ? get().replaceImgUrl(placement.asset.top.url) : "",
+      bottom: placement?.asset?.bottom?.url ? get().replaceImgUrl(placement.asset.bottom.url) : "",
+      lighting: placement?.asset?.lighting?.url ? get().replaceImgUrl(placement.asset.lighting.url) : "",
       id: placement.asset.id,
     }));
 
@@ -131,13 +133,14 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
 
     const image = new Image();
     image.src = selectedAsset?.top.url;
-    const imageSrc = get().replaceImgUrl(selectedAsset?.top.url);
     const newAsset = {
       x,
       y,
       width: image.width,
       height: image.height,
-      image: imageSrc,
+      top: selectedAsset?.top?.url ? get().replaceImgUrl(selectedAsset.top.url) : "",
+      bottom: selectedAsset?.bottom?.url ? get().replaceImgUrl(selectedAsset.bottom.url) : "",
+      lighting: selectedAsset?.lighting?.url ? get().replaceImgUrl(selectedAsset.lighting.url) : "",
       id: selectedAssetId,
     };
     set((state) => ({ assets: [...state.assets, newAsset], isEdited: true }));
