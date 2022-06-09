@@ -15,10 +15,18 @@ export const ping = async () => (await client.query<PingQuery>({ query: pingQuer
 
 // * Me Query
 export type MeQuery = { me: types.Admin };
+// export const meQuery = gql`
+//   ${types.adminFragment}
+//   query me {
+//     ...adminFragment
+//   }
+// `;
 export const meQuery = gql`
   ${types.adminFragment}
   query me {
-    ...adminFragment
+    me {
+      ...adminFragment
+    }
   }
 `;
 export const me = async () => (await client.query<MeQuery>({ query: meQuery })).data.me;
@@ -57,7 +65,7 @@ export const admins = async () => (await client.query<AdminsQuery>({ query: admi
 export type CreateAdminMutation = { createAdmin: types.Admin };
 export const createAdminMutation = gql`
   ${types.adminFragment}
-  mutation createAdmin($data: AdminInput) {
+  mutation createAdmin($data: AdminInput!) {
     createAdmin(data: $data) {
       ...adminFragment
     }
@@ -76,7 +84,7 @@ export const createAdmin = async (data: types.AdminInput) =>
 export type UpdateAdminMutation = { updateAdmin: types.Admin };
 export const updateAdminMutation = gql`
   ${types.adminFragment}
-  mutation updateAdmin($adminId: ID, $data: AdminInput) {
+  mutation updateAdmin($adminId: ID, $data: AdminInput!) {
     updateAdmin(adminId: $adminId, data: $data) {
       ...adminFragment
     }
@@ -111,10 +119,9 @@ export const removeAdmin = async (adminId: string) =>
 // * Signin Admin Mutation
 export type SigninAdminMutation = { signinAdmin: scalar.AccessToken };
 export const signinAdminMutation = gql`
-  ${types.adminFragment}
-  mutation signinAdmin($accountId: String, $password: String) {
+  mutation signinAdmin($accountId: String!, $password: String!) {
     signinAdmin(accountId: $accountId, password: $password) {
-      ...adminFragment
+      accessToken
     }
   }
 `;

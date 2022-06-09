@@ -4,6 +4,7 @@ import * as gql from "../gql";
 import { setLink } from "../apollo";
 
 export interface MapEditorState {
+  isMapEditorOpen: boolean;
   assetPlacements: types.Placement[];
   tileSize: number;
   mapWidth: number; //
@@ -46,8 +47,10 @@ export interface MapEditorState {
   pointerDownOnTile: (e: any) => void;
   clickOnAsset: (e: any, index: number) => void;
   clickOnCollision: (e: any, index: number) => void;
+  toggleMapEditorOpen: () => void;
 }
 export const useMapEditor = create<MapEditorState>((set, get) => ({
+  isMapEditorOpen: false,
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
@@ -84,7 +87,9 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     setLink();
     const mapData = await gql.map("629b51909fd96cc4c6f6adb1");
     // const map = await gql.map("627ab2159ecc5480481c06cf");
-    const assetsData = await gql.assets();
+
+    // const assetsData = await gql.assets();
+    const assetsData = (await gql.assets()).filter((cur) => !cur.top.url.includes("dev.akamir"));
 
     const assets = mapData.placements.map((placement: any) => ({
       x: placement.position[0],
@@ -302,5 +307,8 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   },
   clickOnCollision: (e, index) => {
     get().isCollisionRemoveMode() && get().removeCollision(index);
+  },
+  toggleMapEditorOpen: () => {
+    set((state) => ({ isMapEditorOpen: !state.isMapEditorOpen }));
   },
 }));

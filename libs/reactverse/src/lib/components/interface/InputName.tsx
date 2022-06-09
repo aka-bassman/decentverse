@@ -2,13 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types } from "../../stores";
 // import { CallBox, MyCall } from "./stream";
+import { AdminModal } from "./index";
 import styled from "styled-components";
 
-export interface InputNameProps {
-  socket: Soc;
-}
-
-export const InputName = ({ socket }: InputNameProps) => {
+export const InputName = () => {
   const user = useWorld((state) => state.me);
   const updateUserId = useWorld((state) => state.updateUserId);
   const [nickname, setNickname] = useState<string>("");
@@ -19,6 +16,7 @@ export const InputName = ({ socket }: InputNameProps) => {
 
   return (
     <Container>
+      <AdminModal />
       <Modal>
         What's Your name?
         <InputBox>

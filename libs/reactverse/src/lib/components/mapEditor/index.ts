@@ -8,3 +8,4 @@ export * from "./ViewTool";
 export * from "./MapCollisions";
 export * from "./MapAssets";
 export * from "./MapAssetPreview";
+export * from "./MapEditor";
