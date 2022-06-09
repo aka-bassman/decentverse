@@ -29,7 +29,6 @@ export const AdminSignIn = () => {
           <Form.Item
             label="accountId"
             name="accountId"
-            initialValue="qwer"
             rules={[{ required: true, message: "Please input your accountId!" }]}
           >
             <Input />
@@ -37,7 +36,6 @@ export const AdminSignIn = () => {
           <Form.Item
             label="password"
             name="password"
-            initialValue="qwer1234"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
             <Input.Password />
@@ -50,11 +48,11 @@ export const AdminSignIn = () => {
           </Form.Item>
         </Form>
       </Card>
-      <div style={{ textAlign: "right" }}>
+      {/* <div style={{ textAlign: "right" }}>
         <Button type="link" onClick={() => setAdminView("signUp")}>
           Sign Up &gt;&gt;
         </Button>
-      </div>
+      </div> */}
     </>
   );
 };
