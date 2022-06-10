@@ -32,7 +32,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
             <>
               <Interface socket={socket} />
               <Game socket={socket} />
-              <Stream socket={socket} />
+              {/* <Stream socket={socket} /> */}
             </>
           )}
         </div>

@@ -61,7 +61,7 @@ export const MyCall = ({ socket }: MyCallProps) => {
     };
     const stream = await navigator.mediaDevices.getUserMedia(op);
     // stream.removeTrack(stream.getVideoTracks()[0]);
-    stream.getVideoTracks()[0].enabled = false;
+    stream.getAudioTracks()[0].enabled = false;
 
     // stream.getVideoTracks()[0].
     if (localVideo.current) localVideo.current.srcObject = stream;

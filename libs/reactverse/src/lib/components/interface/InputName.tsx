@@ -13,16 +13,19 @@ export const InputName = ({ socket }: InputNameProps) => {
   const updateUserId = useWorld((state) => state.updateUserId);
   const [nickname, setNickname] = useState<string>("");
   const onChange = (e: any) => {
-    console.log(e);
     setNickname(e.target.value);
   };
 
+  const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.key === "Enter" && updateUserId(nickname);
+  };
+
   return (
-    <Container>
+    <Container onKeyPress={keyPress}>
       <Modal>
         What's Your name?
         <InputBox>
-          <Input placeholder="  Type your nickname!" value={nickname} onChange={onChange} />
+          <Input autoFocus placeholder="  Type your nickname!" value={nickname} onChange={onChange} />
           <Summit onClick={() => updateUserId(nickname)}>Summit!</Summit>
         </InputBox>
       </Modal>
