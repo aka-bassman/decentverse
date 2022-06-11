@@ -3,6 +3,7 @@ import { useGame } from "../stores";
 import { scalar } from "../stores";
 
 export const useKeyboard = () => {
+  const keyboard = useGame((state) => state.keyboard);
   const setKey = useGame((state) => state.setKey);
   const keyState = useRef(scalar.keyboard);
   useEffect(() => {
@@ -24,5 +25,8 @@ export const useKeyboard = () => {
       document.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
+  useEffect(() => {
+    keyState.current = keyboard;
+  }, [keyboard]);
   return keyState;
 };
