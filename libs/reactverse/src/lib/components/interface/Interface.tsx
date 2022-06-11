@@ -12,7 +12,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
   const user = useWorld((state) => state.me);
   const setKey = useGame((state) => state.setKey);
   return (
-    <div style={{ position: "absolute", top: "90%", left: "3%" }}>
+    <div style={{ position: "absolute", top: "15%", left: "3%" }}>
       <button
         style={{ width: 50, margin: 5 }}
         onMouseDown={() => setKey("up", true)}
