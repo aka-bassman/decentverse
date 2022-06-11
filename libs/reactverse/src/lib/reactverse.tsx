@@ -44,7 +44,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
       {isConnected && socket ? (
         <>
           <Game socket={socket} />
-          <Stream socket={socket} />
+          {/* <Stream socket={socket} /> */}
           <Interface socket={socket} />
         </>
       ) : (
