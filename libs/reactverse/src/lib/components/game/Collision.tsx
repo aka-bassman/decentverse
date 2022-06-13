@@ -7,19 +7,6 @@ import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
-export interface InteractionsProp {
-  engine: MutableRefObject<Engine>;
-}
-export const Interactions = ({ engine }: InteractionsProp) => {
-  const interactions = useWorld((state) => state.map?.interactions);
-  return (
-    <Suspense fallback={null}>
-      {interactions?.map((interaction, idx) => (
-        <Collision key={idx} collision={interaction} engine={engine} />
-      ))}
-    </Suspense>
-  );
-};
 
 export interface CollisionProp {
   collision: scalar.Interaction;

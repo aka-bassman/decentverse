@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { client, setLink } from "./stores";
-import { ApolloProvider } from "@apollo/client";
-import { Stream, Game, Interface, InputName } from "./components";
+import { Stream, Game, Interface, InputName, ReactverseLayout, MapEditor } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, types } from "./stores";
+import { useGossip, useWorld, useUser, useMapEditor, types } from "./stores";
 
 export interface ReactverseProps {
   uri: string;
@@ -13,30 +12,46 @@ export interface ReactverseProps {
 export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Soc>();
-  const me = useWorld((state) => state.me);
+  const me = useUser((state) => state);
+  const isMapEditorOpen = useMapEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
+    console.log(1);
+    if (!me) return;
+    console.log(2);
     document.body.style.overflow = "hidden";
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-  }, []);
+  }, [me?.nickname]);
+
+  if (isMapEditorOpen) {
+    return (
+      <ReactverseLayout>
+        <MapEditor />
+      </ReactverseLayout>
+    );
+  }
+
+  if (!me.nickname) {
+    return (
+      <ReactverseLayout>
+        <InputName />
+      </ReactverseLayout>
+    );
+  }
 
   return (
-    <ApolloProvider client={client}>
-      {isConnected && socket && (
-        <div style={{ width: "100%", height: "100vh" }}>
-          {me.userId === "" ? (
-            <InputName socket={socket} />
-          ) : (
-            <>
-              <Interface socket={socket} />
-              <Game socket={socket} />
-              {/* <Stream socket={socket} /> */}
-            </>
-          )}
-        </div>
+    <ReactverseLayout>
+      {isConnected && socket ? (
+        <>
+          <Interface socket={socket} />
+          <Game socket={socket} />
+          <Stream socket={socket} />
+        </>
+      ) : (
+        <></>
       )}
-    </ApolloProvider>
+    </ReactverseLayout>
   );
 };

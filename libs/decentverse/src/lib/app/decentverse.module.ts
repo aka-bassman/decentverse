@@ -55,6 +55,8 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
+        modules.AdminModule,
+        modules.UserModule,
         modules.EventsModule,
         modules.AssetModule,
         modules.CharacterModule,

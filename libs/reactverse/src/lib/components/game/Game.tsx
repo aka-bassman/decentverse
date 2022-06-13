@@ -13,7 +13,6 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
-  const userId = useWorld((state) => state.me.userId);
   const scene = useRef();
   const engine = useRef(Engine.create());
   useEffect(() => {
@@ -26,7 +25,7 @@ export const Game = ({ socket }: GameProps) => {
   const keyboard = useKeyboard();
 
   const player = useRef<RenderCharacter>({
-    id: userId,
+    id: "",
     position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
@@ -55,7 +54,7 @@ export const Game = ({ socket }: GameProps) => {
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
           <Players playerId={player.current.id} />
           <Placements />
-          <Interactions engine={engine} />
+          <Interactions engine={engine} socket={socket} />
         </Suspense>
       </Canvas>
     </div>

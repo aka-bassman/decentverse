@@ -4,4 +4,6 @@ export * from "./Player";
 export * from "./Players";
 export * from "./Tile";
 export * from "./Placements";
-export * from "./Collisions";
+export * from "./Interactions";
+export * from "./Collision";
+export * from "./CallRoom";

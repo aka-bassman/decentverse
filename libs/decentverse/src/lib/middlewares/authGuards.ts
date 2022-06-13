@@ -15,9 +15,9 @@ export class Every implements CanActivate {
 @Injectable()
 export class Admin implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    // const ctx = GqlExecutionContext.create(context).getContext();
-    // const { account } = Auth.verifyToken(ctx.req.headers.authorization);
-    // return Auth.allow(account, ["admin", "superAdmin"], account._id);
+    //   const ctx = GqlExecutionContext.create(context).getContext();
+    //   const { account } = Auth.verifyToken(ctx.req.headers.authorization);
+    //   return Auth.allow(account, ["admin", "superAdmin"], account._id);
     return true;
   }
 }

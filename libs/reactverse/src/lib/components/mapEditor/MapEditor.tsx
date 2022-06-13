@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "antd/dist/antd.css";
-import { client, useMapEditor } from "./stores";
-import { ApolloProvider } from "@apollo/client";
-import { Map, SideToolBar } from "./components";
+import { client, useMapEditor } from "../../stores";
+import { Map, SideToolBar } from "./index";
 import { Layout } from "antd";
 import styled from "styled-components";
 const { Sider, Content } = Layout;
@@ -15,18 +14,16 @@ export const MapEditor = () => {
   }, []);
 
   return (
-    <ApolloProvider client={client}>
-      <MapEditorLayout>
-        <StyledSider>
-          <SideToolBar />
-        </StyledSider>
-        <Layout>
-          <Content>
-            <Map />
-          </Content>
-        </Layout>
-      </MapEditorLayout>
-    </ApolloProvider>
+    <MapEditorLayout>
+      <StyledSider>
+        <SideToolBar />
+      </StyledSider>
+      <Layout>
+        <Content>
+          <Map />
+        </Content>
+      </Layout>
+    </MapEditorLayout>
   );
 };
 

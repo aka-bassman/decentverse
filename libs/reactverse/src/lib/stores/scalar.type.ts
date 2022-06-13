@@ -102,6 +102,7 @@ export type Interaction = {
   topLeft: number[];
   bottomRight: number[];
   url?: string;
+  id?: string;
 };
 export const interactionFragment = gql`
   fragment interactionFragment on Interaction {

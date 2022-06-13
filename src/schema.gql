@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccessToken {
+  accessToken: String!
+}
+
+type Admin {
+  accountId: String!
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  password: String
+  role: String!
+  status: String!
+  updatedAt: DateTime!
+}
+
+input AdminInput {
+  accountId: ID!
+  email: String!
+  password: String
+}
+
 type Asset {
   bottom: File
   createdAt: DateTime!
@@ -106,15 +127,20 @@ type Mutation {
   addAssetFiles(assetId: String!, files: [Upload!]!): File!
   addCharacterFiles(characterId: String!, files: [Upload!]!): File!
   addMapFiles(files: [Upload!]!, mapId: String!, subGroup: String!): File!
+  createAdmin(data: AdminInput!): Admin!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
   createMap(data: MapInput!): Map!
+  removeAdmin(adminId: String!): Admin!
   removeAsset(assetId: String!): Asset!
   removeCharacter(characterId: String!): Character!
   removeMap(mapId: String!): Map!
+  signinAdmin(accountId: String!, password: String!): AccessToken!
+  updateAdmin(adminId: String!, data: AdminInput!): Admin!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
   updateMap(data: MapInput!, mapId: ID!): Map!
+  updateUser(data: UserInput!, userId: String!): User!
 }
 
 type OpenSeaAttribute {
@@ -142,13 +168,18 @@ input PlacementInput {
 }
 
 type Query {
+  admin(adminId: ID!): Admin!
+  admins: [Admin!]!
   asset(assetId: String!): Asset!
   assets: [Asset!]!
   character(characterId: String!): Character!
   characters: [Character!]!
   map(mapId: String!): Map!
   maps: [Map!]!
+  me: Admin!
+  ping: String!
   sayHello: String!
+  whoAmI(address: String!, message: String!, signAddress: String!): User!
 }
 
 type Sprite {
@@ -189,3 +220,17 @@ input TileInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  address: String!
+  createdAt: DateTime!
+  id: String!
+  nickname: String
+  status: String!
+  updatedAt: DateTime!
+}
+
+input UserInput {
+  address: String
+  nickname: String
+}

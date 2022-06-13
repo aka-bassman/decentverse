@@ -1,7 +1,13 @@
 import create from "zustand";
 import * as types from "../types";
 import * as gql from "../gql";
+
 import { devtools } from "zustand/middleware";
+
+const METAMASK_NETWORK_MAINNET = "1";
+const METAMASK_NETWORK_ROPSTEN = "3";
+const NETWORK_VERSION =
+  process.env["NEXT_PUBLIC_ENVIRONMENT"] === "production" ? METAMASK_NETWORK_MAINNET : METAMASK_NETWORK_ROPSTEN;
 
 export interface WorldState {
   scope: types.WorldScope;
@@ -110,7 +116,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     } = await gql.world();
     const me: types.Player = {
       ...state.me,
-      character: get().me.character,
+      character: get().me?.character,
       render: {
         id: "AAAA",
         position: [5000, 5000],
@@ -126,7 +132,6 @@ export const useWorld = create<WorldState>((set, get) => ({
     const status = "idle";
     return set({ map: maps[1], me: { ...me }, render, status });
   },
-
   accelMe: (keyboard: types.Keyboard) => {
     const state: WorldState = get();
     if (!state.me) return;

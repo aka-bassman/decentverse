@@ -1,4 +1,5 @@
 export { AdminModule } from "./admin/admin.module";
+export { UserModule } from "./user/user.module";
 export { AssetModule } from "./asset/asset.module";
 export { AwsModule } from "./aws/aws.module";
 export { CharacterModule } from "./character/character.module";

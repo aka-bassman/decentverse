@@ -1,4 +1,4 @@
-import { Canvas } from "react-three-fiber";
+import { Canvas } from "@react-three/fiber";
 import { useMapEditor } from "../../stores";
 import { useKeyboard } from "../../hooks";
 import { MapTiles, MapCollisions, MapAssets, MapAssetPreview } from "./";
