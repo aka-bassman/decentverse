@@ -7,15 +7,15 @@ import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
-export interface InteractionsProp {
+export interface CollisionsProp {
   engine: MutableRefObject<Engine>;
 }
-export const Interactions = ({ engine }: InteractionsProp) => {
-  const interactions = useWorld((state) => state.map?.interactions);
+export const Collisions = ({ engine }: CollisionsProp) => {
+  const collisions = useWorld((state) => state.map?.collisions);
   return (
     <Suspense fallback={null}>
-      {interactions?.map((interaction, idx) => (
-        <Collision key={idx} collision={interaction} engine={engine} />
+      {collisions?.map((collision, idx) => (
+        <Collision key={idx} collision={collision} engine={engine} />
       ))}
     </Suspense>
   );

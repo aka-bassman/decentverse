@@ -60,6 +60,7 @@ export class DecentverseModule {
         modules.AssetModule,
         modules.CharacterModule,
         modules.MapModule,
+        modules.RoleModule,
         modules.AwsModule.register(options.objectStorage),
         modules.FileModule,
         modules.RtModule.register(options?.redis),

@@ -1,5 +1,6 @@
-import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import * as gql from "../gql";
+
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -11,24 +12,12 @@ import * as gql from "../gql";
  */
 
 @InputType()
-export class MapInput {
+export class RoleInput {
   @Field(() => String)
   name: string;
 
-  @Field(() => Int, { nullable: true })
-  tileSize: number;
-
-  @Field(() => [[gql.TileInput]], { nullable: true })
-  tiles: gql.TileInputType[][];
-
-  @Field(() => [gql.PlacementInput], { nullable: true })
-  placements: gql.PlacementInputType[];
-
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  collisions: gql.InteractionInputType[];
-
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  webviews: gql.InteractionInputType[];
+  @Field(() => [gql.AreaInput])
+  areas: gql.AreaInputType[];
 }
 
 /**
@@ -38,33 +27,15 @@ export class MapInput {
  */
 
 @ObjectType()
-export class Map {
+export class Role {
   @Field(() => String)
   id: string;
 
   @Field(() => String)
   name: string;
 
-  @Field(() => Int)
-  tileSize: number;
-
-  @Field(() => Int)
-  totalWidth: number;
-
-  @Field(() => Int)
-  totalHeight: number;
-
-  @Field(() => [[gql.Tile]])
-  tiles: gql.TileType[][];
-
-  @Field(() => [gql.Placement])
-  placements: gql.PlacementType[];
-
-  @Field(() => [gql.Interaction])
-  collisions: gql.InteractionType[];
-
-  @Field(() => [gql.Interaction])
-  webviews: gql.InteractionType[];
+  @Field(() => [gql.Area])
+  areas: gql.AreaType[];
 
   @Field(() => String)
   status: "active" | "inactive";
@@ -75,3 +46,4 @@ export class Map {
   @Field(() => Date)
   updatedAt: Date;
 }
+export type RoleType = Role;

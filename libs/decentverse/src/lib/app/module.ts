@@ -6,5 +6,6 @@ export { MapModule } from "./map/map.module";
 export { RtModule } from "./rt/rt.module";
 export { EventsModule } from "./events/events.module";
 export { FileModule } from "./file/file.module";
+export { RoleModule } from "./role/role.module";
 export { ScalarModule } from "./scalar/scalar.module";
 export { BatchModule } from "./batch/batch.module";

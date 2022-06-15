@@ -6,3 +6,4 @@ export * from "./map/map.service";
 export * from "./rt/rt.service";
 export * from "./file/file.service";
 export * from "./batch/batch.service";
+export * from "./role/role.service";
