@@ -73,6 +73,7 @@ export const TileMap = ({ player, scope }: MapProp) => {
     };
     scope.current = makeScope(showBox);
   }, 500);
+  console.log(renderTiles, new Date());
   return (
     <Suspense fallback={null}>
       {renderTiles

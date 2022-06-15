@@ -38,6 +38,7 @@ export const Call = ({ peer, socket }: CallProps) => {
       socket.off(`disconnected:${peer.id}`);
     };
   }, []);
+
   const enter = () => {
     peer.call.peer.on("signal", (data) => {
       const signal = { socketId: peer.socketId, desc: data, roomId, nickName: userId, userId };

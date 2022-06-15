@@ -16,14 +16,14 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const isMapEditorOpen = useMapEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
     console.log(1);
-    if (!me) return;
-    console.log(2);
+    console.log(2, ws);
     document.body.style.overflow = "hidden";
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-  }, [me?.nickname]);
+    console.log(isConnected, socket);
+  }, []);
 
   if (isMapEditorOpen) {
     return (
@@ -47,7 +47,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
         <>
           <Interface socket={socket} />
           <Game socket={socket} />
-          <Stream socket={socket} />
+          {/* <Stream socket={socket} /> */}
         </>
       ) : (
         <></>

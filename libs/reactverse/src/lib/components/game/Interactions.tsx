@@ -18,7 +18,6 @@ export const Interactions = ({ engine, socket }: InteractionsProp) => {
   return (
     <Suspense fallback={null}>
       {interactions?.map((interaction, idx) => {
-        console.log(interaction.type);
         if (interaction.type === "collision") return <Collision key={idx} collision={interaction} engine={engine} />;
         else if (interaction.type === "callRoom")
           return <CallRoom key={idx} interaction={interaction} socket={socket} />;

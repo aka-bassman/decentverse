@@ -50,8 +50,8 @@ export const Game = ({ socket }: GameProps) => {
     >
       <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
         <Suspense fallback={null}>
-          <TileMap player={player} scope={scope} />
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
+          <TileMap player={player} scope={scope} />
           <Players playerId={player.current.id} />
           <Placements />
           <Interactions engine={engine} socket={socket} />

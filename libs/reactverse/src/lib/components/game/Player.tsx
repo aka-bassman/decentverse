@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame, world } from "../../stores";
+import { useWorld, useUser, RenderCharacter, scalar, useGame, world } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator } from "../../hooks";
@@ -15,13 +15,19 @@ export interface PlayerProp {
 }
 
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
-  const { camera, get } = useThree();
+  const { camera, get, set } = useThree();
   const me = useWorld((state) => state.me);
+  const iam = useUser((state) => state);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
   const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 120, 165));
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
+    const position = get().camera.position;
+    const playerPosition = player.current.position;
+
+    camera.position.setX(playerPosition[0]);
+    camera.position.setY(playerPosition[1]);
     return () => {
       World.remove(engine.current.world, body.current);
     };
@@ -35,8 +41,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     Body.setVelocity(body.current, { x: velocity[0], y: velocity[1] });
 
     engine.current = Engine.update(engine.current);
-    // console.log(player.current.)
-    // const position = [player.current.position[0] + velocity[0], player.current.position[1] + velocity[1]];
+
     const characterState = velocity[0] === 0 && velocity[1] === 0 ? "idle" : "walk";
     const direction = keyboard.current.right
       ? "right"
@@ -63,21 +68,32 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
+
   useFrame(() => {
     const position = get().camera.position;
     const playerPosition = player.current.position;
-    camera.translateX(Math.floor((playerPosition[0] - position.x) / 10));
-    camera.translateY(Math.floor((playerPosition[1] - position.y) / 10));
+    const x = Math.floor((playerPosition[0] - position.x) / 10);
+    const y = Math.floor((playerPosition[1] - position.y) / 10);
+
+    if (x === 0 && y === 0) return;
+    camera.translateX(x);
+    camera.translateY(y);
+    // camera.position.setX(x);
+    // camera.position.setY(y);
   });
 
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
+        <Text lineHeight={0.8} fontSize={60} material-toneMapped={false}>
+          {iam.nickname}
+        </Text>
+      </sprite>
+      <sprite ref={sprite}>
         <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
-        <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
-          {me.userId}
-        </Text>
+        {/* <planeGeometry>
+        </planeGeometry> */}
       </sprite>
     </Suspense>
   );

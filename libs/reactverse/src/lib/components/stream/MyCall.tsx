@@ -9,7 +9,7 @@ import {
   CamOffIcon,
 } from "..";
 import { Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, types } from "../../stores";
+import { useGossip, useUser, useWorld, types } from "../../stores";
 import { MyVideo } from "./";
 import { useInterval } from "../../hooks";
 import styled from "styled-components";
@@ -22,7 +22,8 @@ const videoWidth = 240;
 const videoHeight = 280;
 
 export const MyCall = ({ socket }: MyCallProps) => {
-  const me = useWorld((state) => state.me);
+  // const me = useWorld((state) => state.me);
+  const me = useUser((state) => state);
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
   const setMic = useGossip((state) => state.setMic);
@@ -46,7 +47,7 @@ export const MyCall = ({ socket }: MyCallProps) => {
     for (const peer of peers) {
       if (!peer.call.peer.connected) return;
       const callData = {
-        id: me.userId,
+        id: me.nickname,
         cam: callRoom.cam,
         mic: callRoom.mic,
         isTalk: callRoom.mic && callRoom.isTalk,
@@ -117,7 +118,7 @@ export const MyCall = ({ socket }: MyCallProps) => {
           <div style={{ visibility: !callRoom.mic ? "visible" : "hidden" }}>
             <MicOffSmallIcon />
           </div>
-          {me.userId}
+          {me.nickname}
         </NameTag>
         <BackLight color={callRoom.isTalk ? "#9ACD32" : "transparent"} />
         {!callRoom.cam && <Bilind />}

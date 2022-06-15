@@ -14,11 +14,24 @@ export interface CallRoomProp {
   socket: Soc;
 }
 export const CallRoom = React.memo(({ interaction, socket }: CallRoomProp) => {
+  const [width, height] = [
+    interaction.topLeft[0] - interaction.bottomRight[0],
+    interaction.bottomRight[1] - interaction.topLeft[1],
+  ];
+  const me = useWorld((state) => state.me);
   useEffect(() => {
+    console.log(me.render.position);
     return () => {
       // World.remove(engine.current.world, box);
     };
-  }, []);
+  }, [me.render]);
 
-  return;
+  return (
+    <Suspense fallback={null}>
+      {/* <mesh position={position}>
+    <planeGeometry args={[width, height]} />
+    <meshBasicMaterial color={0xff0000} transparent />
+  </mesh> */}
+    </Suspense>
+  );
 });
