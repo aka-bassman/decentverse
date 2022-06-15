@@ -9,3 +9,6 @@ export * from "./MapCollisions";
 export * from "./MapAssets";
 export * from "./MapAssetPreview";
 export * from "./MapEditor";
+export * from "./LoadMap";
+export * from "./NewMap";
+export * from "./AddTiles";

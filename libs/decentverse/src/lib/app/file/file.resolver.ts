@@ -9,7 +9,7 @@ import { createReadStream, createWriteStream, fstat } from "fs";
 @Resolver(() => gql.File)
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
-  @Mutation(() => gql.File)
+  @Mutation(() => [gql.File])
   @UseGuards(Allow.Admin)
   async addAssetFiles(
     @Args({ name: "assetId", type: () => String }) assetId: string,
@@ -17,7 +17,7 @@ export class FileResolver {
   ) {
     return await this.fileService.addFiles(files, "asset", assetId);
   }
-  @Mutation(() => gql.File)
+  @Mutation(() => [gql.File])
   @UseGuards(Allow.Admin)
   async addMapFiles(
     @Args({ name: "mapId", type: () => String }) mapId: string,
@@ -26,7 +26,15 @@ export class FileResolver {
   ) {
     return await this.fileService.addFiles(files, "map", `${mapId}/${subGroup}`);
   }
-  @Mutation(() => gql.File)
+  @Mutation(() => [gql.File])
+  @UseGuards(Allow.Admin)
+  async addMapFile(
+    @Args({ name: "mapId", type: () => String }) mapId: string,
+    @Args({ name: "file", type: () => GraphQLUpload }) file: FileUpload
+  ) {
+    return await this.fileService.addMapFile(file, "map", mapId);
+  }
+  @Mutation(() => [gql.File])
   @UseGuards(Allow.Admin)
   async addCharacterFiles(
     @Args({ name: "characterId", type: () => String }) characterId: string,

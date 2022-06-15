@@ -1,46 +1,46 @@
 import styled from "styled-components";
-import { Card, List } from "antd";
-
-const data = [
-  {
-    id: 1,
-    title: "Map Title #1",
-  },
-  {
-    id: 2,
-    title: "Map Title #2",
-  },
-  {
-    id: 3,
-    title: "Map Title #3",
-  },
-  {
-    id: 4,
-    title: "Map Title #4",
-  },
-];
+import { Card, Popconfirm, Descriptions, Button } from "antd";
+import { useMapEditor } from "../../stores";
+import { NewMap, LoadMap, AddTiles } from "./index";
 
 export const MapTool = () => {
+  const { mapData } = useMapEditor();
+  const { closeMap } = useMapEditor().mapTool;
+
+  if (!mapData)
+    return (
+      <Card title="Map" size="small" style={{ marginBottom: 20 }}>
+        <NewMap />
+        <LoadMap />
+      </Card>
+    );
+
   return (
-    <Card title="Map" size="small">
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        renderItem={(item) => (
-          <List.Item
-            onClick={() => {
-              console.log("");
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            <List.Item.Meta
-              // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-              title={item.title}
-              // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-            />
-          </List.Item>
-        )}
-      />
+    <Card title={`Map: ${mapData.name}`} size="small" style={{ marginBottom: 20 }}>
+      {mapData.tiles.length ? (
+        <div>
+          <Descriptions bordered column={1} size="small">
+            <Descriptions.Item label="tiles">
+              {mapData.tiles.length} X {mapData.tiles[0].length}
+            </Descriptions.Item>
+            <Descriptions.Item label="tile size">{mapData.tileSize}px</Descriptions.Item>
+          </Descriptions>
+          <div style={{ textAlign: "right", marginTop: 10 }}>
+            <Popconfirm title="Are you sure？" placement="bottomRight" onConfirm={closeMap}>
+              <a href="#">Close</a>
+            </Popconfirm>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div style={{ textAlign: "right", marginTop: 10 }}>
+            <AddTiles />
+            <Popconfirm title="Are you sure？" placement="bottomRight" onConfirm={closeMap}>
+              <a href="#">Close</a>
+            </Popconfirm>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };
