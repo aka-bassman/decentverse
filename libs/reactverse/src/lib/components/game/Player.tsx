@@ -66,8 +66,10 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   useFrame(() => {
     const position = get().camera.position;
     const playerPosition = player.current.position;
-    camera.translateX(Math.floor((playerPosition[0] - position.x) / 10));
-    camera.translateY(Math.floor((playerPosition[1] - position.y) / 10));
+    const move = [Math.floor((playerPosition[0] - position.x) / 10), Math.floor((playerPosition[1] - position.y) / 10)];
+    // if (move[0] < 10 || move[1] < 10) return;
+    camera.translateX(move[0]);
+    camera.translateY(move[1]);
   });
 
   return (

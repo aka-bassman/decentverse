@@ -44,12 +44,13 @@ export const Game = ({ socket }: GameProps) => {
         width: "200%",
         height: "200%",
         marginLeft: "-50%",
-        marginTop: "-25%",
+        marginTop: "-30%",
         borderColor: "black",
         borderWidth: 2,
       }}
     >
-      <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
+      {/* <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}> */}
+      <Canvas orthographic camera={{ zoom: 0.5 }}>
         <Suspense fallback={null}>
           <TileMap player={player} scope={scope} />
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
