@@ -15,6 +15,7 @@ import { getModelToken } from "@nestjs/mongoose";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = "api";
+
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;
   await app.listen(port);
@@ -35,6 +36,7 @@ async function bootstrap() {
       replSet: process.env.DB_REPLICA_SET,
     },
   });
+
   await decentverse.init();
   // const fileService = decentverse.app.get<srv.FileService>(srv.FileService);
   // const mapService = decentverse.app.get<srv.MapService>(srv.MapService);
