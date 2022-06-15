@@ -120,6 +120,14 @@ export type Tile = {
   webviews: Interaction[];
 };
 
+export type TileInput = {
+  bottom?: string;
+  collisions: Interaction[];
+  lighting?: string;
+  top?: string;
+  webviews: Interaction[];
+};
+
 export const tileFragment = gql`
   ${fileFragment}
   ${interactionFragment}

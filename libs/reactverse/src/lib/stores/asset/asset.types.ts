@@ -20,12 +20,6 @@ export type Asset = {
   createdAt?: Date;
   updatedAt: Date;
 };
-export type TileInput = {
-  top?: string;
-  bottom?: string;
-  lighting?: string;
-  interactions: scalar.Interaction[];
-};
 
 export const assetFragment = gql`
   ${scalar.fileFragment}
