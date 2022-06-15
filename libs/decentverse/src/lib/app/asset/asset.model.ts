@@ -31,7 +31,10 @@ export class Asset extends Input {
   lighting?: MongoSchema.Types.ObjectId;
 
   @Prop([{ type: gql.InteractionSchema }])
-  interactions: gql.InteractionType[];
+  collisions: gql.InteractionType[];
+
+  @Prop([{ type: gql.InteractionSchema }])
+  webviews: gql.InteractionType[];
 
   @Prop({
     type: String,

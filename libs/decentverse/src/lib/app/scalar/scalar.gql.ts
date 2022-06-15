@@ -90,7 +90,7 @@ export const TokenUrlSchema = SchemaFactory.createForClass(TokenUrl);
 
 // * Interaction Schema Definition
 
-export const actionTypes = ["collision"] as const;
+export const actionTypes = ["collision", "webview"] as const;
 export type ActionType = typeof actionTypes[number];
 
 @ObjectType()

@@ -25,7 +25,10 @@ export class MapInput {
   placements: gql.PlacementInputType[];
 
   @Field(() => [gql.InteractionInput], { nullable: true })
-  interactions: gql.InteractionInputType[];
+  collisions: gql.InteractionInputType[];
+
+  @Field(() => [gql.InteractionInput], { nullable: true })
+  webviews: gql.InteractionInputType[];
 }
 
 /**
@@ -58,7 +61,10 @@ export class Map {
   placements: gql.PlacementType[];
 
   @Field(() => [gql.Interaction])
-  interactions: gql.InteractionType[];
+  collisions: gql.InteractionType[];
+
+  @Field(() => [gql.Interaction])
+  webviews: gql.InteractionType[];
 
   @Field(() => String)
   status: "active" | "inactive";

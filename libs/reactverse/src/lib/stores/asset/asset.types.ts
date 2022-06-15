@@ -6,14 +6,16 @@ export type AssetInput = {
   top?: string;
   bottom?: string;
   lighting?: string;
-  interactions: scalar.Interaction[];
+  collisions: scalar.Interaction[];
+  webviews: scalar.Interaction[];
 };
 export type Asset = {
   id: string;
   top: scalar.File;
   bottom?: scalar.File;
   lighting?: scalar.File;
-  interactions: scalar.Interaction[];
+  collisions: scalar.Interaction[];
+  webviews: scalar.Interaction[];
   status: string;
   createdAt?: Date;
   updatedAt: Date;
@@ -33,7 +35,10 @@ export const assetFragment = gql`
     lighting {
       ...fileFragment
     }
-    interactions {
+    collisions {
+      ...interactionFragment
+    }
+    webviews {
       ...interactionFragment
     }
     status

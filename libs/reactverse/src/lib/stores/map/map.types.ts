@@ -8,7 +8,8 @@ export type MapInput = {
   tileSize: number;
   tiles: scalar.Tile[][];
   placements: Placement[];
-  interactions: scalar.Interaction[];
+  collisions: scalar.Interaction[];
+  webviews: scalar.Interaction[];
 };
 
 export type Map = {
@@ -19,7 +20,8 @@ export type Map = {
   totalHeight: number;
   tiles: scalar.Tile[][];
   placements: Placement[];
-  interactions: scalar.Interaction[];
+  collisions: scalar.Interaction[];
+  webviews: scalar.Interaction[];
   status: string;
 };
 
@@ -37,7 +39,10 @@ export const mapFragment = gql`
     placements {
       ...placementFragment
     }
-    interactions {
+    collisions {
+      ...interactionFragment
+    }
+    webviews {
       ...interactionFragment
     }
     status

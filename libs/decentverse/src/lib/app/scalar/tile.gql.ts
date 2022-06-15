@@ -23,7 +23,11 @@ export class Tile {
 
   @Field(() => [gql.Interaction])
   @Prop([{ type: InteractionSchema, required: true }])
-  interactions: gql.InteractionType[];
+  collisions: gql.InteractionType[];
+
+  @Field(() => [gql.Interaction])
+  @Prop([{ type: InteractionSchema, required: true }])
+  webviews: gql.InteractionType[];
 }
 export type TileType = Tile;
 export const TileSchema = SchemaFactory.createForClass(Tile);
@@ -40,6 +44,9 @@ export class TileInput {
   lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.InteractionInput])
-  interactions: gql.InteractionType[];
+  collisions: gql.InteractionType[];
+
+  @Field(() => [gql.InteractionInput])
+  webviews: gql.InteractionType[];
 }
 export type TileInputType = TileInput;
