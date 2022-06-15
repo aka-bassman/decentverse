@@ -29,19 +29,17 @@ export interface MapEditorState {
     isNewModalOpen: boolean;
     isLoadModalOpen: boolean;
     inputName: string;
-    inputTileSize: number;
     loadMapList: () => Promise<void>;
     toggleNewModalOpen: () => void;
     toggleLoadModalOpen: () => void;
     closeMap: () => void;
     updateName: (value: string) => void;
-    updateTileSize: (value: number) => void;
     validationCheck: () => boolean;
     createMap: () => Promise<void>;
   };
   tileTool: {
     isTilesModalOpen: boolean;
-    newTiles: types.TileInput[][];
+    newTiles: types.scalar.TileInput[][];
     toggleTilesModalOpen: () => void;
     addMapFile: (file: any, type: "bottom" | "top" | "lighting") => Promise<void>;
     validationCheck: () => boolean;
@@ -114,7 +112,6 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     isNewModalOpen: false,
     isLoadModalOpen: false,
     inputName: "",
-    inputTileSize: 2000,
     loadMapList: async () => {
       const mapList = await gql.maps();
       set((state) => ({ mapTool: { ...state.mapTool, mapList } }));
@@ -132,21 +129,24 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     updateName: (value: string) => {
       set((state) => ({ mapTool: { ...state.mapTool, inputName: value } }));
     },
-    updateTileSize: (value: number) => {
-      set((state) => ({ mapTool: { ...state.mapTool, inputTileSize: value } }));
-    },
     validationCheck: () => {
-      const { inputName, inputTileSize } = get().mapTool;
-      return !!(inputName && inputTileSize > 0);
+      const { inputName } = get().mapTool;
+      return !!inputName;
     },
     createMap: async () => {
       if (!get().mapTool.validationCheck()) return;
-      const { inputName, inputTileSize } = get().mapTool;
+      const { inputName } = get().mapTool;
 
       const data = {
         name: inputName,
-        tileSize: inputTileSize,
+        tileSize: 2000,
+        collisions: [],
+        placements: [],
+        tiles: [],
+        webviews: [],
       };
+
+      set((state) => ({ mapTool: { ...state.mapTool, isNewModalOpen: false } }));
       const newMap = await gql.createMap(data);
       newMap?.id && (await get().init(newMap.id));
     },
@@ -161,9 +161,9 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       const mapData = get().mapData;
       if (!mapData) return;
       const imageFiles = await gql.addMapFile(file, mapData.name);
-      const newItem = { bottom: undefined, top: undefined, lighting: undefined, interactions: [] };
+      const newItem = { bottom: undefined, top: undefined, lighting: undefined, collisions: [], webviews: [] };
 
-      let newTiles: types.TileInput[][] = JSON.parse(JSON.stringify(get().tileTool.newTiles));
+      let newTiles: types.scalar.TileInput[][] = JSON.parse(JSON.stringify(get().tileTool.newTiles));
 
       imageFiles?.forEach((cur) => {
         const indexText = cur.url.split(mapData.name)[1].split("/")[1].split("-");
@@ -188,13 +188,16 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       const { mapData } = get();
       if (!mapData) return;
 
-      const data: any = {
+      const data = {
         name: mapData.name,
         tileSize: mapData.tileSize,
         tiles: newTiles,
         placements: mapData.placements,
-        interactions: mapData.interactions,
+        collisions: mapData.collisions,
+        webviews: mapData.webviews,
       };
+
+      // const data = { ...mapData, tiles: newTiles };
 
       await gql.updateMap(mapData.id, data);
       set((state) => ({ tileTool: { ...state.tileTool, newTiles: [], isTilesModalOpen: false } }));
@@ -401,6 +404,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
           collisions: tile.collisions,
           lighting: tile.lighting?.id,
           top: tile.top?.id,
+          webviews: tile.webviews,
         };
       });
     });
@@ -415,6 +419,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       tiles: tilesInput,
       placements: assetPlacements,
       collisions: newCollisions,
+      webviews: [], // TODO
     };
 
     await gql.updateMap(mapData.id, data);

@@ -6,12 +6,6 @@ import { PlusOutlined } from "@ant-design/icons";
 export const WebViewTool = () => {
   const { isActiveViewMode, toggleViewMode } = useMapEditor();
 
-  const handleOnChange = (e) => {
-    e.preventDefault();
-
-    console.log("e", e.target.value);
-  };
-
   return (
     <div>
       <Input.Group compact style={{ width: "100%" }}>
