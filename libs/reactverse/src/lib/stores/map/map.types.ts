@@ -6,9 +6,9 @@ import { placementFragment, Placement } from "../asset/asset.types";
 export type MapInput = {
   name: string;
   tileSize: number;
-  tiles: scalar.Tile[][];
-  placements: Placement[];
-  interactions: scalar.Interaction[];
+  tiles?: scalar.Tile[][];
+  placements?: Placement[];
+  interactions?: scalar.Interaction[];
 };
 
 export type Map = {

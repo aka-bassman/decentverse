@@ -7,12 +7,6 @@ import styled from "styled-components";
 const { Sider, Content } = Layout;
 
 export const MapEditor = () => {
-  const { init } = useMapEditor();
-
-  useEffect(() => {
-    init();
-  }, []);
-
   return (
     <MapEditorLayout>
       <StyledSider>
