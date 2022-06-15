@@ -15,7 +15,7 @@ export type TPreview = {
   isPreview: boolean;
   image: string;
 };
-export type TCollisionPreview = {
+export type TInteractionPreview = {
   startX: number;
   startY: number;
   x: number;
@@ -40,19 +40,33 @@ export type TCollision = {
   width: number;
   height: number;
 };
-
+export type TWebView = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 export type TNewTiles = {
   down?: {
     id: string;
     preview: string;
   };
 };
-
 export type File = {
   id: string;
   filename: string;
   url: string;
   status: "active" | "inactive";
+};
+
+export type TInteractionTool = "collision" | "webView" | "webRtc";
+
+export const initPreview = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  isPreview: false,
 };
 
 export const fileFragment = gql`

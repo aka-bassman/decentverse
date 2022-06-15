@@ -11,15 +11,18 @@ export interface MapEditorState {
   mapHeight: number; //
   mainTool: types.TMainTool;
   subTool: string;
+  interactionTool: types.TInteractionTool;
   mapData?: types.Map;
   assetsData?: types.Asset[];
   viewMode: string[];
   selectedAssetId?: string;
   isEdited: boolean;
   preview: types.TPreview;
-  collisionPreview: types.TCollisionPreview;
+  collisionPreview: types.TInteractionPreview;
   assets: types.TAsset[];
   collisions: types.TCollision[];
+  webViewPreview: types.TInteractionPreview;
+  webViews: types.TWebView[];
   status: "none" | "loading" | "failed" | "idle";
   mapTool: {
     mapList: types.Map[];
@@ -38,12 +41,7 @@ export interface MapEditorState {
   };
   tileTool: {
     isTilesModalOpen: boolean;
-    // widthCount: number;
-    // heightCount: number;
-    // isFiilUploadMode: boolean;
     newTiles: types.TileInput[][];
-    // newTiles: types.TNewTiles[][];
-    // setCounts: (width: number, height: number) => void;
     toggleTilesModalOpen: () => void;
     addMapFile: (file: any, type: "bottom" | "top" | "lighting") => Promise<void>;
     validationCheck: () => boolean;
@@ -60,6 +58,7 @@ export interface MapEditorState {
   removeCollision: (index: number) => void;
   setMainTool: (item: types.TMainTool) => void;
   setSubTool: (item: string) => void;
+  setInteractionTool: (item: types.TInteractionTool) => void;
   toggleViewMode: (item: string) => void;
   isActiveViewMode: (item: string) => boolean;
   setSelectedAssetId: (id: string) => void;
@@ -86,6 +85,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   mapHeight: 2000,
   mainTool: "Assets",
   subTool: "Add",
+  interactionTool: "collision",
   mapData: undefined,
   assetsData: [], //
   assets: [],
@@ -94,22 +94,20 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   selectedAssetId: undefined,
   isEdited: false,
   preview: {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    isPreview: false,
+    ...types.initPreview,
     image: "",
   },
   collisionPreview: {
+    ...types.initPreview,
     startX: 0,
     startY: 0,
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    isPreview: false,
   },
+  webViewPreview: {
+    ...types.initPreview,
+    startX: 0,
+    startY: 0,
+  },
+  webViews: [],
   status: "none",
   mapTool: {
     mapList: [],
@@ -165,7 +163,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       const imageFiles = await gql.addMapFile(file, mapData.name);
       const newItem = { bottom: undefined, top: undefined, lighting: undefined, interactions: [] };
 
-      let newTiles: types.TileInput[][] = get().tileTool.newTiles;
+      let newTiles: types.TileInput[][] = JSON.parse(JSON.stringify(get().tileTool.newTiles));
 
       imageFiles?.forEach((cur) => {
         const indexText = cur.url.split(mapData.name)[1].split("/")[1].split("-");
@@ -175,13 +173,15 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
         newTiles = JSON.parse(JSON.stringify(newTiles));
         newTiles[widthIndex][heightIndex][type] = cur.id;
       });
+
+      console.log("newTiles!!!!", newTiles);
       set((state) => ({
         tileTool: { ...state.tileTool, newTiles },
       }));
     },
     validationCheck: () => {
       const { newTiles } = get().tileTool;
-      return !!newTiles.length;
+      return !!newTiles?.[0]?.[0]?.bottom;
     },
     addTiles: async () => {
       const { newTiles } = get().tileTool;
@@ -241,6 +241,11 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     get().clearPreview();
     get().clearCollisionPreview();
     set({ subTool: item, selectedAssetId: undefined });
+  },
+  setInteractionTool: (item) => {
+    get().clearPreview();
+    get().clearCollisionPreview();
+    set({ interactionTool: item, selectedAssetId: undefined });
   },
   previewAsset: (x, y) => {
     const { selectedAssetId, assetsData } = get();
