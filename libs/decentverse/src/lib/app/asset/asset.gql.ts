@@ -26,7 +26,10 @@ export class AssetInput {
   lighting?: MongoSchema.Types.ObjectId;
 
   @Field(() => [gql.InteractionInput], { nullable: true })
-  interactions: gql.InteractionInputType[];
+  collisions: gql.InteractionInputType[];
+
+  @Field(() => [gql.InteractionInput], { nullable: true })
+  webviews: gql.InteractionInputType[];
 }
 
 /**
@@ -53,7 +56,10 @@ export class Asset {
   lighting?: gql.File;
 
   @Field(() => [gql.Interaction], { nullable: true })
-  interactions: gql.InteractionType[];
+  collisions: gql.InteractionType[];
+
+  @Field(() => [gql.Interaction], { nullable: true })
+  webviews: gql.InteractionType[];
 
   @Field(() => String)
   status: "active" | "inactive";

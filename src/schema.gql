@@ -23,24 +23,38 @@ input AdminInput {
   password: String
 }
 
+type Area {
+  bottomRight: [Int!]!
+  map: ID!
+  topLeft: [Int!]!
+}
+
+input AreaInput {
+  bottomRight: [Int!]!
+  map: ID!
+  topLeft: [Int!]!
+}
+
 type Asset {
   bottom: File
+  collisions: [Interaction!]
   createdAt: DateTime!
   id: ID!
-  interactions: [Interaction!]
   lighting: File
   name: String!
   status: String!
   top: File
   updatedAt: DateTime!
+  webviews: [Interaction!]
 }
 
 input AssetInput {
   bottom: ID
-  interactions: [InteractionInput!]
+  collisions: [InteractionInput!]
   lighting: ID
   name: String!
   top: ID
+  webviews: [InteractionInput!]
 }
 
 type Character {
@@ -102,9 +116,9 @@ input InteractionInput {
 }
 
 type Map {
+  collisions: [Interaction!]!
   createdAt: DateTime!
   id: String!
-  interactions: [Interaction!]!
   name: String!
   placements: [Placement!]!
   status: String!
@@ -113,14 +127,16 @@ type Map {
   totalHeight: Int!
   totalWidth: Int!
   updatedAt: DateTime!
+  webviews: [Interaction!]!
 }
 
 input MapInput {
-  interactions: [InteractionInput!]
+  collisions: [InteractionInput!]
   name: String!
   placements: [PlacementInput!]
   tileSize: Int
   tiles: [[TileInput!]!]
+  webviews: [InteractionInput!]
 }
 
 type Mutation {
@@ -132,15 +148,18 @@ type Mutation {
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
   createMap(data: MapInput!): Map!
+  createRole(data: RoleInput!): Admin!
   removeAdmin(adminId: String!): Admin!
   removeAsset(assetId: String!): Asset!
   removeCharacter(characterId: String!): Character!
   removeMap(mapId: String!): Map!
+  removeRole(roleId: String!): Admin!
   signinAdmin(accountId: String!, password: String!): AccessToken!
   updateAdmin(adminId: String!, data: AdminInput!): Admin!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
   updateMap(data: MapInput!, mapId: ID!): Map!
+  updateRole(data: RoleInput!, roleId: String!): Admin!
 }
 
 type OpenSeaAttribute {
@@ -178,7 +197,14 @@ type Query {
   maps: [Map!]!
   me: Admin!
   ping: String!
+  role(roldId: ID!): Admin!
+  roles: [Admin!]!
   sayHello: String!
+}
+
+input RoleInput {
+  areas: [AreaInput!]!
+  name: String!
 }
 
 type Sprite {
@@ -205,16 +231,18 @@ input SpriteInput {
 
 type Tile {
   bottom: File!
-  interactions: [Interaction!]!
+  collisions: [Interaction!]!
   lighting: File
   top: File
+  webviews: [Interaction!]!
 }
 
 input TileInput {
   bottom: ID!
-  interactions: [InteractionInput!]!
+  collisions: [InteractionInput!]!
   lighting: ID
   top: ID
+  webviews: [InteractionInput!]!
 }
 
 """The `Upload` scalar type represents a file upload."""
