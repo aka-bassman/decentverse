@@ -1,8 +1,8 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
-import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
+import { useKeyboard, useGameConnection, useWindowDimensions, useInterval } from "../../hooks";
 import { TileMap, Player, Players, Placements, Interactions } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
@@ -20,6 +20,7 @@ export const Game = ({ socket }: GameProps) => {
       await initWorld();
     })();
   }, []);
+
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
@@ -43,12 +44,11 @@ export const Game = ({ socket }: GameProps) => {
         width: "200%",
         height: "200%",
         marginLeft: "-50%",
-        marginTop: "-25%",
-        borderColor: "black",
-        borderWidth: 2,
+        marginTop: "-30%",
       }}
     >
-      <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}>
+      {/* <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}> */}
+      <Canvas orthographic camera={{ zoom: 0.5 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
           <TileMap player={player} scope={scope} />

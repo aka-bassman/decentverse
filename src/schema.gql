@@ -124,9 +124,10 @@ input MapInput {
 }
 
 type Mutation {
-  addAssetFiles(assetId: String!, files: [Upload!]!): File!
-  addCharacterFiles(characterId: String!, files: [Upload!]!): File!
-  addMapFiles(files: [Upload!]!, mapId: String!, subGroup: String!): File!
+  addAssetFiles(assetId: String!, files: [Upload!]!): [File!]!
+  addCharacterFiles(characterId: String!, files: [Upload!]!): [File!]!
+  addMapFile(file: Upload!, mapId: String!): [File!]!
+  addMapFiles(files: [Upload!]!, mapId: String!, subGroup: String!): [File!]!
   createAdmin(data: AdminInput!): Admin!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!

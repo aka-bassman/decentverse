@@ -1,3 +1,5 @@
+import gql from "graphql-tag";
+
 export type Point = {
   x: number;
   y: number;
@@ -38,3 +40,26 @@ export type TCollision = {
   width: number;
   height: number;
 };
+
+export type TNewTiles = {
+  down?: {
+    id: string;
+    preview: string;
+  };
+};
+
+export type File = {
+  id: string;
+  filename: string;
+  url: string;
+  status: "active" | "inactive";
+};
+
+export const fileFragment = gql`
+  fragment fileFragment on File {
+    id
+    filename
+    url
+    status
+  }
+`;

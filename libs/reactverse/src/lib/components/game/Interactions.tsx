@@ -15,9 +15,11 @@ export interface InteractionsProp {
 
 export const Interactions = ({ engine, socket }: InteractionsProp) => {
   const interactions = useWorld((state) => state.map?.interactions);
+  console.log(interactions?.length);
   return (
     <Suspense fallback={null}>
       {interactions?.map((interaction, idx) => {
+        console.log(interaction.type);
         if (interaction.type === "collision") return <Collision key={idx} collision={interaction} engine={engine} />;
         else if (interaction.type === "callRoom")
           return <CallRoom key={idx} interaction={interaction} socket={socket} />;

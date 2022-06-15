@@ -76,6 +76,7 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",
+    "sharp": "0.30.6",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.5",

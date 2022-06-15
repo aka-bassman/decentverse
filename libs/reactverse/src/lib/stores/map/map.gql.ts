@@ -23,7 +23,7 @@ export const maps = async () =>
 export type CreateMapMutation = { createMap: types.Map };
 export const createMapMutation = gql`
   ${types.mapFragment}
-  mutation createMap($data: MapInput) {
+  mutation createMap($data: MapInput!) {
     createMap(data: $data) {
       ...mapFragment
     }

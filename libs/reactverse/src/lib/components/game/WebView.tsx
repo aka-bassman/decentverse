@@ -7,34 +7,30 @@ import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
+import { reactDomVersion } from "@nrwl/react";
 
-export interface CollisionProp {
-  collision: scalar.Interaction;
+export interface WebViewProp {
+  webView: scalar.Interaction;
   engine: MutableRefObject<Engine>;
 }
-export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
+export const WebView = React.memo(({ webView, engine }: WebViewProp) => {
   const me = useWorld((state) => state.me);
   const position = new Vector3(
-    (collision.bottomRight[0] + collision.topLeft[0]) / 2,
-    (collision.bottomRight[1] + collision.topLeft[1]) / 2,
+    (webView.bottomRight[0] + webView.topLeft[0]) / 2,
+    (webView.bottomRight[1] + webView.topLeft[1]) / 2,
     -0.00000005
   );
-  const [width, height] = [
-    collision.topLeft[0] - collision.bottomRight[0],
-    collision.bottomRight[1] - collision.topLeft[1],
-  ];
+  const [width, height] = [webView.topLeft[0] - webView.bottomRight[0], webView.bottomRight[1] - webView.topLeft[1]];
   useEffect(() => {
-    console.log("asdasd");
     const box = Bodies.rectangle(position.x, position.y, width, height, { isStatic: true });
     World.add(engine.current.world, box);
+
     return () => {
       World.remove(engine.current.world, box);
     };
   }, []);
-
   useEffect(() => {
     console.log("join area?", me.render.position);
-
     if (Math.abs(me.render.position[0] - position.x) > 10 || Math.abs(me.render.position[1] - position.y) > 10)
       console.log("join area");
   }, [me.render.position]);

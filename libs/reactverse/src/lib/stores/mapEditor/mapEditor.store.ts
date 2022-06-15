@@ -2,7 +2,7 @@ import create from "zustand";
 import * as types from "../types";
 import * as gql from "../gql";
 import { setLink } from "../apollo";
-
+import * as scalar from "../scalar.type";
 export interface MapEditorState {
   isMapEditorOpen: boolean;
   assetPlacements: types.Placement[];
@@ -21,7 +21,35 @@ export interface MapEditorState {
   assets: types.TAsset[];
   collisions: types.TCollision[];
   status: "none" | "loading" | "failed" | "idle";
-  init: () => Promise<void>;
+  mapTool: {
+    mapList: types.Map[];
+    isNewModalOpen: boolean;
+    isLoadModalOpen: boolean;
+    inputName: string;
+    inputTileSize: number;
+    loadMapList: () => Promise<void>;
+    toggleNewModalOpen: () => void;
+    toggleLoadModalOpen: () => void;
+    closeMap: () => void;
+    updateName: (value: string) => void;
+    updateTileSize: (value: number) => void;
+    validationCheck: () => boolean;
+    createMap: () => Promise<void>;
+  };
+  tileTool: {
+    isTilesModalOpen: boolean;
+    // widthCount: number;
+    // heightCount: number;
+    // isFiilUploadMode: boolean;
+    newTiles: types.TileInput[][];
+    // newTiles: types.TNewTiles[][];
+    // setCounts: (width: number, height: number) => void;
+    toggleTilesModalOpen: () => void;
+    addMapFile: (file: any, type: "bottom" | "top" | "lighting") => Promise<void>;
+    validationCheck: () => boolean;
+    addTiles: () => Promise<void>;
+  };
+  init: (mapId: string) => Promise<void>;
   previewAsset: (x: number, y: number) => void;
   addAsset: (x: number, y: number) => void;
   addCollision: () => void;
@@ -51,11 +79,11 @@ export interface MapEditorState {
 }
 export const useMapEditor = create<MapEditorState>((set, get) => ({
   isMapEditorOpen: false,
+  // isMapEditorOpen: true,
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
   mapHeight: 2000,
-  // mainTool: "Map",
   mainTool: "Assets",
   subTool: "Add",
   mapData: undefined,
@@ -83,12 +111,99 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     isPreview: false,
   },
   status: "none",
-  init: async () => {
-    setLink();
-    const mapData = await gql.map("629b51909fd96cc4c6f6adb1");
-    // const map = await gql.map("627ab2159ecc5480481c06cf");
+  mapTool: {
+    mapList: [],
+    isNewModalOpen: false,
+    isLoadModalOpen: false,
+    inputName: "",
+    inputTileSize: 2000,
+    loadMapList: async () => {
+      const mapList = await gql.maps();
+      set((state) => ({ mapTool: { ...state.mapTool, mapList } }));
+    },
+    toggleNewModalOpen: () => {
+      set((state) => ({ mapTool: { ...state.mapTool, isNewModalOpen: !state.mapTool.isNewModalOpen } }));
+    },
+    toggleLoadModalOpen: () => {
+      set((state) => ({ mapTool: { ...state.mapTool, isLoadModalOpen: !state.mapTool.isLoadModalOpen } }));
+    },
+    closeMap: () => {
+      set({ mapData: undefined, assetsData: [] });
+      // set((state) => ({ mapTool: { ...state.mapTool, isLoadModalOpen: !state.mapTool.isLoadModalOpen } }));
+    },
+    updateName: (value: string) => {
+      set((state) => ({ mapTool: { ...state.mapTool, inputName: value } }));
+    },
+    updateTileSize: (value: number) => {
+      set((state) => ({ mapTool: { ...state.mapTool, inputTileSize: value } }));
+    },
+    validationCheck: () => {
+      const { inputName, inputTileSize } = get().mapTool;
+      return !!(inputName && inputTileSize > 0);
+    },
+    createMap: async () => {
+      if (!get().mapTool.validationCheck()) return;
+      const { inputName, inputTileSize } = get().mapTool;
 
-    // const assetsData = await gql.assets();
+      const data = {
+        name: inputName,
+        tileSize: inputTileSize,
+      };
+      const newMap = await gql.createMap(data);
+      newMap?.id && (await get().init(newMap.id));
+    },
+  },
+  tileTool: {
+    isTilesModalOpen: false,
+    newTiles: [],
+    toggleTilesModalOpen: () => {
+      set((state) => ({ tileTool: { ...state.tileTool, isTilesModalOpen: !state.tileTool.isTilesModalOpen } }));
+    },
+    addMapFile: async (file, type) => {
+      const mapData = get().mapData;
+      if (!mapData) return;
+      const imageFiles = await gql.addMapFile(file, mapData.name);
+      const newItem = { bottom: undefined, top: undefined, lighting: undefined, interactions: [] };
+
+      let newTiles: types.TileInput[][] = get().tileTool.newTiles;
+
+      imageFiles?.forEach((cur) => {
+        const indexText = cur.url.split(mapData.name)[1].split("/")[1].split("-");
+        const [heightIndex, widthIndex] = [Number(indexText[0]), Number(indexText[1])];
+        if (!newTiles[widthIndex]) newTiles[widthIndex] = [];
+        if (!newTiles[widthIndex][heightIndex]) newTiles[widthIndex][heightIndex] = newItem;
+        newTiles = JSON.parse(JSON.stringify(newTiles));
+        newTiles[widthIndex][heightIndex][type] = cur.id;
+      });
+      set((state) => ({
+        tileTool: { ...state.tileTool, newTiles },
+      }));
+    },
+    validationCheck: () => {
+      const { newTiles } = get().tileTool;
+      return !!newTiles.length;
+    },
+    addTiles: async () => {
+      const { newTiles } = get().tileTool;
+      const { mapData } = get();
+      if (!mapData) return;
+
+      const data: any = {
+        name: mapData.name,
+        tileSize: mapData.tileSize,
+        tiles: newTiles,
+        placements: mapData.placements,
+        interactions: mapData.interactions,
+      };
+
+      await gql.updateMap(mapData.id, data);
+      set((state) => ({ tileTool: { ...state.tileTool, newTiles: [], isTilesModalOpen: false } }));
+      mapData?.id && (await get().init(mapData.id));
+    },
+  },
+  init: async (mapId) => {
+    setLink();
+    const mapData = await gql.map(mapId);
     const assetsData = (await gql.assets()).filter((cur) => !cur.top.url.includes("dev.akamir"));
 
     const assets = mapData.placements.map((placement: any) => ({
@@ -109,7 +224,13 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
     }));
 
-    set({ mapData, assetsData, assets, collisions });
+    set((state) => ({
+      mapData,
+      assetsData,
+      assets,
+      collisions,
+      mapTool: { ...state.mapTool, isLoadModalOpen: false },
+    }));
   },
   setMainTool: (item) => {
     get().clearPreview();

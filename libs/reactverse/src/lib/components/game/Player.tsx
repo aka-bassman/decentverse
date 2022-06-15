@@ -85,12 +85,10 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
-        <Text lineHeight={0.8} fontSize={60} material-toneMapped={false}>
+        <planeGeometry args={[120, 165]} />
+        <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
           {iam.nickname}
         </Text>
-      </sprite>
-      <sprite ref={sprite}>
-        <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
         {/* <planeGeometry>
         </planeGeometry> */}

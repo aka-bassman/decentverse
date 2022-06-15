@@ -18,7 +18,7 @@ export const Map = () => {
           <MapAssetPreview />
           {isActiveViewMode("Assets") && <MapAssets />}
           {isActiveViewMode("Interaction") && <MapCollisions />}
-          <Stats />
+          {/* <Stats /> */}
         </Canvas>
       </div>
     </div>
