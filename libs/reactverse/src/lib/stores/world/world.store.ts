@@ -17,8 +17,11 @@ export interface WorldState {
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   updateUserId: (userId: string) => void;
-  joinInteraction: (type: types.scalar.ActionType, int: types.scalar.Interaction) => void;
-  leaveInteraction: (type: types.scalar.ActionType) => void;
+  joinInteraction: (
+    type: types.scalar.InteractionType,
+    int: types.scalar.CallRoom | types.scalar.Webview | types.scalar.Collision
+  ) => void;
+  leaveInteraction: (type: types.scalar.InteractionType) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -200,15 +203,18 @@ export const useWorld = create<WorldState>((set, get) => ({
       });
       return { otherPlayers };
     }),
-  joinInteraction: (type: types.scalar.ActionType, int: types.scalar.Interaction) =>
+  joinInteraction: (
+    type: types.scalar.InteractionType,
+    int: types.scalar.CallRoom | types.scalar.Webview | types.scalar.Collision
+  ) =>
     set((state) => {
-      const interaction = state.interaction;
+      const interaction: any = state.interaction;
       interaction[type] = int;
       return { interaction };
     }),
-  leaveInteraction: (type: types.scalar.ActionType) =>
+  leaveInteraction: (type: types.scalar.InteractionType) =>
     set((state) => {
-      const interaction = state.interaction;
+      const interaction: any = state.interaction;
       interaction[type] = null;
       return { interaction };
     }),
