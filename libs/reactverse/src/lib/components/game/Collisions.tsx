@@ -12,6 +12,7 @@ export interface CollisionsProp {
 }
 export const Collisions = ({ engine }: CollisionsProp) => {
   const collisions = useWorld((state) => state.map?.collisions);
+
   return (
     <Suspense fallback={null}>
       {collisions?.map((collision, idx) => (

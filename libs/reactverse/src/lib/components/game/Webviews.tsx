@@ -9,9 +9,38 @@ import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
 export interface WebviewsProp {
   engine: MutableRefObject<Engine>;
+  interaction: MutableRefObject<types.InteractionState>;
+  player: MutableRefObject<types.RenderCharacter>;
 }
-export const Webviews = ({ engine }: WebviewsProp) => {
+export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
   const webviews = useWorld((state) => state.map?.webviews);
+  const joinInteraction = useWorld((state) => state.joinInteraction);
+  const leaveInteraction = useWorld((state) => state.leaveInteraction);
+  useInterval(() => {
+    if (interaction.current.webview) {
+      if (
+        interaction.current.webview.topLeft[0] < player.current.position[0] &&
+        player.current.position[0] < interaction.current.webview.bottomRight[0] &&
+        interaction.current.webview.topLeft[1] > player.current.position[1] &&
+        player.current.position[1] > interaction.current.webview.bottomRight[1]
+      )
+        return;
+      interaction.current.webview = null;
+      leaveInteraction("webview");
+    } else {
+      webviews?.map((webview) => {
+        if (
+          webview.topLeft[0] < player.current.position[0] &&
+          player.current.position[0] < webview.bottomRight[0] &&
+          webview.topLeft[1] > player.current.position[1] &&
+          player.current.position[1] > webview.bottomRight[1]
+        ) {
+          interaction.current.webview = webview;
+          joinInteraction("webview", webview);
+        }
+      });
+    }
+  }, 500);
   return (
     <Suspense fallback={null}>
       {webviews?.map((webview, idx) => (
@@ -25,27 +54,20 @@ export interface WebviewProp {
   webview: scalar.Interaction;
   engine: MutableRefObject<Engine>;
 }
-export const Webview = React.memo(({ webview, engine }: WebviewProp) => {
+export const Webview = React.memo(({ webview }: WebviewProp) => {
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,
     -0.00000005
   );
   const [width, height] = [webview.topLeft[0] - webview.bottomRight[0], webview.bottomRight[1] - webview.topLeft[1]];
-  useEffect(() => {
-    const box = Bodies.rectangle(position.x, position.y, width, height, { isStatic: true });
-    World.add(engine.current.world, box);
-    return () => {
-      World.remove(engine.current.world, box);
-    };
-  }, []);
 
   return (
     <Suspense fallback={null}>
-      {/* <mesh position={position}>
+      <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent />
-      </mesh> */}
+      </mesh>
     </Suspense>
   );
 });

@@ -40,6 +40,9 @@ export type OtherPlayer = {
   character: Character;
   updatedAt: number;
 };
+export type InteractionState = {
+  [key in scalar.ActionType]: scalar.Interaction | null;
+};
 export const defaultCharacter = {
   id: "",
   tokenId: 0,
@@ -110,4 +113,9 @@ export const defaultOtherPlayer = {
   id: "default",
   character: defaultCharacter,
   updatedAt: new Date().getTime(),
+};
+export const defaultInteractionState = {
+  collision: null,
+  webview: null,
+  callRoom: null,
 };
