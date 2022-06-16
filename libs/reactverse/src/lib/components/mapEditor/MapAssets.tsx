@@ -13,7 +13,6 @@ export const MapAssets = () => {
 
   const bottomImages = assets.map((asset) => asset.bottom || "/transparent.png");
   const bottomTextures = useLoader(THREE.TextureLoader, bottomImages);
-
   return (
     <Suspense fallback={null}>
       {assets.map((asset, index) => (

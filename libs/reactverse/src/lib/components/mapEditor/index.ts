@@ -12,5 +12,6 @@ export * from "./MapEditor";
 export * from "./LoadMap";
 export * from "./NewMap";
 export * from "./AddTiles";
-export * from "./MapWebViews";
-export * from "./WebViewTool";
+export * from "./MapWebviews";
+export * from "./WebviewTool";
+export * from "./MapCallRooms";
