@@ -190,7 +190,14 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       const mapData = get().mapData;
       if (!mapData) return;
       const imageFiles = await gql.addMapFile(file, mapData.name);
-      const newItem = { bottom: undefined, top: undefined, lighting: undefined, collisions: [], webviews: [] };
+      const newItem = {
+        bottom: undefined,
+        top: undefined,
+        lighting: undefined,
+        collisions: [],
+        webviews: [],
+        callRooms: [],
+      };
 
       let newTiles: types.scalar.TileInput[][] = JSON.parse(JSON.stringify(get().tileTool.newTiles));
 

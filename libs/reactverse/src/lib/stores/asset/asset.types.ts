@@ -6,16 +6,16 @@ export type AssetInput = {
   top?: string;
   bottom?: string;
   lighting?: string;
-  collisions: scalar.Interaction[];
-  webviews: scalar.Interaction[];
+  collisions: scalar.CollisionInput[];
+  webviews: scalar.WebviewInput[];
 };
 export type Asset = {
   id: string;
   top: scalar.File;
   bottom?: scalar.File;
   lighting?: scalar.File;
-  collisions: scalar.Interaction[];
-  webviews: scalar.Interaction[];
+  collisions: scalar.Collision[];
+  webviews: scalar.Webview[];
   status: string;
   createdAt?: Date;
   updatedAt: Date;
@@ -23,7 +23,8 @@ export type Asset = {
 
 export const assetFragment = gql`
   ${scalar.fileFragment}
-  ${scalar.interactionFragment}
+  ${scalar.collisionFragment}
+  ${scalar.webviewFragment}
   fragment assetFragment on Asset {
     id
     top {
@@ -36,10 +37,10 @@ export const assetFragment = gql`
       ...fileFragment
     }
     collisions {
-      ...interactionFragment
+      ...collisionFragment
     }
     webviews {
-      ...interactionFragment
+      ...webviewFragment
     }
     status
     # createdAt

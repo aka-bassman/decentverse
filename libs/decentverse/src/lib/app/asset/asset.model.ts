@@ -30,11 +30,11 @@ export class Asset extends Input {
   @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
   lighting?: MongoSchema.Types.ObjectId;
 
-  @Prop([{ type: gql.InteractionSchema }])
-  collisions: gql.InteractionType[];
+  @Prop([{ type: gql.CollisionSchema }])
+  collisions: gql.CollisionType[];
 
-  @Prop([{ type: gql.InteractionSchema }])
-  webviews: gql.InteractionType[];
+  @Prop([{ type: gql.WebviewSchema }])
+  webviews: gql.WebviewType[];
 
   @Prop({
     type: String,

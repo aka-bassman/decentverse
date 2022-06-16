@@ -30,14 +30,14 @@ export class Map extends Input {
   @Prop([{ type: gql.PlacementSchema }])
   placements: gql.PlacementType[];
 
-  @Prop([{ type: gql.InteractionSchema }])
-  collisions: gql.InteractionType[];
+  @Prop([{ type: gql.CollisionSchema }])
+  collisions: gql.CollisionType[];
 
-  @Prop([{ type: gql.InteractionSchema }])
-  webviews: gql.InteractionType[];
+  @Prop([{ type: gql.WebviewSchema }])
+  webviews: gql.WebviewType[];
 
-  @Prop([{ type: gql.InteractionSchema }])
-  callRooms: gql.InteractionType[];
+  @Prop([{ type: gql.CallRoomSchema }])
+  callRooms: gql.CallRoomType[];
 
   @Prop({ type: Number, required: true, default: 0 })
   totalWidth: number;

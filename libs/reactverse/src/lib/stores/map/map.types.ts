@@ -8,9 +8,9 @@ export type MapInput = {
   tileSize: number;
   tiles: scalar.TileInput[][];
   placements: Placement[];
-  collisions: scalar.Interaction[];
-  webviews: scalar.Interaction[];
-  callRooms: scalar.Interaction[];
+  collisions: scalar.CollisionInput[];
+  webviews: scalar.WebviewInput[];
+  callRooms: scalar.CallRoomInput[];
 };
 
 export type Map = {
@@ -21,16 +21,18 @@ export type Map = {
   totalHeight: number;
   tiles: scalar.Tile[][];
   placements: Placement[];
-  collisions: scalar.Interaction[];
-  webviews: scalar.Interaction[];
-  callRooms: scalar.Interaction[];
+  collisions: scalar.Collision[];
+  webviews: scalar.Webview[];
+  callRooms: scalar.CallRoom[];
   status: string;
 };
 
 export const mapFragment = gql`
   ${scalar.tileFragment}
   ${placementFragment}
-  ${scalar.interactionFragment}
+  ${scalar.collisionFragment}
+  ${scalar.webviewFragment}
+  ${scalar.callRoomFragment}
   fragment mapFragment on Map {
     id
     name
@@ -42,13 +44,13 @@ export const mapFragment = gql`
       ...placementFragment
     }
     collisions {
-      ...interactionFragment
+      ...collisionFragment
     }
     webviews {
-      ...interactionFragment
+      ...webviewFragment
     }
     callRooms {
-      ...interactionFragment
+      ...callRoomFragment
     }
     status
   }

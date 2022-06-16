@@ -23,7 +23,7 @@ export const Collisions = ({ engine }: CollisionsProp) => {
 };
 
 export interface CollisionProp {
-  collision: scalar.Interaction;
+  collision: scalar.Collision;
   engine: MutableRefObject<Engine>;
 }
 export const Collision = React.memo(({ collision, engine }: CollisionProp) => {

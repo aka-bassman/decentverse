@@ -24,14 +24,14 @@ export class MapInput {
   @Field(() => [gql.PlacementInput], { nullable: true })
   placements: gql.PlacementInputType[];
 
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  collisions: gql.InteractionInputType[];
+  @Field(() => [gql.CollisionInput])
+  collisions: gql.CollisionInputType[];
 
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  webviews: gql.InteractionInputType[];
+  @Field(() => [gql.WebviewInput])
+  webviews: gql.WebviewInputType[];
 
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  callRooms: gql.InteractionInputType[];
+  @Field(() => [gql.CallRoomInput], { nullable: true })
+  callRooms: gql.CallRoomInputType[];
 }
 
 /**
@@ -63,14 +63,14 @@ export class Map {
   @Field(() => [gql.Placement])
   placements: gql.PlacementType[];
 
-  @Field(() => [gql.Interaction])
-  collisions: gql.InteractionType[];
+  @Field(() => [gql.Collision])
+  collisions: gql.CollisionType[];
 
-  @Field(() => [gql.Interaction])
-  webviews: gql.InteractionType[];
+  @Field(() => [gql.Webview])
+  webviews: gql.WebviewType[];
 
-  @Field(() => [gql.Interaction])
-  callRooms: gql.InteractionType[];
+  @Field(() => [gql.CallRoom])
+  callRooms: gql.CallRoomType[];
 
   @Field(() => String)
   status: "active" | "inactive";
