@@ -116,6 +116,7 @@ input InteractionInput {
 }
 
 type Map {
+  callRooms: [Interaction!]!
   collisions: [Interaction!]!
   createdAt: DateTime!
   id: String!
@@ -131,6 +132,7 @@ type Map {
 }
 
 input MapInput {
+  callRooms: [InteractionInput!]
   collisions: [InteractionInput!]
   name: String!
   placements: [PlacementInput!]
@@ -231,6 +233,7 @@ input SpriteInput {
 
 type Tile {
   bottom: File!
+  callRooms: [Interaction!]!
   collisions: [Interaction!]!
   lighting: File
   top: File
@@ -239,6 +242,7 @@ type Tile {
 
 input TileInput {
   bottom: ID!
+  callRooms: [InteractionInput!]!
   collisions: [InteractionInput!]!
   lighting: ID
   top: ID
