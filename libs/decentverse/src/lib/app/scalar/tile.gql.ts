@@ -28,6 +28,10 @@ export class Tile {
   @Field(() => [gql.Interaction])
   @Prop([{ type: InteractionSchema, required: true }])
   webviews: gql.InteractionType[];
+
+  @Field(() => [gql.Interaction])
+  @Prop([{ type: InteractionSchema, required: true }])
+  callRooms: gql.InteractionType[];
 }
 export type TileType = Tile;
 export const TileSchema = SchemaFactory.createForClass(Tile);
@@ -48,5 +52,8 @@ export class TileInput {
 
   @Field(() => [gql.InteractionInput])
   webviews: gql.InteractionType[];
+
+  @Field(() => [gql.InteractionInput])
+  callRooms: gql.InteractionType[];
 }
 export type TileInputType = TileInput;

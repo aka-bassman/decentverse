@@ -10,6 +10,7 @@ export type MapInput = {
   placements: Placement[];
   collisions: scalar.Interaction[];
   webviews: scalar.Interaction[];
+  callRooms: scalar.Interaction[];
 };
 
 export type Map = {
@@ -22,6 +23,7 @@ export type Map = {
   placements: Placement[];
   collisions: scalar.Interaction[];
   webviews: scalar.Interaction[];
+  callRooms: scalar.Interaction[];
   status: string;
 };
 
@@ -43,6 +45,9 @@ export const mapFragment = gql`
       ...interactionFragment
     }
     webviews {
+      ...interactionFragment
+    }
+    callRooms {
       ...interactionFragment
     }
     status

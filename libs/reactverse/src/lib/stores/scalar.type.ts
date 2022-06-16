@@ -118,6 +118,7 @@ export type Tile = {
   lighting?: File;
   collisions: Interaction[];
   webviews: Interaction[];
+  callRooms: Interaction[];
 };
 
 export const tileFragment = gql`
@@ -137,6 +138,9 @@ export const tileFragment = gql`
       ...interactionFragment
     }
     webviews {
+      ...interactionFragment
+    }
+    callRooms {
       ...interactionFragment
     }
   }
