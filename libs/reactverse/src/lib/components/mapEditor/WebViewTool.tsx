@@ -3,7 +3,7 @@ import { Input, Button, Radio, Space } from "antd";
 import { useMapEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
-export const WebviewTool = () => {
+export const WebViewTool = () => {
   const { urlInput, urls, selectedUrl, setUrlInput, addUrl, selectUrl } = useMapEditor().webviewTool;
 
   return (
