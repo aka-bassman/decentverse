@@ -7,6 +7,19 @@ import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
+export interface CollisionsProp {
+  engine: MutableRefObject<Engine>;
+}
+export const Collisions = ({ engine }: CollisionsProp) => {
+  const collisions = useWorld((state) => state.map?.collisions);
+  return (
+    <Suspense fallback={null}>
+      {collisions?.map((collision, idx) => (
+        <Collision key={idx} collision={collision} engine={engine} />
+      ))}
+    </Suspense>
+  );
+};
 
 export interface CollisionProp {
   collision: scalar.Interaction;
@@ -24,23 +37,33 @@ export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
     collision.bottomRight[1] - collision.topLeft[1],
   ];
   useEffect(() => {
-    console.log("asdasd");
     const box = Bodies.rectangle(position.x, position.y, width, height, { isStatic: true });
     World.add(engine.current.world, box);
+
     return () => {
       World.remove(engine.current.world, box);
     };
   }, []);
 
-  useEffect(() => {
-    console.log("join area?", me.render.position);
-
-    if (Math.abs(me.render.position[0] - position.x) > 10 || Math.abs(me.render.position[1] - position.y) > 10)
-      console.log("join area");
-  }, [me.render.position]);
-
   return (
     <Suspense fallback={null}>
+      <mesh
+        position={position}
+        onClick={(e) => console.log("click")}
+        onContextMenu={(e) => console.log("context menu")}
+        onDoubleClick={(e) => console.log("double click")}
+        onWheel={(e) => console.log("wheel spins")}
+        onPointerUp={(e) => console.log("up")}
+        onPointerDown={(e) => console.log("down")}
+        onPointerOver={(e) => console.log("over")}
+        onPointerOut={(e) => console.log("out")}
+        onPointerEnter={(e) => console.log("enter")}
+        onPointerLeave={(e) => console.log("leave")}
+        onPointerMove={(e) => console.log("move")}
+        onUpdate={(self) => console.log("props have been updated")}
+      >
+        <planeGeometry args={[width, height]} />
+      </mesh>
       {/* <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent />

@@ -33,10 +33,11 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     );
   }
 
-  if (!me.nickname) {
+  if (!me.nickname && socket) {
     return (
       <ReactverseLayout>
-        <InputName />
+        <Interface socket={socket} />
+        {/* <InputName /> */}
       </ReactverseLayout>
     );
   }

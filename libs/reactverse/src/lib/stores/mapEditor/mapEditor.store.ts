@@ -217,7 +217,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       id: placement.asset.id,
     }));
 
-    const collisions = mapData.interactions.map((interaction) => ({
+    const collisions = mapData.collisions.map((interaction) => ({
       x: (interaction.topLeft[0] + interaction.bottomRight[0]) / 2,
       y: (interaction.topLeft[1] + interaction.bottomRight[1]) / 2,
       width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
@@ -378,9 +378,9 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   saveMap: async () => {
     const { isEdited, mapData, assets } = get();
     if (!isEdited || !mapData) return;
-    const { name, tileSize, tiles, interactions } = mapData;
+    const { name, tileSize, tiles, collisions } = mapData;
 
-    const newInteractions = get().collisions.map((collision) => ({
+    const newCollisions = get().collisions.map((collision) => ({
       type: "collision",
       topLeft: [Math.round(collision.x - collision.width / 2), Math.round(collision.y + collision.height / 2)],
       bottomRight: [Math.round(collision.x + collision.width / 2), Math.round(collision.y - collision.height / 2)],
@@ -393,7 +393,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       cur.forEach((tile, j) => {
         tilesInput[i][j] = {
           bottom: tile.bottom.id,
-          interactions: tile.interactions,
+          collisions: tile.collisions,
           lighting: tile.lighting?.id,
           top: tile.top?.id,
         };
@@ -409,7 +409,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       tileSize,
       tiles: tilesInput,
       placements: assetPlacements,
-      interactions: newInteractions,
+      collisions: newCollisions,
     };
 
     await gql.updateMap(mapData.id, data);

@@ -114,7 +114,6 @@ export const useWorld = create<WorldState>((set, get) => ({
       maps,
       // , characters
     } = await gql.world();
-    console.log(maps[0]);
     const me: types.Player = {
       ...state.me,
       character: get().me?.character,

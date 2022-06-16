@@ -2,8 +2,8 @@ import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
-import { useKeyboard, useGameConnection, useWindowDimensions, useInterval } from "../../hooks";
-import { TileMap, Player, Players, Placements, Interactions } from "./index";
+import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
+import { TileMap, Player, Players, Placements, Collisions } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
 
@@ -54,7 +54,7 @@ export const Game = ({ socket }: GameProps) => {
           <TileMap player={player} scope={scope} />
           <Players playerId={player.current.id} />
           <Placements />
-          <Interactions engine={engine} socket={socket} />
+          <Collisions engine={engine} />
         </Suspense>
       </Canvas>
     </div>

@@ -30,30 +30,12 @@ export const Placement = React.memo(({ placement }: PlacementProp) => {
   const top = placement.asset.top && loader.load(placement.asset.top?.url.replace("https://asset.ayias.io", "ayias"));
   const lighting =
     placement.asset.lighting && loader.load(placement.asset.lighting?.url.replace("https://asset.ayias.io", "ayias"));
+
   const position = new Vector3(placement.position[0], placement.position[1], -0.00000005);
   const topPos = new Vector3(placement.position[0], placement.position[1], 0.00001);
   const [width, height] = [placement.position[2], placement.position[3]];
-  console.log;
   return (
     <Suspense fallback={null}>
-      {/* {bottom && (
-        <mesh position={position} visible={true}>
-          <planeGeometry args={[width, height]} />
-          <meshBasicMaterial map={bottom} transparent />
-        </mesh>
-      )}
-      {top && (
-        <mesh position={topPos}>
-          <planeGeometry args={[width, height]} />
-          <meshBasicMaterial map={top} transparent />
-        </mesh>
-      )}
-      {lighting && (
-        <mesh position={topPos}>
-          <planeGeometry args={[width, height]} />
-          <meshBasicMaterial map={lighting} transparent />
-        </mesh>
-      )} */}
       {bottom && (
         <sprite position={position} visible={true}>
           <planeGeometry args={[width, height]} />
