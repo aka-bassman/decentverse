@@ -19,10 +19,10 @@ export interface MapEditorState {
   isEdited: boolean;
   preview: types.TPreview;
   collisionPreview: types.TInteractionPreview;
+  webviewPreview: types.TInteractionPreview;
   assets: types.TAsset[];
   collisions: types.TCollision[];
-  webViewPreview: types.TInteractionPreview;
-  webViews: types.TWebView[];
+  webviews: types.TWebview[];
   status: "none" | "loading" | "failed" | "idle";
   mapTool: {
     mapList: types.Map[];
@@ -45,15 +45,27 @@ export interface MapEditorState {
     validationCheck: () => boolean;
     addTiles: () => Promise<void>;
   };
+  webviewTool: {
+    urlInput: string;
+    urls: types.TUrls[];
+    selectedUrl: string;
+    setUrlInput: (url: string) => void;
+    addUrl: () => void;
+    selectUrl: (url: string) => void;
+  };
   init: (mapId: string) => Promise<void>;
   previewAsset: (x: number, y: number) => void;
   addAsset: (x: number, y: number) => void;
   addCollision: () => void;
+  addWebview: () => void;
   previewCollision: (x: number, y: number) => void;
   previewCollisionMove: (x: number, y: number) => void;
+  previewWebview: (x: number, y: number) => void;
+  previewWebviewMove: (x: number, y: number) => void;
   // removeAsset: (x: number, y: number) => void;
   removeAsset: (index: number) => void;
   removeCollision: (index: number) => void;
+  removeWebview: (index: number) => void;
   setMainTool: (item: types.TMainTool) => void;
   setSubTool: (item: string) => void;
   setInteractionTool: (item: types.TInteractionTool) => void;
@@ -66,17 +78,19 @@ export interface MapEditorState {
   isAssetAddMode: () => boolean;
   isAssetRemoveMode: () => boolean;
   isCollisionAddMode: () => boolean;
-  isCollisionRemoveMode: () => boolean;
+  isWebviewAddMode: () => boolean;
+  isInteractionRemoveMode: () => boolean;
   saveMap: () => void;
   pointerMoveOnTile: (e: any) => void;
   pointerDownOnTile: (e: any) => void;
   clickOnAsset: (e: any, index: number) => void;
   clickOnCollision: (e: any, index: number) => void;
+  clickOnWebview: (e: any, index: number) => void;
   toggleMapEditorOpen: () => void;
 }
 export const useMapEditor = create<MapEditorState>((set, get) => ({
-  isMapEditorOpen: false,
-  // isMapEditorOpen: true,
+  // isMapEditorOpen: false,
+  isMapEditorOpen: true,
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
@@ -88,6 +102,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   assetsData: [], //
   assets: [],
   collisions: [],
+  webviews: [],
   viewMode: ["Interaction", "Assets"],
   selectedAssetId: undefined,
   isEdited: false,
@@ -100,12 +115,11 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     startX: 0,
     startY: 0,
   },
-  webViewPreview: {
+  webviewPreview: {
     ...types.initPreview,
     startX: 0,
     startY: 0,
   },
-  webViews: [],
   status: "none",
   mapTool: {
     mapList: [],
@@ -174,7 +188,6 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
         newTiles[widthIndex][heightIndex][type] = cur.id;
       });
 
-      console.log("newTiles!!!!", newTiles);
       set((state) => ({
         tileTool: { ...state.tileTool, newTiles },
       }));
@@ -204,6 +217,23 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       mapData?.id && (await get().init(mapData.id));
     },
   },
+  webviewTool: {
+    urlInput: "https://",
+    urls: [],
+    selectedUrl: "",
+    setUrlInput: (url) => {
+      set((state) => ({ webviewTool: { ...state.webviewTool, urlInput: url } }));
+    },
+    addUrl: () => {
+      const newUrl = { color: "#ddd", url: get().webviewTool.urlInput };
+      set((state) => ({
+        webviewTool: { ...state.webviewTool, urlInput: "https://", urls: [...state.webviewTool.urls, newUrl] },
+      }));
+    },
+    selectUrl: (url) => {
+      set((state) => ({ webviewTool: { ...state.webviewTool, selectedUrl: url } }));
+    },
+  },
   init: async (mapId) => {
     setLink();
     const mapData = await gql.map(mapId);
@@ -227,12 +257,28 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
     }));
 
+    const urls: types.TUrls[] = [];
+    const webviews = mapData.webviews.map((interaction) => {
+      if (interaction.url && !urls.find((cur) => cur.url === interaction.url)) {
+        urls.push({ url: interaction.url, color: "#ccc" });
+      }
+      return {
+        x: (interaction.topLeft[0] + interaction.bottomRight[0]) / 2,
+        y: (interaction.topLeft[1] + interaction.bottomRight[1]) / 2,
+        width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
+        height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
+        url: interaction.url ?? "",
+      };
+    });
+
     set((state) => ({
       mapData,
       assetsData,
       assets,
       collisions,
+      webviews,
       mapTool: { ...state.mapTool, isLoadModalOpen: false },
+      webviewTool: { ...state.webviewTool, urls },
     }));
   },
   setMainTool: (item) => {
@@ -322,6 +368,50 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       },
     }));
   },
+  addWebview: () => {
+    const { x, y, width, height } = get().webviewPreview;
+    const { selectedUrl } = get().webviewTool;
+    const newWebview = { x, y, width, height, url: selectedUrl };
+
+    set((state) => ({
+      webviews: [...state.webviews, newWebview],
+      webviewPreview: {
+        ...state.webviewPreview,
+        isPreview: false,
+        startX: 0,
+        startY: 0,
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      },
+      isEdited: true,
+    }));
+  },
+  previewWebview: (x, y) => {
+    if (!get().webviewPreview.isPreview) {
+      set((state) => ({
+        webviewPreview: { ...state.webviewPreview, isPreview: true, startX: x, startY: y },
+      }));
+    } else {
+      get().addWebview();
+    }
+  },
+  previewWebviewMove: (x, y) => {
+    if (!get().webviewPreview.isPreview) return;
+
+    const prevX = get().webviewPreview.startX;
+    set((state) => ({
+      webviewPreview: {
+        ...state.webviewPreview,
+        isPreview: true,
+        x: (x + state.webviewPreview.startX) / 2,
+        y: (y + state.webviewPreview.startY) / 2,
+        width: Math.abs(x - state.webviewPreview.startX),
+        height: Math.abs(y - state.webviewPreview.startY),
+      },
+    }));
+  },
   replaceImgUrl: (url) => {
     return url.replace("https://asset.ayias.io/", "ayias/");
   },
@@ -334,6 +424,13 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   removeCollision: (index) => {
     set((state) => ({
       collisions: [...state.collisions.slice(0, index), ...state.collisions.slice(index + 1)],
+      isEdited: true,
+    }));
+  },
+  removeWebview: (index) => {
+    console.log("removeWebview", index);
+    set((state) => ({
+      webviews: [...state.webviews.slice(0, index), ...state.webviews.slice(index + 1)],
       isEdited: true,
     }));
   },
@@ -378,20 +475,35 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
     return !!(get().mainTool === "Assets" && get().subTool === "Remove");
   },
   isCollisionAddMode: () => {
-    return !!(get().mainTool === "Interaction" && get().subTool === "Add");
+    return !!(get().mainTool === "Interaction" && get().interactionTool === "collision" && get().subTool === "Add");
   },
-  isCollisionRemoveMode: () => {
+  isWebviewAddMode: () => {
+    return !!(
+      get().mainTool === "Interaction" &&
+      get().interactionTool === "webview" &&
+      get().webviewTool.selectedUrl &&
+      get().subTool === "Add"
+    );
+  },
+  isInteractionRemoveMode: () => {
     return !!(get().mainTool === "Interaction" && get().subTool === "Remove");
   },
   saveMap: async () => {
     const { isEdited, mapData, assets } = get();
     if (!isEdited || !mapData) return;
-    const { name, tileSize, tiles, collisions } = mapData;
+    const { name, tileSize, tiles } = mapData;
 
     const newCollisions = get().collisions.map((collision) => ({
       type: "collision",
       topLeft: [Math.round(collision.x - collision.width / 2), Math.round(collision.y + collision.height / 2)],
       bottomRight: [Math.round(collision.x + collision.width / 2), Math.round(collision.y - collision.height / 2)],
+    }));
+
+    const newWebviews = get().webviews.map((webview) => ({
+      type: "webview",
+      topLeft: [Math.round(webview.x - webview.width / 2), Math.round(webview.y + webview.height / 2)],
+      bottomRight: [Math.round(webview.x + webview.width / 2), Math.round(webview.y - webview.height / 2)],
+      url: webview.url,
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
@@ -419,7 +531,7 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
       tiles: tilesInput,
       placements: assetPlacements,
       collisions: newCollisions,
-      webviews: [], // TODO
+      webviews: newWebviews,
     };
 
     await gql.updateMap(mapData.id, data);
@@ -428,16 +540,21 @@ export const useMapEditor = create<MapEditorState>((set, get) => ({
   pointerMoveOnTile: (e) => {
     get().isAssetAddMode() && get().previewAsset(e.point.x, e.point.y);
     get().isCollisionAddMode() && get().previewCollisionMove(e.point.x, e.point.y);
+    get().isWebviewAddMode() && get().previewWebviewMove(e.point.x, e.point.y);
   },
   pointerDownOnTile: (e) => {
     get().isAssetAddMode() && get().addAsset(e.point.x, e.point.y);
     get().isCollisionAddMode() && get().previewCollision(e.point.x, e.point.y);
+    get().isWebviewAddMode() && get().previewWebview(e.point.x, e.point.y);
   },
   clickOnAsset: (e, index) => {
     get().isAssetRemoveMode() && get().removeAsset(index);
   },
   clickOnCollision: (e, index) => {
-    get().isCollisionRemoveMode() && get().removeCollision(index);
+    get().isInteractionRemoveMode() && get().removeCollision(index);
+  },
+  clickOnWebview: (e: any, index: number) => {
+    get().isInteractionRemoveMode() && get().removeWebview(index);
   },
   toggleMapEditorOpen: () => {
     set((state) => ({ isMapEditorOpen: !state.isMapEditorOpen }));

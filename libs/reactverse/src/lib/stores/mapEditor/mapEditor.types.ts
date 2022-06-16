@@ -40,11 +40,16 @@ export type TCollision = {
   width: number;
   height: number;
 };
-export type TWebView = {
+export type TWebview = {
   x: number;
   y: number;
   width: number;
   height: number;
+  url: string;
+};
+export type TUrls = {
+  url: string;
+  color: string;
 };
 export type TNewTiles = {
   down?: {
@@ -59,7 +64,7 @@ export type File = {
   status: "active" | "inactive";
 };
 
-export type TInteractionTool = "collision" | "webView" | "webRtc";
+export type TInteractionTool = "collision" | "webview" | "webRtc";
 
 export const initPreview = {
   x: 0,
