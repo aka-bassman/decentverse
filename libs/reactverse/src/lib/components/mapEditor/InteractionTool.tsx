@@ -20,7 +20,7 @@ export const InteractionTool = () => {
           >
             <Radio.Button value="collision">Collision</Radio.Button>
             <Radio.Button value="webview">WebPage</Radio.Button>
-            <Radio.Button value="webRtc">WebRTC</Radio.Button>
+            <Radio.Button value="callRoom">CallRoom</Radio.Button>
           </Radio.Group>
           {interactionTool === "webview" && <WebviewTool />}
         </OptionArea>

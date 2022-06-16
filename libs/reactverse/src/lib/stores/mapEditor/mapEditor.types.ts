@@ -40,6 +40,12 @@ export type TCollision = {
   width: number;
   height: number;
 };
+export type TCallRoom = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 export type TWebview = {
   x: number;
   y: number;
@@ -64,7 +70,7 @@ export type File = {
   status: "active" | "inactive";
 };
 
-export type TInteractionTool = "collision" | "webview" | "webRtc";
+export type TInteractionTool = "collision" | "webview" | "callRoom";
 
 export const initPreview = {
   x: 0,

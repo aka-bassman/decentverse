@@ -27,8 +27,7 @@ export class MapResolver {
   }
 
   @Mutation(() => gql.Map)
-  // @UseGuards(Allow.Admin)
-  @UseGuards(Allow.Every) //! TODO
+  @UseGuards(Allow.Admin)
   async updateMap(@Args({ name: "mapId", type: () => ID }) mapId: string, @Args("data") data: gql.MapInput) {
     return await this.mapService.updateMap(mapId, data);
   }
