@@ -97,8 +97,8 @@ export interface MapEditorState {
   toggleMapEditorOpen: () => void;
 }
 export const useMapEditor = create<MapEditorState>((set, get) => ({
-  // isMapEditorOpen: false,
-  isMapEditorOpen: true,
+  isMapEditorOpen: false,
+  // isMapEditorOpen: true,
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
