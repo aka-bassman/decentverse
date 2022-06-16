@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { useMapEditor } from "../../stores";
 
-export const MapWebviews = () => {
+export const MapWebViews = () => {
   const { webviews, clickOnWebview, webviewPreview } = useMapEditor();
 
   return (

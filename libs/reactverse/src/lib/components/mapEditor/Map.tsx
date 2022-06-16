@@ -1,7 +1,7 @@
 import { Canvas } from "react-three-fiber";
 import { useMapEditor } from "../../stores";
 import { useKeyboard } from "../../hooks";
-import { MapTiles, MapCollisions, MapAssets, MapAssetPreview, MapWebviews, MapCallRooms } from "./";
+import { MapTiles, MapCollisions, MapAssets, MapAssetPreview, MapWebViews, MapCallRooms } from "./";
 import { Stats } from "@react-three/drei";
 
 export const Map = () => {
@@ -20,7 +20,7 @@ export const Map = () => {
           {isActiveViewMode("Interaction") && (
             <>
               <MapCollisions />
-              <MapWebviews />
+              <MapWebViews />
               <MapCallRooms />
             </>
           )}
