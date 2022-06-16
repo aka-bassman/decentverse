@@ -94,7 +94,7 @@ export const spriteFragment = gql`
   }
 `;
 
-export const actionTypes = ["collision"] as const;
+export const actionTypes = ["collision", "webview", "callRoom"] as const;
 export type ActionType = typeof actionTypes[number];
 
 export type Interaction = {
