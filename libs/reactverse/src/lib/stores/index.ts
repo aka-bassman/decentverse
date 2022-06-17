@@ -2,7 +2,7 @@ export * from "./admin";
 export * from "./asset";
 export * from "./character";
 export * from "./map";
-export * from "./mapEditor";
+export * from "./editor";
 export * from "./game";
 export * from "./world";
 export { default as client, setLink } from "./apollo";

@@ -1,11 +1,11 @@
 import { Canvas } from "react-three-fiber";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 import { useKeyboard } from "../../hooks";
 import { MapTiles, MapCollisions, MapAssets, MapAssetPreview, MapWebViews, MapCallRooms } from "./";
 import { Stats } from "@react-three/drei";
 
 export const Map = () => {
-  const { mapData, isActiveViewMode } = useMapEditor();
+  const { mapData, isActiveViewMode } = useEditor();
   const keyboard = useKeyboard();
 
   if (!mapData) return null;

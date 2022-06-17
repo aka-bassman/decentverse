@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Segmented, Card, Radio } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 import { WebViewTool } from "./";
 
 export const InteractionTool = () => {
-  const { subTool, setSubTool, interactionTool, setInteractionTool } = useMapEditor();
+  const { subTool, setSubTool, interactionTool, setInteractionTool } = useEditor();
 
   return (
     <Card title="Interaction" size="small">

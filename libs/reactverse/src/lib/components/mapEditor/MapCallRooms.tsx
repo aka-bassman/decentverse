@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const MapCallRooms = () => {
-  const { callRooms, clickOnCallRoom, callRoomPreview } = useMapEditor();
+  const { callRooms, clickOnCallRoom, callRoomPreview } = useEditor();
 
   return (
     <Suspense fallback={null}>

@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { Modal, Button, Space } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const AddTiles = () => {
-  const { isTilesModalOpen, toggleTilesModalOpen, addMapFile, addTiles, validationCheck } = useMapEditor().tileTool;
-  const { mapData } = useMapEditor();
+  const { mapData, isTilesModalOpen, toggleTilesModalOpen, addMapFile, addTiles, validationTileCheck } = useEditor();
 
   const handleImageUpload = (e: any, type: "bottom" | "top" | "lighting") => {
     const files = e.target.files;
@@ -25,7 +24,7 @@ export const AddTiles = () => {
         visible={isTilesModalOpen}
         onOk={addTiles}
         onCancel={toggleTilesModalOpen}
-        okButtonProps={{ disabled: !validationCheck() }}
+        okButtonProps={{ disabled: !validationTileCheck() }}
       >
         <FileForm>
           <Space style={{ marginTop: 10 }}>

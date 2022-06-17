@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
-import { useMapEditor, types } from "../../stores";
+import { useEditor, types } from "../../stores";
 import { TextureLoader } from "three";
 
 export const MapAssetPreview = React.memo(() => {
-  const preview = useMapEditor((state) => state.preview);
+  const preview = useEditor((state) => state.preview);
   const loader = new TextureLoader();
   const previewTexture = preview.image && loader.load(preview.image);
 

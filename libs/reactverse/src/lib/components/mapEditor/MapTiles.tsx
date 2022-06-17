@@ -1,7 +1,7 @@
 import { Suspense, MutableRefObject } from "react";
 import styled from "styled-components";
 import { useLoader, useThree, useFrame } from "@react-three/fiber";
-import { useMapEditor, scalar } from "../../stores";
+import { useEditor, scalar } from "../../stores";
 import * as types from "../../stores/types";
 
 import * as THREE from "three";
@@ -15,7 +15,7 @@ export const MapTiles = ({
 }) => {
   const { camera } = useThree();
 
-  const { tileSize, pointerMoveOnTile, pointerDownOnTile } = useMapEditor();
+  const { tileSize, pointerMoveOnTile, pointerDownOnTile } = useEditor();
 
   useFrame(() => {
     const offest = 80;

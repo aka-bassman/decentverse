@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const MapCollisions = () => {
-  const { collisions, clickOnCollision, collisionPreview } = useMapEditor();
+  const { collisions, clickOnCollision, collisionPreview } = useEditor();
 
   return (
     <Suspense fallback={null}>

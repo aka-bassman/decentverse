@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
 import { useLoader } from "@react-three/fiber";
-import { useMapEditor, types } from "../../stores";
+import { useEditor, types } from "../../stores";
 import { TextureLoader } from "three";
 
 import * as THREE from "three";
 
 export const MapAssets = () => {
-  const assets = useMapEditor((state) => state.assets);
+  const assets = useEditor((state) => state.assets);
 
   const assetImages = assets.map((asset) => asset.top || "/transparent.png");
   const topTextures = useLoader(THREE.TextureLoader, assetImages);
@@ -40,7 +40,7 @@ export const MapAsset = React.memo(
     topTexture: any;
     bottomTexture: any;
   }) => {
-    const { clickOnAsset } = useMapEditor();
+    const { clickOnAsset } = useEditor();
     // const loader = new TextureLoader();
     // const topTexture = asset.top && loader.load(asset.top);
     // const bottomTexture = asset.bottom && loader.load(asset.bottom);
