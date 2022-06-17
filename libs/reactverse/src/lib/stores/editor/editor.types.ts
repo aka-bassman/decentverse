@@ -45,6 +45,7 @@ export type TCallRoom = {
   y: number;
   width: number;
   height: number;
+  maxNum: number;
 };
 export type TWebview = {
   x: number;
@@ -52,6 +53,7 @@ export type TWebview = {
   width: number;
   height: number;
   url: string;
+  purpose: TWebviewPurpose;
 };
 export type TUrls = {
   url: string;
@@ -71,6 +73,7 @@ export type File = {
 };
 
 export type TInteractionTool = "collision" | "webview" | "callRoom";
+export type TWebviewPurpose = "default" | "youtube" | "image" | "twitter";
 
 export const initPreview = {
   x: 0,

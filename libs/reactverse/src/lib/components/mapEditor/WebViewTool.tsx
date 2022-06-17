@@ -1,29 +1,25 @@
 import styled from "styled-components";
-import { Input, Button, Radio, Space } from "antd";
+import { Input, Select, Space } from "antd";
 import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
 export const WebViewTool = () => {
-  const { urlInput, urls, selectedUrl, setUrlInput, addUrl, selectUrl } = useEditor();
+  const { urlInput, setWebviewPurpose, webviewPurpose, setUrlInput, checkIsInputUrl } = useEditor();
 
   return (
-    <div>
-      <Input.Group compact style={{ width: "100%", marginBottom: 20 }}>
-        <Input
-          addonBefore="URL"
-          style={{ width: "calc(100% - 40px)" }}
-          value={urlInput}
-          onChange={(e) => setUrlInput(e.target.value)}
-        />
-        <Button onClick={addUrl} type="primary" icon={<PlusOutlined />}></Button>
-      </Input.Group>
-      <Radio.Group onChange={(e) => selectUrl(e.target.value)} value={selectedUrl}>
-        <Space direction="vertical">
-          {urls.map((cur) => (
-            <Radio value={cur.url}>{cur.url}</Radio>
-          ))}
-        </Space>
-      </Radio.Group>
-    </div>
+    <Space direction="vertical">
+      {/* <Input.Group compact style={{ width: "100%", marginBottom: 20 }}> */}
+      <Select value={webviewPurpose} style={{ width: "100%" }} onChange={setWebviewPurpose}>
+        <Select.Option value="default">default</Select.Option>
+        <Select.Option value="youtube">youtube</Select.Option>
+        <Select.Option value="image">image</Select.Option>
+        <Select.Option value="twitter">twitter</Select.Option>
+      </Select>
+      <Input
+        addonBefore={checkIsInputUrl(webviewPurpose) ? "URL" : "ID"}
+        value={urlInput}
+        onChange={(e) => setUrlInput(e.target.value)}
+      />
+    </Space>
   );
 };

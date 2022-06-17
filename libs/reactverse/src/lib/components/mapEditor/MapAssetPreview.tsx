@@ -13,7 +13,7 @@ export const MapAssetPreview = React.memo(() => {
       {preview.isPreview && (
         <sprite position={[preview.x, preview.y, 3]}>
           <planeGeometry args={[preview.width, preview.height]} />
-          <spriteMaterial map={previewTexture} />
+          <spriteMaterial map={previewTexture} transparent={true} opacity={0.5} />
         </sprite>
       )}
     </Suspense>
