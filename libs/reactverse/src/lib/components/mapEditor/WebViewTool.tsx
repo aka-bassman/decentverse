@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Input, Button, Radio, Space } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
 export const WebViewTool = () => {
-  const { urlInput, urls, selectedUrl, setUrlInput, addUrl, selectUrl } = useMapEditor().webviewTool;
+  const { urlInput, urls, selectedUrl, setUrlInput, addUrl, selectUrl } = useEditor();
 
   return (
     <div>

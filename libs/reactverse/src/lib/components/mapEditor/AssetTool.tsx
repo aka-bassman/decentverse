@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Segmented, Card } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const AssetTool = () => {
-  const { assetsData, selectedAssetId, setSelectedAssetId, subTool, setSubTool } = useMapEditor();
+  const { assetsData, selectedAssetId, setSelectedAssetId, subTool, setSubTool } = useEditor();
 
   return (
     <Card title="Assets" size="small">

@@ -1,11 +1,11 @@
-import { useAdmin, useMapEditor } from "../../stores";
+import { useAdmin, useEditor } from "../../stores";
 import { Button, Card } from "antd";
 import styled from "styled-components";
 
 export const AdminInfo = () => {
   const me = useAdmin((state) => state.me);
   const signout = useAdmin((state) => state.signout);
-  const toggleMapEditorOpen = useMapEditor((state) => state.toggleMapEditorOpen);
+  const toggleMapEditorOpen = useEditor((state) => state.toggleMapEditorOpen);
 
   return (
     <AdminInfoContainer>

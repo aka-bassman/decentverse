@@ -1,7 +1,7 @@
 import client from "../apollo";
 import gql from "graphql-tag";
 import * as mapTypes from "../map/map.types";
-import * as types from "./mapEditor.types";
+import * as types from "./editor.types";
 
 // * Map Query
 export type MapQuery = { map: mapTypes.Map };

@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { Card, Popconfirm, Descriptions, Button } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 import { NewMap, LoadMap, AddTiles } from "./index";
 
 export const MapTool = () => {
-  const { mapData } = useMapEditor();
-  const { closeMap } = useMapEditor().mapTool;
+  const { mapData, closeMap } = useEditor();
 
   if (!mapData)
     return (
