@@ -203,23 +203,23 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
     if (!isEdited || !mapData) return;
     const { name, tileSize, tiles } = mapData;
 
-    const newCollisions = get().collisions.map((collision) => ({
-      type: "collision",
+    const newCollisions: scalar.CollisionInput[] = get().collisions.map((collision) => ({
       topLeft: [Math.round(collision.x - collision.width / 2), Math.round(collision.y + collision.height / 2)],
       bottomRight: [Math.round(collision.x + collision.width / 2), Math.round(collision.y - collision.height / 2)],
     }));
 
-    const newWebviews = get().webviews.map((webview) => ({
-      type: "webview",
+    const newWebviews: scalar.WebviewInput[] = get().webviews.map((webview) => ({
       topLeft: [Math.round(webview.x - webview.width / 2), Math.round(webview.y + webview.height / 2)],
       bottomRight: [Math.round(webview.x + webview.width / 2), Math.round(webview.y - webview.height / 2)],
       url: webview.url,
+      size: [100, 100], //!
+      purpose: "default", //!
     }));
 
-    const newCallRooms = get().callRooms.map((callRoom) => ({
-      type: "callRoom",
+    const newCallRooms: scalar.CallRoomInput[] = get().callRooms.map((callRoom) => ({
       topLeft: [Math.round(callRoom.x - callRoom.width / 2), Math.round(callRoom.y + callRoom.height / 2)],
       bottomRight: [Math.round(callRoom.x + callRoom.width / 2), Math.round(callRoom.y - callRoom.height / 2)],
+      maxNum: 100, //!
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
