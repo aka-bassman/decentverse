@@ -6,8 +6,10 @@ import { EditorSlice } from "./editor.store";
 
 export interface EditorInteractionState {
   urlInput: string;
-  urls: types.TUrls[];
-  selectedUrl: string;
+  urls: types.TUrls[]; //!
+  selectedUrl: string; //!
+  inputCallRoomMaxNum?: number;
+  webviewPurpose: types.TWebviewPurpose;
   interactionTool: types.TInteractionTool;
   collisionPreview: types.TInteractionPreview;
   callRoomPreview: types.TInteractionPreview;
@@ -16,8 +18,11 @@ export interface EditorInteractionState {
   callRooms: types.TCallRoom[];
   webviews: types.TWebview[];
   setUrlInput: (url: string) => void;
-  addUrl: () => void;
-  selectUrl: (url: string) => void;
+  addUrl: () => void; //!
+  selectUrl: (url: string) => void; //!
+  setInputCallRoomMaxNum: (maxNum: number) => void;
+  setWebviewPurpose: (purpose: types.TWebviewPurpose) => void;
+  checkIsInputUrl: (purpose: types.TWebviewPurpose) => boolean;
   addCollision: () => void;
   addCallRoom: () => void;
   addWebview: () => void;
@@ -45,6 +50,8 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   urlInput: "https://",
   urls: [],
   selectedUrl: "",
+  inputCallRoomMaxNum: 100,
+  webviewPurpose: "default",
   interactionTool: "collision",
   collisionPreview: {
     ...types.initPreview,
@@ -81,6 +88,16 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     // set((state) => ({ webviewTool: { ...state.webviewTool, selectedUrl: url } }));
     set({ selectedUrl: url });
   },
+  setInputCallRoomMaxNum: (maxNum) => {
+    set({ inputCallRoomMaxNum: Number(maxNum) });
+  },
+  setWebviewPurpose: (purpose) => {
+    const urlInput = get().checkIsInputUrl(purpose) ? "https://" : "";
+    set({ webviewPurpose: purpose, urlInput });
+  },
+  checkIsInputUrl: (purpose) => {
+    return ["default", "image", "twitter"].includes(purpose);
+  },
   addCollision: () => {
     const { x, y, width, height } = get().collisionPreview;
     const newCollision = { x, y, width, height };
@@ -101,8 +118,10 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     }));
   },
   addCallRoom: () => {
+    const maxNum = get().inputCallRoomMaxNum;
+    if (!maxNum) return;
     const { x, y, width, height } = get().callRoomPreview;
-    const newCallRooms = { x, y, width, height };
+    const newCallRooms = { x, y, width, height, maxNum };
 
     set((state) => ({
       callRooms: [...state.callRooms, newCallRooms],
@@ -169,7 +188,7 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   },
   addWebview: () => {
     const { x, y, width, height } = get().webviewPreview;
-    const newWebview = { x, y, width, height, url: get().selectedUrl };
+    const newWebview = { x, y, width, height, url: get().urlInput, purpose: get().webviewPurpose };
 
     set((state) => ({
       webviews: [...state.webviews, newWebview],
@@ -264,7 +283,7 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     return !!(
       get().mainTool === "Interaction" &&
       get().interactionTool === "webview" &&
-      get().selectedUrl &&
+      get().urlInput &&
       get().subTool === "Add"
     );
   },

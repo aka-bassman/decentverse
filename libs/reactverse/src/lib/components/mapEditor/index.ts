@@ -15,3 +15,4 @@ export * from "./AddTiles";
 export * from "./MapWebViews";
 export * from "./WebViewTool";
 export * from "./MapCallRooms";
+export * from "./CallRoomTool";
