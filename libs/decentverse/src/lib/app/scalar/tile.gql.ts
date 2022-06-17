@@ -1,7 +1,7 @@
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types, Schema as MongoSchema } from "mongoose";
-import { InteractionSchema } from "./scalar.gql";
+import { CollisionSchema, CallRoomSchema, WebviewSchema } from "./scalar.gql";
 import * as gql from "../gql";
 
 // * Tile Schema Definition
@@ -21,17 +21,17 @@ export class Tile {
   @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
   lighting?: MongoSchema.Types.ObjectId;
 
-  @Field(() => [gql.Interaction])
-  @Prop([{ type: InteractionSchema, required: true }])
-  collisions: gql.InteractionType[];
+  @Field(() => [gql.Collision])
+  @Prop([{ type: CollisionSchema, required: true }])
+  collisions: gql.CollisionType[];
 
-  @Field(() => [gql.Interaction])
-  @Prop([{ type: InteractionSchema, required: true }])
-  webviews: gql.InteractionType[];
+  @Field(() => [gql.Webview])
+  @Prop([{ type: WebviewSchema, required: true }])
+  webviews: gql.WebviewType[];
 
-  @Field(() => [gql.Interaction])
-  @Prop([{ type: InteractionSchema, required: true }])
-  callRooms: gql.InteractionType[];
+  @Field(() => [gql.CallRoom])
+  @Prop([{ type: CallRoomSchema, required: true }])
+  callRooms: gql.CallRoomType[];
 }
 export type TileType = Tile;
 export const TileSchema = SchemaFactory.createForClass(Tile);
@@ -47,13 +47,13 @@ export class TileInput {
   @Field(() => ID, { nullable: true })
   lighting?: MongoSchema.Types.ObjectId;
 
-  @Field(() => [gql.InteractionInput])
-  collisions: gql.InteractionType[];
+  @Field(() => [gql.CollisionInput])
+  collisions: gql.CollisionInputType[];
 
-  @Field(() => [gql.InteractionInput])
-  webviews: gql.InteractionType[];
+  @Field(() => [gql.WebviewInput])
+  webviews: gql.WebviewInputType[];
 
-  @Field(() => [gql.InteractionInput])
-  callRooms: gql.InteractionType[];
+  @Field(() => [gql.CallRoomInput])
+  callRooms: gql.CallRoomInputType[];
 }
 export type TileInputType = TileInput;

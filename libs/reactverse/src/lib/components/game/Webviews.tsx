@@ -51,7 +51,7 @@ export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
 };
 
 export interface WebviewProp {
-  webview: scalar.Interaction;
+  webview: scalar.Webview;
   engine: MutableRefObject<Engine>;
 }
 export const Webview = React.memo(({ webview }: WebviewProp) => {

@@ -94,21 +94,80 @@ export const spriteFragment = gql`
   }
 `;
 
-export const actionTypes = ["collision", "webview", "callRoom"] as const;
-export type ActionType = typeof actionTypes[number];
+export const interactionTypes = ["collision", "webview", "callRoom"] as const;
+export type InteractionType = typeof interactionTypes[number];
 
-export type Interaction = {
-  type: ActionType;
+export type Collision = {
+  message?: string;
   topLeft: number[];
   bottomRight: number[];
-  url?: string;
 };
-export const interactionFragment = gql`
-  fragment interactionFragment on Interaction {
-    type
+export type CollisionInput = {
+  message?: string;
+  topLeft: number[];
+  bottomRight: number[];
+};
+export const collisionFragment = gql`
+  fragment collisionFragment on Collision {
+    message
+    topLeft
+    bottomRight
+  }
+`;
+
+export const webviewPurposes = ["default", "youtube", "image", "twitter"] as const;
+export type WebviewPurpose = typeof webviewPurposes[number];
+export type Webview = {
+  message?: string;
+  errorMessage?: string;
+  topLeft: number[];
+  bottomRight: number[];
+  url: string;
+  size: number[];
+  purpose: WebviewPurpose;
+};
+export type WebviewInput = {
+  message?: string;
+  errorMessage?: string;
+  topLeft: number[];
+  bottomRight: number[];
+  url: string;
+  size: number[];
+  purpose: WebviewPurpose;
+};
+export const webviewFragment = gql`
+  fragment webviewFragment on Webview {
+    message
+    errorMessage
     topLeft
     bottomRight
     url
+    size
+    purpose
+  }
+`;
+
+export type CallRoom = {
+  message?: string;
+  errorMessage?: string;
+  topLeft: number[];
+  bottomRight: number[];
+  maxNum: number;
+};
+export type CallRoomInput = {
+  message?: string;
+  errorMessage?: string;
+  topLeft: number[];
+  bottomRight: number[];
+  maxNum: number;
+};
+export const callRoomFragment = gql`
+  fragment callRoomFragment on CallRoom {
+    message
+    errorMessage
+    topLeft
+    bottomRight
+    maxNum
   }
 `;
 
@@ -116,22 +175,25 @@ export type Tile = {
   top: File;
   bottom: File;
   lighting?: File;
-  collisions: Interaction[];
-  webviews: Interaction[];
-  callRooms: Interaction[];
+  collisions: Collision[];
+  webviews: Webview[];
+  callRooms: CallRoom[];
 };
 
 export type TileInput = {
-  bottom?: string;
-  collisions: Interaction[];
-  lighting?: string;
   top?: string;
-  webviews: Interaction[];
+  bottom?: string;
+  lighting?: string;
+  collisions: CollisionInput[];
+  webviews: WebviewInput[];
+  callRooms: CallRoomInput[];
 };
 
 export const tileFragment = gql`
   ${fileFragment}
-  ${interactionFragment}
+  ${collisionFragment}
+  ${webviewFragment}
+  ${callRoomFragment}
   fragment tileFragment on Tile {
     top {
       ...fileFragment
@@ -143,13 +205,13 @@ export const tileFragment = gql`
       ...fileFragment
     }
     collisions {
-      ...interactionFragment
+      ...collisionFragment
     }
     webviews {
-      ...interactionFragment
+      ...webviewFragment
     }
     callRooms {
-      ...interactionFragment
+      ...callRoomFragment
     }
   }
 `;

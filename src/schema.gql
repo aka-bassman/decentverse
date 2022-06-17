@@ -37,7 +37,7 @@ input AreaInput {
 
 type Asset {
   bottom: File
-  collisions: [Interaction!]
+  collisions: [Collision!]!
   createdAt: DateTime!
   id: ID!
   lighting: File
@@ -45,16 +45,32 @@ type Asset {
   status: String!
   top: File
   updatedAt: DateTime!
-  webviews: [Interaction!]
+  webviews: [Webview!]!
 }
 
 input AssetInput {
   bottom: ID
-  collisions: [InteractionInput!]
+  collisions: [CollisionInput!]!
   lighting: ID
   name: String!
   top: ID
-  webviews: [InteractionInput!]
+  webviews: [WebviewInput!]!
+}
+
+type CallRoom {
+  bottomRight: [Int!]!
+  errorMessage: String
+  maxNum: Int!
+  message: String
+  topLeft: [Int!]!
+}
+
+input CallRoomInput {
+  bottomRight: [Int!]!
+  errorMessage: String
+  maxNum: Int!
+  message: String
+  topLeft: [Int!]!
 }
 
 type Character {
@@ -85,6 +101,18 @@ input CharacterInput {
   up: SpriteInput
 }
 
+type Collision {
+  bottomRight: [Int!]!
+  message: String
+  topLeft: [Int!]!
+}
+
+input CollisionInput {
+  bottomRight: [Int!]!
+  message: String
+  topLeft: [Int!]!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -101,23 +129,9 @@ type File {
   url: String!
 }
 
-type Interaction {
-  bottomRight: [Int!]!
-  topLeft: [Int!]!
-  type: String!
-  url: String
-}
-
-input InteractionInput {
-  bottomRight: [Int!]!
-  topLeft: [Int!]!
-  type: String!
-  url: String
-}
-
 type Map {
-  callRooms: [Interaction!]!
-  collisions: [Interaction!]!
+  callRooms: [CallRoom!]!
+  collisions: [Collision!]!
   createdAt: DateTime!
   id: String!
   name: String!
@@ -128,17 +142,17 @@ type Map {
   totalHeight: Int!
   totalWidth: Int!
   updatedAt: DateTime!
-  webviews: [Interaction!]!
+  webviews: [Webview!]!
 }
 
 input MapInput {
-  callRooms: [InteractionInput!]
-  collisions: [InteractionInput!]
+  callRooms: [CallRoomInput!]
+  collisions: [CollisionInput!]!
   name: String!
   placements: [PlacementInput!]
   tileSize: Int
   tiles: [[TileInput!]!]
-  webviews: [InteractionInput!]
+  webviews: [WebviewInput!]!
 }
 
 type Mutation {
@@ -233,21 +247,41 @@ input SpriteInput {
 
 type Tile {
   bottom: File!
-  callRooms: [Interaction!]!
-  collisions: [Interaction!]!
+  callRooms: [CallRoom!]!
+  collisions: [Collision!]!
   lighting: File
   top: File
-  webviews: [Interaction!]!
+  webviews: [Webview!]!
 }
 
 input TileInput {
   bottom: ID!
-  callRooms: [InteractionInput!]!
-  collisions: [InteractionInput!]!
+  callRooms: [CallRoomInput!]!
+  collisions: [CollisionInput!]!
   lighting: ID
   top: ID
-  webviews: [InteractionInput!]!
+  webviews: [WebviewInput!]!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type Webview {
+  bottomRight: [Int!]!
+  errorMessage: String
+  message: String
+  purpose: String!
+  size: [Int!]!
+  topLeft: [Int!]!
+  url: String!
+}
+
+input WebviewInput {
+  bottomRight: [Int!]!
+  errorMessage: String
+  message: String
+  purpose: String!
+  size: [Int!]!
+  topLeft: [Int!]!
+  url: String!
+}

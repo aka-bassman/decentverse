@@ -51,7 +51,7 @@ export const CallRooms = ({ engine, interaction, player }: CallRoomsProp) => {
 };
 
 export interface CallRoomProp {
-  callRoom: scalar.Interaction;
+  callRoom: scalar.CallRoom;
   engine: MutableRefObject<Engine>;
 }
 export const CallRoom = React.memo(({ callRoom }: CallRoomProp) => {
