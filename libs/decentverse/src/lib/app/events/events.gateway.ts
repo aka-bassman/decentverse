@@ -39,13 +39,10 @@ export class EventsGateway {
   }
 
   @SubscribeMessage("chat")
-  async chat(client: Socket, id: string, data: any) {
-    // client.emit("characters", ids, await this.rtService.characters(ids));
-  }
-
-  @SubscribeMessage("message")
-  async message(client: Socket, from: string, to: string, data: any) {
-    // client.emit("characters", ids, await this.rtService.characters(ids));
+  async chat(client: Socket, roomId: "public" | string, data: any) {
+    if (roomId === "public") this.server.emit(`chat:${roomId}`, data);
+    const sockets = this.server.of("/").in(roomId);
+    return sockets.emit(`chat:${roomId}`, data);
   }
 
   @SubscribeMessage("join")
@@ -91,7 +88,6 @@ export class EventsGateway {
     client.data = { roomId, userId, nickName };
     const socket = clients.find((client) => client.id === socketId);
     if (!socket) return;
-
     socket.emit(`desc:${userId}`, { desc, userId });
   }
 
