@@ -210,12 +210,12 @@ export const useWorld = create<WorldState>((set, get) => ({
     set((state) => {
       const interaction: any = state.interaction;
       interaction[type] = int;
-      return { interaction };
+      return { interaction: { ...interaction } };
     }),
   leaveInteraction: (type: types.scalar.InteractionType) =>
     set((state) => {
       const interaction: any = state.interaction;
       interaction[type] = null;
-      return { interaction };
+      return { interaction: { ...interaction } };
     }),
 }));

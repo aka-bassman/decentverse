@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
-import { TileMap, Player, Players, Placements, Collisions, Webviews, CallRooms } from "./index";
+import { TileMap, Player, Players, Placements, Collisions, Webviews, CallRooms, Overlay } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
 
@@ -59,6 +59,7 @@ export const Game = ({ socket }: GameProps) => {
           <Collisions engine={engine} />
           <Webviews engine={engine} interaction={interaction} player={player} />
           <CallRooms engine={engine} interaction={interaction} player={player} />
+          <Overlay />
         </Suspense>
       </Canvas>
     </div>
