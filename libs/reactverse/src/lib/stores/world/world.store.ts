@@ -16,12 +16,15 @@ export interface WorldState {
   me: types.Player;
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
+  interaction: types.InteractionState;
   initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   updateUserId: (userId: string) => void;
+  joinInteraction: (type: types.scalar.ActionType, int: types.scalar.Interaction) => void;
+  leaveInteraction: (type: types.scalar.ActionType) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -107,6 +110,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     tiles: [],
     players: {},
   },
+  interaction: types.defaultInteractionState,
   status: "none",
   initWorld: async () => {
     const state = get();
@@ -200,5 +204,17 @@ export const useWorld = create<WorldState>((set, get) => ({
         if (!otherPlayers.get(player.id)) otherPlayers.set(player.id, player);
       });
       return { otherPlayers };
+    }),
+  joinInteraction: (type: types.scalar.ActionType, int: types.scalar.Interaction) =>
+    set((state) => {
+      const interaction = state.interaction;
+      interaction[type] = int;
+      return { interaction };
+    }),
+  leaveInteraction: (type: types.scalar.ActionType) =>
+    set((state) => {
+      const interaction = state.interaction;
+      interaction[type] = null;
+      return { interaction };
     }),
 }));

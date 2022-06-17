@@ -27,11 +27,31 @@ export const AddTiles = () => {
         onCancel={toggleTilesModalOpen}
         okButtonProps={{ disabled: !validationCheck() }}
       >
-        <Space style={{ marginTop: 10 }}>
-          bottom:
-          <input type="file" multiple onChange={(e) => handleImageUpload(e, "bottom")} />
-        </Space>
+        <FileForm>
+          <Space style={{ marginTop: 10 }}>
+            <div className="label">
+              <span>*</span>Bottom
+            </div>
+            <input type="file" onChange={(e) => handleImageUpload(e, "bottom")} />
+          </Space>
+          <Space style={{ marginTop: 10 }}>
+            <div className="label">Top</div>
+            <input type="file" onChange={(e) => handleImageUpload(e, "top")} />
+          </Space>
+        </FileForm>
       </Modal>
     </>
   );
 };
+
+const FileForm = styled.div`
+  .label {
+    width: 100px;
+    text-align: right;
+    font-weight: bolder;
+    span {
+      color: #ff6666;
+      margin-right: 4px;
+    }
+  }
+`;

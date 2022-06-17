@@ -15,8 +15,6 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const me = useUser((state) => state);
   const isMapEditorOpen = useMapEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
-    console.log(1);
-    console.log(2, ws);
     document.body.style.overflow = "hidden";
     setLink(uri);
     const socket = io(ws);
@@ -36,8 +34,8 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   if (!me.nickname && socket) {
     return (
       <ReactverseLayout>
-        <Interface socket={socket} />
-        {/* <InputName /> */}
+        {/* <Interface socket={socket} /> */}
+        <InputName />
       </ReactverseLayout>
     );
   }
@@ -48,7 +46,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
         <>
           <Game socket={socket} />
           {/* <Stream socket={socket} /> */}
-          <Interface socket={socket} />
+          {/* <Interface socket={socket} /> */}
         </>
       ) : (
         <></>

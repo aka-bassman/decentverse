@@ -29,6 +29,9 @@ export class MapInput {
 
   @Field(() => [gql.InteractionInput], { nullable: true })
   webviews: gql.InteractionInputType[];
+
+  @Field(() => [gql.InteractionInput], { nullable: true })
+  callRooms: gql.InteractionInputType[];
 }
 
 /**
@@ -65,6 +68,9 @@ export class Map {
 
   @Field(() => [gql.Interaction])
   webviews: gql.InteractionType[];
+
+  @Field(() => [gql.Interaction])
+  callRooms: gql.InteractionType[];
 
   @Field(() => String)
   status: "active" | "inactive";

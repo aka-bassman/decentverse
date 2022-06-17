@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, useUser, RenderCharacter, scalar, useGame, world } from "../../stores";
+import { types, useWorld, useUser, RenderCharacter, scalar, useGame, world } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator } from "../../hooks";
@@ -17,9 +17,11 @@ export interface PlayerProp {
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get, set } = useThree();
   const me = useWorld((state) => state.me);
+
   const iam = useUser((state) => state);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
   const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 120, 165));
+  const inter = useRef<string>("");
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
@@ -39,7 +41,6 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       keyboard.current.down ? -me.maxSpeed : keyboard.current.up ? me.maxSpeed : 0,
     ];
     Body.setVelocity(body.current, { x: velocity[0], y: velocity[1] });
-
     engine.current = Engine.update(engine.current);
 
     const characterState = velocity[0] === 0 && velocity[1] === 0 ? "idle" : "walk";
@@ -52,6 +53,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       : keyboard.current.down && me.character.down
       ? "down"
       : player.current.direction;
+
     player.current = {
       id: player.current.id,
       position: [body.current.position.x, body.current.position.y],
@@ -74,6 +76,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const playerPosition = player.current.position;
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
+    // if (interaction && interaction.current.webview) console.log("player webview!");
 
     if (x === 0 && y === 0) return;
     camera.translateX(x);
@@ -87,11 +90,13 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       <sprite ref={sprite}>
         <planeGeometry args={[120, 165]} />
         <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
-          {iam.nickname}
+          {inter.current}
         </Text>
-        <spriteMaterial map={url} />
-        {/* <planeGeometry>
-        </planeGeometry> */}
+
+        {/* <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
+          {iam.nickname}
+        </Text> */}
+        {/* <spriteMaterial map={url} color={interaction && interaction.current.webview === null ? "hotpink" : "green"} /> */}
       </sprite>
     </Suspense>
   );

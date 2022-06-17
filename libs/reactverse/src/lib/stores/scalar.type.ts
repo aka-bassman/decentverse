@@ -94,7 +94,7 @@ export const spriteFragment = gql`
   }
 `;
 
-export const actionTypes = ["collision"] as const;
+export const actionTypes = ["collision", "webview", "callRoom"] as const;
 export type ActionType = typeof actionTypes[number];
 
 export type Interaction = {
@@ -119,6 +119,15 @@ export type Tile = {
   lighting?: File;
   collisions: Interaction[];
   webviews: Interaction[];
+  callRooms: Interaction[];
+};
+
+export type TileInput = {
+  bottom?: string;
+  collisions: Interaction[];
+  lighting?: string;
+  top?: string;
+  webviews: Interaction[];
 };
 
 export const tileFragment = gql`
@@ -138,6 +147,9 @@ export const tileFragment = gql`
       ...interactionFragment
     }
     webviews {
+      ...interactionFragment
+    }
+    callRooms {
       ...interactionFragment
     }
   }

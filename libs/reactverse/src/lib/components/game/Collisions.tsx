@@ -12,6 +12,7 @@ export interface CollisionsProp {
 }
 export const Collisions = ({ engine }: CollisionsProp) => {
   const collisions = useWorld((state) => state.map?.collisions);
+
   return (
     <Suspense fallback={null}>
       {collisions?.map((collision, idx) => (
@@ -47,23 +48,6 @@ export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
 
   return (
     <Suspense fallback={null}>
-      <mesh
-        position={position}
-        onClick={(e) => console.log("click")}
-        onContextMenu={(e) => console.log("context menu")}
-        onDoubleClick={(e) => console.log("double click")}
-        onWheel={(e) => console.log("wheel spins")}
-        onPointerUp={(e) => console.log("up")}
-        onPointerDown={(e) => console.log("down")}
-        onPointerOver={(e) => console.log("over")}
-        onPointerOut={(e) => console.log("out")}
-        onPointerEnter={(e) => console.log("enter")}
-        onPointerLeave={(e) => console.log("leave")}
-        onPointerMove={(e) => console.log("move")}
-        onUpdate={(self) => console.log("props have been updated")}
-      >
-        <planeGeometry args={[width, height]} />
-      </mesh>
       {/* <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent />

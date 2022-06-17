@@ -36,6 +36,9 @@ export class Map extends Input {
   @Prop([{ type: gql.InteractionSchema }])
   webviews: gql.InteractionType[];
 
+  @Prop([{ type: gql.InteractionSchema }])
+  callRooms: gql.InteractionType[];
+
   @Prop({ type: Number, required: true, default: 0 })
   totalWidth: number;
 

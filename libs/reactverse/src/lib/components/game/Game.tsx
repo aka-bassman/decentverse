@@ -3,7 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
-import { TileMap, Player, Players, Placements, Collisions } from "./index";
+import { TileMap, Player, Players, Placements, Collisions, Webviews, CallRooms } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
 
@@ -24,7 +24,6 @@ export const Game = ({ socket }: GameProps) => {
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
-
   const player = useRef<RenderCharacter>({
     id: "",
     position: [5000, 5000],
@@ -36,6 +35,7 @@ export const Game = ({ socket }: GameProps) => {
     min: [0, 0],
     max: [2048, 2048],
   });
+  const interaction = useRef<types.InteractionState>(types.defaultInteractionState);
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
   return (
@@ -55,6 +55,8 @@ export const Game = ({ socket }: GameProps) => {
           <Players playerId={player.current.id} />
           <Placements />
           <Collisions engine={engine} />
+          <Webviews engine={engine} interaction={interaction} player={player} />
+          <CallRooms engine={engine} interaction={interaction} player={player} />
         </Suspense>
       </Canvas>
     </div>

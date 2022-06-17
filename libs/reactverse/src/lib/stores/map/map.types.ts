@@ -6,10 +6,11 @@ import { placementFragment, Placement } from "../asset/asset.types";
 export type MapInput = {
   name: string;
   tileSize: number;
-  tiles: scalar.Tile[][];
+  tiles: scalar.TileInput[][];
   placements: Placement[];
   collisions: scalar.Interaction[];
   webviews: scalar.Interaction[];
+  callRooms: scalar.Interaction[];
 };
 
 export type Map = {
@@ -22,6 +23,7 @@ export type Map = {
   placements: Placement[];
   collisions: scalar.Interaction[];
   webviews: scalar.Interaction[];
+  callRooms: scalar.Interaction[];
   status: string;
 };
 
@@ -43,6 +45,9 @@ export const mapFragment = gql`
       ...interactionFragment
     }
     webviews {
+      ...interactionFragment
+    }
+    callRooms {
       ...interactionFragment
     }
     status
