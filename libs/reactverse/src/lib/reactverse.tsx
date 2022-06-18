@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { client, setLink } from "./stores";
 import { Stream, Game, Interface, InputName, ReactverseLayout, MapEditor } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, useEditor, types } from "./stores";
+import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
 
 export interface ReactverseProps {
   uri: string;
@@ -12,16 +12,16 @@ export interface ReactverseProps {
 export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Soc>();
-  const me = useWorld((state) => state.me);
+  const me = useUser((state) => state);
   const isMapEditorOpen = useEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
-    if (!me.userId) return;
     document.body.style.overflow = "hidden";
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-  }, [me?.userId]);
+    console.log(isConnected, socket);
+  }, []);
 
   if (isMapEditorOpen) {
     return (
@@ -31,9 +31,10 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     );
   }
 
-  if (!me?.userId) {
+  if (!me.nickname && socket) {
     return (
       <ReactverseLayout>
+        {/* <Interface socket={socket} /> */}
         <InputName />
       </ReactverseLayout>
     );
@@ -44,7 +45,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
       {isConnected && socket ? (
         <>
           <Game socket={socket} />
-          {/* <Stream socket={socket} /> */}
+          <Stream socket={socket} />
           <Interface socket={socket} />
         </>
       ) : (

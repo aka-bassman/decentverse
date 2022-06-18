@@ -1,7 +1,7 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar } from "../../stores";
-import { Sprite, SpriteMaterial } from "three";
+import { Sprite, SpriteMaterial, Vector3 } from "three";
 import { useKeyboard, useGameConnection, useWindowDimensions } from "../../hooks";
 import { TileMap, Player, Players, Placements, Collisions, Webviews, CallRooms, Overlay } from "./index";
 import { Socket as Soc } from "socket.io-client";
@@ -13,7 +13,6 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const initWorld = useWorld((state) => state.initWorld);
-  const userId = useWorld((state) => state.me.userId);
   const scene = useRef();
   const engine = useRef(Engine.create());
   useEffect(() => {
@@ -21,11 +20,12 @@ export const Game = ({ socket }: GameProps) => {
       await initWorld();
     })();
   }, []);
+
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const keyboard = useKeyboard();
   const player = useRef<RenderCharacter>({
-    id: userId,
+    id: "",
     position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
@@ -35,6 +35,7 @@ export const Game = ({ socket }: GameProps) => {
     min: [0, 0],
     max: [2048, 2048],
   });
+  const position_ = new Vector3(0, 0, 3);
   const interaction = useRef<types.InteractionState>(types.defaultInteractionState);
   useGameConnection({ player, scope, socket });
   useWindowDimensions();
@@ -45,15 +46,13 @@ export const Game = ({ socket }: GameProps) => {
         height: "200%",
         marginLeft: "-50%",
         marginTop: "-30%",
-        borderColor: "black",
-        borderWidth: 2,
       }}
     >
       {/* <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}> */}
-      <Canvas orthographic camera={{ zoom: 0.5 }}>
+      <Canvas orthographic camera={{ zoom: 0.5 }} frameloop="always">
         <Suspense fallback={null}>
-          <TileMap player={player} scope={scope} />
           <Player sprite={sprite} animation={animation} keyboard={keyboard} player={player} engine={engine} />
+          <TileMap player={player} scope={scope} />
           <Players playerId={player.current.id} />
           <Placements />
           <Collisions engine={engine} />

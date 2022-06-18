@@ -1,7 +1,13 @@
 import create from "zustand";
 import * as types from "../types";
 import * as gql from "../gql";
+
 import { devtools } from "zustand/middleware";
+
+const METAMASK_NETWORK_MAINNET = "1";
+const METAMASK_NETWORK_ROPSTEN = "3";
+const NETWORK_VERSION =
+  process.env["NEXT_PUBLIC_ENVIRONMENT"] === "production" ? METAMASK_NETWORK_MAINNET : METAMASK_NETWORK_ROPSTEN;
 
 export interface WorldState {
   scope: types.WorldScope;
@@ -13,9 +19,12 @@ export interface WorldState {
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
   interaction: types.InteractionState;
+  modalOpen: boolean;
   initWorld: () => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
+  openModal: () => void;
+  closeModal: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   updateUserId: (userId: string) => void;
@@ -100,9 +109,11 @@ export const useWorld = create<WorldState>((set, get) => ({
     state: "idle",
     direction: "right",
   },
+  modalOpen: false,
   myChat: "",
   otherPlayerIds: [],
   otherPlayers: new Map(),
+
   scope: {
     min: [0, 0],
     max: [2048, 2048],
@@ -113,6 +124,14 @@ export const useWorld = create<WorldState>((set, get) => ({
   },
   interaction: types.defaultInteractionState,
   status: "none",
+  openModal: () =>
+    set({
+      modalOpen: true,
+    }),
+  closeModal: () =>
+    set({
+      modalOpen: false,
+    }),
   initWorld: async () => {
     const state = get();
     const {
@@ -130,7 +149,6 @@ export const useWorld = create<WorldState>((set, get) => ({
     const status = "idle";
     return set({ map: maps[1], renderMe, render, status });
   },
-
   accelMe: (keyboard: types.Keyboard) => {
     const state: WorldState = get();
     if (!state.me) return;

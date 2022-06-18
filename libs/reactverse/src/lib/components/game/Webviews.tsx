@@ -2,8 +2,8 @@ import React, { Suspense, useRef, MutableRefObject, useMemo, useEffect } from "r
 import { useFrame, useThree } from "@react-three/fiber";
 import { types, scalar, useWorld, RenderCharacter, useGame } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader, MeshBasicMaterial } from "three";
-import { useTexture } from "@react-three/drei";
-import { useInterval } from "../../hooks";
+import { useTexture, Text } from "@react-three/drei";
+import { useInterval, useKeyboard } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
@@ -14,6 +14,7 @@ export interface WebviewsProp {
 }
 export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
   const webviews = useWorld((state) => state.map?.webviews);
+  const closeWebview = useWorld((state) => state.closeModal);
   const joinInteraction = useWorld((state) => state.joinInteraction);
   const leaveInteraction = useWorld((state) => state.leaveInteraction);
   useInterval(() => {
@@ -25,8 +26,10 @@ export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
         player.current.position[1] > interaction.current.webview.bottomRight[1]
       )
         return;
+      console.log("leave web view");
       interaction.current.webview = null;
       leaveInteraction("webview");
+      closeWebview();
     } else {
       webviews?.map((webview) => {
         if (
@@ -35,6 +38,7 @@ export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
           webview.topLeft[1] > player.current.position[1] &&
           player.current.position[1] > webview.bottomRight[1]
         ) {
+          console.log("join web view");
           interaction.current.webview = webview;
           joinInteraction("webview", webview);
         }
@@ -55,11 +59,18 @@ export interface WebviewProp {
   engine: MutableRefObject<Engine>;
 }
 export const Webview = React.memo(({ webview }: WebviewProp) => {
+  const interaction = useWorld((state) => state.interaction);
+  const openWebview = useWorld((state) => state.openModal);
+  const keyboard = useKeyboard();
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,
     -0.00000005
   );
+
+  useInterval(() => {
+    if (keyboard.current.interaction) openWebview();
+  }, 100);
   const [width, height] = [webview.topLeft[0] - webview.bottomRight[0], webview.bottomRight[1] - webview.topLeft[1]];
 
   return (
@@ -67,6 +78,15 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
       <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent />
+        {interaction && interaction.webview?.url === webview.url && (
+          <mesh position={[0, -120, 1]}>
+            <planeBufferGeometry attach="geometry" args={[380, 100]} />
+            <meshPhongMaterial attach="material" color="#000000" opacity={0.5} transparent={true} />
+            <Text lineHeight={0.8} position={[0, 0, 1]} fontSize={50} material-toneMapped={false}>
+              Press 'F'
+            </Text>
+          </mesh>
+        )}
       </mesh>
     </Suspense>
   );

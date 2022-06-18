@@ -56,6 +56,7 @@ export class DecentverseModule {
           // inject: [],
         }),
         modules.AdminModule,
+        modules.UserModule,
         modules.EventsModule,
         modules.AssetModule,
         modules.CharacterModule,

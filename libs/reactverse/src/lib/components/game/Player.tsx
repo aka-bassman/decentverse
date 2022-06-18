@@ -1,11 +1,12 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame, world, useGossip } from "../../stores";
+import { useWorld, RenderCharacter, scalar, useGame, world, useGossip, useUser } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text, Html } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import { Engine, World, Bodies, Vector, Body } from "matter-js";
-
+import { TextureLoader } from "three";
+import { SpeechBox } from ".";
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;
   animation: MutableRefObject<scalar.SpriteDef>;
@@ -15,7 +16,8 @@ export interface PlayerProp {
 }
 
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
-  const { camera, get } = useThree();
+  const { camera, get, set } = useThree();
+  const nickname = useUser((state) => state.nickname);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
@@ -23,6 +25,11 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
+    const position = get().camera.position;
+    const playerPosition = player.current.position;
+
+    camera.position.setX(playerPosition[0]);
+    camera.position.setY(playerPosition[1]);
     return () => {
       World.remove(engine.current.world, body.current);
     };
@@ -45,6 +52,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       : keyboard.current.down && me.character.down
       ? "down"
       : player.current.direction;
+
     player.current = {
       id: player.current.id,
       position: [body.current.position.x, body.current.position.y],
@@ -54,23 +62,33 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     };
     sprite.current.position.x = body.current.position.x;
     sprite.current.position.y = body.current.position.y;
+
     const character = me.character as any;
     animation.current = character[player.current.direction][player.current.state];
   });
+
+  // useInterval(() => {}, 5000);
   const animator = createTileTextureAnimator(url, [240, 330]);
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
+
   useFrame(() => {
     const position = get().camera.position;
     const playerPosition = player.current.position;
-    const move = [Math.floor((playerPosition[0] - position.x) / 10), Math.floor((playerPosition[1] - position.y) / 10)];
-    camera.translateX(move[0]);
-    camera.translateY(move[1]);
+    const x = Math.floor((playerPosition[0] - position.x) / 10);
+    const y = Math.floor((playerPosition[1] - position.y) / 10);
+    // if (interaction && interaction.current.webview) console.log("player webview!");
+    if (x === 0 && y === 0) return;
+    camera.translateX(x);
+    camera.translateY(y);
+    // camera.position.setX(x);
+    // camera.position.setY(y);
   });
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
+        <SpeechBox />
         <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
         <Text
@@ -81,7 +99,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
           overflowWrap="normal"
           material-toneMapped={false}
         >
-          {me.userId}
+          {nickname}
         </Text>
         <MyChat />
       </sprite>

@@ -8,3 +8,4 @@ export * from "./Collisions";
 export * from "./Webviews";
 export * from "./CallRooms";
 export * from "./Overlay";
+export * from "./SpeechBox";

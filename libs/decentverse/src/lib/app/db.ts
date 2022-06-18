@@ -6,6 +6,7 @@ export { FilterQuery as Query };
 export { DataLoader };
 export * from "../dbConfig";
 export * as Admin from "./admin/admin.model";
+export * as User from "./user/user.model";
 export * as Asset from "./asset/asset.model";
 export * as Character from "./character/character.model";
 export * as Map from "./map/map.model";

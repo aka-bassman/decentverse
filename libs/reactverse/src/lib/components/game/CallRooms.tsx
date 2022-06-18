@@ -46,6 +46,7 @@ export const CallRooms = ({ engine, interaction, player, socket }: CallRoomsProp
       });
     }
   }, 500);
+
   return (
     <Suspense fallback={null}>
       {callRooms?.map((callRoom, idx) => (
@@ -60,17 +61,22 @@ export interface CallRoomProp {
   engine: MutableRefObject<Engine>;
 }
 export const CallRoom = React.memo(({ callRoom }: CallRoomProp) => {
+  const light = useRef<AmbientLight | undefined>();
   const position = new Vector3(
     (callRoom.bottomRight[0] + callRoom.topLeft[0]) / 2,
     (callRoom.bottomRight[1] + callRoom.topLeft[1]) / 2,
     -0.00000005
   );
+
   const [width, height] = [
     callRoom.topLeft[0] - callRoom.bottomRight[0],
     callRoom.bottomRight[1] - callRoom.topLeft[1],
   ];
+
   return (
     <Suspense fallback={null}>
+      {/* <directionalLight ref={light} intensity={0.8} color={0xffff00} /> */}
+
       <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0x00ff00} transparent />

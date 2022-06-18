@@ -35,6 +35,7 @@ export const useGame = create<GameState>((set, get) => ({
     right: false,
     up: false,
     down: false,
+    interaction: false,
   },
   signalInterval: 500, // signal interval between server
   ping: 0, // signal time between server

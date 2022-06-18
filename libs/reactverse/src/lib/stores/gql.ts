@@ -1,5 +1,6 @@
 // export * from "./scalar.type";
 export * from "./admin/admin.gql";
+export * from "./user/user.gql";
 export * from "./asset/asset.gql";
 export * from "./character/character.gql";
 // export * from "./game/game.types";

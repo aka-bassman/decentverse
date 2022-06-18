@@ -148,6 +148,7 @@ export const webviewFragment = gql`
 `;
 
 export type CallRoom = {
+  _id: string;
   message?: string;
   errorMessage?: string;
   topLeft: number[];
@@ -163,6 +164,7 @@ export type CallRoomInput = {
 };
 export const callRoomFragment = gql`
   fragment callRoomFragment on CallRoom {
+    _id
     message
     errorMessage
     topLeft
@@ -221,6 +223,7 @@ export const keyMap = {
   KeyA: "left",
   KeyS: "down",
   KeyD: "right",
+  KeyF: "interaction",
   ArrowUp: "up",
   ArrowLeft: "left",
   ArrowDown: "down",
@@ -235,5 +238,6 @@ export const keyboard = {
   right: false,
   up: false,
   down: false,
+  interaction: false,
 };
 export type Keyboard = { [key in KeyType]: boolean };
