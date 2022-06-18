@@ -91,7 +91,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   }, animation);
   return (
     <sprite ref={sprite}>
-      <SpeechBox />
+      <SpeechBox id={player.id} />
       <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={60} material-toneMapped={false}>

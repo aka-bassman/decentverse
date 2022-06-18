@@ -3,16 +3,6 @@ import * as types from "./user.types";
 import * as scalar from "../scalar.type";
 import gql from "graphql-tag";
 
-// * Ping Query
-
-export type PingQuery = { ping: string };
-export const pingQuery = gql`
-  query ping {
-    ping
-  }
-`;
-export const ping = async () => (await client.query<PingQuery>({ query: pingQuery })).data.ping;
-
 // * WhoAmI Query
 export type WhoAmIQuery = { whoAmI: types.User };
 

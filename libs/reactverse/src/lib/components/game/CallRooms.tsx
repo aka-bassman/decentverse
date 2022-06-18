@@ -61,7 +61,6 @@ export interface CallRoomProp {
   engine: MutableRefObject<Engine>;
 }
 export const CallRoom = React.memo(({ callRoom }: CallRoomProp) => {
-  const light = useRef<AmbientLight | undefined>();
   const position = new Vector3(
     (callRoom.bottomRight[0] + callRoom.topLeft[0]) / 2,
     (callRoom.bottomRight[1] + callRoom.topLeft[1]) / 2,
