@@ -11,8 +11,9 @@ export interface WebviewsProp {
   engine: MutableRefObject<Engine>;
   interaction: MutableRefObject<types.InteractionState>;
   player: MutableRefObject<types.RenderCharacter>;
+  keyboard: MutableRefObject<scalar.Keyboard>;
 }
-export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
+export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp) => {
   const webviews = useWorld((state) => state.map?.webviews);
   const closeWebview = useWorld((state) => state.closeModal);
   const joinInteraction = useWorld((state) => state.joinInteraction);
@@ -48,7 +49,7 @@ export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
   return (
     <Suspense fallback={null}>
       {webviews?.map((webview, idx) => (
-        <Webview key={idx} webview={webview} engine={engine} />
+        <Webview key={idx} webview={webview} keyboard={keyboard} />
       ))}
     </Suspense>
   );
@@ -56,12 +57,11 @@ export const Webviews = ({ engine, interaction, player }: WebviewsProp) => {
 
 export interface WebviewProp {
   webview: scalar.Webview;
-  engine: MutableRefObject<Engine>;
+  keyboard: MutableRefObject<scalar.Keyboard>;
 }
-export const Webview = React.memo(({ webview }: WebviewProp) => {
+export const Webview = React.memo(({ webview, keyboard }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
   const openWebview = useWorld((state) => state.openModal);
-  const keyboard = useKeyboard();
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,

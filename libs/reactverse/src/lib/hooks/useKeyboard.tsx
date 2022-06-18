@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useGame } from "../stores";
 import { scalar } from "../stores";
 import { useInterval } from "./useInterval";
 
-export const useKeyboard = () => {
+export interface KeyboardProps {
+  keyState: MutableRefObject<scalar.Keyboard>;
+  lockState: MutableRefObject<boolean>;
+}
+
+export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
   const keyboard = useGame((state) => state.keyboard);
   const keyLock = useGame((state) => state.keyLock);
   const setKey = useGame((state) => state.setKey);
-  const keyState = useRef(scalar.keyboard);
-  const lockState = useRef(false);
   const lockKey = useGame((state) => state.lockKey);
   useEffect(() => {
     window.addEventListener("focus", () => lockKey(false));
@@ -38,5 +41,4 @@ export const useKeyboard = () => {
     lockState.current = keyLock;
     if (keyLock) keyState.current = scalar.keyboard;
   }, [keyLock]);
-  return keyState;
 };
