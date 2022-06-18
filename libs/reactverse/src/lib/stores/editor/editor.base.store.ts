@@ -37,6 +37,7 @@ export interface EditorBaseState {
   isAssetAddMode: () => boolean;
   isAssetRemoveMode: () => boolean;
   saveMap: () => void;
+  getWebviewUrl: (url: string, purpose: types.TWebviewPurpose) => string;
   pointerMoveOnTile: (e: any) => void;
   pointerDownOnTile: (e: any) => void;
   clickOnAsset: (e: any, index: number) => void;
@@ -96,6 +97,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
         width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
         height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
         url: interaction.url ?? "",
+        purpose: interaction.purpose,
       };
     });
 
@@ -104,6 +106,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       y: (callRoom.topLeft[1] + callRoom.bottomRight[1]) / 2,
       width: Math.abs(callRoom.bottomRight[0] - callRoom.topLeft[0]),
       height: Math.abs(callRoom.bottomRight[1] - callRoom.topLeft[1]),
+      maxNum: callRoom.maxNum,
     }));
 
     set((state) => ({
@@ -203,23 +206,23 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
     if (!isEdited || !mapData) return;
     const { name, tileSize, tiles } = mapData;
 
-    const newCollisions = get().collisions.map((collision) => ({
-      type: "collision",
+    const newCollisions: scalar.CollisionInput[] = get().collisions.map((collision) => ({
       topLeft: [Math.round(collision.x - collision.width / 2), Math.round(collision.y + collision.height / 2)],
       bottomRight: [Math.round(collision.x + collision.width / 2), Math.round(collision.y - collision.height / 2)],
     }));
 
-    const newWebviews = get().webviews.map((webview) => ({
-      type: "webview",
+    const newWebviews: scalar.WebviewInput[] = get().webviews.map((webview) => ({
       topLeft: [Math.round(webview.x - webview.width / 2), Math.round(webview.y + webview.height / 2)],
       bottomRight: [Math.round(webview.x + webview.width / 2), Math.round(webview.y - webview.height / 2)],
-      url: webview.url,
+      url: get().getWebviewUrl(webview.url, webview.purpose),
+      size: [100, 100], //!
+      purpose: webview.purpose,
     }));
 
-    const newCallRooms = get().callRooms.map((callRoom) => ({
-      type: "callRoom",
+    const newCallRooms: scalar.CallRoomInput[] = get().callRooms.map((callRoom) => ({
       topLeft: [Math.round(callRoom.x - callRoom.width / 2), Math.round(callRoom.y + callRoom.height / 2)],
       bottomRight: [Math.round(callRoom.x + callRoom.width / 2), Math.round(callRoom.y - callRoom.height / 2)],
+      maxNum: callRoom.maxNum,
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
@@ -254,6 +257,10 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
 
     await gql.updateMap(mapData.id, data);
     set({ isEdited: false });
+  },
+  getWebviewUrl: (url, purpose) => {
+    if (purpose === "youtube") return `https://youtu.be/${url}`;
+    return url;
   },
   pointerMoveOnTile: (e) => {
     get().isAssetAddMode() && get().previewAsset(e.point.x, e.point.y);

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Segmented, Card, Radio } from "antd";
 import { useEditor } from "../../stores";
-import { WebViewTool } from "./";
+import { WebViewTool, CallRoomTool } from "./";
 
 export const InteractionTool = () => {
   const { subTool, setSubTool, interactionTool, setInteractionTool } = useEditor();
@@ -23,6 +23,7 @@ export const InteractionTool = () => {
             <Radio.Button value="callRoom">CallRoom</Radio.Button>
           </Radio.Group>
           {interactionTool === "webview" && <WebViewTool />}
+          {interactionTool === "callRoom" && <CallRoomTool />}
         </OptionArea>
       )}
     </Card>
