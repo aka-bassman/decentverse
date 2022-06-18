@@ -29,6 +29,7 @@ export interface GossipState {
   unmutePeer: (id: string) => void;
   blindPeer: (id: string) => void;
   openPeer: (id: string) => void;
+  clearPeers: () => void;
   togglePeerMic: (peerId: string, mic: boolean) => void;
   togglePeerCam: (peerId: string, cam: boolean) => void;
   setLocalStream: (localStream: MediaStream) => void;
@@ -87,11 +88,16 @@ export const useGossip = create<GossipState>((set, get) => ({
 
       return { peers };
     }),
+  clearPeers: () =>
+    set((state) => {
+      return { peers: [] };
+    }),
   setMic: (mic: number) =>
     set((state) => {
       if (!state.callRoom.localStream) return {};
       if (state.callRoom.localStream.getAudioTracks().length > 0)
         state.callRoom.localStream.getAudioTracks().forEach((track) => (track.enabled = mic ? true : false));
+      console.log(state.callRoom.localStream.getAudioTracks()[0].enabled);
       return { callRoom: { ...state.callRoom, mic } };
     }),
   setCam: (cam: boolean) =>

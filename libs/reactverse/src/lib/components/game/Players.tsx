@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar, useGame } from "../../stores";
+import { types, useWorld, useGossip, RenderCharacter, scalar, useGame } from "../../stores";
 import { Sprite, SpriteMaterial } from "three";
 import { useTexture, Text } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
@@ -13,6 +13,7 @@ export interface PlayersProp {
 export const Players = ({ playerId }: PlayersProp) => {
   const otherPlayerIds = useWorld((state) => state.otherPlayerIds);
   const otherPlayers = useWorld((state) => state.otherPlayers);
+
   return (
     <Suspense fallback={null}>
       {otherPlayerIds.map((id) => {
@@ -25,12 +26,24 @@ export const Players = ({ playerId }: PlayersProp) => {
   );
 };
 
+const SpeechBox = ({ id }: { id: string }) => {
+  const isTalk = useGossip((state) => state.peers.find((peer) => peer.id === id)?.isTalk);
+  const speechBubble = useTexture("./speechBubble.png");
+
+  return (
+    <sprite position={[0, 220, 1]}>
+      <planeGeometry args={isTalk ? [120, 125] : [0, 0]} />
+      {<spriteMaterial map={speechBubble} />}
+    </sprite>
+  );
+};
 export interface OtherPlayerProp {
   player: types.OtherPlayer;
 }
 export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   const texture = useTexture(`ayias/decentverse/character/chinchin.png?id=${player.id}`);
   const animator = createTileTextureAnimator(texture, player.character.tileSize);
+  const speechBubble = useTexture("./speechBubble.png");
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>(player.character.right.idle);
   const movement = useRef<{
@@ -77,6 +90,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   }, animation);
   return (
     <sprite ref={sprite}>
+      <SpeechBox />
       <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>

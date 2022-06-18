@@ -63,10 +63,12 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   }, 500);
   const getUserMedia = async () => {
     const op = {
+      video: { width: 200, height: 130 },
       audio: true,
     };
     const stream = await navigator.mediaDevices.getUserMedia(op);
     // stream.removeTrack(stream.getVideoTracks()[0]);
+    stream.getVideoTracks()[0].enabled = false;
 
     // stream.getVideoTracks()[0].
     if (localVideo.current) localVideo.current.srcObject = stream;
@@ -96,25 +98,54 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
     return stream;
   };
 
+  const toggleMyCam = async () => {
+    const cam = !callRoom.cam;
+    setCam(cam);
+  };
   const toggleMyMic = async () => {
     const mic = callRoom.mic ? 0 : 100;
     setMic(mic);
   };
+  const getDisplay = async () => {
+    const stream = await navigator.mediaDevices.getDisplayMedia();
+    // callRoom.localStream?.addTrack(stream.getTracks()[0]);
+    if (screenVideo.current) {
+      if (screenVideo.current.srcObject) screenVideo.current.srcObject = null;
+      else screenVideo.current.srcObject = stream;
+    }
+    toggleScreen(stream);
+    // if (localScreen.current) localScreen.current.srcObject = stream;
+  };
 
   return (
     <Container>
-      <video className="Video" autoPlay muted ref={localVideo} />
-      <Control>
-        <IconButton onClick={toggleMyMic}>{callRoom.mic ? <MicOnIcon /> : <MicOffIcon />}</IconButton>
-      </Control>
+      <VideoBox>
+        <NameTag>
+          <div style={{ visibility: !callRoom.mic ? "visible" : "hidden" }}>
+            <MicOffSmallIcon />
+          </div>
+          {me.nickname}
+        </NameTag>
+        <BackLight color={callRoom.isTalk ? "#9ACD32" : "transparent"} />
+        {!callRoom.cam && <Bilind />}
+        <video className="Video" autoPlay muted ref={localVideo} />
+        <Control>
+          <IconButton onClick={getDisplay}>
+            <ShareScreenOffIcon />
+          </IconButton>
+          <IconButton onClick={toggleMyMic}>{callRoom.mic ? <MicOnIcon /> : <MicOffIcon />}</IconButton>
+          <IconButton onClick={toggleMyCam}>{callRoom.cam ? <CamOnIcon /> : <CamOffIcon />}</IconButton>
+        </Control>
+      </VideoBox>
+      <video className="ScreenShare" autoPlay muted ref={screenVideo} />
     </Container>
   );
 };
 
 const Container = styled.div`
   position: absolute;
-  bottom: 4%;
-  left: 50%;
+  top: 4%;
+  left: 1%;
 `;
 
 const VideoBox = styled.div`
@@ -183,7 +214,8 @@ const NameTag = styled.div`
 `;
 const Control = styled.div`
   position: absolute;
-  bottom: 10%;
+  left: 50%;
+  bottom: 5%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -192,11 +224,5 @@ const Control = styled.div`
 `;
 
 const IconButton = styled.button`
-  background: white;
-  height: 50px;
-  width: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 200px;
+  background: transparent;
 `;

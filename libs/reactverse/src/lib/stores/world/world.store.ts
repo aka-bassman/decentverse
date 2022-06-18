@@ -22,6 +22,7 @@ export interface WorldState {
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
   openModal: () => void;
+  closeModal: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   updateUserId: (userId: string) => void;
