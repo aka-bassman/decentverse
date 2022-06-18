@@ -4,6 +4,13 @@ import * as gql from "../gql";
 import { setLink } from "../apollo";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
+import { MetaMaskInpageProvider } from "@metamask/providers";
+
+declare global {
+  interface Window {
+    ethereum?: MetaMaskInpageProvider;
+  }
+}
 export interface UserState {
   id?: string;
   nickname: string;
