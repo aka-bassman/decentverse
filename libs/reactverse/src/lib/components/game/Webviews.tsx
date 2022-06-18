@@ -27,7 +27,6 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
         player.current.position[1] > interaction.current.webview.bottomRight[1]
       )
         return;
-      console.log("leave web view");
       interaction.current.webview = null;
       leaveInteraction("webview");
       closeWebview();
