@@ -10,6 +10,5 @@ export const generateUser = () => {
 export const updateUser = (user: User.Input) => {
   return {
     address: user.address,
-    nickname: user.nickname,
   };
 };
