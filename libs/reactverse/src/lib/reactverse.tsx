@@ -49,7 +49,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
           <Interface socket={socket} />
         </>
       ) : (
-        <></>
+        <>Connecting...</>
       )}
     </ReactverseLayout>
   );

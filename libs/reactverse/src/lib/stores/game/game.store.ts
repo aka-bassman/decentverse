@@ -4,6 +4,7 @@ import { Socket } from "socket.io-client";
 
 export interface GameState {
   loopInterval: number;
+  keyLock: boolean;
   keyboard: types.Keyboard;
   signalInterval: number;
   ping: number;
@@ -22,11 +23,13 @@ export interface GameState {
   screen: types.Screen;
   status: "none" | "loading" | "failed" | "idle";
   setKey: (key: types.KeyType, keyState: boolean) => void;
+  lockKey: (isLocked: boolean) => void;
   changeScreenSize: (screen: types.Screen) => void;
   setTiles: (tiles: number[][]) => void;
 }
 export const useGame = create<GameState>((set, get) => ({
   loopInterval: 500,
+  keyLock: false,
   keyboard: {
     left: false,
     right: false,
@@ -62,6 +65,7 @@ export const useGame = create<GameState>((set, get) => ({
       keyboard[key] = keyState;
       return { keyboard };
     }),
+  lockKey: (isLocked: boolean) => set({ keyLock: isLocked }),
   changeScreenSize: (screen: types.Screen) => set({ screen }),
   setTiles: (tiles: number[][]) => {
     return set((state) => ({ render: { ...state.render, tiles } }));

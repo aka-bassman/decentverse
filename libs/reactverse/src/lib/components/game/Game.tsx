@@ -57,7 +57,7 @@ export const Game = ({ socket }: GameProps) => {
           <Placements />
           <Collisions engine={engine} />
           <Webviews engine={engine} interaction={interaction} player={player} />
-          <CallRooms engine={engine} interaction={interaction} player={player} />
+          <CallRooms socket={socket} engine={engine} interaction={interaction} player={player} />
           <Overlay />
         </Suspense>
       </Canvas>

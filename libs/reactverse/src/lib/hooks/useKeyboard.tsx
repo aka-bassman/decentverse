@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "../stores";
 import { scalar } from "../stores";
+import { useInterval } from "./useInterval";
 
 export const useKeyboard = () => {
   const keyboard = useGame((state) => state.keyboard);
+  const keyLock = useGame((state) => state.keyLock);
   const setKey = useGame((state) => state.setKey);
   const keyState = useRef(scalar.keyboard);
+  const lockState = useRef(false);
+  const lockKey = useGame((state) => state.lockKey);
   useEffect(() => {
+    window.addEventListener("focus", () => lockKey(false));
+    window.addEventListener("blur", () => lockKey(true));
     const handleKeyEvent = (event: any, state: boolean) => {
-      if (event.repeat) return;
+      if (event.repeat || lockState.current) return;
       const code: scalar.Key = event.code;
       const key = scalar.keyMap[code];
       if (!key) return;
@@ -28,5 +34,9 @@ export const useKeyboard = () => {
   useEffect(() => {
     keyState.current = keyboard;
   }, [keyboard]);
+  useEffect(() => {
+    lockState.current = keyLock;
+    if (keyLock) keyState.current = scalar.keyboard;
+  }, [keyLock]);
   return keyState;
 };

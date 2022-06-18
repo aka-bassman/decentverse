@@ -4,13 +4,12 @@ import { Socket as Soc } from "socket.io-client";
 
 export interface GossipState {
   chats: types.Chat[];
-  messages: types.Message[];
   chatText: string;
   callRoom: types.CallRoom;
   peers: types.PeerStream[];
-  messageText: string;
-  chat: () => void;
-  message: () => void;
+  onChangeChatText: (e: any) => void;
+  sendChat: (roomId: string, text: string) => void;
+  receiveChat: (roomId: string, chat: types.Chat) => void;
   addPeer: (
     socketId: string,
     initiator: boolean,
@@ -38,9 +37,7 @@ export interface GossipState {
 }
 export const useGossip = create<GossipState>((set, get) => ({
   chats: [],
-  messages: [],
   chatText: "",
-  messageText: "",
   callRoom: {
     roomId: "",
     roomType: "none",
@@ -50,8 +47,22 @@ export const useGossip = create<GossipState>((set, get) => ({
     fullNum: 0,
   },
   peers: [],
-  chat: () => set((state) => ({ chats: [...state.chats] })),
-  message: () => set((state) => ({ chats: [...state.messages] })),
+  onChangeChatText: (e: any) => set({ chatText: e.target.value }),
+  sendChat: (roomId: string, text: string) =>
+    set((state) => ({
+      chats: [
+        ...state.chats,
+        {
+          from: "1242",
+          fromName: "aaa",
+          text,
+          at: new Date(),
+        },
+      ],
+      chatText: "",
+    })),
+  receiveChat: (roomId: string, chat: types.Chat) =>
+    set((state) => ({ chats: [...state.chats, { ...chat, at: new Date(chat.at) }] })),
   addPeer: (
     socketId: string,
     initiator: boolean,
