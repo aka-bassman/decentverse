@@ -10,10 +10,12 @@ export interface ChattingProps {
 }
 
 export const Chatting = ({ socket }: ChattingProps) => {
+  const userId = useWorld((state) => state.me.userId);
   const chats = useGossip((state) => state.chats);
   const receiveChat = useGossip((state) => state.receiveChat);
   useEffect(() => {
     socket.on("chat:public", (chat: types.Chat) => {
+      if (chat.from === userId) return;
       receiveChat("public", chat);
     });
     return () => {
@@ -43,22 +45,26 @@ export const Chat = ({ chat }: ChatProps) => {
 };
 
 export const ChatInput = ({ socket }: ChattingProps) => {
+  const userId = useWorld((state) => state.me.userId);
   const chatText = useGossip((state) => state.chatText);
   const onChangeChatText = useGossip((state) => state.onChangeChatText);
   const sendChat = useGossip((state) => state.sendChat);
   const speakChat = useWorld((state) => state.speakChat);
   const lockKey = useGame((state) => state.lockKey);
   const keyPress = async (e: any) => e.key === "Enter" && !e.shiftKey && onSubmit();
+  const timeout = useRef<NodeJS.Timeout>();
   const onSubmit = () => {
-    socket.emit("chat", "public", {
-      from: "1242",
-      fromName: "aaa",
+    if (timeout.current) clearInterval(timeout.current);
+    const chat = {
+      from: userId,
+      fromName: userId,
       text: chatText,
       at: new Date(),
-    });
+    };
+    socket.emit("chat", "public", chat);
     sendChat("public", chatText);
     speakChat(chatText);
-    setTimeout(() => speakChat(""), 3000);
+    timeout.current = setTimeout(() => speakChat(""), 3000);
   };
   return (
     <div style={{ position: "absolute", bottom: 0 }}>

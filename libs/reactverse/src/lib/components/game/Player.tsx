@@ -42,7 +42,6 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     ];
     Body.setVelocity(body.current, { x: velocity[0], y: velocity[1] });
     engine.current = Engine.update(engine.current);
-    // const position = [player.current.position[0] + velocity[0], player.current.position[1] + velocity[1]];
     const characterState = velocity[0] === 0 && velocity[1] === 0 ? "idle" : "walk";
     const direction = keyboard.current.right
       ? "right"
@@ -111,7 +110,6 @@ const MyChat = () => {
   const myChat = useWorld((state) => state.myChat);
   return (
     <Html
-      // occlude
       center
       style={{
         backgroundColor: `rgba(255,255,255,${myChat.length ? 0.7 : 0})`,

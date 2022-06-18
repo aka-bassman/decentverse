@@ -75,11 +75,10 @@ export const CallRoom = React.memo(({ callRoom }: CallRoomProp) => {
   return (
     <Suspense fallback={null}>
       {/* <directionalLight ref={light} intensity={0.8} color={0xffff00} /> */}
-
-      <mesh position={position}>
+      {/* <mesh position={position}>
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0x00ff00} transparent />
-      </mesh>
+      </mesh> */}
     </Suspense>
   );
 });

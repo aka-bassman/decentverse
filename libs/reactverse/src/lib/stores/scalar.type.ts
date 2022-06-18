@@ -231,7 +231,7 @@ export const keyMap = {
 } as const;
 export type Key = keyof typeof keyMap;
 
-export const keyTypes = ["up", "left", "down", "right"] as const;
+export const keyTypes = ["up", "left", "down", "right", "interaction"] as const;
 export type KeyType = typeof keyTypes[number];
 export const keyboard = {
   left: false,
