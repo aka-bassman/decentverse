@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Card, Button, Modal } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const LoadMap = () => {
-  const { init } = useMapEditor();
-  const { isLoadModalOpen, toggleLoadModalOpen, loadMapList, mapList } = useMapEditor().mapTool;
+  const { init, isLoadModalOpen, toggleLoadModalOpen, loadMapList, mapList } = useEditor();
 
   useEffect(() => {
     if (!isLoadModalOpen) return;

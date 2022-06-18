@@ -68,6 +68,7 @@
     "peerjs": "^1.4.6",
     "pubsub-js": "^1.9.4",
     "react": "18.1.0",
+    "react-device-detect": "^2.2.2",
     "react-dom": "18.1.0",
     "react-router-dom": "^6.3.0",
     "react-three-fiber": "^6.0.13",

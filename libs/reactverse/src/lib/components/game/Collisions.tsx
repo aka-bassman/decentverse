@@ -23,7 +23,7 @@ export const Collisions = ({ engine }: CollisionsProp) => {
 };
 
 export interface CollisionProp {
-  collision: scalar.Interaction;
+  collision: scalar.Collision;
   engine: MutableRefObject<Engine>;
 }
 export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
@@ -37,6 +37,7 @@ export const Collision = React.memo(({ collision, engine }: CollisionProp) => {
     collision.topLeft[0] - collision.bottomRight[0],
     collision.bottomRight[1] - collision.topLeft[1],
   ];
+
   useEffect(() => {
     const box = Bodies.rectangle(position.x, position.y, width, height, { isStatic: true });
     World.add(engine.current.world, box);

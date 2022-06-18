@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
-export const MapWebviews = () => {
-  const { webviews, clickOnWebview, webviewPreview } = useMapEditor();
+export const MapWebViews = () => {
+  const { webviews, clickOnWebview, webviewPreview } = useEditor();
 
   return (
     <Suspense fallback={null}>

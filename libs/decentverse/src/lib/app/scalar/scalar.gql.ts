@@ -2,7 +2,7 @@ import GraphQLJSON from "graphql-type-json";
 import { ReadStream } from "fs";
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Types, Schema as MongoSchema } from "mongoose";
+import { Types, Schema as MongoSchema, ObjectId } from "mongoose";
 
 @ObjectType()
 export class AccessToken {
@@ -88,17 +88,18 @@ export class TokenUrl {
 export type TokenUrlType = TokenUrl;
 export const TokenUrlSchema = SchemaFactory.createForClass(TokenUrl);
 
-// * Interaction Schema Definition
+export const filePurposes = ["asset", "character", "map"] as const;
+export type FilePurpose = typeof filePurposes[number];
 
-export const actionTypes = ["collision", "webview", "callRoom"] as const;
-export type ActionType = typeof actionTypes[number];
+export const webviewPurposes = ["default", "youtube", "image", "twitter"] as const;
+export type WebviewPurpose = typeof webviewPurposes[number];
 
 @ObjectType()
 @Schema()
-export class Interaction {
-  @Field(() => String)
-  @Prop({ type: String, enum: actionTypes, required: true })
-  type: ActionType;
+export class Collision {
+  @Field(() => String, { nullable: true })
+  @Prop({ type: String, required: false })
+  message?: string;
 
   @Field(() => [Int])
   @Prop([Number])
@@ -107,18 +108,64 @@ export class Interaction {
   @Field(() => [Int])
   @Prop([Number])
   bottomRight: number[];
-
-  @Field(() => String, { nullable: true })
-  @Prop({ type: String })
-  url?: string;
 }
-export type InteractionType = Interaction;
-export const InteractionSchema = SchemaFactory.createForClass(Interaction);
+export type CollisionType = Collision;
+export const CollisionSchema = SchemaFactory.createForClass(Collision);
 
 @InputType()
-export class InteractionInput {
+export class CollisionInput {
+  @Field(() => String, { nullable: true })
+  message?: string;
+
+  @Field(() => [Int])
+  topLeft: number[];
+
+  @Field(() => [Int])
+  bottomRight: number[];
+}
+export type CollisionInputType = CollisionInput;
+
+@ObjectType()
+@Schema()
+export class Webview {
+  @Field(() => String, { nullable: true })
+  @Prop({ type: String, required: false })
+  message?: string;
+
+  @Field(() => String, { nullable: true })
+  @Prop({ type: String, required: false })
+  errorMessage?: string;
+
+  @Field(() => [Int])
+  @Prop([Number])
+  topLeft: number[];
+
+  @Field(() => [Int])
+  @Prop([Number])
+  bottomRight: number[];
+
   @Field(() => String)
-  type: ActionType;
+  @Prop({ type: String })
+  url: string;
+
+  @Field(() => [Int])
+  @Prop([Number])
+  size: number[];
+
+  @Field(() => String)
+  @Prop({ type: String, required: true, default: "default", enum: webviewPurposes })
+  purpose: WebviewPurpose;
+}
+export type WebviewType = Webview;
+export const WebviewSchema = SchemaFactory.createForClass(Webview);
+
+@InputType()
+export class WebviewInput {
+  @Field(() => String, { nullable: true })
+  message?: string;
+
+  @Field(() => String, { nullable: true })
+  errorMessage?: string;
 
   @Field(() => [Int])
   topLeft: number[];
@@ -126,10 +173,62 @@ export class InteractionInput {
   @Field(() => [Int])
   bottomRight: number[];
 
-  @Field(() => String, { nullable: true })
-  url?: string;
-}
-export type InteractionInputType = InteractionInput;
+  @Field(() => String)
+  url: string;
 
-export const filePurposes = ["asset", "character", "map"] as const;
-export type FilePurpose = typeof filePurposes[number];
+  @Field(() => [Int])
+  size: number[];
+
+  @Field(() => String)
+  purpose: WebviewPurpose;
+}
+export type WebviewInputType = WebviewInput;
+
+@ObjectType()
+@Schema()
+export class CallRoom {
+  @Field(() => String, { nullable: false })
+  @Prop({ type: String })
+  _id: string;
+
+  @Field(() => String, { nullable: true })
+  @Prop({ type: String, required: false })
+  message?: string;
+
+  @Field(() => String, { nullable: true })
+  @Prop({ type: String, required: false })
+  errorMessage?: string;
+
+  @Field(() => [Int])
+  @Prop([Number])
+  topLeft: number[];
+
+  @Field(() => [Int])
+  @Prop([Number])
+  bottomRight: number[];
+
+  @Field(() => Int)
+  @Prop({ type: Number, required: true, default: 100 })
+  maxNum: number;
+}
+export type CallRoomType = CallRoom;
+export const CallRoomSchema = SchemaFactory.createForClass(CallRoom);
+
+@InputType()
+export class CallRoomInput {
+  @Field(() => String, { nullable: true })
+  message?: string;
+
+  @Field(() => String, { nullable: true })
+  errorMessage?: string;
+
+  @Field(() => [Int])
+  topLeft: number[];
+
+  @Field(() => [Int])
+  bottomRight: number[];
+
+  @Field(() => Int)
+  maxNum: number;
+}
+export type CallRoomInputType = CallRoomInput;

@@ -14,6 +14,7 @@ export interface UserState {
   guest: () => void;
   logout: () => void;
   updateUser: (data: Partial<types.UserInput>) => Promise<void>;
+  setName: (nickname: string) => void;
   status: "loading" | "idle";
 }
 export const useUser = create<UserState>((set, get) => ({
@@ -52,4 +53,5 @@ export const useUser = create<UserState>((set, get) => ({
     if (!me.id) return;
     await gql.updateUser(me?.id, data);
   },
+  setName: (nickname: string) => set({ nickname }),
 }));

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Button, Segmented, Space } from "antd";
-import { useMapEditor, TMainTool } from "../../stores";
+import { useEditor, TMainTool } from "../../stores";
 import { MapTool, AssetTool, InteractionTool, ViewTool } from "./index";
 
 export const SideToolBar = () => {
-  const { mainTool, setMainTool, isEdited, saveMap, mapData } = useMapEditor();
+  const { mainTool, setMainTool, isEdited, saveMap, mapData } = useEditor();
 
   return (
     <SideToolBarContainer>

@@ -16,12 +16,13 @@ import styled from "styled-components";
 
 export interface MyCallProps {
   socket: Soc;
+  roomId: string;
 }
 
 const videoWidth = 240;
 const videoHeight = 280;
 
-export const MyCall = ({ socket }: MyCallProps) => {
+export const MyCall = ({ socket, roomId }: MyCallProps) => {
   // const me = useWorld((state) => state.me);
   const me = useUser((state) => state);
   const callRoom = useGossip((state) => state.callRoom);
@@ -36,7 +37,8 @@ export const MyCall = ({ socket }: MyCallProps) => {
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     getUserMedia().then(() => {
-      socket.emit("join", { roomId: "bbb", userId: me.userId, nickName: me.userId });
+      socket.emit("join", { roomId, userId: me.nickname, nickName: me.nickname });
+      console.log("get user media");
     });
     return () => {
       peers.map((peer) => peer.call.peer.destroy());

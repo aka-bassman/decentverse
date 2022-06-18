@@ -10,6 +10,7 @@ export const InputName = ({}) => {
   const whoAmI = useUser((state) => state.whoAmI);
   const guest = useUser((state) => state.guest);
   const logout = useUser((state) => state.logout);
+  const setName = useUser((state) => state.setName);
   const updateUser = useUser((state) => state.updateUser);
   const updateUserId = useWorld((state) => state.updateUserId);
   const [nickname, setNickname] = useState<string>(me.nickname ?? "");
@@ -40,16 +41,22 @@ export const InputName = ({}) => {
     setCurrentPage(currentPage - 1);
   };
   const onClickSubmit = () => {
-    updateUserId(nickname);
+    console.log(nickname);
+    setName(nickname);
     updateUser({ nickname });
+    updateUserId(nickname);
   };
 
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
+      setName(nickname);
       updateUser({ nickname });
       updateUserId(nickname);
     }
   };
+  useEffect(() => {
+    console.log("nickname : ", me.nickname);
+  }, [me.nickname]);
   const process = [
     <>
       <Metamask onClick={onPressMetamask}>Start to metamask</Metamask>

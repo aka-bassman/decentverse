@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
-import { WebView } from ".";
+import { WebViewModal } from ".";
 import styled from "styled-components";
 
 export interface InterfaceProps {
@@ -12,45 +12,47 @@ export const Interface = ({ socket }: InterfaceProps) => {
   const user = useWorld((state) => state.me);
   const setKey = useGame((state) => state.setKey);
   return (
-    <div style={{ position: "absolute", top: "30%", left: "3%" }}>
-      <WebView />
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("up", true)}
-        onMouseUp={() => setKey("up", false)}
-        onTouchStart={() => setKey("up", true)}
-        onTouchEnd={() => setKey("up", false)}
-      >
-        UP
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("down", true)}
-        onMouseUp={() => setKey("down", false)}
-        onTouchStart={() => setKey("down", true)}
-        onTouchEnd={() => setKey("down", false)}
-      >
-        DOWN
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("right", true)}
-        onMouseUp={() => setKey("right", false)}
-        onTouchStart={() => setKey("right", true)}
-        onTouchEnd={() => setKey("right", false)}
-      >
-        RIGHT
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("left", true)}
-        onMouseUp={() => setKey("left", false)}
-        onTouchStart={() => setKey("left", true)}
-        onTouchEnd={() => setKey("left", false)}
-      >
-        LEFT
-      </button>
-    </div>
+    <>
+      <div style={{ position: "absolute", top: "30%", left: "3%" }}>
+        <button
+          style={{ width: 50, margin: 5 }}
+          onMouseDown={() => setKey("up", true)}
+          onMouseUp={() => setKey("up", false)}
+          onTouchStart={() => setKey("up", true)}
+          onTouchEnd={() => setKey("up", false)}
+        >
+          UP
+        </button>
+        <button
+          style={{ width: 50, margin: 5 }}
+          onMouseDown={() => setKey("down", true)}
+          onMouseUp={() => setKey("down", false)}
+          onTouchStart={() => setKey("down", true)}
+          onTouchEnd={() => setKey("down", false)}
+        >
+          DOWN
+        </button>
+        <button
+          style={{ width: 50, margin: 5 }}
+          onMouseDown={() => setKey("right", true)}
+          onMouseUp={() => setKey("right", false)}
+          onTouchStart={() => setKey("right", true)}
+          onTouchEnd={() => setKey("right", false)}
+        >
+          RIGHT
+        </button>
+        <button
+          style={{ width: 50, margin: 5 }}
+          onMouseDown={() => setKey("left", true)}
+          onMouseUp={() => setKey("left", false)}
+          onTouchStart={() => setKey("left", true)}
+          onTouchEnd={() => setKey("left", false)}
+        >
+          LEFT
+        </button>
+      </div>
+      <WebViewModal />
+    </>
   );
   // return <>{/* <Name>{user.userId}</Name> */}</>;
 };

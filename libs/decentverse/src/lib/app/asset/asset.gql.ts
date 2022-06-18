@@ -25,11 +25,11 @@ export class AssetInput {
   @Field(() => ID, { nullable: true })
   lighting?: MongoSchema.Types.ObjectId;
 
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  collisions: gql.InteractionInputType[];
+  @Field(() => [gql.CollisionInput])
+  collisions: gql.CollisionInputType[];
 
-  @Field(() => [gql.InteractionInput], { nullable: true })
-  webviews: gql.InteractionInputType[];
+  @Field(() => [gql.WebviewInput])
+  webviews: gql.WebviewInputType[];
 }
 
 /**
@@ -55,11 +55,11 @@ export class Asset {
   @Field(() => gql.File, { nullable: true })
   lighting?: gql.File;
 
-  @Field(() => [gql.Interaction], { nullable: true })
-  collisions: gql.InteractionType[];
+  @Field(() => [gql.Collision])
+  collisions: gql.CollisionType[];
 
-  @Field(() => [gql.Interaction], { nullable: true })
-  webviews: gql.InteractionType[];
+  @Field(() => [gql.Webview])
+  webviews: gql.WebviewType[];
 
   @Field(() => String)
   status: "active" | "inactive";

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import "antd/dist/antd.css";
-import { client, useMapEditor } from "../../stores";
 import { Map, SideToolBar } from "./index";
 import { Layout } from "antd";
 import styled from "styled-components";

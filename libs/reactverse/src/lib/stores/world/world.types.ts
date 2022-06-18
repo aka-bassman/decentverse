@@ -41,7 +41,9 @@ export type OtherPlayer = {
   updatedAt: number;
 };
 export type InteractionState = {
-  [key in scalar.ActionType]: scalar.Interaction | null;
+  collision: scalar.Collision | null;
+  webview: scalar.Webview | null;
+  callRoom: scalar.CallRoom | null;
 };
 export const defaultCharacter = {
   id: "",

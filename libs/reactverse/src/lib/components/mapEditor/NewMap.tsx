@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { Card, Modal, InputNumber, Button, Input, Space } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 import { useState, useEffect } from "react";
 
 export const NewMap = () => {
-  const { isNewModalOpen, toggleNewModalOpen, inputName, updateName, validationCheck, createMap } =
-    useMapEditor().mapTool;
+  const { isNewModalOpen, toggleNewModalOpen, inputName, updateName, validationMapCheck, createMap } = useEditor();
 
   return (
     <>
@@ -17,7 +16,7 @@ export const NewMap = () => {
         visible={isNewModalOpen}
         onOk={createMap}
         onCancel={toggleNewModalOpen}
-        okButtonProps={{ disabled: !validationCheck() }}
+        okButtonProps={{ disabled: !validationMapCheck() }}
       >
         <Space style={{ marginTop: 10 }}>
           <Input addonBefore="name" value={inputName} onChange={(e) => updateName(e.target.value)} />

@@ -17,7 +17,7 @@ export class MapResolver {
   @Query(() => [gql.Map])
   @UseGuards(Allow.Admin)
   async maps() {
-    return this.mapService.maps();
+    return await this.mapService.maps();
   }
 
   @Mutation(() => gql.Map)

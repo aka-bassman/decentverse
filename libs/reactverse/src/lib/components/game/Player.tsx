@@ -18,7 +18,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   const { camera, get, set } = useThree();
   const me = useWorld((state) => state.me);
 
-  const iam = useUser((state) => state);
+  const nickname = useUser((state) => state.nickname);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
   const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 120, 165));
   const inter = useRef<string>("");
@@ -77,7 +77,6 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
     // if (interaction && interaction.current.webview) console.log("player webview!");
-
     if (x === 0 && y === 0) return;
     camera.translateX(x);
     camera.translateY(y);
@@ -89,14 +88,10 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     <Suspense fallback={null}>
       <sprite ref={sprite}>
         <planeGeometry args={[120, 165]} />
+        <spriteMaterial map={url} />
         <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
-          {inter.current}
+          {nickname}
         </Text>
-
-        {/* <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
-          {iam.nickname}
-        </Text> */}
-        {/* <spriteMaterial map={url} color={interaction && interaction.current.webview === null ? "hotpink" : "green"} /> */}
       </sprite>
     </Suspense>
   );

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Card, Checkbox } from "antd";
-import { useMapEditor } from "../../stores";
+import { useEditor } from "../../stores";
 
 export const ViewTool = () => {
-  const { isActiveViewMode, toggleViewMode } = useMapEditor();
+  const { isActiveViewMode, toggleViewMode } = useEditor();
 
   return (
     <Card title="View mode" size="small">
