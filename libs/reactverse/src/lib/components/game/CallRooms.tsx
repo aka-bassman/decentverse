@@ -1,22 +1,7 @@
 import React, { Suspense, useRef, MutableRefObject, useMemo, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-<<<<<<< HEAD
-import { types, scalar, useWorld, RenderCharacter, useGame } from "../../stores";
-import {
-  Group,
-  Scene,
-  Sprite,
-  SpriteMaterial,
-  Vector,
-  Vector3,
-  TextureLoader,
-  MeshBasicMaterial,
-  AmbientLight,
-} from "three";
-=======
 import { types, scalar, useWorld, RenderCharacter, useGame, useGossip } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader, MeshBasicMaterial } from "three";
->>>>>>> e8a6d6ef6e0340159c3e5f9ee1444b72c9393521
 import { useTexture } from "@react-three/drei";
 import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
