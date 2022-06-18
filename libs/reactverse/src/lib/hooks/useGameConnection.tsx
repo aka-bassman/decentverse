@@ -15,12 +15,13 @@ export interface SocketProp {
 export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   const addOtherPlayers = useWorld((state) => state.addOtherPlayers);
   const setOtherPlayerIds = useWorld((state) => state.setOtherPlayerIds);
-  const me = useWorld((state) => state.me);
+  const character = useWorld((state) => state.me.character);
+  const myChat = useWorld((state) => state.myChat);
   useEffect(() => {
-    socket.emit("register", player.current.id, makeCharacterMessage(me.character));
+    socket.emit("register", player.current.id, makeCharacterMessage(character));
     socket.on("players", (data) => {
       const players = data.map((dat: string) => dat && decodeProtocolV1(dat)).filter((d: any) => !!d);
-      const ids = players.map((player: types.RenderCharacter) => {
+      const ids = players.map((player: types.RenderOtherPlayer) => {
         PubSub.publish(player.id, player);
         return player.id;
       });
@@ -45,7 +46,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   }, []);
   useInterval(() => {
     if (!socket) return;
-    const data = encodeProtocolV1(player.current, scope.current);
+    const data = encodeProtocolV1({ ...player.current, chatText: myChat }, scope.current);
     socket.emit("player", ...data);
   }, 250);
 };

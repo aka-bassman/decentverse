@@ -1,21 +1,24 @@
 import React, { Suspense, useRef, MutableRefObject, useMemo, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { types, scalar, useWorld, RenderCharacter, useGame } from "../../stores";
+import { types, scalar, useWorld, RenderCharacter, useGame, useGossip } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader, MeshBasicMaterial } from "three";
 import { useTexture } from "@react-three/drei";
 import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
+import { Socket } from "socket.io-client";
 export interface CallRoomsProp {
   engine: MutableRefObject<Engine>;
   interaction: MutableRefObject<types.InteractionState>;
   player: MutableRefObject<types.RenderCharacter>;
+  socket: Socket;
 }
-export const CallRooms = ({ engine, interaction, player }: CallRoomsProp) => {
+export const CallRooms = ({ engine, interaction, player, socket }: CallRoomsProp) => {
   const callRooms = useWorld((state) => state.map?.callRooms);
   const joinInteraction = useWorld((state) => state.joinInteraction);
   const leaveInteraction = useWorld((state) => state.leaveInteraction);
+  const receiveChat = useGossip((state) => state.receiveChat);
   useInterval(() => {
     if (interaction.current.callRoom) {
       if (
@@ -25,18 +28,20 @@ export const CallRooms = ({ engine, interaction, player }: CallRoomsProp) => {
         player.current.position[1] > interaction.current.callRoom.bottomRight[1]
       )
         return;
-      interaction.current.callRoom = null;
       leaveInteraction("callRoom");
+      socket.off(`chat:${getAreaId(interaction.current.callRoom)}`);
+      interaction.current.callRoom = null;
     } else {
-      callRooms?.map((callroom) => {
+      callRooms?.map((callRoom) => {
         if (
-          callroom.topLeft[0] < player.current.position[0] &&
-          player.current.position[0] < callroom.bottomRight[0] &&
-          callroom.topLeft[1] > player.current.position[1] &&
-          player.current.position[1] > callroom.bottomRight[1]
+          callRoom.topLeft[0] < player.current.position[0] &&
+          player.current.position[0] < callRoom.bottomRight[0] &&
+          callRoom.topLeft[1] > player.current.position[1] &&
+          player.current.position[1] > callRoom.bottomRight[1]
         ) {
-          interaction.current.callRoom = callroom;
-          joinInteraction("callRoom", callroom);
+          interaction.current.callRoom = callRoom;
+          joinInteraction("callRoom", callRoom);
+          socket.on(`chat:${getAreaId(interaction.current.callRoom)}`, (c: types.Chat) => receiveChat("callRoom", c));
         }
       });
     }
@@ -73,3 +78,8 @@ export const CallRoom = React.memo(({ callRoom }: CallRoomProp) => {
     </Suspense>
   );
 });
+
+const getAreaId = (callRoom: types.scalar.CallRoom) =>
+  callRoom
+    ? `${callRoom.topLeft[0]}/${callRoom.topLeft[1]}/${callRoom.bottomRight[0]}/${callRoom.bottomRight[1]}`
+    : "default";

@@ -1,9 +1,9 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame, world } from "../../stores";
+import { useWorld, RenderCharacter, scalar, useGame, world, useGossip } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
-import { useTexture, Text } from "@react-three/drei";
-import { useDuration, createTileTextureAnimator } from "../../hooks";
+import { useTexture, Text, Html } from "@react-three/drei";
+import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import { Engine, World, Bodies, Vector, Body } from "matter-js";
 
 export interface PlayerProp {
@@ -17,8 +17,9 @@ export interface PlayerProp {
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get } = useThree();
   const me = useWorld((state) => state.me);
+  const renderMe = useWorld((state) => state.renderMe);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
-  const body = useRef<Matter.Body>(Bodies.rectangle(me.render.position[0], me.render.position[1], 120, 165));
+  const body = useRef<Matter.Body>(Bodies.rectangle(renderMe.position[0], renderMe.position[1], 120, 165));
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
@@ -33,9 +34,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       keyboard.current.down ? -me.maxSpeed : keyboard.current.up ? me.maxSpeed : 0,
     ];
     Body.setVelocity(body.current, { x: velocity[0], y: velocity[1] });
-
     engine.current = Engine.update(engine.current);
-    // console.log(player.current.)
     // const position = [player.current.position[0] + velocity[0], player.current.position[1] + velocity[1]];
     const characterState = velocity[0] === 0 && velocity[1] === 0 ? "idle" : "walk";
     const direction = keyboard.current.right
@@ -71,16 +70,45 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     camera.translateX(move[0]);
     camera.translateY(move[1]);
   });
-
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
         <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
-        <Text lineHeight={0.8} position={[0, 120, 1]} fontSize={60} material-toneMapped={false}>
+        <Text
+          lineHeight={0.8}
+          position={[0, -120, 1]}
+          fontSize={60}
+          maxWidth={10}
+          overflowWrap="normal"
+          material-toneMapped={false}
+        >
           {me.userId}
         </Text>
+        <MyChat />
       </sprite>
     </Suspense>
+  );
+};
+const MyChat = () => {
+  const myChat = useWorld((state) => state.myChat);
+  return (
+    <Html
+      // occlude
+      center
+      style={{
+        backgroundColor: `rgba(255,255,255,${myChat.length ? 0.7 : 0})`,
+        maxWidth: 300,
+        width: "max-content",
+        borderRadius: 10,
+        bottom: 35,
+        padding: 10,
+        alignContent: "center",
+        alignItems: "center",
+        wordWrap: "normal",
+      }}
+    >
+      {myChat}
+    </Html>
   );
 };

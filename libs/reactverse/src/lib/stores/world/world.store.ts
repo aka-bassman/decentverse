@@ -8,6 +8,8 @@ export interface WorldState {
   render: types.WorldRender;
   map?: types.Map;
   me: types.Player;
+  renderMe: types.RenderCharacter;
+  myChat: string;
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
   interaction: types.InteractionState;
@@ -22,6 +24,7 @@ export interface WorldState {
     int: types.scalar.CallRoom | types.scalar.Webview | types.scalar.Collision
   ) => void;
   leaveInteraction: (type: types.scalar.InteractionType) => void;
+  speakChat: (chatText: string) => void;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -89,14 +92,15 @@ export const useWorld = create<WorldState>((set, get) => ({
     maxSpeed: 10,
     acceleration: 1,
     deceleration: 1,
-    render: {
-      id: "",
-      position: [5000, 5000],
-      velocity: [0, 0],
-      state: "idle",
-      direction: "right",
-    },
   },
+  renderMe: {
+    id: "",
+    position: [5000, 5000],
+    velocity: [0, 0],
+    state: "idle",
+    direction: "right",
+  },
+  myChat: "",
   otherPlayerIds: [],
   otherPlayers: new Map(),
   scope: {
@@ -115,23 +119,16 @@ export const useWorld = create<WorldState>((set, get) => ({
       maps,
       // , characters
     } = await gql.world();
-    const me: types.Player = {
-      ...state.me,
-      character: get().me.character,
-      render: {
-        id: "AAAA",
-        position: [5000, 5000],
-        velocity: [0, 0],
-        state: "idle",
-        direction: "right",
-      },
-      maxSpeed: 10,
-      acceleration: 1,
-      deceleration: 1,
-    };
+    const renderMe = {
+      id: "AAAA",
+      position: [5000, 5000],
+      velocity: [0, 0],
+      state: "idle",
+      direction: "right",
+    } as any;
     const render = { tiles: maps[1].tiles, players: {} };
     const status = "idle";
-    return set({ map: maps[1], me: { ...me }, render, status });
+    return set({ map: maps[1], renderMe, render, status });
   },
 
   accelMe: (keyboard: types.Keyboard) => {
@@ -166,7 +163,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       keyboard.right ? state.me.maxSpeed : keyboard.left ? -state.me.maxSpeed : 0,
       keyboard.down ? state.me.maxSpeed : keyboard.up ? -state.me.maxSpeed : 0,
     ];
-    const position = [state.me.render.position[0] + velocity[0], state.me.render.position[1] + velocity[1]];
+    const position = [state.renderMe.position[0] + velocity[0], state.renderMe.position[1] + velocity[1]];
     const characterState = velocity[0] === 0 && velocity[1] === 0 ? "idle" : "walk";
     const direction = keyboard.right
       ? "right"
@@ -176,19 +173,19 @@ export const useWorld = create<WorldState>((set, get) => ({
       ? "up"
       : keyboard.down && state.me.character.down
       ? "down"
-      : state.me.render.direction;
+      : state.renderMe.direction;
     return set({
-      me: { ...state.me, render: { id: state.me.render.id, position, velocity, direction, state: characterState } },
+      renderMe: { ...state.renderMe, id: state.renderMe.id, position, velocity, direction, state: characterState },
     });
   },
   moveMe: () => {
     const state = get();
     if (!state.me) return;
     const position = [
-      state.me.render.position[0] + state.me.render.velocity[0],
-      state.me.render.position[1] + state.me.render.velocity[1],
+      state.renderMe.position[0] + state.renderMe.velocity[0],
+      state.renderMe.position[1] + state.renderMe.velocity[1],
     ];
-    return set({ me: { ...state.me, render: { ...state.me.render, position } } });
+    return set({ renderMe: { ...state.renderMe, position } });
   },
   updateUserId: (userId: string) => {
     const state = get();
@@ -218,4 +215,5 @@ export const useWorld = create<WorldState>((set, get) => ({
       interaction[type] = null;
       return { interaction };
     }),
+  speakChat: (chatText: string) => set((state) => ({ myChat: chatText })),
 }));

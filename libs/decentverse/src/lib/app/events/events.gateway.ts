@@ -39,7 +39,8 @@ export class EventsGateway {
   }
 
   @SubscribeMessage("chat")
-  async chat(client: Socket, roomId: "public" | string, data: any) {
+  async chat(client: Socket, [roomId, data]: any) {
+    console.log(roomId, data);
     if (roomId === "public") this.server.emit(`chat:${roomId}`, data);
     const sockets = this.server.of("/").in(roomId);
     return sockets.emit(`chat:${roomId}`, data);

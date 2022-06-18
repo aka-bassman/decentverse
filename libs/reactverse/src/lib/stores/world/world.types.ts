@@ -23,13 +23,20 @@ export type RenderCharacter = {
   state: PlayerState;
   direction: Direction;
 };
+export type RenderOtherPlayer = {
+  id: string;
+  position: number[];
+  velocity: number[];
+  state: PlayerState;
+  direction: Direction;
+  chatText: string;
+};
 export type Player = {
   userId: string;
   character: Character;
   maxSpeed: number;
   acceleration: number;
   deceleration: number;
-  render: RenderCharacter;
 };
 export type WorldRender = {
   tiles: scalar.Tile[][];
