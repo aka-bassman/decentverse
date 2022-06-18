@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as Map from "./map.model";
 import * as db from "../db";
+import * as gql from "../../app/gql";
 @Injectable()
 export class MapService {
   private readonly logger = new Logger(MapService.name);
@@ -24,11 +25,11 @@ export class MapService {
   async createMap(data: Map.Input) {
     return await this.Map.create(data);
   }
-  async updateMap(mapId: db.ID | string, data: Partial<Map.Raw>) {
+  async updateMap(mapId: db.ID | string, data: Partial<gql.MapInput>) {
     const map = await this.Map.pickById(mapId);
+
     return await map
       .merge({
-        ...data,
         totalWidth: map.tileSize * (data.tiles[0]?.length ?? 0),
         totalHeight: map.tileSize * data.tiles.length,
       })

@@ -58,6 +58,7 @@ input AssetInput {
 }
 
 type CallRoom {
+  _id: String!
   bottomRight: [Int!]!
   errorMessage: String
   maxNum: Int!
@@ -176,6 +177,7 @@ type Mutation {
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
   updateMap(data: MapInput!, mapId: ID!): Map!
   updateRole(data: RoleInput!, roleId: String!): Admin!
+  updateUser(data: UserInput!, userId: String!): User!
 }
 
 type OpenSeaAttribute {
@@ -216,6 +218,7 @@ type Query {
   role(roldId: ID!): Admin!
   roles: [Admin!]!
   sayHello: String!
+  whoAmI(address: String!, message: String!, signAddress: String!): User!
 }
 
 input RoleInput {
@@ -265,6 +268,20 @@ input TileInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  address: String!
+  createdAt: DateTime!
+  id: String!
+  nickname: String
+  status: String!
+  updatedAt: DateTime!
+}
+
+input UserInput {
+  address: String
+  nickname: String
+}
 
 type Webview {
   bottomRight: [Int!]!

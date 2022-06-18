@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
 // import { CallBox, MyCall } from "./stream";
-import { Chatting } from "./index";
+import { Chatting, WebViewModal } from "./index";
+
 import styled from "styled-components";
 
 export interface InterfaceProps {
@@ -15,6 +16,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
   return (
     <div style={{ position: "absolute", top: "0%", left: "0%" }}>
       <Chatting socket={socket} />
+      <WebViewModal />
       <button
         style={{ width: 50, margin: 5 }}
         onMouseDown={() => setKey("up", true)}

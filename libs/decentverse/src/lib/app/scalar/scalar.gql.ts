@@ -2,7 +2,7 @@ import GraphQLJSON from "graphql-type-json";
 import { ReadStream } from "fs";
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Types, Schema as MongoSchema } from "mongoose";
+import { Types, Schema as MongoSchema, ObjectId } from "mongoose";
 
 @ObjectType()
 export class AccessToken {
@@ -187,6 +187,10 @@ export type WebviewInputType = WebviewInput;
 @ObjectType()
 @Schema()
 export class CallRoom {
+  @Field(() => String, { nullable: false })
+  @Prop({ type: String })
+  _id: string;
+
   @Field(() => String, { nullable: true })
   @Prop({ type: String, required: false })
   message?: string;
