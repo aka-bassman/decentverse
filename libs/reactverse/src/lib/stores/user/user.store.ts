@@ -4,6 +4,8 @@ import * as gql from "../gql";
 import { setLink } from "../apollo";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
+declare const window: any;
+
 export interface UserState {
   id?: string;
   nickname: string;
@@ -24,16 +26,13 @@ export const useUser = create<UserState>((set, get) => ({
   type: "user",
   status: "loading",
   whoAmI: async () => {
-    if (typeof window.ethereum === "undefined") {
-      return;
-    }
-    const selectedAddress = await window.ethereum.request<string>({ method: "eth_requestAccounts" });
+    if (typeof window.ethereum === "undefined") return;
+    const selectedAddress = await window.ethereum.request({ method: "eth_requestAccounts" });
     if (selectedAddress) {
-      console.log(selectedAddress[0]);
       const provider = new ethers.providers.Web3Provider(window.ethereum as any);
       const message = `test messgae\n timeStmap:${new Date().getTime()}`;
       const params = [message, selectedAddress[0]];
-      const signAddress = await window.ethereum.request<string>({
+      const signAddress = await window.ethereum.request({
         method: "personal_sign",
         params,
       });
