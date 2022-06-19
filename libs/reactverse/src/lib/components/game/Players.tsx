@@ -93,7 +93,6 @@ export const PlayerChat = ({ id }: { id: string }) => {
   const speechBubble = useTexture("./speechBubble.png");
   useEffect(() => {
     const subscription = (_: string, state: { chatText: string; isTalk: boolean }) => {
-      console.log("fds", state);
       setChatState(state);
     };
     PubSub.subscribe(`chat:${id}`, subscription);
@@ -101,6 +100,7 @@ export const PlayerChat = ({ id }: { id: string }) => {
       PubSub.unsubscribe(subscription);
     };
   }, []);
+  console.log(chatState);
   return (
     <>
       <Html
@@ -120,7 +120,7 @@ export const PlayerChat = ({ id }: { id: string }) => {
         {chatState.chatText}
       </Html>
       <sprite position={[60, 150, 1]}>
-        <planeGeometry args={chatState.isTalk && !chatState.chatText.length ? [120, 125] : [0, 0]} />
+        <planeGeometry args={chatState.isTalk ? [120, 125] : [0, 0]} />
         {<spriteMaterial map={speechBubble} />}
       </sprite>
     </>

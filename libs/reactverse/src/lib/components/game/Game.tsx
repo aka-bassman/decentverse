@@ -15,6 +15,7 @@ import {
 } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
+import { isMobile } from "react-device-detect";
 
 export interface GameProps {
   socket: Soc;
@@ -47,12 +48,20 @@ export const Game = ({ socket }: GameProps) => {
   const margin = 500;
   return (
     <div
-      style={{
-        width: screen.size[0] + 2 * margin,
-        height: screen.size[1] + 2 * margin,
-        marginLeft: -margin,
-        marginTop: -margin,
-      }}
+      style={
+        // {
+        //   width: "260%",
+        //   height: "260%",
+        //   marginLeft: "-80%",
+        //   marginTop: "-80%",
+        // }
+        {
+          width: screen.size[0] + 2 * margin,
+          height: screen.size[1] + 2 * margin,
+          marginLeft: -margin,
+          marginTop: -margin,
+        }
+      }
     >
       <Canvas orthographic camera={{ zoom: 0.5 }} frameloop="always">
         <Suspense fallback={null}>

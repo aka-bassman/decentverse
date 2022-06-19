@@ -30,7 +30,7 @@ export const decodeProtocolV1 = (data: string): PlayerProtocol => {
     state: message[5] as types.PlayerState,
     direction: message[6] as types.Direction,
     chatText: message[7],
-    isTalk: Boolean(message[8]),
+    isTalk: message[8] === "true",
   };
 };
 const convToScore = (x: number, y: number, maxDigits = 16) => {
