@@ -1,7 +1,7 @@
 import { useState, useEffect, MutableRefObject } from "react";
 import { io, Socket as Soc } from "socket.io-client";
 import { useInterval } from "../hooks/useInterval";
-import { defaultCharacter, types, useWorld } from "../stores";
+import { defaultCharacter, types, useGossip, useWorld } from "../stores";
 import { encodeProtocolV1, decodeProtocolV1, makeCharacterMessage } from "../utils";
 import PubSub from "pubsub-js";
 
@@ -17,6 +17,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   const setOtherPlayerIds = useWorld((state) => state.setOtherPlayerIds);
   const character = useWorld((state) => state.me.character);
   const myChat = useWorld((state) => state.myChat);
+  const isTalk = useGossip((state) => state.callRoom.isTalk);
   useEffect(() => {
     socket.emit("register", player.current.id, makeCharacterMessage(character));
     socket.on("players", (data) => {
@@ -46,7 +47,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   }, []);
   useInterval(() => {
     if (!socket) return;
-    const data = encodeProtocolV1({ ...player.current, chatText: myChat }, scope.current);
+    const data = encodeProtocolV1({ ...player.current, chatText: myChat, isTalk }, scope.current);
     socket.emit("player", ...data);
   }, 250);
 };

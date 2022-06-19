@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useUser, types } from "../../stores";
-// import { CallBox, MyCall } from "./stream";
-import { AdminModal } from "./index";
 import styled, { keyframes } from "styled-components";
 
 export const InputName = ({}) => {

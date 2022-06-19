@@ -25,7 +25,8 @@ export class EventsGateway {
   @SubscribeMessage("player")
   async player(client: Socket, [id, position, data, min, max]: string[]) {
     await this.rtService.updatePlayer(id, position, data);
-    client.emit("players", await this.rtService.getRange(min, max));
+    const d = await this.rtService.getRange(min, max);
+    client.emit("players", d);
   }
 
   @SubscribeMessage("register")

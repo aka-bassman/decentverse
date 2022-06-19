@@ -6,7 +6,6 @@ import { useTexture, Text, Html } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import { Engine, World, Bodies, Vector, Body } from "matter-js";
 import { TextureLoader } from "three";
-import { SpeechBox } from ".";
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;
   animation: MutableRefObject<scalar.SpriteDef>;
@@ -78,23 +77,19 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const playerPosition = player.current.position;
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
-    // if (interaction && interaction.current.webview) console.log("player webview!");
     if (x === 0 && y === 0) return;
     camera.translateX(x);
     camera.translateY(y);
-    // camera.position.setX(x);
-    // camera.position.setY(y);
   });
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
-        <SpeechBox />
         <planeGeometry args={[120, 165]} />
         <spriteMaterial map={url} />
         <Text
           lineHeight={0.8}
           position={[0, -120, 1]}
-          fontSize={60}
+          fontSize={40}
           maxWidth={10}
           overflowWrap="normal"
           material-toneMapped={false}
@@ -108,22 +103,30 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
 };
 const MyChat = () => {
   const myChat = useWorld((state) => state.myChat);
+  const isTalk = useGossip((state) => state.callRoom.isTalk);
+  const speechBubble = useTexture("./speechBubble.png");
   return (
-    <Html
-      center
-      style={{
-        backgroundColor: `rgba(255,255,255,${myChat.length ? 0.7 : 0})`,
-        maxWidth: 300,
-        width: "max-content",
-        borderRadius: 10,
-        bottom: 35,
-        padding: 10,
-        alignContent: "center",
-        alignItems: "center",
-        wordWrap: "normal",
-      }}
-    >
-      {myChat}
-    </Html>
+    <>
+      <Html
+        center
+        style={{
+          backgroundColor: `rgba(255,255,255,${myChat.length ? 0.7 : 0})`,
+          maxWidth: 300,
+          width: "max-content",
+          borderRadius: 10,
+          bottom: 35,
+          padding: 10,
+          alignContent: "center",
+          alignItems: "center",
+          wordWrap: "normal",
+        }}
+      >
+        {myChat}
+      </Html>
+      <sprite position={[60, 150, 1]}>
+        <planeGeometry args={isTalk && !myChat.length ? [120, 125] : [0, 0]} />
+        <spriteMaterial map={speechBubble} />
+      </sprite>
+    </>
   );
 };

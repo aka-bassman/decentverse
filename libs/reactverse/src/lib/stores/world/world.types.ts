@@ -30,6 +30,7 @@ export type RenderOtherPlayer = {
   state: PlayerState;
   direction: Direction;
   chatText: string;
+  isTalk: boolean;
 };
 export type Player = {
   userId: string;

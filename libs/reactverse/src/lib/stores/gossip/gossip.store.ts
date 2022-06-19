@@ -160,7 +160,7 @@ export const useGossip = create<GossipState>((set, get) => ({
     }),
   setIsTalk: (isTalk: boolean) =>
     set((state) => {
-      state.callRoom.isTalk = isTalk;
+      state.callRoom.isTalk = isTalk && state.callRoom.mic > 0;
       return { callRoom: { ...state.callRoom } };
     }),
   updatePeer: (data: Partial<types.PeerStream>) =>

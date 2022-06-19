@@ -106,7 +106,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     id: "",
     position: [5000, 5000],
     velocity: [0, 0],
-    state: "idle",
+    state: "idle" as "idle" | "walk",
     direction: "right",
   },
   modalOpen: false,

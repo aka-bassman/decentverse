@@ -6,6 +6,7 @@ export type PlayerProtocol = {
   state: types.PlayerState;
   direction: types.Direction;
   chatText: string;
+  isTalk: boolean;
 };
 export type Scope = {
   min: number[];
@@ -17,7 +18,7 @@ export const encodeProtocolV1 = (p: PlayerProtocol, s: Scope) => {
   const max = convToScore(s.max[0], s.max[1]);
   const encodedData = `${p.id}\t${Math.floor(p.position[0])}\t${Math.floor(p.position[1])}\t${p.velocity[0]}\t${
     p.velocity[1]
-  }\t${p.state}\t${p.direction}\t${p.chatText}`;
+  }\t${p.state}\t${p.direction}\t${p.chatText}\t${p.isTalk}`;
   return [p.id, encodedPosition, encodedData, min, max];
 };
 export const decodeProtocolV1 = (data: string): PlayerProtocol => {
@@ -29,6 +30,7 @@ export const decodeProtocolV1 = (data: string): PlayerProtocol => {
     state: message[5] as types.PlayerState,
     direction: message[6] as types.Direction,
     chatText: message[7],
+    isTalk: Boolean(message[8]),
   };
 };
 const convToScore = (x: number, y: number, maxDigits = 16) => {

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
-// import { CallBox, MyCall } from "./stream";
 import { Chatting, WebViewModal } from "./index";
 import { Joystick } from "react-joystick-component";
 import { isMobile } from "react-device-detect";
@@ -24,14 +23,7 @@ export interface InterfaceProps {
 export const Interface = ({ socket }: InterfaceProps) => {
   const user = useWorld((state) => state.me);
   const setKey = useGame((state) => state.setKey);
-
-  // This is simply an example that demonstrates
-  // how you can dispatch an event on the element.
-
   const handleMove = (event: IJoystickUpdateEvent) => {
-    console.log(event);
-    //right
-    -74;
     if (event.x && event.x > 37.5) {
       console.log("right");
       setKey("right", true);
@@ -64,47 +56,32 @@ export const Interface = ({ socket }: InterfaceProps) => {
     setKey("right", false);
   };
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <div style={{ position: "absolute", top: "0%", left: "0%" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        flexDirection: "column",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0%",
+          alignItems: "center",
+          flexDirection: "column",
+          display: "flex",
+          justifyContent: "center",
+          maxWidth: "100%",
+        }}
+      >
         <Chatting socket={socket} />
-        <WebViewModal />
+      </div>
 
-        {/* <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("up", true)}
-        onMouseUp={() => setKey("up", false)}
-        onTouchStart={() => setKey("up", true)}
-        onTouchEnd={() => setKey("up", false)}
-      >
-        UP
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("down", true)}
-        onMouseUp={() => setKey("down", false)}
-        onTouchStart={() => setKey("down", true)}
-        onTouchEnd={() => setKey("down", false)}
-      >
-        DOWN
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("right", true)}
-        onMouseUp={() => setKey("right", false)}
-        onTouchStart={() => setKey("right", true)}
-        onTouchEnd={() => setKey("right", false)}
-      >
-        RIGHT
-      </button>
-      <button
-        style={{ width: 50, margin: 5 }}
-        onMouseDown={() => setKey("left", true)}
-        onMouseUp={() => setKey("left", false)}
-        onTouchStart={() => setKey("left", true)}
-        onTouchEnd={() => setKey("left", false)}
-      >
-        LEFT
-      </button> */}
+      <div style={{ position: "absolute", top: "0%", left: "0%" }}>
+        <WebViewModal />
       </div>
       {isMobile && (
         <div style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "-40%" }}>
@@ -118,7 +95,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
               console.log("touchENd");
               setKey("interaction", false);
             }}
-            style={{ width: 75, height: 75, borderRadius: 300, marginLeft: 20 }}
+            style={{ width: 75, height: 75, borderRadius: 300, marginLeft: 20, opacity: 0.7 }}
           >
             F
           </button>
