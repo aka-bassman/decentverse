@@ -56,7 +56,6 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
 
 export interface WebviewProp {
   webview: scalar.Webview;
-  keyboard: MutableRefObject<scalar.Keyboard>;
 }
 export const Webview = React.memo(({ webview }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
