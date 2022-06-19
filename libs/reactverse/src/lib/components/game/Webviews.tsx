@@ -3,7 +3,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { types, scalar, useWorld, RenderCharacter, useGame } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader, MeshBasicMaterial } from "three";
 import { useTexture, Text } from "@react-three/drei";
-import { useInterval, useKeyboard } from "../../hooks";
+import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
 import { Bodies, Engine, World } from "matter-js";
@@ -48,7 +48,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
   return (
     <Suspense fallback={null}>
       {webviews?.map((webview, idx) => (
-        <Webview key={idx} webview={webview} keyboard={keyboard} />
+        <Webview key={idx} webview={webview} />
       ))}
     </Suspense>
   );
@@ -58,9 +58,11 @@ export interface WebviewProp {
   webview: scalar.Webview;
   keyboard: MutableRefObject<scalar.Keyboard>;
 }
-export const Webview = React.memo(({ webview, keyboard }: WebviewProp) => {
+export const Webview = React.memo(({ webview }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
   const openWebview = useWorld((state) => state.openModal);
+  const keyboard = useGame((state) => state.keyboard);
+
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,
@@ -68,7 +70,7 @@ export const Webview = React.memo(({ webview, keyboard }: WebviewProp) => {
   );
 
   useInterval(() => {
-    if (keyboard.current.interaction) openWebview();
+    if (keyboard.interaction) openWebview();
   }, 100);
   const [width, height] = [webview.topLeft[0] - webview.bottomRight[0], webview.bottomRight[1] - webview.topLeft[1]];
 
