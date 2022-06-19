@@ -41,7 +41,6 @@ export class EventsGateway {
 
   @SubscribeMessage("chat")
   async chat(client: Socket, [roomId, data]: any) {
-    console.log(roomId, data);
     if (roomId === "public") this.server.emit(`chat:${roomId}`, data);
     const sockets = this.server.of("/").in(roomId);
     return sockets.emit(`chat:${roomId}`, data);
@@ -52,14 +51,12 @@ export class EventsGateway {
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
-    console.log(roomId);
     if (clients.length === 0) {
       this.logger.log("create Room");
       client.join(roomId);
       client.rooms.add(roomId);
     } else if (clients.length > 0) {
       this.logger.log("Ready");
-      console.log("clinets length : ", clients.length);
       for (const client_ of clients) {
         client_.emit("init", client.id, client.data);
       }
@@ -85,12 +82,10 @@ export class EventsGateway {
 
   @SubscribeMessage("receive")
   async receive(client: Socket, { socketId, roomId, userId, nickName }: any) {
-    console.log("receive", userId);
     const sockets = this.server.of("/").in(roomId);
     const clients = await sockets.fetchSockets();
     client.data = { roomId, userId, nickName };
     const receiver = clients.find((client) => client.id === socketId);
-    console.log(clients.length);
     receiver.emit("receive", client.id, client.data);
   }
 

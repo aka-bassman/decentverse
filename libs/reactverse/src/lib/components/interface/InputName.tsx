@@ -38,7 +38,6 @@ export const InputName = ({}) => {
     setCurrentPage(currentPage - 1);
   };
   const onClickSubmit = () => {
-    console.log(nickname);
     setName(nickname);
     updateUser({ nickname });
     updateUserId(nickname);
@@ -51,9 +50,6 @@ export const InputName = ({}) => {
       updateUserId(nickname);
     }
   };
-  useEffect(() => {
-    console.log("nickname : ", me.nickname);
-  }, [me.nickname]);
   const process = [
     <>
       <Metamask onClick={onPressMetamask}>Start to metamask</Metamask>

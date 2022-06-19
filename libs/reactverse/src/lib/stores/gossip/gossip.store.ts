@@ -108,7 +108,6 @@ export const useGossip = create<GossipState>((set, get) => ({
       if (!state.callRoom.localStream) return {};
       if (state.callRoom.localStream.getAudioTracks().length > 0)
         state.callRoom.localStream.getAudioTracks().forEach((track) => (track.enabled = mic ? true : false));
-      console.log(state.callRoom.localStream.getAudioTracks()[0].enabled);
       return { callRoom: { ...state.callRoom, mic } };
     }),
   setCam: (cam: boolean) =>

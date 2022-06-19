@@ -25,11 +25,9 @@ export const Interface = ({ socket }: InterfaceProps) => {
   const setKey = useGame((state) => state.setKey);
   const handleMove = (event: IJoystickUpdateEvent) => {
     if (event.x && event.x > 37.5) {
-      console.log("right");
       setKey("right", true);
       setKey("left", false);
     } else if (event.x && event.x < -37.5) {
-      console.log("left");
       setKey("right", false);
       setKey("left", true);
     } else {
@@ -88,11 +86,9 @@ export const Interface = ({ socket }: InterfaceProps) => {
           <Joystick size={150} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
           <button
             onTouchStart={() => {
-              console.log("touch");
               setKey("interaction", true);
             }}
             onTouchEnd={() => {
-              console.log("touchENd");
               setKey("interaction", false);
             }}
             style={{ width: 75, height: 75, borderRadius: 300, marginLeft: 20, opacity: 0.7 }}

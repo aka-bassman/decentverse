@@ -70,7 +70,6 @@ async function bootstrap() {
   //   },
   // });
   // const files = await fileModel.find({});
-  // console.log(files[0]);
 }
 
 bootstrap();

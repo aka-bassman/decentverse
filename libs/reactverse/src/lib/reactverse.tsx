@@ -20,7 +20,6 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-    console.log(isConnected, socket);
   }, []);
 
   if (isMapEditorOpen) {

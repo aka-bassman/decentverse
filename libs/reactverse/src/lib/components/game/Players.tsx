@@ -100,7 +100,6 @@ export const PlayerChat = ({ id }: { id: string }) => {
       PubSub.unsubscribe(subscription);
     };
   }, []);
-  console.log(chatState);
   return (
     <>
       <Html

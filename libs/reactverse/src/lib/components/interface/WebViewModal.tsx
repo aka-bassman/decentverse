@@ -9,9 +9,6 @@ export const WebViewModal = ({}) => {
   const isOpen = useWorld((state) => state.modalOpen);
   const closeModal = useWorld((state) => state.closeModal);
 
-  useEffect(() => {
-    console.log(interaction.webview);
-  }, [interaction.webview]);
   return (
     <>
       {isOpen && (

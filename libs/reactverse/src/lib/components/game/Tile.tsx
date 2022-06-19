@@ -25,7 +25,6 @@ export const Tile = React.memo(({ x, y, offsetX, offsetY }: TileProp) => {
     renderTiles[y][x].lighting &&
     loader.load(renderTiles[y][x].lighting?.url.replace("https://asset.ayias.io", "ayias") ?? "");
   const position = new Vector3(offsetX, offsetY, -0.0000001);
-  console.log(position);
   return (
     <Suspense fallback={null}>
       {/* <mesh position={position} visible={true}>

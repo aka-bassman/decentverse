@@ -242,7 +242,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     }));
   },
   removeWebview: (index) => {
-    console.log("removeWebview", index);
     set((state) => ({
       webviews: [...state.webviews.slice(0, index), ...state.webviews.slice(index + 1)],
       isEdited: true,
