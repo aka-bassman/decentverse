@@ -12,6 +12,7 @@ import { Socket as Soc } from "socket.io-client";
 import { useGossip, useUser, useWorld, types } from "../../stores";
 import { MyVideo } from "./";
 import { useInterval } from "../../hooks";
+import { isMobile } from "react-device-detect";
 import styled from "styled-components";
 
 export interface MyCallProps {
@@ -104,9 +105,15 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   return (
     <Container>
       <video className="Video" autoPlay muted ref={localVideo} />
-      <Control>
-        <IconButton onClick={toggleMyMic}>{callRoom.mic ? <MicOnIcon /> : <MicOffIcon />}</IconButton>
-      </Control>
+      {isMobile ? (
+        <MobileControl>
+          <IconButton onClick={toggleMyMic}>{callRoom.mic ? <MicOnIcon /> : <MicOffIcon />}</IconButton>
+        </MobileControl>
+      ) : (
+        <Control>
+          <IconButton onClick={toggleMyMic}>{callRoom.mic ? <MicOnIcon /> : <MicOffIcon />}</IconButton>
+        </Control>
+      )}
     </Container>
   );
 };
@@ -115,6 +122,7 @@ const Container = styled.div`
   position: absolute;
   bottom: 4%;
   left: 50%;
+  /* border-width: 10px; */
 `;
 
 const VideoBox = styled.div`
@@ -189,6 +197,25 @@ const Control = styled.div`
   justify-content: center;
   z-index: 3;
   transform: translate(-50%, 0);
+`;
+const MobileControl = styled.div`
+  position: absolute;
+  bottom: -180%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 3;
+  /* transform: translate(-50%, 0); */
+`;
+
+const MobileIconButton = styled.button`
+  background: white;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 200px;
 `;
 
 const IconButton = styled.button`

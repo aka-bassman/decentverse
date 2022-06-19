@@ -2,6 +2,7 @@ import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { useWorld } from "../../stores";
 import { XButton } from "..";
 import styled from "styled-components";
+import { isMobile } from "react-device-detect";
 
 export const WebViewModal = ({}) => {
   const interaction = useWorld((state) => state.interaction);
@@ -17,13 +18,13 @@ export const WebViewModal = ({}) => {
         <div
           style={{
             display: interaction.webview && isOpen ? "inline" : "hidden",
-            width: 1000,
-            height: 600,
+            width: isMobile ? 400 : 1000,
+            height: isMobile ? 600 : 600,
             borderRadius: 30,
             backgroundColor: "white",
             position: "absolute",
-            top: "50%",
-            left: "50%",
+            top: isMobile ? "100%" : "50%",
+            left: isMobile ? "50%" : "50%",
             transform: `translate(-50%, -50%)`,
             justifyContent: "center",
             alignItems: "center",

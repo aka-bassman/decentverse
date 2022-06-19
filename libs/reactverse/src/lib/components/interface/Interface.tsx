@@ -3,8 +3,19 @@ import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
 // import { CallBox, MyCall } from "./stream";
 import { Chatting, WebViewModal } from "./index";
-
+import { Joystick } from "react-joystick-component";
+import { isMobile } from "react-device-detect";
 import styled from "styled-components";
+
+type JoystickDirection = "FORWARD" | "RIGHT" | "LEFT" | "BACKWARD";
+
+interface IJoystickUpdateEvent {
+  type: "move" | "stop" | "start";
+  x: number | null;
+  y: number | null;
+  direction: JoystickDirection | null;
+  distance: number | null;
+}
 
 export interface InterfaceProps {
   socket: Soc;
@@ -13,11 +24,52 @@ export interface InterfaceProps {
 export const Interface = ({ socket }: InterfaceProps) => {
   const user = useWorld((state) => state.me);
   const setKey = useGame((state) => state.setKey);
+
+  // This is simply an example that demonstrates
+  // how you can dispatch an event on the element.
+
+  const handleMove = (event: IJoystickUpdateEvent) => {
+    console.log(event);
+    //right
+    -74;
+    if (event.x && event.x > 37.5) {
+      console.log("right");
+      setKey("right", true);
+      setKey("left", false);
+    } else if (event.x && event.x < -37.5) {
+      console.log("left");
+      setKey("right", false);
+      setKey("left", true);
+    } else {
+      setKey("right", false);
+      setKey("left", false);
+    }
+
+    //top
+    if (event.y && event.y > 37.5) {
+      setKey("down", false);
+      setKey("up", true);
+    } else if (event.y && event.y < -37.5) {
+      setKey("down", true);
+      setKey("up", false);
+    } else {
+      setKey("down", false);
+      setKey("up", false);
+    }
+  };
+  const handleStop = (event: IJoystickUpdateEvent) => {
+    setKey("down", false);
+    setKey("up", false);
+    setKey("left", false);
+    setKey("right", false);
+  };
   return (
-    <div style={{ position: "absolute", top: "0%", left: "0%" }}>
-      <Chatting socket={socket} />
-      <WebViewModal />
-      <button
+    <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ position: "absolute", top: "0%", left: "0%" }}>
+        <Chatting socket={socket} />
+        <WebViewModal />
+
+        {/* <button
         style={{ width: 50, margin: 5 }}
         onMouseDown={() => setKey("up", true)}
         onMouseUp={() => setKey("up", false)}
@@ -52,7 +104,26 @@ export const Interface = ({ socket }: InterfaceProps) => {
         onTouchEnd={() => setKey("left", false)}
       >
         LEFT
-      </button>
+      </button> */}
+      </div>
+      {isMobile && (
+        <div style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "-40%" }}>
+          <Joystick size={150} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
+          <button
+            onTouchStart={() => {
+              console.log("touch");
+              setKey("interaction", true);
+            }}
+            onTouchEnd={() => {
+              console.log("touchENd");
+              setKey("interaction", false);
+            }}
+            style={{ width: 75, height: 75, borderRadius: 300, marginLeft: 20 }}
+          >
+            F
+          </button>
+        </div>
+      )}
     </div>
   );
   // return <>{/* <Name>{user.userId}</Name> */}</>;
