@@ -78,7 +78,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
         <Chatting socket={socket} />
       </div>
 
-      <div style={{ position: "absolute", top: "0%", left: "0%" }}>
+      <div style={{ top: "0%", left: "0%" }}>
         <WebViewModal />
       </div>
       {isMobile && (
