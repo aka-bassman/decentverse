@@ -75,8 +75,8 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
   return (
     <Suspense fallback={null}>
       <mesh position={position}>
-        <planeGeometry args={[width, height]} />
-        <meshBasicMaterial color={0xff0000} transparent />
+        {/* <planeGeometry args={[width, height]} />
+        <meshBasicMaterial color={0xff0000} transparent /> */}
         {interaction && interaction.webview?.url === webview.url && (
           <mesh position={[0, -120, 1]}>
             <planeBufferGeometry attach="geometry" args={[380, 100]} />
