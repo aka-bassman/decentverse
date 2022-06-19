@@ -4,7 +4,7 @@ import { XButton } from "..";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
 
-export const WebViewModal = ({}) => {
+export const WebViewModal = () => {
   const interaction = useWorld((state) => state.interaction);
   const isOpen = useWorld((state) => state.modalOpen);
   const closeModal = useWorld((state) => state.closeModal);
