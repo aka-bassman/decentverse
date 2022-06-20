@@ -23,8 +23,8 @@ export const WebViewModal = ({}) => {
             borderRadius: 30,
             backgroundColor: "white",
             position: "absolute",
-            top: isMobile ? "100%" : "50%",
-            left: isMobile ? "50%" : "50%",
+            top: isMobile ? "100%" : "100%",
+            left: isMobile ? "50%" : "150%",
             transform: `translate(-50%, -50%)`,
             justifyContent: "center",
             alignItems: "center",
@@ -50,12 +50,12 @@ export const WebViewModal = ({}) => {
               <XButton />
             </button>
           </div>
-          <object
+          <iframe
             id="foo"
-            // data="https://www.opensea.com"
-            data={interaction.webview?.url}
+            src="https://twitframe.com/show?url=https://twitter.com/ching_ching____"
+            // data={interaction.webview?.url}
             style={{ display: "inline-flex", width: "100%", height: "80%" }}
-          ></object>
+          ></iframe>
         </div>
       )}
     </>
