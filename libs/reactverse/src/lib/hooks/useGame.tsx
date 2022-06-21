@@ -4,7 +4,7 @@ import { RepeatWrapping } from "three";
 export function tiledToR3FTextureTranspiler(tilePosition: number[], tilesAmountX: number, tilesAmountY: number) {
   return {
     offset: {
-      x: tilePosition[1] / tilesAmountX,
+      x: tilePosition[1] / tilesAmountX - 0.01, //temp
       y: (tilesAmountY - tilePosition[0] - 1) / tilesAmountY,
     },
   };

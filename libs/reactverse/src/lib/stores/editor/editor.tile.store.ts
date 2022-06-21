@@ -59,8 +59,6 @@ export const editorTileSlice: EditorSlice<EditorTileState> = (set, get) => ({
       callRooms: mapData.callRooms,
     };
 
-    console.log("data!!!!", data);
-
     await gql.updateMap(mapData.id, data);
     set({ newTiles: [], isTilesModalOpen: false });
 

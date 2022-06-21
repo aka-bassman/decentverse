@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar } from "../../stores";
+import { types, useWorld, RenderCharacter, scalar, useGame, useUser } from "../../stores";
 import { Sprite, SpriteMaterial, Vector3 } from "three";
 import {
   TileMap,
@@ -21,7 +21,9 @@ export interface GameProps {
 }
 
 export const Game = ({ socket }: GameProps) => {
+  const nickname = useUser((state) => state.nickname);
   const initWorld = useWorld((state) => state.initWorld);
+  const screen = useGame((state) => state.screen);
   const engine = useRef(Engine.create());
   useEffect(() => {
     initWorld();
@@ -29,7 +31,7 @@ export const Game = ({ socket }: GameProps) => {
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const player = useRef<RenderCharacter>({
-    id: "",
+    id: nickname,
     position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
@@ -42,16 +44,28 @@ export const Game = ({ socket }: GameProps) => {
   const interaction = useRef<types.InteractionState>(types.defaultInteractionState);
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
+  const margin = 500;
+  console.log(screen.size[0] + 2 * margin);
+  console.log(screen.size[1] + 2 * margin);
+
   return (
     <div
-      style={{
-        width: "200%",
-        height: "200%",
-        marginLeft: "-50%",
-        marginTop: "-30%",
-      }}
+      style={
+        // {
+        //   width: "260%",
+        //   height: "260%",
+        //   marginLeft: "-80%",
+        //   marginTop: "-80%",
+        // }
+        {
+          width: "100%",
+          height: "100%",
+
+          // marginLeft: -margin,
+          // marginTop: -margin,
+        }
+      }
     >
-      {/* <Canvas camera={{ fov: 100, near: 1, far: 3000, position: [0, 0, 2500], zoom: 1 }}> */}
       <Canvas orthographic camera={{ zoom: 0.5 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />

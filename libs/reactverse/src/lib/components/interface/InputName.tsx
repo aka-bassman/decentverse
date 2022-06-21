@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useUser, types } from "../../stores";
-// import { CallBox, MyCall } from "./stream";
-import { AdminModal } from "./index";
 import styled, { keyframes } from "styled-components";
 
 export const InputName = ({}) => {
@@ -41,7 +38,6 @@ export const InputName = ({}) => {
     setCurrentPage(currentPage - 1);
   };
   const onClickSubmit = () => {
-    console.log(nickname);
     setName(nickname);
     updateUser({ nickname });
     updateUserId(nickname);
@@ -54,9 +50,6 @@ export const InputName = ({}) => {
       updateUserId(nickname);
     }
   };
-  useEffect(() => {
-    console.log("nickname : ", me.nickname);
-  }, [me.nickname]);
   const process = [
     <>
       <Metamask onClick={onPressMetamask}>Start to metamask</Metamask>

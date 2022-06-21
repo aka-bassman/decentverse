@@ -9,11 +9,9 @@ import PubSub from "pubsub-js";
 export interface PlayersProp {
   playerId: string;
 }
-
 export const Players = ({ playerId }: PlayersProp) => {
   const otherPlayerIds = useWorld((state) => state.otherPlayerIds);
   const otherPlayers = useWorld((state) => state.otherPlayers);
-
   return (
     <Suspense fallback={null}>
       {otherPlayerIds.map((id) => {
@@ -26,24 +24,12 @@ export const Players = ({ playerId }: PlayersProp) => {
   );
 };
 
-const SpeechBox = ({ id }: { id: string }) => {
-  const isTalk = useGossip((state) => state.peers.find((peer) => peer.id === id)?.isTalk);
-  const speechBubble = useTexture("./speechBubble.png");
-
-  return (
-    <sprite position={[0, 220, 1]}>
-      <planeGeometry args={isTalk ? [120, 125] : [0, 0]} />
-      {<spriteMaterial map={speechBubble} />}
-    </sprite>
-  );
-};
 export interface OtherPlayerProp {
   player: types.OtherPlayer;
 }
 export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   const texture = useTexture(`ayias/decentverse/character/chinchin.png?id=${player.id}`);
   const animator = createTileTextureAnimator(texture, player.character.tileSize);
-  const speechBubble = useTexture("./speechBubble.png");
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>(player.character.right.idle);
   const movement = useRef<{
@@ -58,7 +44,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
       if (!movement.current) {
         movement.current = { prev: data, next: data, live: data };
         sprite.current.position.set(data.position[0], data.position[1], 0);
-      } else
+      } else {
         movement.current = {
           prev: movement.current.next,
           next: data,
@@ -71,7 +57,9 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
             ],
           },
         };
-      if (data.chatText !== movement.current.prev.chatText) PubSub.publish(`chat:${player.id}`, data.chatText);
+        if (data.chatText !== movement.current.prev.chatText || data.isTalk !== movement.current.prev.isTalk)
+          PubSub.publish(`chat:${player.id}`, { chatText: data.chatText, isTalk: data.isTalk });
+      }
     };
     PubSub.subscribe(player.id, subscription);
     return () => {
@@ -91,10 +79,9 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   }, animation);
   return (
     <sprite ref={sprite}>
-      <SpeechBox id={player.id} />
       <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
-      <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={60} material-toneMapped={false}>
+      <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={40} material-toneMapped={false}>
         {player.id}
       </Text>
       <PlayerChat id={player.id} />
@@ -102,10 +89,11 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   );
 });
 export const PlayerChat = ({ id }: { id: string }) => {
-  const [chatText, setChatText] = useState("");
+  const [chatState, setChatState] = useState({ chatText: "", isTalk: false });
+  const speechBubble = useTexture("./speechBubble.png");
   useEffect(() => {
-    const subscription = (_: string, text: string) => {
-      setChatText(text);
+    const subscription = (_: string, state: { chatText: string; isTalk: boolean }) => {
+      setChatState(state);
     };
     PubSub.subscribe(`chat:${id}`, subscription);
     return () => {
@@ -113,21 +101,27 @@ export const PlayerChat = ({ id }: { id: string }) => {
     };
   }, []);
   return (
-    <Html
-      center
-      style={{
-        backgroundColor: `rgba(255,255,255,${chatText.length ? 0.7 : 0})`,
-        maxWidth: 300,
-        width: "max-content",
-        borderRadius: 10,
-        bottom: 35,
-        padding: 10,
-        alignContent: "center",
-        alignItems: "center",
-        wordWrap: "normal",
-      }}
-    >
-      {chatText}
-    </Html>
+    <>
+      <Html
+        center
+        style={{
+          backgroundColor: `rgba(255,255,255,${chatState.chatText.length ? 0.7 : 0})`,
+          maxWidth: 300,
+          width: "max-content",
+          borderRadius: 10,
+          bottom: 35,
+          padding: 10,
+          alignContent: "center",
+          alignItems: "center",
+          wordWrap: "normal",
+        }}
+      >
+        {chatState.chatText}
+      </Html>
+      <sprite position={[60, 150, 1]}>
+        <planeGeometry args={chatState.isTalk ? [120, 125] : [0, 0]} />
+        {<spriteMaterial map={speechBubble} />}
+      </sprite>
+    </>
   );
 };

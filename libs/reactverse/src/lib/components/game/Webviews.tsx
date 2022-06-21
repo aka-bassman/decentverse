@@ -38,7 +38,6 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
           webview.topLeft[1] > player.current.position[1] &&
           player.current.position[1] > webview.bottomRight[1]
         ) {
-          console.log("join web view");
           interaction.current.webview = webview;
           joinInteraction("webview", webview);
         }
@@ -76,8 +75,8 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
   return (
     <Suspense fallback={null}>
       <mesh position={position}>
-        <planeGeometry args={[width, height]} />
-        <meshBasicMaterial color={0xff0000} transparent />
+        {/* <planeGeometry args={[width, height]} />
+        <meshBasicMaterial color={0xff0000} transparent /> */}
         {interaction && interaction.webview?.url === webview.url && (
           <mesh position={[0, -120, 1]}>
             <planeBufferGeometry attach="geometry" args={[380, 100]} />

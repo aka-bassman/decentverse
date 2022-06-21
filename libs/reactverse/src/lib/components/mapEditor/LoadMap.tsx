@@ -12,7 +12,6 @@ export const LoadMap = () => {
   }, [isLoadModalOpen]);
 
   const loadMap = (mapId: string) => {
-    console.log("ok", mapId);
     init(mapId);
   };
 

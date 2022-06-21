@@ -12,11 +12,9 @@ export const Stream = ({ socket }: StreamProps) => {
   const peers = useGossip((state) => state.peers);
   const interaction = useWorld((state) => state.interaction);
 
-  useEffect(() => {
-    console.log(peers.length);
-  }, [peers]);
   return (
     <>
+      {/* <MyCall socket={socket} roomId={"asd"} /> */}
       {interaction.callRoom && <MyCall socket={socket} roomId={interaction.callRoom._id} />}
       {interaction.callRoom && callRoom.localStream && (
         <CallBox

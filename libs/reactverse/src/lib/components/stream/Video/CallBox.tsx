@@ -20,12 +20,10 @@ export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxPr
   useEffect(() => {
     socket.on("init", (clientId: string, init: types.InitForm) => {
       if (init.userId === me.userId) return;
-      console.log("init");
       addPeer(clientId, false, init, localStream, screenStream);
       socket.emit("receive", { socketId: clientId, roomId, userId: me.userId, nickName: me.userId });
     });
     socket.on("receive", (clientId: string, init: types.InitForm) => {
-      console.log("receive", init.userId);
       addPeer(clientId, true, init, localStream, screenStream);
     });
     return () => {

@@ -18,4 +18,12 @@ export const ReactverseLayout = ({ children }: Props) => {
 const AppContainer = styled.div`
   width: 100%;
   height: 100vh;
+  @media screen and (max-width: 500px) {
+    width: 150%;
+    height: 150vh;
+    overflow: "hidden";
+    overflow-y: "hidden";
+    /* background-color: red; */
+    /* flex-direction: column; */
+  }
 `;

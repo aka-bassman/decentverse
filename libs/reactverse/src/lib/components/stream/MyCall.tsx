@@ -38,12 +38,11 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   const localVideo = useRef<HTMLVideoElement>(null);
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    console.log("join and get user media");
     getUserMedia().then(() => {
       socket.emit("join", { roomId, userId: me.nickname, nickName: me.nickname });
-      console.log("get user media");
     });
     return () => {
+      setIsTalk(false);
       socket.emit("leave");
       peers.map((peer) => peer.call.peer.destroy());
       clearPeers();
