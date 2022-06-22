@@ -21,8 +21,11 @@ const AppContainer = styled.div`
   @media screen and (max-width: 500px) {
     width: 150%;
     height: 150vh;
+    /* border-width: 10px;
+    border-color: blue; */
     overflow: "hidden";
     overflow-y: "hidden";
+    overflow-x: "hidden";
     /* background-color: red; */
     /* flex-direction: column; */
   }

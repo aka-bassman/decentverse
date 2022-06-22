@@ -47,11 +47,11 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   return (
     <ReactverseLayout>
       {isConnected && socket ? (
-        <div style={{ width: "100%", height: "100%" }}>
+        <>
           <Interface socket={socket} />
           <Game socket={socket} />
           {/* <Stream socket={socket} /> */}
-        </div>
+        </>
       ) : (
         <>Connecting...</>
       )}

@@ -55,20 +55,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
     setKey("right", false);
   };
   return (
-    <div
-      style={{
-        position: "absolute",
-        width: "150%",
-        height: "150%",
-        alignItems: "center",
-        flexDirection: "column",
-        display: "flex",
-        // borderWidth: 30,
-        // borderColor: "red",
-        zIndex: 1,
-        justifyContent: "center",
-      }}
-    >
+    <InterfaceContainer>
       <div
         style={{
           position: "absolute",
@@ -88,7 +75,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
       </div>
       {isMobile && (
         <div style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "5%" }}>
-          <Joystick size={150} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
+          <Joystick size={100} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
           <button
             onTouchStart={() => {
               setKey("interaction", true);
@@ -102,29 +89,15 @@ export const Interface = ({ socket }: InterfaceProps) => {
           </button>
         </div>
       )}
-    </div>
+    </InterfaceContainer>
   );
   // return <>{/* <Name>{user.userId}</Name> */}</>;
 };
 
-const Name = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 10;
-  font-size: 50px;
-  transform: translate(-50%, -50%);
-`;
 const InterfaceContainer = styled.div`
-  position: "absolute";
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  /* border-width: 100px; */
-  z-index: 0;
-  .name {
-    left: 50%;
-    top: 50%;
-    font-size: 20px;
-  }
+  position: absolute;
+  width: 150%;
+  height: 150vh;
+  border-width: 10px;
+  z-index: 1;
 `;

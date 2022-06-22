@@ -15,6 +15,7 @@ import {
 } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
+import styled from "styled-components";
 
 export interface GameProps {
   socket: Soc;
@@ -60,6 +61,7 @@ export const Game = ({ socket }: GameProps) => {
         {
           width: "100%",
           height: "100%",
+          // transform: `translate(-50%, -0%)`,
 
           // marginLeft: -margin,
           // marginTop: -margin,
@@ -82,3 +84,9 @@ export const Game = ({ socket }: GameProps) => {
     </div>
   );
 };
+
+// const Name = styled.div`
+//   width: 200%;
+//   height: 200%;
+//   transform: translate(-100%, -100%);
+// `;

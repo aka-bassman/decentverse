@@ -44,16 +44,16 @@ export const Tile = React.memo(({ x, y, offsetX, offsetY }: TileProp) => {
           <meshBasicMaterial map={lighting} transparent />
         </mesh>
       )} */}
-      <sprite position={position}>
-        <planeGeometry args={[2000, 2000]} />
-        <spriteMaterial map={bottom} />
-      </sprite>
       {top && (
-        <sprite position={position}>
+        <mesh position={position}>
           <planeGeometry args={[2000, 2000]} />
-          <spriteMaterial map={top} />
-        </sprite>
+          <meshBasicMaterial attach="material" map={top} />
+        </mesh>
       )}
+      <mesh position={position}>
+        <planeGeometry args={[2000, 2000]} />
+        <meshBasicMaterial attach="material" map={bottom} />
+      </mesh>
       {/* {lighting && (
         <mesh position={position}>
           <planeGeometry args={[2000, 2000]} />
