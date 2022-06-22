@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useGossip, useWorld, useUser, types } from "../../stores";
 import styled, { keyframes } from "styled-components";
+import { AdminModal } from "./index";
 
-export const InputName = ({}) => {
+export const InputName = () => {
   const me = useUser((state) => state);
   const whoAmI = useUser((state) => state.whoAmI);
   const guest = useUser((state) => state.guest);
@@ -66,6 +67,7 @@ export const InputName = ({}) => {
 
   return (
     <Container>
+      <AdminModal />
       <Title>Reactverse</Title>
       <Process>{process[currentPage]}</Process>
     </Container>

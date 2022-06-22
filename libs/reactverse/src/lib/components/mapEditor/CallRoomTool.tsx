@@ -3,7 +3,8 @@ import { InputNumber } from "antd";
 import { useEditor } from "../../stores";
 
 export const CallRoomTool = () => {
-  const { inputCallRoomMaxNum, setInputCallRoomMaxNum, selectedUrl, setUrlInput, addUrl, selectUrl } = useEditor();
+  const inputCallRoomMaxNum = useEditor((state) => state.inputCallRoomMaxNum);
+  const setInputCallRoomMaxNum = useEditor((state) => state.setInputCallRoomMaxNum);
 
   return (
     <div>
