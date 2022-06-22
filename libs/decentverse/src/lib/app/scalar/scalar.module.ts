@@ -3,7 +3,8 @@ import { PlacementResolver } from "./placement.resolver";
 import { SpriteResolver } from "./sprite.resolver";
 import { TileResolver } from "./tile.resolver";
 import { AreaResolver } from "./area.resolver";
+import { FlowResolver } from "./flow.resolver";
 
 @Global()
-@Module({ providers: [PlacementResolver, SpriteResolver, TileResolver, AreaResolver] })
+@Module({ providers: [PlacementResolver, SpriteResolver, TileResolver, AreaResolver, FlowResolver] })
 export class ScalarModule {}

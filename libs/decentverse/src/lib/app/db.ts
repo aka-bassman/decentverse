@@ -1,7 +1,7 @@
 import { Schema, Types, FilterQuery } from "mongoose";
 import * as DataLoader from "dataloader";
-export type ID = Schema.Types.ObjectId;
-export const ObjectId = Schema.Types.ObjectId;
+export type ID = Types.ObjectId;
+export const ObjectId = Types.ObjectId;
 export { FilterQuery as Query };
 export { DataLoader };
 export * from "../dbConfig";
@@ -12,3 +12,4 @@ export * as Character from "./character/character.model";
 export * as Map from "./map/map.model";
 export * as File from "./file/file.model";
 export * as Role from "./role/role.model";
+export * as Dialog from "./dialog/dialog.model";

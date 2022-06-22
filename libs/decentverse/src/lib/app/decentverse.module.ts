@@ -64,6 +64,7 @@ export class DecentverseModule {
         modules.RoleModule,
         modules.AwsModule.register(options.objectStorage),
         modules.FileModule,
+        modules.DialogModule,
         modules.RtModule.register(options?.redis),
         modules.ScalarModule,
         modules.BatchModule,

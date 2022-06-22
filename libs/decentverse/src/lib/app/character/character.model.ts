@@ -17,13 +17,13 @@ import * as gql from "../gql";
 @Schema()
 export class Input {
   @Prop({ type: MongoSchema.Types.ObjectId, required: false, index: true })
-  contract?: MongoSchema.Types.ObjectId;
+  contract?: Types.ObjectId;
 
   @Prop({ type: Number, required: true, index: true, default: -1 })
   tokenId: number;
 
   @Prop({ type: MongoSchema.Types.ObjectId, required: true, ref: "file", index: true })
-  file: MongoSchema.Types.ObjectId;
+  file: Types.ObjectId;
 
   @Prop([{ type: Number, required: true }])
   tileSize: number[];
@@ -84,7 +84,7 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface DocType extends Document<MongoSchema.Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
 export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);

@@ -1,6 +1,7 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
-import { Types, Schema as MongoSchema } from "mongoose";
 import * as gql from "../gql";
+import { Types, Schema as MongoSchema } from "mongoose";
+
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -12,24 +13,15 @@ import * as gql from "../gql";
  */
 
 @InputType()
-export class AssetInput {
+export class DialogInput {
   @Field(() => String)
-  name: string;
+  title: string;
 
-  @Field(() => ID, { nullable: true })
-  top?: Types.ObjectId;
+  @Field(() => [ID])
+  characters: Types.ObjectId[];
 
-  @Field(() => ID, { nullable: true })
-  bottom?: Types.ObjectId;
-
-  @Field(() => ID, { nullable: true })
-  lighting?: Types.ObjectId;
-
-  @Field(() => [gql.CollisionInput])
-  collisions: gql.CollisionInputType[];
-
-  @Field(() => [gql.WebviewInput])
-  webviews: gql.WebviewInputType[];
+  @Field(() => [gql.FlowInput])
+  flows: gql.FlowInputType[];
 }
 
 /**
@@ -39,27 +31,15 @@ export class AssetInput {
  */
 
 @ObjectType()
-export class Asset {
-  @Field(() => ID)
-  id: string;
-
+export class Dialog {
   @Field(() => String)
-  name: string;
+  title: string;
 
-  @Field(() => gql.File, { nullable: true })
-  top?: gql.File;
+  @Field(() => [gql.Character])
+  characters: gql.Character[];
 
-  @Field(() => gql.File, { nullable: true })
-  bottom?: gql.File;
-
-  @Field(() => gql.File, { nullable: true })
-  lighting?: gql.File;
-
-  @Field(() => [gql.Collision])
-  collisions: gql.CollisionType[];
-
-  @Field(() => [gql.Webview])
-  webviews: gql.WebviewType[];
+  @Field(() => [gql.Flow])
+  flows: gql.FlowType[];
 
   @Field(() => String)
   status: "active" | "inactive";
@@ -70,3 +50,4 @@ export class Asset {
   @Field(() => Date)
   updatedAt: Date;
 }
+export type DialogType = Dialog;

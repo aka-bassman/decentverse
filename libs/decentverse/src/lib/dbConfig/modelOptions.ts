@@ -6,7 +6,7 @@ export const getDefaultModelStatics = <TDocument, TSchema>() => ({
     Object.assign(doc, rawData);
     return await doc.save();
   },
-  pickAndWrite: async function (docId: Schema.Types.ObjectId | string, rawData: Partial<TSchema>): Promise<TDocument> {
+  pickAndWrite: async function (docId: Types.ObjectId | string, rawData: Partial<TSchema>): Promise<TDocument> {
     const doc = await this.findById(docId);
     if (!doc) throw new Error("No Document");
     Object.assign(doc, rawData);
@@ -17,7 +17,7 @@ export const getDefaultModelStatics = <TDocument, TSchema>() => ({
     if (!doc) throw new Error("No Document");
     return doc;
   },
-  pickById: async function (docId: Schema.Types.ObjectId | string): Promise<TDocument> {
+  pickById: async function (docId: Types.ObjectId | string): Promise<TDocument> {
     const doc = await this.findById(docId);
     if (!doc) throw new Error("No Document");
     return doc;

@@ -14,13 +14,13 @@ import { Types, Schema as MongoSchema } from "mongoose";
 @InputType()
 export class CharacterInput {
   @Field(() => ID, { nullable: true })
-  contract?: MongoSchema.Types.ObjectId;
+  contract?: Types.ObjectId;
 
   @Field()
   tokenId: number;
 
   @Field(() => ID)
-  file: MongoSchema.Types.ObjectId;
+  file: Types.ObjectId;
 
   @Field(() => [Int])
   tileSize: number[];

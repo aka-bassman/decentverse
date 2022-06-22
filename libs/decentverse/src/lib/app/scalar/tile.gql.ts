@@ -11,15 +11,15 @@ import * as gql from "../gql";
 export class Tile {
   @Field(() => gql.File, { nullable: true })
   @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
-  top?: MongoSchema.Types.ObjectId;
+  top?: Types.ObjectId;
 
   @Field(() => gql.File)
   @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: true })
-  bottom: MongoSchema.Types.ObjectId;
+  bottom: Types.ObjectId;
 
   @Field(() => gql.File, { nullable: true })
   @Prop({ type: MongoSchema.Types.ObjectId, ref: "file", required: false })
-  lighting?: MongoSchema.Types.ObjectId;
+  lighting?: Types.ObjectId;
 
   @Field(() => [gql.Collision])
   @Prop([{ type: CollisionSchema, required: true }])
@@ -39,13 +39,13 @@ export const TileSchema = SchemaFactory.createForClass(Tile);
 @InputType()
 export class TileInput {
   @Field(() => ID, { nullable: true })
-  top?: MongoSchema.Types.ObjectId;
+  top?: Types.ObjectId;
 
   @Field(() => ID)
-  bottom: MongoSchema.Types.ObjectId;
+  bottom: Types.ObjectId;
 
   @Field(() => ID, { nullable: true })
-  lighting?: MongoSchema.Types.ObjectId;
+  lighting?: Types.ObjectId;
 
   @Field(() => [gql.CollisionInput])
   collisions: gql.CollisionInputType[];

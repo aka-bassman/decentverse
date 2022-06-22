@@ -8,7 +8,7 @@ import * as gql from "../gql";
 export class Area {
   @Field(() => ID)
   @Prop({ type: MongoSchema.Types.ObjectId, required: true, index: true })
-  map: MongoSchema.Types.ObjectId;
+  map: Types.ObjectId;
 
   @Field(() => [Int])
   @Prop([Number])
@@ -24,7 +24,7 @@ export const AreaSchema = SchemaFactory.createForClass(Area);
 @InputType()
 export class AreaInput {
   @Field(() => ID)
-  map: MongoSchema.Types.ObjectId;
+  map: Types.ObjectId;
 
   @Field(() => [Int])
   topLeft: number[];
