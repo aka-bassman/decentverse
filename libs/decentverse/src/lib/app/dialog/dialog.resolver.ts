@@ -1,15 +1,18 @@
-import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ID, ResolveField, Parent } from "@nestjs/graphql";
 import { DialogService } from "./dialog.service";
+import { Dialog } from "./dialog.gql";
 import { Allow, Account } from "../../middlewares";
-import * as gql from "../../app/gql";
+import * as gql from "../gql";
+import * as srv from "../srv";
+import * as db from "../db";
 import { UseGuards } from "@nestjs/common";
 
-@Resolver(() => gql.Dialog)
+@Resolver(() => Dialog)
 export class DialogResolver {
-  constructor(private readonly dialogService: DialogService) {}
+  constructor(private readonly dialogService: DialogService, private readonly characterService: srv.CharacterService) {}
   @Query(() => gql.Admin)
   @UseGuards(Allow.Admin)
-  async dialog(@Args({ name: "roldId", type: () => ID }) dialogId: string) {
+  async dialog(@Args({ name: "dialogId", type: () => ID }) dialogId: string) {
     return this.dialogService.dialog(dialogId);
   }
 
@@ -39,4 +42,9 @@ export class DialogResolver {
   async removeDialog(@Args({ name: "dialogId", type: () => String }) dialogId: string) {
     return await this.dialogService.removeDialog(dialogId);
   }
+
+  // @ResolveField()
+  // async characters(@Parent() dialog: db.Dialog.Dialog) {
+  //   return await this.characterService.loadMany(dialog.characters);
+  // }
 }

@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { types } from ".";
 export type AccessToken = {
   accessToken: string;
 };
@@ -241,3 +242,73 @@ export const keyboard = {
   interaction: false,
 };
 export type Keyboard = { [key in KeyType]: boolean };
+
+export const flowStyles = ["speak"] as const;
+export type FlowStyle = typeof flowStyles[number];
+
+export const avatarPositions = ["left", "right", "center"] as const;
+export type AvatarPosition = typeof avatarPositions[number];
+
+export type Flow = {
+  style: FlowStyle;
+  subject: string;
+  character?: string;
+  image?: File;
+  background?: File;
+  avatarPosition: AvatarPosition;
+  name?: string;
+  text: string;
+  position: number[];
+  next?: string;
+};
+
+export type FlowInput = {
+  style: FlowStyle;
+  subject: string;
+  character?: string;
+  image?: string;
+  background?: string;
+  avatarPosition: AvatarPosition;
+  name?: string;
+  text: string;
+  position: number[];
+  next?: string;
+};
+
+export const flowFragment = gql`
+  ${fileFragment}
+  fragment flowFragment on Flow {
+    style
+    subject
+    characte
+    image {
+      ...fileFragment
+    }
+    background {
+      ...fileFragment
+    }
+    avatarPosition
+    name
+    text
+    position
+    next
+  }
+`;
+
+export type Area = {
+  map: string;
+  topLeft: number[];
+  bottomRight: number[];
+};
+export type AreaInput = {
+  map: string;
+  topLeft: number[];
+  bottomRight: number[];
+};
+export const areaFragment = gql`
+  fragment areaFragment on Area {
+    map
+    topLeft
+    bottomRight
+  }
+`;
