@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import { useEditor } from "../../stores";
 
 export const MapCollisions = () => {
-  const { collisions, clickOnCollision, collisionPreview } = useEditor();
+  const collisions = useEditor((state) => state.collisions);
+  const clickOnItem = useEditor((state) => state.clickOnItem);
+  const collisionPreview = useEditor((state) => state.collisionPreview);
 
   return (
     <Suspense fallback={null}>
@@ -15,7 +17,7 @@ export const MapCollisions = () => {
       )}
 
       {collisions.map((collision, index) => (
-        <mesh key={index} position={[collision.x, collision.y, 0]} onClick={(e) => clickOnCollision(e, index)}>
+        <mesh key={index} position={[collision.x, collision.y, 0]} onClick={(e) => clickOnItem(e, collision.placeId)}>
           <planeBufferGeometry attach="geometry" args={[collision.width, collision.height]} />
           <meshPhongMaterial attach="material" color="#FF6666" opacity={0.9} transparent={true} />
         </mesh>

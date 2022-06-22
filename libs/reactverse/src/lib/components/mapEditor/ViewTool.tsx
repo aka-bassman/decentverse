@@ -6,19 +6,17 @@ export const ViewTool = () => {
   const { isActiveViewMode, toggleViewMode } = useEditor();
 
   return (
-    <Card title="View mode" size="small">
+    <div>
       <div>
-        <div>
-          <Checkbox onChange={() => toggleViewMode("Interaction")} checked={isActiveViewMode("Interaction")}>
-            Interaction
-          </Checkbox>
-        </div>
-        <div>
-          <Checkbox onChange={() => toggleViewMode("Assets")} checked={isActiveViewMode("Assets")}>
-            Assets
-          </Checkbox>
-        </div>
+        <Checkbox onChange={() => toggleViewMode("Interaction")} checked={isActiveViewMode("Interaction")}>
+          Interaction
+        </Checkbox>
       </div>
-    </Card>
+      <div>
+        <Checkbox onChange={() => toggleViewMode("Assets")} checked={isActiveViewMode("Assets")}>
+          Assets
+        </Checkbox>
+      </div>
+    </div>
   );
 };

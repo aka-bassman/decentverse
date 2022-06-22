@@ -58,11 +58,11 @@ input AssetInput {
 }
 
 type CallRoom {
-  _id: String!
   bottomRight: [Int!]!
   errorMessage: String
   maxNum: Int!
   message: String
+  roomId: String!
   topLeft: [Int!]!
 }
 
@@ -71,6 +71,7 @@ input CallRoomInput {
   errorMessage: String
   maxNum: Int!
   message: String
+  roomId: String!
   topLeft: [Int!]!
 }
 

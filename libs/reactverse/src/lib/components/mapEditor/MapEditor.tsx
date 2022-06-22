@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "antd/dist/antd.css";
-import { Map, SideToolBar } from "./index";
+import { Map, SideToolBar, SubToolBar } from "./index";
 import { Layout } from "antd";
 import styled from "styled-components";
 const { Sider, Content } = Layout;
@@ -13,6 +13,7 @@ export const MapEditor = () => {
       </StyledSider>
       <Layout>
         <Content>
+          <SubToolBar />
           <Map />
         </Content>
       </Layout>

@@ -12,22 +12,24 @@ export interface EditorBaseState {
   tileSize: number;
   mapWidth: number; //
   mapHeight: number; //
+  editMode: types.TEditMode;
   mainTool: types.TMainTool;
-  subTool: string;
   mapData?: types.Map;
   assetsData?: types.Asset[];
   viewMode: string[];
   selectedAssetId?: string;
+  viewItems: types.TViewItem[];
   isEdited: boolean;
   preview: types.TPreview;
   assets: types.TAsset[];
   status: "none" | "loading" | "failed" | "idle";
   init: (mapId: string) => Promise<void>;
+  getPlaceId: (prefix: "asset" | "collision" | "webview" | "callRoom", x: number, y: number) => string;
   previewAsset: (x: number, y: number) => void;
   addAsset: (x: number, y: number) => void;
-  removeAsset: (index: number) => void;
+  removeAsset: (placeId: string) => void;
+  setEditMode: (item: types.TEditMode) => void;
   setMainTool: (item: types.TMainTool) => void;
-  setSubTool: (item: string) => void;
   setInteractionTool: (item: types.TInteractionTool) => void;
   toggleViewMode: (item: string) => void;
   isActiveViewMode: (item: string) => boolean;
@@ -35,28 +37,27 @@ export interface EditorBaseState {
   replaceImgUrl: (url: string) => string;
   clearPreview: () => void;
   isAssetAddMode: () => boolean;
-  isAssetRemoveMode: () => boolean;
   saveMap: () => void;
   getWebviewUrl: (url: string, purpose: types.TWebviewPurpose) => string;
   pointerMoveOnTile: (e: any) => void;
   pointerDownOnTile: (e: any) => void;
-  clickOnAsset: (e: any, index: number) => void;
+  clickOnItem: (e: any, placeId: string) => void;
   toggleMapEditorOpen: () => void;
 }
 
 export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
-  isMapEditorOpen: false,
+  isMapEditorOpen: true,
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
   mapHeight: 2000,
+  editMode: "Select",
   mainTool: "Assets" as types.TMainTool,
-  subTool: "Add",
   mapData: undefined,
   assetsData: [], //
   assets: [],
   viewMode: ["Interaction", "Assets"],
-  selectedAssetId: undefined,
+  viewItems: [],
   isEdited: false,
   preview: {
     ...types.initPreview,
@@ -77,37 +78,57 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       bottom: placement?.asset?.bottom?.url ? get().replaceImgUrl(placement.asset.bottom.url) : "",
       lighting: placement?.asset?.lighting?.url ? get().replaceImgUrl(placement.asset.lighting.url) : "",
       id: placement.asset.id,
+      placeId: get().getPlaceId("asset", placement.position[0], placement.position[1]),
     }));
 
-    const collisions = mapData.collisions.map((interaction) => ({
-      x: (interaction.topLeft[0] + interaction.bottomRight[0]) / 2,
-      y: (interaction.topLeft[1] + interaction.bottomRight[1]) / 2,
-      width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
-      height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
-    }));
+    const collisions = mapData.collisions.map((interaction) => {
+      const x = (interaction.topLeft[0] + interaction.bottomRight[0]) / 2;
+      const y = (interaction.topLeft[1] + interaction.bottomRight[1]) / 2;
 
-    const urls: types.TUrls[] = [];
-    const webviews = mapData.webviews.map((interaction) => {
-      if (interaction.url && !urls.find((cur) => cur.url === interaction.url)) {
-        urls.push({ url: interaction.url, color: "#ccc" });
-      }
       return {
-        x: (interaction.topLeft[0] + interaction.bottomRight[0]) / 2,
-        y: (interaction.topLeft[1] + interaction.bottomRight[1]) / 2,
+        x,
+        y,
         width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
         height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
-        url: interaction.url ?? "",
-        purpose: interaction.purpose,
+        placeId: get().getPlaceId("collision", x, y),
       };
     });
 
-    const callRooms = mapData.callRooms.map((callRoom) => ({
-      x: (callRoom.topLeft[0] + callRoom.bottomRight[0]) / 2,
-      y: (callRoom.topLeft[1] + callRoom.bottomRight[1]) / 2,
-      width: Math.abs(callRoom.bottomRight[0] - callRoom.topLeft[0]),
-      height: Math.abs(callRoom.bottomRight[1] - callRoom.topLeft[1]),
-      maxNum: callRoom.maxNum,
-    }));
+    const webviews = mapData.webviews.map((interaction) => {
+      const x = (interaction.topLeft[0] + interaction.bottomRight[0]) / 2;
+      const y = (interaction.topLeft[1] + interaction.bottomRight[1]) / 2;
+      let url = interaction.url;
+      if (interaction.purpose === "youtube") {
+        url = interaction.url.split("/embed/")[1];
+      }
+
+      return {
+        x,
+        y,
+        width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
+        height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
+        url,
+        purpose: interaction.purpose,
+        placeId: get().getPlaceId("webview", x, y),
+      };
+    });
+
+    const callRooms = mapData.callRooms.map((interaction) => {
+      const x = (interaction.topLeft[0] + interaction.bottomRight[0]) / 2;
+      const y = (interaction.topLeft[1] + interaction.bottomRight[1]) / 2;
+
+      return {
+        x,
+        y,
+        width: Math.abs(interaction.bottomRight[0] - interaction.topLeft[0]),
+        height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
+        maxNum: interaction.maxNum,
+        placeId: get().getPlaceId("callRoom", x, y),
+        roomId: interaction.roomId,
+      };
+    });
+
+    console.log("assets", assets);
 
     set((state) => ({
       mapData,
@@ -117,20 +138,20 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       webviews,
       callRooms,
       isLoadModalOpen: false,
-      urls,
-      // mapTool: { ...state.mapTool, isLoadModalOpen: false },
-      // webviewTool: { ...state.webviewTool, urls },
     }));
+  },
+  getPlaceId: (prefix, x, y) => {
+    return `${prefix}_${Math.round(x)}_${Math.round(y)}`;
+  },
+  setEditMode: (item) => {
+    get().clearPreview();
+    get().clearInteractionPreview();
+    set({ editMode: item, selectedAssetId: undefined });
   },
   setMainTool: (item) => {
     get().clearPreview();
     get().clearInteractionPreview();
-    set({ mainTool: item, subTool: "Add", selectedAssetId: undefined });
-  },
-  setSubTool: (item) => {
-    get().clearPreview();
-    get().clearInteractionPreview();
-    set({ subTool: item, selectedAssetId: undefined });
+    set({ mainTool: item, selectedAssetId: undefined });
   },
   setInteractionTool: (item) => {
     get().clearPreview();
@@ -163,18 +184,22 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       bottom: selectedAsset?.bottom?.url ? get().replaceImgUrl(selectedAsset.bottom.url) : "",
       lighting: selectedAsset?.lighting?.url ? get().replaceImgUrl(selectedAsset.lighting.url) : "",
       id: selectedAssetId,
+      placeId: get().getPlaceId("asset", x, y),
     };
     set((state) => ({ assets: [...state.assets, newAsset], isEdited: true }));
   },
   replaceImgUrl: (url) => {
     return url.replace("https://asset.ayias.io/", "ayias/");
   },
-  removeAsset: (index) => {
+  removeAsset: (placeId) => {
     set((state) => ({
-      assets: [...state.assets.slice(0, index), ...state.assets.slice(index + 1)],
+      assets: state.assets.filter((asset) => asset.placeId !== placeId),
+      selectedAssetId: undefined,
+      viewItems: state.viewItems.filter((cur) => cur.data.placeId !== placeId),
       isEdited: true,
     }));
   },
+
   toggleViewMode: (item) => {
     set((state) => ({
       viewMode: state.viewMode.includes(item)
@@ -196,10 +221,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
     });
   },
   isAssetAddMode: () => {
-    return !!(get().mainTool === "Assets" && get().subTool === "Add" && get().selectedAssetId);
-  },
-  isAssetRemoveMode: () => {
-    return !!(get().mainTool === "Assets" && get().subTool === "Remove");
+    return !!(get().mainTool === "Assets" && get().editMode === "Add" && get().selectedAssetId);
   },
   saveMap: async () => {
     const { isEdited, mapData, assets } = get();
@@ -223,6 +245,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       topLeft: [Math.round(callRoom.x - callRoom.width / 2), Math.round(callRoom.y + callRoom.height / 2)],
       bottomRight: [Math.round(callRoom.x + callRoom.width / 2), Math.round(callRoom.y - callRoom.height / 2)],
       maxNum: callRoom.maxNum,
+      roomId: callRoom.placeId,
     }));
 
     let tilesInput = new Array(tiles.length).fill(undefined);
@@ -255,11 +278,12 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       callRooms: newCallRooms,
     };
 
+    console.log("data!!!!!!", data);
     await gql.updateMap(mapData.id, data);
     set({ isEdited: false });
   },
   getWebviewUrl: (url, purpose) => {
-    if (purpose === "youtube") return `https://youtu.be/${url}`;
+    if (purpose === "youtube") return `https://youtube.com/embed/${url}`;
     return url;
   },
   pointerMoveOnTile: (e) => {
@@ -269,13 +293,31 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
     get().isWebviewAddMode() && get().previewWebviewMove(e.point.x, e.point.y);
   },
   pointerDownOnTile: (e) => {
+    set({ viewItems: [] });
     get().isAssetAddMode() && get().addAsset(e.point.x, e.point.y);
     get().isCollisionAddMode() && get().previewCollision(e.point.x, e.point.y);
     get().isCallRoomAddMode() && get().previewCallRoom(e.point.x, e.point.y);
     get().isWebviewAddMode() && get().previewWebview(e.point.x, e.point.y);
   },
-  clickOnAsset: (e, index) => {
-    get().isAssetRemoveMode() && get().removeAsset(index);
+  clickOnItem: (e, placeId) => {
+    if (get().editMode !== "Select" || get().viewItems.find((cur) => cur.data.placeId === placeId)) return;
+
+    if (placeId.includes("asset")) {
+      const data = get().assets.find((cur) => cur.placeId === placeId);
+      data && set((state) => ({ viewItems: [...state.viewItems, { type: "asset", data }] }));
+    }
+    if (placeId.includes("collision")) {
+      const data = get().collisions.find((cur) => cur.placeId === placeId);
+      data && set((state) => ({ viewItems: [...state.viewItems, { type: "collision", data }] }));
+    }
+    if (placeId.includes("webview")) {
+      const data = get().webviews.find((cur) => cur.placeId === placeId);
+      data && set((state) => ({ viewItems: [...state.viewItems, { type: "webview", data }] }));
+    }
+    if (placeId.includes("callRoom")) {
+      const data = get().callRooms.find((cur) => cur.placeId === placeId);
+      data && set((state) => ({ viewItems: [...state.viewItems, { type: "callRoom", data }] }));
+    }
   },
   toggleMapEditorOpen: () => {
     set((state) => ({ isMapEditorOpen: !state.isMapEditorOpen }));
