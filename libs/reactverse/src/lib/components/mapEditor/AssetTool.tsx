@@ -3,26 +3,25 @@ import { Segmented, Card } from "antd";
 import { useEditor } from "../../stores";
 
 export const AssetTool = () => {
-  const { assetsData, selectedAssetId, setSelectedAssetId, subTool, setSubTool } = useEditor();
+  const assetsData = useEditor((state) => state.assetsData);
+  const selectedAssetId = useEditor((state) => state.selectedAssetId);
+  const setSelectedAssetId = useEditor((state) => state.setSelectedAssetId);
 
   return (
     <Card title="Assets" size="small">
-      <Segmented block options={["Add", "Remove"]} value={subTool} onChange={(value) => setSubTool(value as string)} />
-      {subTool === "Add" && (
-        <AssetList>
-          {assetsData?.map((asset) => (
-            <AssetItem
-              key={asset.id}
-              onClick={() => setSelectedAssetId(asset.id)}
-              className={selectedAssetId === asset.id ? "active" : ""}
-            >
-              {asset?.bottom?.url && <img src={asset.bottom.url} />}
-              {asset?.top?.url && <img src={asset.top.url} />}
-              {asset?.lighting?.url && <img src={asset.lighting.url} />}
-            </AssetItem>
-          ))}
-        </AssetList>
-      )}
+      <AssetList>
+        {assetsData?.map((asset) => (
+          <AssetItem
+            key={asset.id}
+            onClick={() => setSelectedAssetId(asset.id)}
+            className={selectedAssetId === asset.id ? "active" : ""}
+          >
+            {asset?.bottom?.url && <img src={asset.bottom.url} />}
+            {asset?.top?.url && <img src={asset.top.url} />}
+            {asset?.lighting?.url && <img src={asset.lighting.url} />}
+          </AssetItem>
+        ))}
+      </AssetList>
     </Card>
   );
 };

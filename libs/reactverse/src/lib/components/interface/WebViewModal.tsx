@@ -13,12 +13,12 @@ export const WebViewModal = () => {
     <div
       style={{
         display: interaction.webview && isOpen ? "inline" : "hidden",
-        width: isMobile ? 400 : 1000,
-        height: isMobile ? 600 : 600,
+        width: isMobile ? "90%" : 1000,
+        height: isMobile ? "50%" : 600,
         borderRadius: 30,
         backgroundColor: "white",
         position: "absolute",
-        top: isMobile ? "100%" : "50%",
+        top: isMobile ? "50%" : "50%",
         left: isMobile ? "50%" : "50%",
         transform: `translate(-50%, -50%)`,
         justifyContent: "center",

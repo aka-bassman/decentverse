@@ -7,55 +7,31 @@ import * as THREE from "three";
 
 export const MapAssets = () => {
   const assets = useEditor((state) => state.assets);
-
-  const assetImages = assets.map((asset) => asset.top || "/transparent.png");
-  const topTextures = useLoader(THREE.TextureLoader, assetImages);
-
-  const bottomImages = assets.map((asset) => asset.bottom || "/transparent.png");
-  const bottomTextures = useLoader(THREE.TextureLoader, bottomImages);
   return (
     <Suspense fallback={null}>
-      {assets.map((asset, index) => (
-        <MapAsset
-          key={index}
-          asset={asset}
-          index={index}
-          topTexture={topTextures[index]}
-          bottomTexture={bottomTextures[index]}
-        />
+      {assets.map((asset) => (
+        <MapAsset key={asset.placeId} asset={asset} />
       ))}
     </Suspense>
   );
 };
 
-export const MapAsset = React.memo(
-  ({
-    asset,
-    index,
-    topTexture,
-    bottomTexture,
-  }: {
-    asset: types.TAsset;
-    index: number;
-    topTexture: any;
-    bottomTexture: any;
-  }) => {
-    const { clickOnAsset } = useEditor();
-    // const loader = new TextureLoader();
-    // const topTexture = asset.top && loader.load(asset.top);
-    // const bottomTexture = asset.bottom && loader.load(asset.bottom);
+export const MapAsset = React.memo(({ asset }: { asset: types.TAsset }) => {
+  const clickOnItem = useEditor((state) => state.clickOnItem);
+  const loader = new TextureLoader();
+  const topTexture = asset.top && loader.load(asset.top);
+  const bottomTexture = asset.bottom && loader.load(asset.bottom);
 
-    return (
-      <Suspense fallback={null}>
-        <mesh position={[asset.x, asset.y, 1]} onClick={(e) => clickOnAsset(e, index)}>
-          <planeBufferGeometry attach="geometry" args={[asset.width, asset.height]} />
-          {bottomTexture && <meshBasicMaterial attach="material" map={bottomTexture} transparent={true} />}
-        </mesh>
-        <mesh position={[asset.x, asset.y, 2]}>
-          <planeBufferGeometry attach="geometry" args={[asset.width, asset.height]} />
-          {topTexture && <meshBasicMaterial attach="material" map={topTexture} transparent={true} />}
-        </mesh>
-      </Suspense>
-    );
-  }
-);
+  return (
+    <Suspense fallback={null}>
+      <mesh position={[asset.x, asset.y, 1]} onClick={(e) => clickOnItem(e, asset.placeId)}>
+        <planeBufferGeometry attach="geometry" args={[asset.width, asset.height]} />
+        {bottomTexture && <meshBasicMaterial attach="material" map={bottomTexture} transparent={true} />}
+      </mesh>
+      <mesh position={[asset.x, asset.y, 2]}>
+        <planeBufferGeometry attach="geometry" args={[asset.width, asset.height]} />
+        {topTexture && <meshBasicMaterial attach="material" map={topTexture} transparent={true} />}
+      </mesh>
+    </Suspense>
+  );
+});

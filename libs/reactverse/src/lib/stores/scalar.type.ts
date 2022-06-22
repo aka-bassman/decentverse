@@ -149,12 +149,12 @@ export const webviewFragment = gql`
 `;
 
 export type CallRoom = {
-  _id: string;
   message?: string;
   errorMessage?: string;
   topLeft: number[];
   bottomRight: number[];
   maxNum: number;
+  roomId: string;
 };
 export type CallRoomInput = {
   message?: string;
@@ -162,15 +162,16 @@ export type CallRoomInput = {
   topLeft: number[];
   bottomRight: number[];
   maxNum: number;
+  roomId: string;
 };
 export const callRoomFragment = gql`
   fragment callRoomFragment on CallRoom {
-    _id
     message
     errorMessage
     topLeft
     bottomRight
     maxNum
+    roomId
   }
 `;
 

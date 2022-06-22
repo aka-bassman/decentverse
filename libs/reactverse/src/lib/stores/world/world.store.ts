@@ -146,6 +146,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       direction: "right",
     } as any;
     const render = { tiles: maps[1].tiles, players: {} };
+    console.log(maps[1].tiles);
     const status = "idle";
     return set({ map: maps[1], renderMe, render, status });
   },

@@ -63,7 +63,8 @@ export const useGame = create<GameState>((set, get) => ({
     set((state) => {
       const keyboard = state.keyboard;
       keyboard[key] = keyState;
-      return { keyboard };
+      // console.log(keyboard[key]);
+      return { keyboard: { ...keyboard } };
     }),
   lockKey: (isLocked: boolean) => set({ keyLock: isLocked }),
   changeScreenSize: (screen: types.Screen) => set({ screen }),

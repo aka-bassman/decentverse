@@ -22,7 +22,7 @@ export const Chatting = ({ socket }: ChattingProps) => {
     };
   }, []);
   return (
-    <div style={{ backgroundColor: "black", opacity: "50%", width: 500, height: 40 }}>
+    <div style={{ backgroundColor: "blue", opacity: "50%", width: "100%", height: 40 }}>
       {/* {chats.map((chat, idx) => (
         <Chat key={idx} chat={chat} />
       ))} */}
@@ -66,18 +66,24 @@ export const ChatInput = ({ socket }: ChattingProps) => {
     timeout.current = setTimeout(() => speakChat(""), 3000);
   };
   return (
-    <div style={{ position: "absolute" }}>
-      <Input
-        onFocus={() => !isMobile && lockKey(true)}
-        onBlur={() => !isMobile && lockKey(false)}
-        onMouseOut={() => !isMobile && lockKey(false)}
-        style={{ fontSize: 20, backgroundColor: "transparent", color: "white", width: 500, maxWidth: "100%" }}
-        value={chatText}
-        onChange={onChangeChatText}
-        onKeyDown={keyPress}
-        placeholder="type..."
-      />
-      {/* <Button style={{ width: 50, backgroundColor: "red" }} onClick={onSubmit} /> */}
-    </div>
+    <Input
+      onFocus={() => !isMobile && lockKey(true)}
+      onBlur={() => !isMobile && lockKey(false)}
+      onMouseOut={() => !isMobile && lockKey(false)}
+      style={{
+        fontSize: 20,
+        backgroundColor: "transparent",
+        borderColor: "red",
+        color: "white",
+        width: "100%",
+      }}
+      value={chatText}
+      onChange={onChangeChatText}
+      onKeyDown={keyPress}
+      placeholder="type..."
+    />
   );
+  {
+    /* <Button style={{ width: 50, backgroundColor: "red" }} onClick={onSubmit} /> */
+  }
 };

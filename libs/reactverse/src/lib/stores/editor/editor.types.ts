@@ -7,6 +7,8 @@ export type Point = {
 };
 
 export type TMainTool = "Map" | "Assets" | "Interaction";
+export type TEditMode = "Select" | "Add" | "Modify";
+
 export type TPreview = {
   x: number;
   y: number;
@@ -24,34 +26,24 @@ export type TInteractionPreview = {
   height: number;
   isPreview: boolean;
 };
-export type TAsset = {
+export type TMapItem = {
   x: number;
   y: number;
   width: number;
   height: number;
+  placeId: string;
+};
+export type TAsset = TMapItem & {
   top: string;
   bottom: string;
   lighting: string;
   id: string;
 };
-export type TCollision = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-export type TCallRoom = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+export type TCollision = TMapItem;
+export type TCallRoom = TMapItem & {
   maxNum: number;
 };
-export type TWebview = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+export type TWebview = TMapItem & {
   url: string;
   purpose: TWebviewPurpose;
 };
@@ -70,6 +62,10 @@ export type File = {
   filename: string;
   url: string;
   status: "active" | "inactive";
+};
+export type TViewItem = {
+  type: "asset" | "collision" | "webview" | "callRoom";
+  data: TAsset | TCollision | TWebview | TCallRoom;
 };
 
 export type TInteractionTool = "collision" | "webview" | "callRoom";

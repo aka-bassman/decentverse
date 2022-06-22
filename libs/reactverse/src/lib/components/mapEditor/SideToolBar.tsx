@@ -1,37 +1,55 @@
 import styled from "styled-components";
-import { Button, Segmented, Space } from "antd";
-import { useEditor, TMainTool } from "../../stores";
-import { MapTool, AssetTool, InteractionTool, ViewTool } from "./index";
+import { Segmented } from "antd";
+import { useEditor, TMainTool, TEditMode } from "../../stores";
+import { MapTool, AssetTool, InteractionTool, SelectInfo } from "./index";
 
 export const SideToolBar = () => {
-  const { mainTool, setMainTool, isEdited, saveMap, mapData } = useEditor();
+  const mainTool = useEditor((state) => state.mainTool);
+  const setMainTool = useEditor((state) => state.setMainTool);
+  const mapData = useEditor((state) => state.mapData);
+  const editMode = useEditor((state) => state.editMode);
+  const setEditMode = useEditor((state) => state.setEditMode);
 
   return (
     <SideToolBarContainer>
       <MapTool />
       {!!mapData?.tiles?.length && (
         <>
-          <Button block style={{ marginBottom: 10 }} disabled={!isEdited} onClick={saveMap}>
-            SAVE
-          </Button>
           <Segmented
+            className="edit-mode-button"
             block
-            options={["Assets", "Interaction"]}
-            value={mainTool}
-            onChange={(value) => setMainTool(value as TMainTool)}
+            options={["Select", "Add"]}
+            value={editMode}
+            onChange={(value) => setEditMode(value as TEditMode)}
           />
-          <ToolContainer>
-            {mainTool === "Assets" && <AssetTool />}
-            {mainTool === "Interaction" && <InteractionTool />}
-          </ToolContainer>
-          <ViewTool />
+
+          {editMode === "Add" ? (
+            <>
+              <Segmented
+                block
+                options={["Assets", "Interaction"]}
+                value={mainTool}
+                onChange={(value) => setMainTool(value as TMainTool)}
+              />
+              <div className="tool-container">
+                {mainTool === "Assets" && <AssetTool />}
+                {mainTool === "Interaction" && <InteractionTool />}
+              </div>
+            </>
+          ) : (
+            <SelectInfo />
+          )}
         </>
       )}
     </SideToolBarContainer>
   );
 };
 
-const SideToolBarContainer = styled.div``;
-const ToolContainer = styled.div`
-  margin-top: 10px;
+const SideToolBarContainer = styled.div`
+  .edit-mode-button {
+    margin-bottom: 10px;
+  }
+  .tool-container {
+    margin-top: 10px;
+  }
 `;
