@@ -15,7 +15,7 @@ import {
 } from "./index";
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
-import { isMobile } from "react-device-detect";
+import styled from "styled-components";
 
 export interface GameProps {
   socket: Soc;
@@ -46,6 +46,9 @@ export const Game = ({ socket }: GameProps) => {
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
   const margin = 500;
+  console.log(screen.size[0] + 2 * margin);
+  console.log(screen.size[1] + 2 * margin);
+
   return (
     <div
       style={
@@ -56,10 +59,12 @@ export const Game = ({ socket }: GameProps) => {
         //   marginTop: "-80%",
         // }
         {
-          width: screen.size[0] + 2 * margin,
-          height: screen.size[1] + 2 * margin,
-          marginLeft: -margin,
-          marginTop: -margin,
+          width: "100%",
+          height: "100%",
+          // transform: `translate(-50%, -0%)`,
+
+          // marginLeft: -margin,
+          // marginTop: -margin,
         }
       }
     >
@@ -79,3 +84,9 @@ export const Game = ({ socket }: GameProps) => {
     </div>
   );
 };
+
+// const Name = styled.div`
+//   width: 200%;
+//   height: 200%;
+//   transform: translate(-100%, -100%);
+// `;

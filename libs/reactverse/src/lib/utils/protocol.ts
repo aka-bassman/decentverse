@@ -48,7 +48,8 @@ const binDescs = new Array(...binAscs).reverse();
 export const makeScope = (scope: types.WorldScope): types.WorldScope => {
   const target = [Math.min(...scope.min), Math.max(...scope.max)];
   const [min, max] = [binDescs.find((bin) => bin <= target[0]) ?? 0, binAscs.find((bin) => bin >= target[1]) ?? 2 ^ 30];
-  return { min: [min, min], max: [max, max] };
+  // return { min: [min, min], max: [max, max] };
+  return { min: [45000, 45000], max: [50000, 50000] };
 };
 
 export const makeCharacterMessage = (character: types.Character) => {

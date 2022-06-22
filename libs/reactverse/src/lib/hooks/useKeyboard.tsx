@@ -2,6 +2,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { useGame } from "../stores";
 import { scalar } from "../stores";
 import { useInterval } from "./useInterval";
+import { isMobile } from "react-device-detect";
 
 export interface KeyboardProps {
   keyState: MutableRefObject<scalar.Keyboard>;
@@ -14,6 +15,7 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
   const setKey = useGame((state) => state.setKey);
   const lockKey = useGame((state) => state.lockKey);
   useEffect(() => {
+    console.log("useKeyboard use Effect", keyState.current);
     window.addEventListener("focus", () => lockKey(false));
     window.addEventListener("blur", () => lockKey(true));
     const handleKeyEvent = (event: any, state: boolean) => {
@@ -30,8 +32,11 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
     return () => {
+      console.log("aksjodaksjdhaskjdfhsdkjfhdskfjhdskfhdskjfhjk");
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
+      // if (!isMobile) {
+      // };
     };
   }, []);
   useEffect(() => {
@@ -39,6 +44,6 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
   }, [keyboard]);
   useEffect(() => {
     lockState.current = keyLock;
-    if (keyLock) keyState.current = scalar.keyboard;
+    // if (keyLock) keyState.current = scalar.keyboard;
   }, [keyLock]);
 };
