@@ -30,6 +30,7 @@ export class MapService {
 
     return await map
       .merge({
+        ...data,
         totalWidth: map.tileSize * (data.tiles[0]?.length ?? 0),
         totalHeight: map.tileSize * data.tiles.length,
       })

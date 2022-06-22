@@ -6,7 +6,10 @@ import { ToolOutlined } from "@ant-design/icons";
 import { AdminSignIn, AdminSignUp, AdminInfo } from "./index";
 
 export const AdminModal = () => {
-  const { init, adminView, toggleShowAdminModal, isShowAdminModal } = useAdmin();
+  const init = useAdmin((state) => state.init);
+  const adminView = useAdmin((state) => state.adminView);
+  const toggleShowAdminModal = useAdmin((state) => state.toggleShowAdminModal);
+  const isShowAdminModal = useAdmin((state) => state.isShowAdminModal);
 
   useEffect(() => {
     init();

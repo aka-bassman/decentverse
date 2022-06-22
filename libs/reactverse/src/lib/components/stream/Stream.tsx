@@ -14,13 +14,12 @@ export const Stream = ({ socket }: StreamProps) => {
 
   return (
     <>
-      {/* <MyCall socket={socket} roomId={"asd"} /> */}
-      {interaction.callRoom && <MyCall socket={socket} roomId={interaction.callRoom._id} />}
+      {interaction.callRoom && <MyCall socket={socket} roomId={interaction.callRoom.roomId} />}
       {interaction.callRoom && callRoom.localStream && (
         <CallBox
           localStream={callRoom.localStream}
           screenStream={callRoom.screenStream}
-          roomId={interaction.callRoom._id}
+          roomId={interaction.callRoom.roomId}
           socket={socket}
         />
       )}

@@ -187,10 +187,6 @@ export type WebviewInputType = WebviewInput;
 @ObjectType()
 @Schema()
 export class CallRoom {
-  @Field(() => String, { nullable: false })
-  @Prop({ type: String })
-  _id: string;
-
   @Field(() => String, { nullable: true })
   @Prop({ type: String, required: false })
   message?: string;
@@ -210,6 +206,10 @@ export class CallRoom {
   @Field(() => Int)
   @Prop({ type: Number, required: true, default: 100 })
   maxNum: number;
+
+  @Field(() => String)
+  @Prop({ type: String })
+  roomId: string;
 }
 export type CallRoomType = CallRoom;
 export const CallRoomSchema = SchemaFactory.createForClass(CallRoom);
@@ -230,5 +230,8 @@ export class CallRoomInput {
 
   @Field(() => Int)
   maxNum: number;
+
+  @Field(() => String)
+  roomId: string;
 }
 export type CallRoomInputType = CallRoomInput;

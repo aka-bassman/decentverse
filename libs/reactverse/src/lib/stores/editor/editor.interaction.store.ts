@@ -6,8 +6,6 @@ import { EditorSlice } from "./editor.store";
 
 export interface EditorInteractionState {
   urlInput: string;
-  urls: types.TUrls[]; //!
-  selectedUrl: string; //!
   inputCallRoomMaxNum?: number;
   webviewPurpose: types.TWebviewPurpose;
   interactionTool: types.TInteractionTool;
@@ -18,8 +16,6 @@ export interface EditorInteractionState {
   callRooms: types.TCallRoom[];
   webviews: types.TWebview[];
   setUrlInput: (url: string) => void;
-  addUrl: () => void; //!
-  selectUrl: (url: string) => void; //!
   setInputCallRoomMaxNum: (maxNum: number) => void;
   setWebviewPurpose: (purpose: types.TWebviewPurpose) => void;
   checkIsInputUrl: (purpose: types.TWebviewPurpose) => boolean;
@@ -32,24 +28,17 @@ export interface EditorInteractionState {
   previewCallRoomMove: (x: number, y: number) => void;
   previewWebview: (x: number, y: number) => void;
   previewWebviewMove: (x: number, y: number) => void;
-  removeCollision: (index: number) => void;
-  removeCallRoom: (index: number) => void;
-  removeWebview: (index: number) => void;
+  removeCollision: (placeId: string) => void;
+  removeCallRoom: (placeId: string) => void;
+  removeWebview: (placeId: string) => void;
   clearInteractionPreview: () => void;
   isCollisionAddMode: () => boolean;
   isCallRoomAddMode: () => boolean;
   isWebviewAddMode: () => boolean;
-  isInteractionRemoveMode: () => boolean;
-  clickOnCollision: (e: any, index: number) => void;
-  clickOnCallRoom: (e: any, index: number) => void;
-  clickOnWebview: (e: any, index: number) => void;
 }
 
-// createFishSlice
 export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set, get) => ({
   urlInput: "https://",
-  urls: [],
-  selectedUrl: "",
   inputCallRoomMaxNum: 100,
   webviewPurpose: "default",
   interactionTool: "collision",
@@ -74,20 +63,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   setUrlInput: (url) => {
     set({ urlInput: url });
   },
-  addUrl: () => {
-    const newUrl = { color: "#ddd", url: get().urlInput };
-    // set((state) => ({
-    //   webviewTool: { ...state.webviewTool, urlInput: "https://", urls: [...state.webviewTool.urls, newUrl] },
-    // }));
-    set((state) => ({
-      urlInput: "https://",
-      urls: [...state.urls, newUrl],
-    }));
-  },
-  selectUrl: (url) => {
-    // set((state) => ({ webviewTool: { ...state.webviewTool, selectedUrl: url } }));
-    set({ selectedUrl: url });
-  },
   setInputCallRoomMaxNum: (maxNum) => {
     set({ inputCallRoomMaxNum: Number(maxNum) });
   },
@@ -100,7 +75,7 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   },
   addCollision: () => {
     const { x, y, width, height } = get().collisionPreview;
-    const newCollision = { x, y, width, height };
+    const newCollision = { x, y, width, height, placeId: get().getPlaceId("collision", x, y) };
 
     set((state) => ({
       collisions: [...state.collisions, newCollision],
@@ -121,7 +96,8 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     const maxNum = get().inputCallRoomMaxNum;
     if (!maxNum) return;
     const { x, y, width, height } = get().callRoomPreview;
-    const newCallRooms = { x, y, width, height, maxNum };
+    const placeId = get().getPlaceId("callRoom", x, y);
+    const newCallRooms = { x, y, width, height, maxNum, placeId, roomId: placeId };
 
     set((state) => ({
       callRooms: [...state.callRooms, newCallRooms],
@@ -150,7 +126,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   previewCollisionMove: (x, y) => {
     if (!get().collisionPreview.isPreview) return;
 
-    const prevX = get().collisionPreview.startX;
     set((state) => ({
       collisionPreview: {
         ...state.collisionPreview,
@@ -174,7 +149,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   previewCallRoomMove: (x, y) => {
     if (!get().callRoomPreview.isPreview) return;
 
-    const prevX = get().callRoomPreview.startX;
     set((state) => ({
       callRoomPreview: {
         ...state.callRoomPreview,
@@ -188,7 +162,15 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   },
   addWebview: () => {
     const { x, y, width, height } = get().webviewPreview;
-    const newWebview = { x, y, width, height, url: get().urlInput, purpose: get().webviewPurpose };
+    const newWebview = {
+      x,
+      y,
+      width,
+      height,
+      url: get().urlInput,
+      purpose: get().webviewPurpose,
+      placeId: get().getPlaceId("webview", x, y),
+    };
 
     set((state) => ({
       webviews: [...state.webviews, newWebview],
@@ -217,7 +199,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   previewWebviewMove: (x, y) => {
     if (!get().webviewPreview.isPreview) return;
 
-    const prevX = get().webviewPreview.startX;
     set((state) => ({
       webviewPreview: {
         ...state.webviewPreview,
@@ -229,21 +210,24 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       },
     }));
   },
-  removeCollision: (index) => {
+  removeCollision: (placeId) => {
     set((state) => ({
-      collisions: [...state.collisions.slice(0, index), ...state.collisions.slice(index + 1)],
+      collisions: state.collisions.filter((collision) => collision.placeId !== placeId),
+      viewItems: state.viewItems.filter((cur) => cur.data.placeId !== placeId),
       isEdited: true,
     }));
   },
-  removeCallRoom: (index) => {
+  removeCallRoom: (placeId) => {
     set((state) => ({
-      callRooms: [...state.callRooms.slice(0, index), ...state.callRooms.slice(index + 1)],
+      callRooms: state.callRooms.filter((callRoom) => callRoom.placeId !== placeId),
+      viewItems: state.viewItems.filter((cur) => cur.data.placeId !== placeId),
       isEdited: true,
     }));
   },
-  removeWebview: (index) => {
+  removeWebview: (placeId) => {
     set((state) => ({
-      webviews: [...state.webviews.slice(0, index), ...state.webviews.slice(index + 1)],
+      webviews: state.webviews.filter((webview) => webview.placeId !== placeId),
+      viewItems: state.viewItems.filter((cur) => cur.data.placeId !== placeId),
       isEdited: true,
     }));
   },
@@ -273,29 +257,17 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
     }));
   },
   isCollisionAddMode: () => {
-    return !!(get().mainTool === "Interaction" && get().interactionTool === "collision" && get().subTool === "Add");
+    return !!(get().mainTool === "Interaction" && get().interactionTool === "collision" && get().editMode === "Add");
   },
   isCallRoomAddMode: () => {
-    return !!(get().mainTool === "Interaction" && get().interactionTool === "callRoom" && get().subTool === "Add");
+    return !!(get().mainTool === "Interaction" && get().interactionTool === "callRoom" && get().editMode === "Add");
   },
   isWebviewAddMode: () => {
     return !!(
       get().mainTool === "Interaction" &&
       get().interactionTool === "webview" &&
       get().urlInput &&
-      get().subTool === "Add"
+      get().editMode === "Add"
     );
-  },
-  isInteractionRemoveMode: () => {
-    return !!(get().mainTool === "Interaction" && get().subTool === "Remove");
-  },
-  clickOnCollision: (e, index) => {
-    get().isInteractionRemoveMode() && get().removeCollision(index);
-  },
-  clickOnCallRoom: (e, index) => {
-    get().isInteractionRemoveMode() && get().removeCallRoom(index);
-  },
-  clickOnWebview: (e: any, index: number) => {
-    get().isInteractionRemoveMode() && get().removeWebview(index);
   },
 });
