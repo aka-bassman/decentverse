@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { types, useWorld, RenderCharacter, scalar, useGame, useUser } from "../../stores";
+import { types, useWorld, useDialog, RenderCharacter, scalar, useGame, useUser } from "../../stores";
 import { Sprite, SpriteMaterial, Vector3 } from "three";
 import {
   TileMap,
@@ -24,10 +24,12 @@ export interface GameProps {
 export const Game = ({ socket }: GameProps) => {
   const nickname = useUser((state) => state.nickname);
   const initWorld = useWorld((state) => state.initWorld);
+  const initDialogs = useDialog((state) => state.initDialogs);
   const screen = useGame((state) => state.screen);
   const engine = useRef(Engine.create());
   useEffect(() => {
     initWorld();
+    initDialogs();
   }, []);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
@@ -46,8 +48,6 @@ export const Game = ({ socket }: GameProps) => {
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
   const margin = 500;
-  console.log(screen.size[0] + 2 * margin);
-  console.log(screen.size[1] + 2 * margin);
 
   return (
     <div
