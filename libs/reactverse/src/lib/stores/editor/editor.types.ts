@@ -47,6 +47,13 @@ export type TWebview = TMapItem & {
   url: string;
   purpose: TWebviewPurpose;
 };
+export type TTalk = TMapItem & TTalkScript;
+export type TTalkScript = {
+  characters: TCharacter[];
+  script: TScript[];
+};
+export type TCharacter = { name: string; image?: string };
+export type TScript = { characterIndex: number; text: string; image?: string };
 export type TUrls = {
   url: string;
   color: string;
@@ -68,7 +75,7 @@ export type TViewItem = {
   data: TAsset | TCollision | TWebview | TCallRoom;
 };
 
-export type TInteractionTool = "collision" | "webview" | "callRoom";
+export type TInteractionTool = "collision" | "webview" | "callRoom" | "talk";
 export type TWebviewPurpose = "default" | "youtube" | "image" | "twitter";
 
 export const initPreview = {
