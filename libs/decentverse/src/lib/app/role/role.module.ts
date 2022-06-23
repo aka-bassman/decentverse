@@ -6,7 +6,7 @@ import { RoleResolver } from "./role.resolver";
 
 @Global()
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Role.Role.name, schema: Role.schema }])],
+  imports: [MongooseModule.forFeatureAsync([{ name: Role.Role.name, useFactory: () => Role.schema }])],
   providers: [RoleService, RoleResolver],
   exports: [RoleService],
 })

@@ -120,6 +120,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DialogInput {
+  characters: [ID!]!
+  flows: [FlowInput!]!
+  title: String!
+}
+
 type File {
   createdAt: DateTime!
   encoding: String!
@@ -129,6 +135,30 @@ type File {
   status: String!
   updatedAt: DateTime!
   url: String!
+}
+
+type Flow {
+  avatarPosition: String!
+  background: File
+  character: ID
+  image: File
+  name: String
+  next: String
+  position: [Int!]!
+  style: String!
+  subject: String!
+  text: String!
+}
+
+input FlowInput {
+  avatarPosition: String!
+  character: ID
+  image: ID
+  name: String
+  position: [Int!]!
+  style: String!
+  subject: String!
+  text: String!
 }
 
 type Map {
@@ -165,17 +195,20 @@ type Mutation {
   createAdmin(data: AdminInput!): Admin!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
+  createDialog(data: DialogInput!): Admin!
   createMap(data: MapInput!): Map!
   createRole(data: RoleInput!): Admin!
   removeAdmin(adminId: String!): Admin!
   removeAsset(assetId: String!): Asset!
   removeCharacter(characterId: String!): Character!
+  removeDialog(dialogId: String!): Admin!
   removeMap(mapId: String!): Map!
   removeRole(roleId: String!): Admin!
   signinAdmin(accountId: String!, password: String!): AccessToken!
   updateAdmin(adminId: String!, data: AdminInput!): Admin!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
+  updateDialog(data: DialogInput!, dialogId: String!): Admin!
   updateMap(data: MapInput!, mapId: ID!): Map!
   updateRole(data: RoleInput!, roleId: String!): Admin!
   updateUser(data: UserInput!, userId: String!): User!
@@ -212,6 +245,8 @@ type Query {
   assets: [Asset!]!
   character(characterId: String!): Character!
   characters: [Character!]!
+  dialog(dialogId: ID!): Admin!
+  dialogs: [Admin!]!
   map(mapId: String!): Map!
   maps: [Map!]!
   me: Admin!

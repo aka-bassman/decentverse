@@ -9,7 +9,7 @@ import * as gql from "../gql";
 export class Placement {
   @Field(() => gql.Asset)
   @Prop({ type: MongoSchema.Types.ObjectId, required: true, ref: "asset" })
-  asset: MongoSchema.Types.ObjectId;
+  asset: Types.ObjectId;
 
   @Field(() => [Int])
   @Prop([{ type: Number, required: true, min: 0 }])
@@ -21,7 +21,7 @@ export const PlacementSchema = SchemaFactory.createForClass(Placement);
 @InputType()
 export class PlacementInput {
   @Field(() => ID)
-  asset: MongoSchema.Types.ObjectId;
+  asset: Types.ObjectId;
 
   @Field(() => [Int])
   position: number[];

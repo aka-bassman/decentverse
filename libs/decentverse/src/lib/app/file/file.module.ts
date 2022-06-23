@@ -6,7 +6,7 @@ import { FileResolver } from "./file.resolver";
 
 @Global()
 @Module({
-  imports: [MongooseModule.forFeature([{ name: File.File.name, schema: File.schema }])],
+  imports: [MongooseModule.forFeatureAsync([{ name: File.File.name, useFactory: () => File.schema }])],
   providers: [FileService, FileResolver],
   exports: [FileService],
 })

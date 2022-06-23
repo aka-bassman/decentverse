@@ -6,7 +6,7 @@ import { AdminResolver } from "./admin.resolver";
 
 @Global()
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Admin.Admin.name, schema: Admin.schema }])],
+  imports: [MongooseModule.forFeatureAsync([{ name: Admin.Admin.name, useFactory: () => Admin.schema }])],
   providers: [AdminService, AdminResolver],
   exports: [AdminService],
 })

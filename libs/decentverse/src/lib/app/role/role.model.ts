@@ -64,7 +64,7 @@ const queryHelpers = {
 type DocMtds = typeof documentMethods;
 type MdlStats = typeof modelStatics;
 type QryHelps = typeof queryHelpers;
-export interface DocType extends Document<MongoSchema.Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
+export interface DocType extends Document<Types.ObjectId, QryHelps, Raw>, DocMtds, Raw {}
 export type Doc = DocType & dbConfig.DefaultSchemaFields;
 export interface Mdl extends Model<Doc, QryHelps, DocMtds>, MdlStats {}
 export const schema = SchemaFactory.createForClass<Raw, Doc>(Raw);

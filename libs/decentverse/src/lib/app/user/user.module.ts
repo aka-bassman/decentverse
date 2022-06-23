@@ -6,7 +6,7 @@ import { UserResolver } from "./user.resolver";
 
 @Global()
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.User.name, schema: User.schema }])],
+  imports: [MongooseModule.forFeatureAsync([{ name: User.User.name, useFactory: () => User.schema }])],
   providers: [UserService, UserResolver],
   exports: [UserService],
 })

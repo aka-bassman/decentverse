@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, ID } from "@nestjs/graphql";
-import { Types, Schema as MongoSchema } from "mongoose";
 import * as gql from "../gql";
+import { Types, Schema as MongoSchema } from "mongoose";
 /**
  * * Akamir GraphQL Schema V2.1
  */
@@ -10,26 +10,16 @@ import * as gql from "../gql";
  * ? Input은 입력데이터의 field들을 작성합니다. Field 내에는 gql 속성을, 타입값에는 데이터 타입을 지정합니다.
  * * 복잡한 속성이 있는 경우, 이는 scalar.schema.ts로 빼서 작업하세요.
  */
-
 @InputType()
-export class AssetInput {
+export class DialogInput {
   @Field(() => String)
-  name: string;
+  title: string;
 
-  @Field(() => ID, { nullable: true })
-  top?: Types.ObjectId;
+  @Field(() => [ID])
+  characters: Types.ObjectId[];
 
-  @Field(() => ID, { nullable: true })
-  bottom?: Types.ObjectId;
-
-  @Field(() => ID, { nullable: true })
-  lighting?: Types.ObjectId;
-
-  @Field(() => [gql.CollisionInput])
-  collisions: gql.CollisionInputType[];
-
-  @Field(() => [gql.WebviewInput])
-  webviews: gql.WebviewInputType[];
+  @Field(() => [gql.FlowInput])
+  flows: gql.FlowInputType[];
 }
 
 /**
@@ -37,29 +27,16 @@ export class AssetInput {
  * ? Object Type의 출력데이터의 field들을 작성합니다. Field 내에는 gql 속성을, 타입값에는 데이터 타입을 지정합니다.
  * * 복잡한 속성이 있는 경우, 이는 scalar.schema.ts로 빼서 작업하세요.
  */
-
 @ObjectType()
-export class Asset {
-  @Field(() => ID)
-  id: string;
-
+export class Dialog {
   @Field(() => String)
-  name: string;
+  title: string;
 
-  @Field(() => gql.File, { nullable: true })
-  top?: gql.File;
+  // @Field(() => [gql.Character])
+  // characters: gql.Character[];
 
-  @Field(() => gql.File, { nullable: true })
-  bottom?: gql.File;
-
-  @Field(() => gql.File, { nullable: true })
-  lighting?: gql.File;
-
-  @Field(() => [gql.Collision])
-  collisions: gql.CollisionType[];
-
-  @Field(() => [gql.Webview])
-  webviews: gql.WebviewType[];
+  @Field(() => [gql.Flow])
+  flows: gql.FlowType[];
 
   @Field(() => String)
   status: "active" | "inactive";
@@ -70,3 +47,4 @@ export class Asset {
   @Field(() => Date)
   updatedAt: Date;
 }
+export type DialogType = Dialog;

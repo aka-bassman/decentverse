@@ -3,6 +3,8 @@ import { client, setLink } from "./stores";
 import { Stream, Game, Interface, InputName, ReactverseLayout, MapEditor } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
+import disableScroll from "disable-scroll";
+import { isMobile } from "react-device-detect";
 
 export interface ReactverseProps {
   uri: string;
@@ -15,11 +17,14 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const me = useUser((state) => state);
   const isMapEditorOpen = useEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    // disableScroll.on();
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
+    return () => {
+      // disableScroll.off();
+    };
   }, []);
 
   if (isMapEditorOpen) {
@@ -43,9 +48,9 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     <ReactverseLayout>
       {isConnected && socket ? (
         <>
-          <Game socket={socket} />
-          <Stream socket={socket} />
           <Interface socket={socket} />
+          <Game socket={socket} />
+          {/* <Stream socket={socket} /> */}
         </>
       ) : (
         <>Connecting...</>

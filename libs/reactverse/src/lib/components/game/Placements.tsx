@@ -37,22 +37,22 @@ export const Placement = React.memo(({ placement }: PlacementProp) => {
   return (
     <Suspense fallback={null}>
       {bottom && (
-        <sprite position={position} visible={true}>
+        <mesh position={position} visible={true}>
           <planeGeometry args={[width, height]} />
-          <spriteMaterial map={bottom} transparent />
-        </sprite>
+          <meshBasicMaterial map={bottom} transparent />
+        </mesh>
       )}
       {top && (
-        <sprite position={topPos}>
+        <mesh position={topPos}>
           <planeGeometry args={[width, height]} />
-          <spriteMaterial map={top} transparent />
-        </sprite>
+          <meshBasicMaterial map={top} transparent />
+        </mesh>
       )}
       {lighting && (
-        <sprite position={topPos}>
+        <mesh position={topPos}>
           <planeGeometry args={[width, height]} />
-          <spriteMaterial map={lighting} transparent />
-        </sprite>
+          <meshBasicMaterial map={lighting} transparent />
+        </mesh>
       )}
     </Suspense>
   );
