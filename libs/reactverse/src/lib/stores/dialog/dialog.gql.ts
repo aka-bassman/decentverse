@@ -27,6 +27,7 @@ export const dialogsQuery = gql`
   ${types.dialogFragment}
   query dialogs {
     dialogs {
+      status
       ...dialogFragment
     }
   }

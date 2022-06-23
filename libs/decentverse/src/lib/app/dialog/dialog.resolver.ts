@@ -16,19 +16,19 @@ export class DialogResolver {
     return this.dialogService.dialog(dialogId);
   }
 
-  @Query(() => [gql.Admin])
-  @UseGuards(Allow.SuperAdmin)
+  @Query(() => [Dialog])
+  // @UseGuards(Allow.SuperAdmin)
   async dialogs() {
     return this.dialogService.dialogs();
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => Dialog)
   @UseGuards(Allow.SuperAdmin)
   async createDialog(@Args("data") data: gql.DialogInput) {
     return await this.dialogService.createDialog(data);
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => Dialog)
   @UseGuards(Allow.SuperAdmin)
   async updateDialog(
     @Args({ name: "dialogId", type: () => String }) dialogId: string,
@@ -37,7 +37,7 @@ export class DialogResolver {
     return await this.dialogService.updateDialog(dialogId, data);
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => Dialog)
   @UseGuards(Allow.SuperAdmin)
   async removeDialog(@Args({ name: "dialogId", type: () => String }) dialogId: string) {
     return await this.dialogService.removeDialog(dialogId);
