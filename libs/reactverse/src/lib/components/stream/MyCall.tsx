@@ -96,10 +96,5 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
     return stream;
   };
 
-  const toggleMyMic = async () => {
-    const mic = callRoom.mic ? 0 : 100;
-    setMic(mic);
-  };
-
   return <video className="Video" autoPlay muted ref={localVideo} />;
 };
