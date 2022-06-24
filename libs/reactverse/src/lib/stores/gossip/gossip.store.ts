@@ -8,6 +8,8 @@ export interface GossipState {
   callRoom: types.CallRoom;
   peers: types.PeerStream[];
   onChangeChatText: (e: any) => void;
+  joinCallRoom: (roomId: string) => void;
+  leaveCallRoom: () => void;
   sendChat: (roomId: string, text: string) => void;
   receiveChat: (roomId: string, chat: types.Chat) => void;
   addPeer: (
@@ -61,6 +63,9 @@ export const useGossip = create<GossipState>((set, get) => ({
       ],
       chatText: "",
     })),
+  joinCallRoom: (roomId: string) => set((state) => ({ callRoom: { ...state.callRoom, roomId } })),
+  leaveCallRoom: () => set((state) => ({ callRoom: { ...state.callRoom, roomId: "", isTalk: false } })),
+
   receiveChat: (roomId: string, chat: types.Chat) =>
     set((state) => ({ chats: [...state.chats, { ...chat, at: new Date(chat.at) }] })),
   addPeer: (
@@ -180,5 +185,6 @@ export const useGossip = create<GossipState>((set, get) => ({
           return { callRoom: { ...state.callRoom, screenStream } };
         });
   },
+
   status: "none",
 }));

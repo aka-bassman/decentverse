@@ -68,7 +68,7 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
   );
 
   useInterval(() => {
-    if (keyboard.interaction) openWebview();
+    if (keyboard.interaction && interaction.webview) openWebview();
   }, 100);
   const [width, height] = [webview.topLeft[0] - webview.bottomRight[0], webview.bottomRight[1] - webview.topLeft[1]];
 
