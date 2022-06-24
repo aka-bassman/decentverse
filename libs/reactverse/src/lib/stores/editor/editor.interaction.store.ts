@@ -15,7 +15,6 @@ export interface EditorInteractionState {
   collisions: types.TCollision[];
   callRooms: types.TCallRoom[];
   webviews: types.TWebview[];
-  talks: types.TTalk[];
   setUrlInput: (url: string) => void;
   setInputCallRoomMaxNum: (maxNum: number) => void;
   setWebviewPurpose: (purpose: types.TWebviewPurpose) => void;
@@ -61,7 +60,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   collisions: [],
   callRooms: [],
   webviews: [],
-  talks: [],
   setUrlInput: (url) => {
     set({ urlInput: url });
   },

@@ -15,10 +15,10 @@ export const LoadMap = () => {
     loadMapList();
   }, [isLoadModalOpen]);
 
-  // useEffect(() => {
-  //   //! TODO: 삭제
-  //   init("62a3482360cb6ba7fa50e65c");
-  // }, []);
+  useEffect(() => {
+    //! TODO: 삭제
+    init("62a3482360cb6ba7fa50e65c");
+  }, []);
   const loadMap = (mapId: string) => {
     init(mapId);
   };
