@@ -24,11 +24,11 @@ export const Interface = ({ socket }: InterfaceProps) => {
   const user = useWorld((state) => state.me);
   const setKey = useGame((state) => state.setKey);
   const handleMove = (event: IJoystickUpdateEvent) => {
-    // console.log(event);
-    if (event.x && event.x > 37.5) {
+    console.log(event);
+    if (event.x && event.x > 25) {
       setKey("right", true);
       setKey("left", false);
-    } else if (event.x && event.x < -37.5) {
+    } else if (event.x && event.x < -25) {
       setKey("right", false);
       setKey("left", true);
     } else {
@@ -37,10 +37,10 @@ export const Interface = ({ socket }: InterfaceProps) => {
     }
 
     //top
-    if (event.y && event.y > 37.5) {
+    if (event.y && event.y > 25) {
       setKey("down", false);
       setKey("up", true);
-    } else if (event.y && event.y < -37.5) {
+    } else if (event.y && event.y < -25) {
       setKey("down", true);
       setKey("up", false);
     } else {
@@ -65,6 +65,7 @@ export const Interface = ({ socket }: InterfaceProps) => {
           display: "flex",
           justifyContent: "center",
           width: "100%",
+          // height: "100%",
         }}
       >
         <Chatting socket={socket} />
@@ -74,7 +75,9 @@ export const Interface = ({ socket }: InterfaceProps) => {
         <WebViewModal />
       </div>
       {isMobile && (
-        <div style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "5%" }}>
+        <div
+          style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "5%", zIndex: 10 }}
+        >
           <Joystick size={100} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
           <button
             onTouchStart={() => {
@@ -96,8 +99,19 @@ export const Interface = ({ socket }: InterfaceProps) => {
 
 const InterfaceContainer = styled.div`
   position: absolute;
-  width: 150%;
-  height: 150vh;
+  width: 100%;
+  height: 100vh;
+  @media screen and (max-width: 500px) {
+    width: 150%;
+    height: 150vh;
+    /* border-width: 10px;
+    border-color: blue; */
+    overflow: "hidden";
+    overflow-y: "hidden";
+    overflow-x: "hidden";
+    /* background-color: red; */
+    /* flex-direction: column; */
+  }
   border-width: 10px;
   z-index: 1;
 `;

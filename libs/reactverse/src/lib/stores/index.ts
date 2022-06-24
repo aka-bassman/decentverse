@@ -2,6 +2,7 @@ export * from "./admin";
 export * from "./user";
 export * from "./asset";
 export * from "./character";
+export * from "./dialog";
 export * from "./map";
 export * from "./editor";
 export * from "./game";

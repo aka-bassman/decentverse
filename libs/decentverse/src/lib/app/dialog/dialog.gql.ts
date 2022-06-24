@@ -30,10 +30,13 @@ export class DialogInput {
 @ObjectType()
 export class Dialog {
   @Field(() => String)
+  id: string;
+
+  @Field(() => String)
   title: string;
 
-  // @Field(() => [gql.Character])
-  // characters: gql.Character[];
+  @Field(() => [gql.Character])
+  characters: gql.Character[];
 
   @Field(() => [gql.Flow])
   flows: gql.FlowType[];

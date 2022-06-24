@@ -23,7 +23,7 @@ export const dialogFragment = gql`
   ${scalar.flowFragment}
   fragment dialogFragment on Dialog {
     id
-    title
+    status
     characters {
       ...characterFragment
     }
@@ -31,7 +31,7 @@ export const dialogFragment = gql`
       ...flowFragment
     }
     status
-    # createdAt
-    # updatedAt
+    createdAt
+    updatedAt
   }
 `;

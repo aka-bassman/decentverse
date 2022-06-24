@@ -2,24 +2,24 @@ import { Types, FilterQuery, PipelineStage, Schema } from "mongoose";
 export const getDefaultModelStatics = <TDocument, TSchema>() => ({
   pickOneAndWrite: async function (query: FilterQuery<TSchema>, rawData: Partial<TSchema>): Promise<TDocument> {
     const doc = await this.findOne(query);
-    if (!doc) throw new Error("No Document");
+    if (!doc) throw new Error(`${this.modelName}: No Document`);
     Object.assign(doc, rawData);
     return await doc.save();
   },
   pickAndWrite: async function (docId: Types.ObjectId | string, rawData: Partial<TSchema>): Promise<TDocument> {
     const doc = await this.findById(docId);
-    if (!doc) throw new Error("No Document");
+    if (!doc) throw new Error(`${this.modelName}: No Document`);
     Object.assign(doc, rawData);
     return await doc.save();
   },
   pickOne: async function (query: FilterQuery<TSchema>): Promise<TDocument> {
     const doc = await this.findOne(query);
-    if (!doc) throw new Error("No Document");
+    if (!doc) throw new Error(`${this.modelName}: No Document`);
     return doc;
   },
   pickById: async function (docId: Types.ObjectId | string): Promise<TDocument> {
     const doc = await this.findById(docId);
-    if (!doc) throw new Error("No Document");
+    if (!doc) throw new Error(`${this.modelName}: No Document`);
     return doc;
   },
   sample: async function (
