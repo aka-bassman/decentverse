@@ -30,7 +30,10 @@ export class DialogInput {
 
 @ObjectType()
 export class Dialog {
-  @Field()
+  @Field(() => String)
+  id: string;
+
+  @Field(() => String)
   title: string;
 
   @Field(() => [gql.Character])

@@ -281,7 +281,7 @@ export const flowFragment = gql`
   fragment flowFragment on Flow {
     style
     subject
-    characte
+    character
     image {
       ...fileFragment
     }

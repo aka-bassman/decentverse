@@ -124,6 +124,7 @@ type Dialog {
   characters: [Character!]!
   createdAt: DateTime!
   flows: [Flow!]!
+  id: String!
   status: String!
   title: String!
   updatedAt: DateTime!
