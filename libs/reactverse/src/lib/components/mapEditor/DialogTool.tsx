@@ -3,7 +3,7 @@ import { Modal, Button, Space, Input, Radio, Col, Row } from "antd";
 import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
-export const TalkTool = () => {
+export const DialogTool = () => {
   const isScriptModalOpen = useEditor((state) => state.isScriptModalOpen);
   const toggleScriptModalOpen = useEditor((state) => state.toggleScriptModalOpen);
   const addScript = useEditor((state) => state.addScript);
@@ -15,11 +15,11 @@ export const TalkTool = () => {
   return (
     <div>
       <Button type="primary" block onClick={toggleScriptModalOpen}>
-        Add Script
+        Add Dialog
       </Button>
 
       <Modal
-        title={`Add Script`}
+        title="Add Dialog"
         visible={isScriptModalOpen}
         onOk={addScript}
         onCancel={toggleScriptModalOpen}

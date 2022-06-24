@@ -24,4 +24,4 @@ export * from "./SelectwebviewInfo";
 export * from "./SelectCallRoomInfo";
 export * from "./SelectInfoButtons";
 export * from "./SelectInfoBox";
-export * from "./TalkTool";
+export * from "./DialogTool";

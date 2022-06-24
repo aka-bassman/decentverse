@@ -6,7 +6,7 @@ export type Point = {
   z: number;
 };
 
-export type TMainTool = "Map" | "Assets" | "Interaction";
+export type TMainTool = "Assets" | "Interaction" | "Dialog";
 export type TEditMode = "Select" | "Add" | "Modify";
 
 export type TPreview = {

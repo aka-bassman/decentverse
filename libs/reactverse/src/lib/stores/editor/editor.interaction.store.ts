@@ -16,10 +16,6 @@ export interface EditorInteractionState {
   callRooms: types.TCallRoom[];
   webviews: types.TWebview[];
   talks: types.TTalk[];
-  isScriptModalOpen: boolean;
-  characterNameInput: string;
-  characters: types.TCharacter[];
-  selectedCharacter?: types.TCharacter;
   setUrlInput: (url: string) => void;
   setInputCallRoomMaxNum: (maxNum: number) => void;
   setWebviewPurpose: (purpose: types.TWebviewPurpose) => void;
@@ -40,11 +36,6 @@ export interface EditorInteractionState {
   isCollisionAddMode: () => boolean;
   isCallRoomAddMode: () => boolean;
   isWebviewAddMode: () => boolean;
-  toggleScriptModalOpen: () => void;
-  addScript: () => Promise<void>;
-  setCharacterNameInput: (name: string) => void;
-  addCharacter: () => void;
-  selectCharacter: (index: number) => void;
 }
 
 export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set, get) => ({
@@ -71,10 +62,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   callRooms: [],
   webviews: [],
   talks: [],
-  isScriptModalOpen: false,
-  characterNameInput: "",
-  characters: [],
-  selectedCharacter: undefined,
   setUrlInput: (url) => {
     set({ urlInput: url });
   },
@@ -284,25 +271,5 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       get().urlInput &&
       get().editMode === "Add"
     );
-  },
-  toggleScriptModalOpen: () => {
-    set((state) => ({ isScriptModalOpen: !state.isScriptModalOpen }));
-  },
-  addScript: async () => {
-    console.log("addScript");
-  },
-  setCharacterNameInput: (name) => {
-    set({ characterNameInput: name });
-  },
-  addCharacter: () => {
-    if (!get().characterNameInput) return;
-    const newCharacter = { name: get().characterNameInput, image: undefined };
-    set((state) => ({
-      characters: [...state.characters, newCharacter],
-      characterNameInput: "",
-    }));
-  },
-  selectCharacter: (index) => {
-    set((state) => ({ selectedCharacter: state.characters[index] }));
   },
 });
