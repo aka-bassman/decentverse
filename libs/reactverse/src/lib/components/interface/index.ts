@@ -5,4 +5,6 @@ export * from "./AdminSignIn";
 export * from "./AdminSignUp";
 export * from "./AdminInfo";
 export * from "./Chatting";
+export * from "./MicController";
+export * from "./MobileController";
 export * from "./WebViewModal";
