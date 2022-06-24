@@ -10,7 +10,7 @@ import { UseGuards } from "@nestjs/common";
 @Resolver(() => Dialog)
 export class DialogResolver {
   constructor(private readonly dialogService: DialogService, private readonly characterService: srv.CharacterService) {}
-  @Query(() => gql.Admin)
+  @Query(() => gql.Dialog)
   @UseGuards(Allow.Admin)
   async dialog(@Args({ name: "dialogId", type: () => ID }) dialogId: string) {
     return this.dialogService.dialog(dialogId);
@@ -43,8 +43,8 @@ export class DialogResolver {
     return await this.dialogService.removeDialog(dialogId);
   }
 
-  // @ResolveField()
-  // async characters(@Parent() dialog: db.Dialog.Dialog) {
-  //   return await this.characterService.loadMany(dialog.characters);
-  // }
+  @ResolveField(() => [gql.Character])
+  async characters(@Parent() dialog: db.Dialog.Dialog) {
+    return await this.characterService.loadMany(dialog.characters);
+  }
 }

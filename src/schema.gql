@@ -255,7 +255,7 @@ type Query {
   assets: [Asset!]!
   character(characterId: String!): Character!
   characters: [Character!]!
-  dialog(dialogId: ID!): Admin!
+  dialog(dialogId: ID!): Dialog!
   dialogs: [Dialog!]!
   map(mapId: String!): Map!
   maps: [Map!]!
