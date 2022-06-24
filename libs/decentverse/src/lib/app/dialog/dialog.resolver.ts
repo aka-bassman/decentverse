@@ -10,25 +10,25 @@ import { UseGuards } from "@nestjs/common";
 @Resolver(() => Dialog)
 export class DialogResolver {
   constructor(private readonly dialogService: DialogService, private readonly characterService: srv.CharacterService) {}
-  @Query(() => gql.Admin)
+  @Query(() => gql.Dialog)
   @UseGuards(Allow.Admin)
   async dialog(@Args({ name: "dialogId", type: () => ID }) dialogId: string) {
     return this.dialogService.dialog(dialogId);
   }
 
-  @Query(() => [gql.Admin])
+  @Query(() => [gql.Dialog])
   @UseGuards(Allow.SuperAdmin)
   async dialogs() {
     return this.dialogService.dialogs();
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => gql.Dialog)
   @UseGuards(Allow.SuperAdmin)
   async createDialog(@Args("data") data: gql.DialogInput) {
     return await this.dialogService.createDialog(data);
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => gql.Dialog)
   @UseGuards(Allow.SuperAdmin)
   async updateDialog(
     @Args({ name: "dialogId", type: () => String }) dialogId: string,
@@ -37,14 +37,14 @@ export class DialogResolver {
     return await this.dialogService.updateDialog(dialogId, data);
   }
 
-  @Mutation(() => gql.Admin)
+  @Mutation(() => gql.Dialog)
   @UseGuards(Allow.SuperAdmin)
   async removeDialog(@Args({ name: "dialogId", type: () => String }) dialogId: string) {
     return await this.dialogService.removeDialog(dialogId);
   }
 
-  // @ResolveField()
-  // async characters(@Parent() dialog: db.Dialog.Dialog) {
-  //   return await this.characterService.loadMany(dialog.characters);
-  // }
+  @ResolveField(() => [gql.Character])
+  async characters(@Parent() dialog: db.Dialog.Dialog) {
+    return await this.characterService.loadMany(dialog.characters);
+  }
 }

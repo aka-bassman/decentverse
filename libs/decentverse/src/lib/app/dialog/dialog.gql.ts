@@ -27,24 +27,24 @@ export class DialogInput {
  * ? Object Type의 출력데이터의 field들을 작성합니다. Field 내에는 gql 속성을, 타입값에는 데이터 타입을 지정합니다.
  * * 복잡한 속성이 있는 경우, 이는 scalar.schema.ts로 빼서 작업하세요.
  */
+
 @ObjectType()
 export class Dialog {
-  @Field(() => String)
+  @Field()
   title: string;
 
-  // @Field(() => [gql.Character])
-  // characters: gql.Character[];
+  @Field(() => [gql.Character])
+  characters: gql.Character[];
 
   @Field(() => [gql.Flow])
   flows: gql.FlowType[];
 
-  @Field(() => String)
+  @Field()
   status: "active" | "inactive";
 
-  @Field(() => Date)
+  @Field()
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field()
   updatedAt: Date;
 }
-export type DialogType = Dialog;

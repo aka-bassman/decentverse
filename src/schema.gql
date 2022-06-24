@@ -120,6 +120,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Dialog {
+  characters: [Character!]!
+  createdAt: DateTime!
+  flows: [Flow!]!
+  status: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
 input DialogInput {
   characters: [ID!]!
   flows: [FlowInput!]!
@@ -195,20 +204,20 @@ type Mutation {
   createAdmin(data: AdminInput!): Admin!
   createAsset(data: AssetInput!): Asset!
   createCharacter(data: CharacterInput!): Character!
-  createDialog(data: DialogInput!): Admin!
+  createDialog(data: DialogInput!): Dialog!
   createMap(data: MapInput!): Map!
   createRole(data: RoleInput!): Admin!
   removeAdmin(adminId: String!): Admin!
   removeAsset(assetId: String!): Asset!
   removeCharacter(characterId: String!): Character!
-  removeDialog(dialogId: String!): Admin!
+  removeDialog(dialogId: String!): Dialog!
   removeMap(mapId: String!): Map!
   removeRole(roleId: String!): Admin!
   signinAdmin(accountId: String!, password: String!): AccessToken!
   updateAdmin(adminId: String!, data: AdminInput!): Admin!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!
-  updateDialog(data: DialogInput!, dialogId: String!): Admin!
+  updateDialog(data: DialogInput!, dialogId: String!): Dialog!
   updateMap(data: MapInput!, mapId: ID!): Map!
   updateRole(data: RoleInput!, roleId: String!): Admin!
   updateUser(data: UserInput!, userId: String!): User!
@@ -245,8 +254,8 @@ type Query {
   assets: [Asset!]!
   character(characterId: String!): Character!
   characters: [Character!]!
-  dialog(dialogId: ID!): Admin!
-  dialogs: [Admin!]!
+  dialog(dialogId: ID!): Dialog!
+  dialogs: [Dialog!]!
   map(mapId: String!): Map!
   maps: [Map!]!
   me: Admin!
