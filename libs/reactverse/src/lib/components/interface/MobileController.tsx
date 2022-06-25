@@ -17,6 +17,7 @@ interface IJoystickUpdateEvent {
   distance: number | null;
 }
 
+const width = document.documentElement.clientWidth;
 export const MobileController = ({}) => {
   const setKey = useGame((state) => state.setKey);
   const interaction = useWorld((state) => state.interaction);
@@ -24,10 +25,10 @@ export const MobileController = ({}) => {
   const setMic = useGossip((state) => state.setMic);
 
   const handleMove = (event: IJoystickUpdateEvent) => {
-    if (event.x && event.x > 25) {
+    if (event.x && event.x > width / 2 / 10) {
       setKey("right", true);
       setKey("left", false);
-    } else if (event.x && event.x < -25) {
+    } else if (event.x && event.x < -(width / 2) / 10) {
       setKey("right", false);
       setKey("left", true);
     } else {
@@ -36,10 +37,10 @@ export const MobileController = ({}) => {
     }
 
     //top
-    if (event.y && event.y > 25) {
+    if (event.y && event.y > width / 2 / 10) {
       setKey("down", false);
       setKey("up", true);
-    } else if (event.y && event.y < -25) {
+    } else if (event.y && event.y < -(width / 2) / 10) {
       setKey("down", true);
       setKey("up", false);
     } else {
@@ -98,7 +99,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding-right: 25px;
-  padding-left: ${document.documentElement.clientWidth / 9}px;
+  padding-left: ${width / 9}px;
   /* left: 10%; */
   bottom: 15%;
   z-index: 1;
@@ -109,8 +110,8 @@ const ButtonContainer = styled.button`
   background-color: transparent;
 `;
 const InteractionButton = styled.button`
-  width: ${document.documentElement.clientWidth / 7}px;
-  height: ${document.documentElement.clientWidth / 7}px;
+  width: ${width / 7}px;
+  height: ${width / 7}px;
   border-radius: 300px;
   margin-left: 20px;
   background-color: white;
@@ -125,8 +126,8 @@ const Control = styled.div`
 
 const IconButton = styled.button`
   background: white;
-  width: ${document.documentElement.clientWidth / 7}px;
-  height: ${document.documentElement.clientWidth / 7}px;
+  width: ${width / 7}px;
+  height: ${width / 7}px;
   display: flex;
   justify-content: center;
   align-items: center;

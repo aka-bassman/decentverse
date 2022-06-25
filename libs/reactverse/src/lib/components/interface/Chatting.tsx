@@ -97,7 +97,6 @@ export const ChatInputMobile = ({ socket }: ChattingProps) => {
   const timeout = useRef<NodeJS.Timeout>();
   const onSubmit = () => {
     if (timeout.current) clearInterval(timeout.current);
-    console.log("on submit");
     const chat = {
       from: userId,
       fromName: userId,
@@ -147,15 +146,12 @@ export const ChatInputMobile = ({ socket }: ChattingProps) => {
       </div>
     </div>
   );
-  {
-    /* <Button style={{ width: 50, backgroundColor: "red" }} onClick={onSubmit} /> */
-  }
 };
 
 const SendButton = styled.button`
   width: ${document.documentElement.clientWidth / 8}px;
   height: ${document.documentElement.clientWidth / 8}px;
-  border-radius: 30px;
+  border-radius: ${document.documentElement.clientWidth / 8}px;
   background-color: white;
   display: flex;
   align-items: center;
