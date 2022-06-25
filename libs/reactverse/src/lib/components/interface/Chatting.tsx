@@ -22,7 +22,7 @@ export const Chatting = ({ socket }: ChattingProps) => {
     };
   }, []);
   return (
-    <div style={{ backgroundColor: "gray", opacity: "90%", width: "100%", height: 40 }}>
+    <div style={{ backgroundColor: "gray", opacity: "90%", width: "100%", height: 50 }}>
       {/* {chats.map((chat, idx) => (
         <Chat key={idx} chat={chat} />
       ))} */}
