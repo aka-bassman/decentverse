@@ -15,7 +15,6 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
   const setKey = useGame((state) => state.setKey);
   const lockKey = useGame((state) => state.lockKey);
   useEffect(() => {
-    console.log("useKeyboard use Effect", keyState.current);
     window.addEventListener("focus", () => lockKey(false));
     window.addEventListener("blur", () => lockKey(true));
     const handleKeyEvent = (event: any, state: boolean) => {
@@ -23,6 +22,7 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
       const code: scalar.Key = event.code;
       const key = scalar.keyMap[code];
       if (!key) return;
+      if (isMobile && key !== "interaction") return;
       else if (keyState.current[key] === state) return;
       keyState.current[key] = state;
       setKey(key, state);
@@ -32,7 +32,6 @@ export const useKeyboard = ({ keyState, lockState }: KeyboardProps) => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
     return () => {
-      console.log("aksjodaksjdhaskjdfhsdkjfhdskfjhdskfhdskjfhjk");
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
       // if (!isMobile) {

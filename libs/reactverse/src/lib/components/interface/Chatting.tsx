@@ -3,6 +3,8 @@ import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
 import { Button, Input } from "antd";
 import { isMobile } from "react-device-detect";
+import { SendIcon } from "..";
+import styled from "styled-components";
 
 export interface ChattingProps {
   socket: Soc;
@@ -12,6 +14,7 @@ export const Chatting = ({ socket }: ChattingProps) => {
   const userId = useWorld((state) => state.me.userId);
   const chats = useGossip((state) => state.chats);
   const receiveChat = useGossip((state) => state.receiveChat);
+
   useEffect(() => {
     socket.on("chat:public", (chat: types.Chat) => {
       if (chat.from === userId) return;
@@ -21,14 +24,7 @@ export const Chatting = ({ socket }: ChattingProps) => {
       socket.off("chat:public");
     };
   }, []);
-  return (
-    <div style={{ backgroundColor: "gray", opacity: "90%", width: "100%", height: 40 }}>
-      {/* {chats.map((chat, idx) => (
-        <Chat key={idx} chat={chat} />
-      ))} */}
-      <ChatInput socket={socket} />
-    </div>
-  );
+  return <>{isMobile ? <ChatInputMobile socket={socket} /> : <ChatInput socket={socket} />}</>;
 };
 
 export interface ChatProps {
@@ -66,23 +62,105 @@ export const ChatInput = ({ socket }: ChattingProps) => {
     timeout.current = setTimeout(() => speakChat(""), 3000);
   };
   return (
-    <Input
-      onFocus={() => !isMobile && lockKey(true)}
-      onBlur={() => !isMobile && lockKey(false)}
-      onMouseOut={() => !isMobile && lockKey(false)}
-      style={{
-        fontSize: 25,
-        backgroundColor: "transparent",
-        color: "white",
-        width: "100%",
-      }}
-      value={chatText}
-      onChange={onChangeChatText}
-      onKeyDown={keyPress}
-      placeholder="type..."
-    />
+    <div style={{ backgroundColor: "#4b46467f", width: "90%", borderRadius: 20, height: 50, marginBottom: 10 }}>
+      <Input
+        onFocus={() => !isMobile && lockKey(true)}
+        onBlur={() => !isMobile && lockKey(false)}
+        onMouseOut={() => !isMobile && lockKey(false)}
+        style={{
+          fontSize: 25,
+          backgroundColor: "transparent",
+          color: "white",
+          width: "100%",
+          borderRadius: 20,
+          borderColor: "transparent",
+        }}
+        value={chatText}
+        onChange={onChangeChatText}
+        onKeyDown={keyPress}
+        placeholder="type..."
+      />
+    </div>
   );
   {
     /* <Button style={{ width: 50, backgroundColor: "red" }} onClick={onSubmit} /> */
   }
 };
+export const ChatInputMobile = ({ socket }: ChattingProps) => {
+  const userId = useWorld((state) => state.me.userId);
+  const chatText = useGossip((state) => state.chatText);
+  const onChangeChatText = useGossip((state) => state.onChangeChatText);
+  const sendChat = useGossip((state) => state.sendChat);
+  const speakChat = useWorld((state) => state.speakChat);
+  const lockKey = useGame((state) => state.lockKey);
+  const keyPress = async (e: any) => e.key === "Enter" && !e.shiftKey && onSubmit();
+  const timeout = useRef<NodeJS.Timeout>();
+  const onSubmit = () => {
+    if (timeout.current) clearInterval(timeout.current);
+    console.log("on submit");
+    const chat = {
+      from: userId,
+      fromName: userId,
+      text: chatText,
+      at: new Date(),
+    };
+    socket.emit("chat", "public", chat);
+    sendChat("public", chatText);
+    speakChat(chatText);
+    timeout.current = setTimeout(() => speakChat(""), 3000);
+  };
+  return (
+    <div style={{ width: "100%", marginBottom: 10, borderRadius: 20, height: 50 }}>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingLeft: 20,
+          paddingRight: 20,
+          marginBottom: 10,
+        }}
+      >
+        <div style={{ backgroundColor: "#4b46467f", width: "80%", borderRadius: 40 }}>
+          <Input
+            onFocus={() => !isMobile && lockKey(true)}
+            onBlur={() => !isMobile && lockKey(false)}
+            onMouseOut={() => !isMobile && lockKey(false)}
+            style={{
+              fontSize: 18,
+              backgroundColor: "transparent",
+              color: "white",
+              width: "100%",
+              borderRadius: 20,
+              borderColor: "transparent",
+            }}
+            value={chatText}
+            onChange={onChangeChatText}
+            onKeyDown={keyPress}
+            placeholder="type..."
+          />
+        </div>
+        <SendButton onClick={onSubmit}>
+          <SendIcon />
+        </SendButton>
+      </div>
+    </div>
+  );
+  {
+    /* <Button style={{ width: 50, backgroundColor: "red" }} onClick={onSubmit} /> */
+  }
+};
+
+const SendButton = styled.button`
+  width: ${document.documentElement.clientWidth / 8}px;
+  height: ${document.documentElement.clientWidth / 8}px;
+  border-radius: 30px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  :active {
+    opacity: 0.7;
+  }
+`;
