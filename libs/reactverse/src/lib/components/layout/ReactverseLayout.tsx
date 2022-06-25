@@ -23,17 +23,17 @@ const AppContainer = styled.div`
   height: 100vh;
   @media screen and (max-width: 800px) {
     width: 100%;
-    /* height: ${document.documentElement.clientHeight}px;
+    height: ${document.documentElement.clientHeight}px;
     overflow: hidden;
     overflow-x: hidden;
-    overflow-y: hidden; */
+    overflow-y: hidden;
     /* touch-action: none; */
     /* -webkit-overflow-scrolling: none; */
 
     /* 이외의 브라우저 */
     overscroll-behavior: none;
   }
-  /* overflow: hidden;
+  overflow: hidden;
   overflow-x: hidden;
-  overflow-y: hidden; */
+  overflow-y: hidden;
 `;

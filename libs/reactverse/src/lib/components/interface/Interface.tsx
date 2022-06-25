@@ -40,9 +40,9 @@ const InterfaceContainer = styled.div`
   @media screen and (max-width: 800px) {
     width: 100%;
     height: ${document.documentElement.clientHeight}px;
-    /* overflow: hidden;
+    overflow: hidden;
     overflow-x: hidden;
-    overflow-y: hidden; */
+    overflow-y: hidden;
     .Controller {
       width: 100%;
       position: absolute;
