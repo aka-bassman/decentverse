@@ -22,6 +22,12 @@ export class CharacterInput {
   @Field(() => ID)
   file: Types.ObjectId;
 
+  @Field(() => ID, { nullable: true })
+  image?: Types.ObjectId;
+
+  @Field(() => String, { nullable: true })
+  name?: string;
+
   @Field(() => [Int])
   tileSize: number[];
 

@@ -25,6 +25,12 @@ export class Input {
   @Prop({ type: MongoSchema.Types.ObjectId, required: true, ref: "file", index: true })
   file: Types.ObjectId;
 
+  @Prop({ type: MongoSchema.Types.ObjectId, required: false, ref: "file" })
+  image?: Types.ObjectId;
+
+  @Prop({ type: String, required: false })
+  name?: Types.ObjectId;
+
   @Prop([{ type: Number, required: true }])
   tileSize: number[];
 
