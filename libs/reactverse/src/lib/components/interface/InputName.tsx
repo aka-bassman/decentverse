@@ -53,8 +53,8 @@ export const InputName = () => {
   };
   const process = [
     <>
-      <Metamask onClick={onPressMetamask}>Start to metamask</Metamask>
-      <Offline onClick={onPressOffline}>Start to Offline</Offline>
+      <Metamask onClick={onPressMetamask}>Login with Metamask</Metamask>
+      <Offline onClick={onPressOffline}>Start as a Guest</Offline>
     </>,
     <>
       <InputBox onKeyPress={keyPress}>
@@ -68,7 +68,7 @@ export const InputName = () => {
   return (
     <Container>
       <AdminModal />
-      <Title>Reactverse</Title>
+      <Title>AYIAS</Title>
       <Process>{process[currentPage]}</Process>
     </Container>
   );
