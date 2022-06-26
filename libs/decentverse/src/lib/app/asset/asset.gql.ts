@@ -30,6 +30,9 @@ export class AssetInput {
 
   @Field(() => [gql.WebviewInput])
   webviews: gql.WebviewInputType[];
+
+  @Field(() => [gql.DialogueInput])
+  dialogues: gql.DialogueInputType[];
 }
 
 /**
@@ -60,6 +63,9 @@ export class Asset {
 
   @Field(() => [gql.Webview])
   webviews: gql.WebviewType[];
+
+  @Field(() => [gql.Dialogue])
+  dialogues: gql.DialogueType[];
 
   @Field(() => String)
   status: "active" | "inactive";

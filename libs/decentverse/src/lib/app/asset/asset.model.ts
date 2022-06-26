@@ -36,6 +36,9 @@ export class Asset extends Input {
   @Prop([{ type: gql.WebviewSchema }])
   webviews: gql.WebviewType[];
 
+  @Prop([{ type: gql.DialogueSchema }])
+  dialogues: gql.DialogueType[];
+
   @Prop({
     type: String,
     enum: ["active", "inactive"],

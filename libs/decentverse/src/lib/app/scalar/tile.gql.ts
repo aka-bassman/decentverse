@@ -32,6 +32,10 @@ export class Tile {
   @Field(() => [gql.CallRoom])
   @Prop([{ type: CallRoomSchema, required: true }])
   callRooms: gql.CallRoomType[];
+
+  @Field(() => [gql.Dialogue])
+  @Prop([{ type: gql.DialogueSchema, required: true }])
+  dialogues: gql.DialogueType[];
 }
 export type TileType = Tile;
 export const TileSchema = SchemaFactory.createForClass(Tile);
@@ -55,5 +59,8 @@ export class TileInput {
 
   @Field(() => [gql.CallRoomInput])
   callRooms: gql.CallRoomInputType[];
+
+  @Field(() => [gql.DialogueInput])
+  dialogues: gql.DialogueInputType[];
 }
 export type TileInputType = TileInput;
