@@ -29,7 +29,7 @@ export class Input {
   image?: Types.ObjectId;
 
   @Prop({ type: String, required: false })
-  name?: Types.ObjectId;
+  name?: string;
 
   @Prop([{ type: Number, required: true }])
   tileSize: number[];
