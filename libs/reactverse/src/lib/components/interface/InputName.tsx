@@ -65,13 +65,13 @@ export const InputName = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          <ChoiceBox>
+          {/* <ChoiceBox>
             {testImages.map((image, idx) => (
               <button style={{ width: 20, height: 30, cursor: "pointer" }} onClick={() => console.log("hello")}>
                 <img index={idx} src={image} />
               </button>
             ))}
-          </ChoiceBox>
+          </ChoiceBox> */}
           <Goback onClick={logout}>Back</Goback>
         </>
       )}
