@@ -15,7 +15,7 @@ const AppContainer = styled.div`
 const Box = styled.div`
   padding: 10px;
   border-radius: 10px;
-  max-width: 500px;
+  max-width: 800px;
   width: 100%;
   background-color: #fff;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4);

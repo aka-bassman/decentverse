@@ -19,14 +19,11 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const skipLogin = false; // 나중에 query params로 넘겨야함.
 
   useEffect(() => {
-    disableScroll.on();
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-    return () => {
-      disableScroll.off();
-    };
+    return () => {};
   }, []);
   if (!socket || !isConnected) return <>Connecting...</>;
   else

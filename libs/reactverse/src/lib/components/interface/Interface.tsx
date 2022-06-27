@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
-import { Chatting, WebViewModal } from "./index";
-import { Joystick } from "react-joystick-component";
-import { isMobile } from "react-device-detect";
+import { Chatting, WebViewModal, MobileController, MicController } from "./index";
 import styled from "styled-components";
 
 type JoystickDirection = "FORWARD" | "RIGHT" | "LEFT" | "BACKWARD";
@@ -21,77 +19,14 @@ export interface InterfaceProps {
 }
 
 export const Interface = ({ socket }: InterfaceProps) => {
-  const user = useWorld((state) => state.me);
-  const setKey = useGame((state) => state.setKey);
-  const handleMove = (event: IJoystickUpdateEvent) => {
-    console.log(event);
-    if (event.x && event.x > 25) {
-      setKey("right", true);
-      setKey("left", false);
-    } else if (event.x && event.x < -25) {
-      setKey("right", false);
-      setKey("left", true);
-    } else {
-      setKey("right", false);
-      setKey("left", false);
-    }
-
-    //top
-    if (event.y && event.y > 25) {
-      setKey("down", false);
-      setKey("up", true);
-    } else if (event.y && event.y < -25) {
-      setKey("down", true);
-      setKey("up", false);
-    } else {
-      setKey("down", false);
-      setKey("up", false);
-    }
-  };
-  const handleStop = (event: IJoystickUpdateEvent) => {
-    setKey("down", false);
-    setKey("up", false);
-    setKey("left", false);
-    setKey("right", false);
-  };
   return (
     <InterfaceContainer>
-      <div
-        style={{
-          position: "absolute",
-          bottom: "0%",
-          alignItems: "center",
-          flexDirection: "column",
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-          // height: "100%",
-        }}
-      >
+      <ChattingContainer>
         <Chatting socket={socket} />
-      </div>
-
-      <div style={{ top: "0%", left: "0%" }}>
-        <WebViewModal />
-      </div>
-      {isMobile && (
-        <div
-          style={{ position: "absolute", display: "flex", alignItems: "center", left: "5%", bottom: "5%", zIndex: 10 }}
-        >
-          <Joystick size={100} baseColor="#656565" stickColor="#adadad" move={handleMove} stop={handleStop} />
-          <button
-            onTouchStart={() => {
-              setKey("interaction", true);
-            }}
-            onTouchEnd={() => {
-              setKey("interaction", false);
-            }}
-            style={{ width: 75, height: 75, borderRadius: 300, marginLeft: 20, opacity: 0.7 }}
-          >
-            F
-          </button>
-        </div>
-      )}
+      </ChattingContainer>
+      <WebViewModal />
+      <MobileController />
+      <MicController />
     </InterfaceContainer>
   );
   // return <>{/* <Name>{user.userId}</Name> */}</>;
@@ -101,17 +36,42 @@ const InterfaceContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100vh;
-  @media screen and (max-width: 500px) {
-    width: 150%;
-    height: 150vh;
-    /* border-width: 10px;
-    border-color: blue; */
-    overflow: "hidden";
-    overflow-y: "hidden";
-    overflow-x: "hidden";
-    /* background-color: red; */
-    /* flex-direction: column; */
-  }
-  border-width: 10px;
   z-index: 1;
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    height: ${document.documentElement.clientHeight}px;
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    .Controller {
+      width: 100%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 25px;
+      padding-left: 25px;
+      /* left: 10%; */
+      bottom: 15%;
+      z-index: 1;
+    }
+  }
+`;
+const ChattingContainer = styled.div`
+  position: absolute;
+  bottom: 0%;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const InteractionButton = styled.button`
+  width: ${document.documentElement.clientWidth / 7}px;
+  height: ${document.documentElement.clientWidth / 7}px;
+  border-radius: 300px;
+  margin-left: 20px;
+  background-color: white;
+  opacity: 0.7;
 `;

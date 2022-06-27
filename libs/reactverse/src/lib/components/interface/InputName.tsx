@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGossip, useWorld, useUser, types } from "../../stores";
 import styled, { keyframes } from "styled-components";
 import { AdminModal } from "./index";
+import { isMobile } from "react-device-detect";
 
 export const InputName = () => {
   const user = useUser((state) => state.user);
@@ -23,9 +24,9 @@ export const InputName = () => {
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
   return (
-    <Container>
+    <Container_>
       <AdminModal />
-      <Title>AYIAS</Title>
+      <div className="Title">AYIAS</div>
       {loginMethod === "none" ? (
         <>
           <Metamask onClick={whoAmI}>Login with Metamask</Metamask>
@@ -45,11 +46,11 @@ export const InputName = () => {
           <Goback onClick={logout}>Back</Goback>
         </>
       )}
-    </Container>
+    </Container_>
   );
 };
 
-const Container = styled.div`
+const Container_ = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
@@ -61,19 +62,36 @@ const Container = styled.div`
   justify-content: center;
   text-align: center;
   background: #083266;
+  @media screen and (max-width: 800px) {
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: none;
+
+    /* 이외의 브라우저 */
+    overscroll-behavior: none;
+  }
+  .Title {
+    font-size: 120px;
+    margin-bottom: 300px;
+    @media screen and (max-width: 800px) {
+      font-size: 60px;
+      margin-bottom: 60px;
+    }
+  }
+  /* overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden; */
 `;
-const Process = styled.div``;
-const Title = styled.div`
-  font-size: 120px;
-  margin-bottom: 300px;
-`;
+
 const InputBox = styled.div`
   display: flex;
   margin-top: 10px;
   padding-left: 0px;
 `;
 const Input = styled.input`
-  width: 99%;
+  width: 80%;
   height: auto;
   font-size: 28px;
   border-width: 3px;
@@ -86,6 +104,21 @@ const Input = styled.input`
   justify-self: center;
   border-radius: 10px;
   background: white;
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    /* height: auto; */
+    font-size: 18px;
+    border-width: 3px;
+    margin-right: 5px;
+    padding-left: 10px;
+    border-color: #3258d4;
+    color: black;
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    border-radius: 10px;
+    background: white;
+  }
 `;
 const Submit = styled.button`
   width: auto;
@@ -95,10 +128,21 @@ const Submit = styled.button`
   font-size: 28px;
   color: white;
   background: #3258d4;
-
   align-self: center;
   justify-self: center;
   border-radius: 10px;
+  @media screen and (max-width: 800px) {
+    height: auto;
+    font-size: 18px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: white;
+    background: #3258d4;
+    align-self: center;
+    justify-self: center;
+    border-radius: 10px;
+  }
   :hover {
     opacity: 0.8;
     background: #3ed06c;
@@ -115,6 +159,18 @@ const Goback = styled.button`
   align-self: center;
   justify-self: center;
   border-radius: 10px;
+  @media screen and (max-width: 800px) {
+    width: auto;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: white;
+    background: gray;
+    align-self: center;
+    justify-self: center;
+    border-radius: 10px;
+  }
   :hover {
     opacity: 0.8;
   }
@@ -135,6 +191,24 @@ const Metamask = styled.button`
   background: #3258d4;
   display: flex;
   border-radius: 10px;
+
+  @media screen and (max-width: 800px) {
+    width: 260px;
+    height: auto;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: #3258d4;
+    display: flex;
+    border-radius: 10px;
+  }
+
   :hover {
     opacity: 0.8;
     /* background: #3ed06c; */
@@ -156,6 +230,22 @@ const Offline = styled.button`
   align-self: center;
   justify-self: center;
   border-radius: 10px;
+  @media screen and (max-width: 800px) {
+    width: 260px;
+    height: auto;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: gray;
+    display: flex;
+    border-radius: 10px;
+  }
   :hover {
     opacity: 0.8;
   }
