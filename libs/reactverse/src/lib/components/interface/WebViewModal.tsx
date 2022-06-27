@@ -85,6 +85,8 @@ const ButtonContainer = styled.div`
 
 const CancelButton = styled.button`
   background-color: transparent;
+  margin-right: 10px;
+  margin-top: 10px;
 `;
 
 const Webview = styled.object`

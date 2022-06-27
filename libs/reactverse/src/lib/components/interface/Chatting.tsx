@@ -109,7 +109,7 @@ export const ChatInputMobile = ({ socket }: ChattingProps) => {
     timeout.current = setTimeout(() => speakChat(""), 3000);
   };
   return (
-    <div style={{ width: "100%", marginBottom: 10, borderRadius: 20, height: 50 }}>
+    <div style={{ width: "100%", marginBottom: 10, borderRadius: 20 }}>
       <div
         style={{
           display: "flex",
@@ -121,7 +121,7 @@ export const ChatInputMobile = ({ socket }: ChattingProps) => {
           marginBottom: 10,
         }}
       >
-        <div style={{ backgroundColor: "#4b46467f", width: "80%", borderRadius: 40 }}>
+        <div style={{ backgroundColor: "#4b46467f", width: "80%", height: "100%", borderRadius: 40 }}>
           <Input
             onFocus={() => !isMobile && lockKey(true)}
             onBlur={() => !isMobile && lockKey(false)}
@@ -141,7 +141,10 @@ export const ChatInputMobile = ({ socket }: ChattingProps) => {
           />
         </div>
         <SendButton onClick={onSubmit}>
-          <SendIcon />
+          <SendIcon
+            width={document.documentElement.clientWidth / 20}
+            height={document.documentElement.clientWidth / 20}
+          />
         </SendButton>
       </div>
     </div>

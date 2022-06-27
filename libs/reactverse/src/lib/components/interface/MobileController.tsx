@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, types, useGame } from "../../stores";
 import { Chatting, WebViewModal } from "./index";
-import { MicOnIcon, MicOffIcon } from "..";
+import { MicOnIcon, MicOffIcon, InteractionIcon } from "..";
 import { Joystick } from "react-joystick-component";
 import { isMobile, isIOS } from "react-device-detect";
 import styled from "styled-components";
@@ -81,7 +81,7 @@ export const MobileController = ({}) => {
             )}
             {interaction.webview && (
               <InteractionButton onTouchStart={enableInteraction} onTouchEnd={disableItneraction}>
-                F
+                <InteractionIcon />
               </InteractionButton>
             )}
           </ButtonContainer>
@@ -114,8 +114,10 @@ const InteractionButton = styled.button`
   height: ${width / 7}px;
   border-radius: 300px;
   margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: white;
-  opacity: 0.7;
 `;
 
 const Control = styled.div`
