@@ -11,3 +11,5 @@ export { FileModule } from "./file/file.module";
 export { RoleModule } from "./role/role.module";
 export { ScalarModule } from "./scalar/scalar.module";
 export { BatchModule } from "./batch/batch.module";
+export { CaverModule } from "./caver/caver.module";
+export { KasModule } from "./kas/kas.module";

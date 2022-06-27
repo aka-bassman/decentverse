@@ -21,3 +21,7 @@ export const batchProcess = async <Doc>({ name, model, query, fn, mapFn, batchNu
   Logger.log(`${name} Batch Job Finished`);
   return num;
 };
+
+export const sleep = async (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
