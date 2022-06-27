@@ -14,8 +14,10 @@ export interface ReactverseProps {
 export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Soc>();
-  const me = useUser((state) => state);
+  const worldStatus = useWorld((state) => state.status);
   const isMapEditorOpen = useEditor((state) => state.isMapEditorOpen);
+  const skipLogin = false; // 나중에 query params로 넘겨야함.
+
   useEffect(() => {
     disableScroll.on();
     setLink(uri);
@@ -26,34 +28,21 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
       disableScroll.off();
     };
   }, []);
-
-  if (isMapEditorOpen) {
+  if (!socket || !isConnected) return <>Connecting...</>;
+  else
     return (
       <ReactverseLayout>
-        <MapEditor />
+        {isMapEditorOpen ? (
+          <MapEditor />
+        ) : worldStatus === "none" ? (
+          <InputName />
+        ) : (
+          <>
+            <Interface socket={socket} />
+            <Game socket={socket} />
+            <Stream socket={socket} />
+          </>
+        )}
       </ReactverseLayout>
     );
-  }
-
-  if (!me.nickname && socket) {
-    return (
-      <ReactverseLayout>
-        {/* <Interface socket={socket} /> */}
-        <InputName />
-      </ReactverseLayout>
-    );
-  }
-  return (
-    <ReactverseLayout>
-      {isConnected && socket ? (
-        <>
-          <Interface socket={socket} />
-          <Game socket={socket} />
-          <Stream socket={socket} />
-        </>
-      ) : (
-        <>Connecting...</>
-      )}
-    </ReactverseLayout>
-  );
 };

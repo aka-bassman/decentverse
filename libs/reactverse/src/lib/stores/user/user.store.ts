@@ -1,5 +1,5 @@
 import create from "zustand";
-import * as types from "./user.types";
+import * as types from "../types";
 import * as gql from "../gql";
 import { setLink } from "../apollo";
 import { toast } from "react-toastify";
@@ -12,23 +12,22 @@ declare global {
   }
 }
 export interface UserState {
-  id?: string;
-  nickname: string;
-  address: string;
-  isGuest: boolean;
+  loginMethod: "metamask" | "kaikas" | "guest" | "none";
   type: "user" | "admin";
+  user: types.User;
+  characters: types.Character[];
   whoAmI: () => Promise<void>;
-  guest: () => void;
+  loginAsGuest: () => void;
   logout: () => void;
-  updateUser: (data: Partial<types.UserInput>) => Promise<void>;
-  setName: (nickname: string) => void;
+  updateUser: () => Promise<void>;
+  setNickname: (nickname: string) => void;
   status: "loading" | "idle";
 }
 export const useUser = create<UserState>((set, get) => ({
-  nickname: "",
-  address: "",
-  isGuest: true,
+  loginMethod: "none",
   type: "user",
+  user: types.defaultUser,
+  characters: [],
   status: "loading",
   whoAmI: async () => {
     if (typeof window.ethereum === "undefined") return;
@@ -43,19 +42,20 @@ export const useUser = create<UserState>((set, get) => ({
       });
       if (!signAddress || !selectedAddress[0]) return;
       const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
-      set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
+      const characters = await gql.characters({}, 0, 6);
+      set({ user, loginMethod: "metamask", characters });
     }
   },
-  guest: () => {
-    set({ isGuest: true });
+  loginAsGuest: () =>
+    set((state) => ({
+      loginMethod: "guest",
+      user: { ...state.user, nickname: `Guest#${Math.floor(Math.random() * 1000000)}` },
+    })),
+  logout: () => set((state) => ({ user: types.defaultUser, loginMethod: "none" })),
+  updateUser: async () => {
+    const { user } = get();
+    if (user.id === "") return;
+    await gql.updateUser(user.id, user);
   },
-  logout: () => {
-    set({ nickname: "", address: "" });
-  },
-  updateUser: async (data: types.UserInput) => {
-    const me = get();
-    if (!me.id) return;
-    await gql.updateUser(me?.id, data);
-  },
-  setName: (nickname: string) => set({ nickname }),
+  setNickname: (nickname: string) => set((state) => ({ user: { ...state.user, nickname } })),
 }));

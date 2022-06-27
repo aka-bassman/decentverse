@@ -4,72 +4,47 @@ import styled, { keyframes } from "styled-components";
 import { AdminModal } from "./index";
 
 export const InputName = () => {
-  const me = useUser((state) => state);
+  const user = useUser((state) => state.user);
+  const characters = useUser((state) => state.characters);
+  const loginMethod = useUser((state) => state.loginMethod);
   const whoAmI = useUser((state) => state.whoAmI);
-  const guest = useUser((state) => state.guest);
+  const loginAsGuest = useUser((state) => state.loginAsGuest);
   const logout = useUser((state) => state.logout);
-  const setName = useUser((state) => state.setName);
+  const setNickname = useUser((state) => state.setNickname);
   const updateUser = useUser((state) => state.updateUser);
   const updateUserId = useWorld((state) => state.updateUserId);
-  const [nickname, setNickname] = useState<string>(me.nickname ?? "");
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const initWorld = useWorld((state) => state.initWorld);
 
-  useEffect(() => {
-    setNickname(me.nickname);
-  }, [me.nickname]);
-
-  const onChange = (e: any) => {
-    setNickname(e.target.value);
-  };
-
-  const onPressMetamask = async () => {
-    await whoAmI();
-    setCurrentPage(currentPage + 1);
-  };
-  const onPressOffline = () => {
-    guest();
-    setNickname(`Guest#${Math.floor(Math.random() * 1000000)}`);
-    setCurrentPage(currentPage + 1);
-  };
-
-  const onClickGoBack = () => {
-    setNickname("");
-    logout();
-    updateUserId("");
-    setCurrentPage(currentPage - 1);
-  };
   const onClickSubmit = () => {
-    setName(nickname);
-    updateUser({ nickname });
-    updateUserId(nickname);
+    updateUser();
+    // updateUserId(nickname);
+    initWorld(user, characters[0] ?? types.defaultCharacter);
   };
-
-  const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
-      setName(nickname);
-      updateUser({ nickname });
-      updateUserId(nickname);
-    }
-  };
-  const process = [
-    <>
-      <Metamask onClick={onPressMetamask}>Login with Metamask</Metamask>
-      <Offline onClick={onPressOffline}>Start as a Guest</Offline>
-    </>,
-    <>
-      <InputBox onKeyPress={keyPress}>
-        <Input autoFocus placeholder="  Type your nickname!" value={nickname} onChange={onChange} />
-        <Submit onClick={onClickSubmit}>Submit!</Submit>
-      </InputBox>
-      <Goback onClick={onClickGoBack}>Go Back</Goback>
-    </>,
-  ];
+  const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
   return (
     <Container>
       <AdminModal />
       <Title>AYIAS</Title>
-      <Process>{process[currentPage]}</Process>
+      {loginMethod === "none" ? (
+        <>
+          <Metamask onClick={whoAmI}>Login with Metamask</Metamask>
+          <Offline onClick={loginAsGuest}>Start as a Guest</Offline>
+        </>
+      ) : (
+        <>
+          <InputBox onKeyPress={keyPress}>
+            <Input
+              autoFocus
+              placeholder="  Type your nickname!"
+              value={user.nickname}
+              onChange={(e: any) => setNickname(e.target.value)}
+            />
+            <Submit onClick={onClickSubmit}>Next</Submit>
+          </InputBox>
+          <Goback onClick={logout}>Back</Goback>
+        </>
+      )}
     </Container>
   );
 };

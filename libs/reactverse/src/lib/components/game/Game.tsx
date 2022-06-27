@@ -22,15 +22,8 @@ export interface GameProps {
 }
 
 export const Game = ({ socket }: GameProps) => {
-  const nickname = useUser((state) => state.nickname);
-  const initWorld = useWorld((state) => state.initWorld);
-  const initDialogs = useDialog((state) => state.initDialogs);
-  const screen = useGame((state) => state.screen);
+  const nickname = useUser((state) => state.user.nickname);
   const engine = useRef(Engine.create());
-  useEffect(() => {
-    initWorld();
-    initDialogs();
-  }, []);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const player = useRef<RenderCharacter>({

@@ -7,3 +7,4 @@ export * from "./map/map.types";
 export * from "./world/world.types";
 export * from "./gossip/gossip.types";
 export * from "./editor/editor.types";
+export * from "./user/user.types";
