@@ -2,6 +2,7 @@ import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types, Schema as MongoSchema } from "mongoose";
 import { CollisionSchema, CallRoomSchema, WebviewSchema } from "./scalar.gql";
+import { DialogueSchema } from "./dialogue.gql";
 import * as gql from "../gql";
 
 // * Tile Schema Definition
@@ -34,7 +35,7 @@ export class Tile {
   callRooms: gql.CallRoomType[];
 
   @Field(() => [gql.Dialogue])
-  @Prop([{ type: gql.DialogueSchema, required: true }])
+  @Prop([{ type: DialogueSchema, required: true }])
   dialogues: gql.DialogueType[];
 }
 export type TileType = Tile;

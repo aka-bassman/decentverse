@@ -7,7 +7,7 @@ export class DialogueResolver {
   constructor(private readonly dialogService: srv.DialogService) {}
 
   @ResolveField()
-  async map(@Parent() dialogue: gql.Dialogue) {
+  async dialog(@Parent() dialogue: gql.Dialogue) {
     return await this.dialogService.load(dialogue.dialog);
   }
 }
