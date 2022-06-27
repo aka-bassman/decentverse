@@ -3,6 +3,7 @@ import { useGossip, useWorld, useUser, types } from "../../stores";
 import styled, { keyframes } from "styled-components";
 import { AdminModal } from "./index";
 import { isMobile } from "react-device-detect";
+import { KlaytnIcon, MetamaskIcon } from "../common";
 
 export const InputName = () => {
   const me = useUser((state) => state);
@@ -24,6 +25,10 @@ export const InputName = () => {
   };
 
   const onPressMetamask = async () => {
+    await whoAmI();
+    setCurrentPage(currentPage + 1);
+  };
+  const onPressKaikas = async () => {
     await whoAmI();
     setCurrentPage(currentPage + 1);
   };
@@ -53,9 +58,18 @@ export const InputName = () => {
     }
   };
   const process = [
-    <div style={{ display: "inline", justifyContent: "center", alignItems: "center" }}>
-      <Metamask onClick={onPressMetamask}>Start to metamask</Metamask>
-      <Offline onClick={onPressOffline}>Start to Offline</Offline>
+    <div style={{ display: "inline", justifyContent: "c/logos/klaytn-klay-logo.svgenter", alignItems: "center" }}>
+      <Kaikas onClick={onPressKaikas}>
+        <KlaytnIcon />
+        <div style={{ marginLeft: 20 }}>Start to kaikas</div>
+      </Kaikas>
+      <Metamask onClick={onPressMetamask}>
+        <MetamaskIcon />
+        <div style={{ marginLeft: 20 }}>Start to Metamask</div>
+      </Metamask>
+      <Offline onClick={onPressOffline}>
+        <div style={{ marginLeft: 50 }}>Start to Geust</div>
+      </Offline>
     </div>,
     <>
       <InputBox onKeyPress={keyPress}>
@@ -201,6 +215,44 @@ const Goback = styled.button`
   }
 `;
 
+const Kaikas = styled.button`
+  width: 500px;
+  height: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: #8f806a;
+  display: flex;
+  border-radius: 10px;
+
+  @media screen and (max-width: 800px) {
+    width: 260px;
+    height: auto;
+    padding-left: 30px;
+    padding-right: 7px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: flex-start;
+    color: white;
+    background: #8f806a;
+    display: flex;
+    border-radius: 10px;
+  }
+
+  :hover {
+    opacity: 0.8;
+    /* background: #3ed06c; */
+  }
+`;
 const Metamask = styled.button`
   width: 500px;
   height: auto;
@@ -213,23 +265,23 @@ const Metamask = styled.button`
   align-items: center;
   justify-content: center;
   color: white;
-  background: #3258d4;
+  background: #f7a252;
   display: flex;
   border-radius: 10px;
 
   @media screen and (max-width: 800px) {
     width: 260px;
     height: auto;
-    padding-left: 7px;
+    padding-left: 30px;
     padding-right: 7px;
     padding-top: 7px;
     padding-bottom: 7px;
     margin-bottom: 10px;
     font-size: 16px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: white;
-    background: #3258d4;
+    background: #f7a252;
     display: flex;
     border-radius: 10px;
   }
@@ -258,14 +310,14 @@ const Offline = styled.button`
   @media screen and (max-width: 800px) {
     width: 260px;
     height: auto;
-    padding-left: 7px;
+    padding-left: 30px;
     padding-right: 7px;
     padding-top: 7px;
     padding-bottom: 7px;
     margin-bottom: 10px;
     font-size: 16px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: white;
     background: gray;
     display: flex;

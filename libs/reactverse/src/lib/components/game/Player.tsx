@@ -5,7 +5,8 @@ import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text, Html } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import { Engine, World, Bodies, Vector, Body } from "matter-js";
-import { TextureLoader } from "three";
+import { isMobile } from "react-device-detect";
+
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;
   animation: MutableRefObject<scalar.SpriteDef>;
@@ -114,7 +115,7 @@ const MyChat = () => {
           maxWidth: 300,
           width: "max-content",
           borderRadius: 10,
-          bottom: 35,
+          bottom: isMobile ? 10 : 35,
           padding: 10,
           alignContent: "center",
           alignItems: "center",
