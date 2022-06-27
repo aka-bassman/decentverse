@@ -23,15 +23,8 @@ export interface GameProps {
 }
 
 export const Game = ({ socket }: GameProps) => {
-  const nickname = useUser((state) => state.nickname);
-  const initWorld = useWorld((state) => state.initWorld);
-  const initDialogs = useDialog((state) => state.initDialogs);
-  const screen = useGame((state) => state.screen);
+  const nickname = useUser((state) => state.user.nickname);
   const engine = useRef(Engine.create());
-  useEffect(() => {
-    initWorld();
-    initDialogs();
-  }, []);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const player = useRef<RenderCharacter>({
@@ -52,7 +45,7 @@ export const Game = ({ socket }: GameProps) => {
 
   return (
     <GameContainer>
-      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
+      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.8 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />
           <TileMap player={player} scope={scope} />
@@ -79,7 +72,7 @@ const GameContainer = styled.div`
     overflow: hidden;
     overflow-y: hidden;
     overflow-x: hidden;
-    /* background-color: red; */
+    background-color: red;
     /* flex-direction: column; */
   }
 `;

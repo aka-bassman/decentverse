@@ -1,37 +1,39 @@
 import create from "zustand";
-import * as types from "./user.types";
+import * as types from "../types";
 import * as gql from "../gql";
 import { setLink } from "../apollo";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { isMobile } from "react-device-detect";
 
 declare global {
   interface Window {
     ethereum?: MetaMaskInpageProvider;
+    klaytn?: any;
   }
 }
 export interface UserState {
-  id?: string;
-  nickname: string;
-  address: string;
-  isGuest: boolean;
+  loginMethod: "metamask" | "kaikas" | "guest" | "none";
   type: "user" | "admin";
-  whoAmIMetamask: () => Promise<void>;
-  whoAmIKaikas: () => Promise<void>;
-  guest: () => void;
+  user: types.User;
+  characters: types.Character[];
+  whoAmI: () => Promise<void>;
+  connectMetamask: () => Promise<void>;
+  connectKaikas: () => Promise<void>;
+  loginAsGuest: () => void;
   logout: () => void;
-  updateUser: (data: Partial<types.UserInput>) => Promise<void>;
-  setName: (nickname: string) => void;
+  updateUser: () => Promise<void>;
+  setNickname: (nickname: string) => void;
   status: "loading" | "idle";
 }
 export const useUser = create<UserState>((set, get) => ({
-  nickname: "",
-  address: "",
-  isGuest: true,
+  loginMethod: "none",
   type: "user",
+  user: types.defaultUser,
+  characters: [],
   status: "loading",
-  whoAmIMetamask: async () => {
+  whoAmI: async () => {
     if (typeof window.ethereum === "undefined") return;
     const selectedAddress = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
     if (selectedAddress) {
@@ -47,7 +49,7 @@ export const useUser = create<UserState>((set, get) => ({
       set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
     }
   },
-  whoAmIKaikas: async () => {
+  connectMetamask: async () => {
     if (typeof window.ethereum === "undefined") return;
     const selectedAddress = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
     if (selectedAddress) {
@@ -63,16 +65,50 @@ export const useUser = create<UserState>((set, get) => ({
       set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
     }
   },
-  guest: () => {
-    set({ isGuest: true });
+  connectKaikas: async () => {
+    if (isMobile) {
+      return window.alert("PC로 진행해주세요.");
+    }
+    if (!window.klaytn) {
+      // return window.alert(t("exception_kaikas-not-found"));
+      return window.alert("Kaikas를 다운로드 해주세요.");
+    }
+    // if (window.klaytn.networkVersion.toString() !== process.env.NEXT_PUBLIC_KLAYTN_CHAIN_ID) {
+    //   // check baobab // 8217
+    //   return window.alert(t("reveal.exception_network"));
+    // }
+    // if (typeof window.ethereum === "undefined") return;
+    // const selectedAddress = await window.klaytn.request<string[]>({ method: "eth_requestAccounts" });
+    const account = (await window.klaytn.enable())[0];
+
+    if (account) {
+      console.log(account);
+      // const provider = new ethers.providers.Web3Provider(window.klaytn as any);
+      // const message = `test messgae\n timeStmap:${new Date().getTime()}`;
+      // const params = [message, selectedAddress[0]];
+      // const signAddress = await window.klaytn.request<string>({
+      //   method: "personal_sign",
+      //   params,
+      // });
+      // console.log(window.klaytn);
+      // const signedAddress = window.klaytn.sign("test", account);
+      // console.log(signedAddress);
+      // if (!signAddress || !selectedAddress[0]) return;
+      // const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
+      // set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
+    }
   },
-  logout: () => {
-    set({ nickname: "", address: "" });
+
+  loginAsGuest: () =>
+    set((state) => ({
+      loginMethod: "guest",
+      user: { ...state.user, nickname: `Guest#${Math.floor(Math.random() * 1000000)}` },
+    })),
+  logout: () => set((state) => ({ user: types.defaultUser, loginMethod: "none" })),
+  updateUser: async () => {
+    const { user } = get();
+    if (user.id === "") return;
+    await gql.updateUser(user.id, user);
   },
-  updateUser: async (data: types.UserInput) => {
-    const me = get();
-    if (!me.id) return;
-    await gql.updateUser(me?.id, data);
-  },
-  setName: (nickname: string) => set({ nickname }),
+  setNickname: (nickname: string) => set((state) => ({ user: { ...state.user, nickname } })),
 }));

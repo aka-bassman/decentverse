@@ -68,6 +68,8 @@ export class DecentverseModule {
         modules.RtModule.register(options?.redis),
         modules.ScalarModule,
         modules.BatchModule,
+        modules.KasModule,
+        modules.CaverModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

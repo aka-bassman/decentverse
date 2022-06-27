@@ -39,7 +39,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     getUserMedia().then(() => {
-      socket.emit("join", { roomId, userId: me.nickname, nickName: me.nickname });
+      socket.emit("join", { roomId, userId: me.user.nickname, nickName: me.user.nickname });
     });
     return () => {
       setIsTalk(false);
@@ -53,7 +53,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
     for (const peer of peers) {
       if (!peer.call.peer.connected) return;
       const callData = {
-        id: me.nickname,
+        id: me.user.nickname,
         cam: callRoom.cam,
         mic: callRoom.mic,
         isTalk: callRoom.mic && callRoom.isTalk,

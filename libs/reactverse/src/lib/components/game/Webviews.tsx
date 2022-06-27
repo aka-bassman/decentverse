@@ -106,14 +106,16 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
                 style={{
                   backgroundColor: `rgba(0,0,0,${0.7})`,
                   color: "white",
+                  width: "max-content",
                   borderRadius: 10,
                   padding: 10,
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  wordWrap: "normal",
                 }}
               >
-                <div style={{ display: "block", marginRight: 10 }}>Press 'F'</div>
+                Press 'F'
               </Html>
             )}
           </>

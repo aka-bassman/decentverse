@@ -3,6 +3,7 @@ import { ReadStream } from "fs";
 import { Field, ObjectType, Int, InputType, ID } from "@nestjs/graphql";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types, Schema as MongoSchema, ObjectId } from "mongoose";
+import * as gql from "../gql";
 
 @ObjectType()
 export class AccessToken {

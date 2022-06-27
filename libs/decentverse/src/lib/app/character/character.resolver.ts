@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ResolveField, Parent, Int } from "@nestjs/graphql";
 import { CharacterService } from "./character.service";
 import { Allow, Account } from "../../middlewares";
 import * as gql from "../../app/gql";
@@ -15,11 +15,19 @@ export class CharacterResolver {
   async character(@Args({ name: "characterId", type: () => String }) characterId: string) {
     return this.characterService.character(characterId);
   }
-
   @Query(() => [gql.Character])
   @UseGuards(Allow.Every)
-  async characters() {
-    return this.characterService.characters();
+  async characters(
+    @Args({ name: "query", type: () => gql.JSON }) query: db.Query<db.Character.Doc>,
+    @Args({ name: "skip", type: () => Int }) skip: number,
+    @Args({ name: "limit", type: () => Int }) limit: number
+  ) {
+    return this.characterService.characters(query, skip, limit);
+  }
+  @Query(() => Int)
+  @UseGuards(Allow.Every)
+  async count(@Args({ name: "query", type: () => gql.JSON }) query: db.Query<db.Character.Doc>) {
+    return this.characterService.count(query);
   }
 
   @Mutation(() => gql.Character)
