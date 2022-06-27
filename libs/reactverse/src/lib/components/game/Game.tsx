@@ -16,6 +16,7 @@ import {
 import { Socket as Soc } from "socket.io-client";
 import { Engine, Render, Bodies, World } from "matter-js";
 import styled from "styled-components";
+import { isMobile, isIOS } from "react-device-detect";
 
 export interface GameProps {
   socket: Soc;
@@ -50,25 +51,8 @@ export const Game = ({ socket }: GameProps) => {
   const margin = 500;
 
   return (
-    <div
-      style={
-        // {
-        //   width: "260%",
-        //   height: "260%",
-        //   marginLeft: "-80%",
-        //   marginTop: "-80%",
-        // }
-        {
-          width: "100%",
-          height: "100%",
-          // transform: `translate(-50%, -0%)`,
-
-          // marginLeft: -margin,
-          // marginTop: -margin,
-        }
-      }
-    >
-      <Canvas orthographic camera={{ zoom: 0.5 }} frameloop="always">
+    <GameContainer>
+      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />
           <TileMap player={player} scope={scope} />
@@ -81,12 +65,21 @@ export const Game = ({ socket }: GameProps) => {
         </Suspense>
       </Canvas>
       <StateManagement keyState={keyState} lockState={lockState} player={player} socket={socket} scope={scope} />
-    </div>
+    </GameContainer>
   );
 };
 
-// const Name = styled.div`
-//   width: 200%;
-//   height: 200%;
-//   transform: translate(-100%, -100%);
-// `;
+const GameContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    height: ${document.documentElement.clientHeight}px;
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    /* background-color: red; */
+    /* flex-direction: column; */
+  }
+`;

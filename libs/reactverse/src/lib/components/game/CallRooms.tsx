@@ -16,6 +16,8 @@ export interface CallRoomsProp {
 }
 export const CallRooms = ({ engine, interaction, player, socket }: CallRoomsProp) => {
   const callRooms = useWorld((state) => state.map?.callRooms);
+  const joinCallRoom = useGossip((state) => state.joinCallRoom);
+  const leaveCallRoom = useGossip((state) => state.leaveCallRoom);
   const joinInteraction = useWorld((state) => state.joinInteraction);
   const leaveInteraction = useWorld((state) => state.leaveInteraction);
   const receiveChat = useGossip((state) => state.receiveChat);
@@ -29,6 +31,7 @@ export const CallRooms = ({ engine, interaction, player, socket }: CallRoomsProp
       )
         return;
       leaveInteraction("callRoom");
+      leaveCallRoom();
       socket.off(`chat:${getAreaId(interaction.current.callRoom)}`);
       interaction.current.callRoom = null;
     } else {
@@ -41,6 +44,7 @@ export const CallRooms = ({ engine, interaction, player, socket }: CallRoomsProp
         ) {
           interaction.current.callRoom = callRoom;
           joinInteraction("callRoom", callRoom);
+          joinCallRoom(callRoom.roomId);
           socket.on(`chat:${getAreaId(interaction.current.callRoom)}`, (c: types.Chat) => receiveChat("callRoom", c));
         }
       });

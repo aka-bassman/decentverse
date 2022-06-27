@@ -10,16 +10,15 @@ export interface StreamProps {
 export const Stream = ({ socket }: StreamProps) => {
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
-  const interaction = useWorld((state) => state.interaction);
-
+  console.log(callRoom.roomId);
   return (
     <>
-      {interaction.callRoom && <MyCall socket={socket} roomId={interaction.callRoom.roomId} />}
-      {interaction.callRoom && callRoom.localStream && (
+      {callRoom.roomId && <MyCall socket={socket} roomId={callRoom.roomId} />}
+      {callRoom.roomId && callRoom.localStream && (
         <CallBox
           localStream={callRoom.localStream}
           screenStream={callRoom.screenStream}
-          roomId={interaction.callRoom.roomId}
+          roomId={callRoom.roomId}
           socket={socket}
         />
       )}

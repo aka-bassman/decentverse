@@ -17,14 +17,11 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const me = useUser((state) => state);
   const isMapEditorOpen = useEditor((state) => state.isMapEditorOpen);
   useEffect(() => {
-    disableScroll.on();
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-    return () => {
-      disableScroll.off();
-    };
+    return () => {};
   }, []);
 
   if (isMapEditorOpen) {
