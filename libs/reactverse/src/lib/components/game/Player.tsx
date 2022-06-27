@@ -16,7 +16,7 @@ export interface PlayerProp {
 
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get, set } = useThree();
-  const nickname = useUser((state) => state.nickname);
+  const nickname = useUser((state) => state.user.nickname);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
