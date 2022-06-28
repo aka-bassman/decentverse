@@ -6,7 +6,7 @@ export type Point = {
   z: number;
 };
 
-export type TMainTool = "Map" | "Assets" | "Interaction";
+export type TMainTool = "Assets" | "Interaction" | "Dialog";
 export type TEditMode = "Select" | "Add" | "Modify";
 
 export type TPreview = {
@@ -47,6 +47,12 @@ export type TWebview = TMapItem & {
   url: string;
   purpose: TWebviewPurpose;
 };
+export type TCharacter = { name: string; image?: string; avatarPosition?: TAvatarPosition };
+export type TFlow = {
+  avatarPositions: TAvatarPosition;
+  text: string;
+  characterIndex: number;
+};
 export type TUrls = {
   url: string;
   color: string;
@@ -68,8 +74,9 @@ export type TViewItem = {
   data: TAsset | TCollision | TWebview | TCallRoom;
 };
 
-export type TInteractionTool = "collision" | "webview" | "callRoom";
+export type TInteractionTool = "collision" | "webview" | "callRoom" | "talk";
 export type TWebviewPurpose = "default" | "youtube" | "image" | "twitter";
+export type TAvatarPosition = "left" | "right" | "center";
 
 export const initPreview = {
   x: 0,

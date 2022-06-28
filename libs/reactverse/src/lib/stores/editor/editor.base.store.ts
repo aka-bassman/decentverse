@@ -47,6 +47,7 @@ export interface EditorBaseState {
 
 export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
   isMapEditorOpen: false,
+  // isMapEditorOpen: true, //! todo
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
