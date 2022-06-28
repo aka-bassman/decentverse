@@ -78,6 +78,7 @@ export const TileMap = ({ player, scope }: MapProp) => {
     // console.log(player.current.position[0], screen.size[0], showBox.min);
     // console.log(scope.current.min);
   }, 500);
+  console.log("tile render teset");
   return (
     <Suspense fallback={null}>
       {renderTiles

@@ -3,6 +3,7 @@ import { UserService } from "./user.service";
 import { Allow, Account } from "../../middlewares";
 import * as gql from "../gql";
 import { UseGuards } from "@nestjs/common";
+import { getAddress } from "ethers/lib/utils";
 
 @Resolver(() => gql.User)
 export class UserResolver {
@@ -10,12 +11,8 @@ export class UserResolver {
 
   @Query(() => gql.User)
   @UseGuards(Allow.Every)
-  async whoAmI(
-    @Args({ name: "address", type: () => String }) address: string,
-    @Args({ name: "message", type: () => String }) message: string,
-    @Args({ name: "signAddress", type: () => String }) signAddress: string
-  ) {
-    return await this.userService.whoAmI(address, message, signAddress);
+  async whoAmI(@Args({ name: "address", type: () => String }) address: string) {
+    return await this.userService.whoAmI(address);
   }
 
   @Mutation(() => gql.User)

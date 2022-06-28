@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, MutableRefObject, useMemo } from "react";
+import React, { Suspense, useRef, MutableRefObject, useMemo, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { types, useWorld, RenderCharacter, scalar, useGame } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader } from "three";
@@ -10,6 +10,7 @@ import { Tile } from "./Tile";
 
 export const Placements = () => {
   const placements = useWorld((state) => state.map?.placements);
+  console.log("placements render test", placements);
   return (
     <Suspense fallback={null}>
       {placements?.map((placement, idx) => (
@@ -25,15 +26,26 @@ export interface PlacementProp {
 const loader = new TextureLoader();
 
 export const Placement = React.memo(({ placement }: PlacementProp) => {
+  const loaded = useWorld((state) => state.loaded);
+  console.log("placement render test");
+
   const bottom =
-    placement.asset.bottom && loader.load(placement.asset.bottom?.url.replace("https://asset.ayias.io", "ayias"));
-  const top = placement.asset.top && loader.load(placement.asset.top?.url.replace("https://asset.ayias.io", "ayias"));
+    placement.asset.bottom &&
+    loader.load(placement.asset.bottom?.url.replace("https://asset.ayias.io", "ayias"), loaded);
+  const top =
+    placement.asset.top && loader.load(placement.asset.top?.url.replace("https://asset.ayias.io", "ayias"), loaded);
   const lighting =
-    placement.asset.lighting && loader.load(placement.asset.lighting?.url.replace("https://asset.ayias.io", "ayias"));
+    placement.asset.lighting &&
+    loader.load(placement.asset.lighting?.url.replace("https://asset.ayias.io", "ayias"), loaded);
 
   const position = new Vector3(placement.position[0], placement.position[1], -0.00000005);
   const topPos = new Vector3(placement.position[0], placement.position[1], 0.00001);
   const [width, height] = [placement.position[2], placement.position[3]];
+
+  console.log("render test");
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <Suspense fallback={null}>
       {bottom && (

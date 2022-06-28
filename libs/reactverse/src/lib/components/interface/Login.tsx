@@ -4,18 +4,20 @@ import styled, { keyframes } from "styled-components";
 import { AdminModal } from "./index";
 import { isMobile } from "react-device-detect";
 import { KlaytnIcon, MetamaskIcon } from "../common";
-import { Button, Input } from "antd";
-export const InputName = () => {
+import { Button, Input, Carousel } from "antd";
+import { CharacterBox, GuestButton, KaikasButton, MetamaskButton } from "./";
+
+export const Login = () => {
   const user = useUser((state) => state.user);
   const characters = useUser((state) => state.characters);
   const loginMethod = useUser((state) => state.loginMethod);
+  const logout = useUser((state) => state.logout);
+  const skipLoginProcess = useUser((state) => state.skipLoginProcess);
   const connectMetamask = useUser((state) => state.connectMetamask);
   const connectKaikas = useUser((state) => state.connectKaikas);
   const loginAsGuest = useUser((state) => state.loginAsGuest);
-  const logout = useUser((state) => state.logout);
   const setNickname = useUser((state) => state.setNickname);
   const updateUser = useUser((state) => state.updateUser);
-  const updateUserId = useWorld((state) => state.updateUserId);
   const initWorld = useWorld((state) => state.initWorld);
   const testImages = [
     "./images.png",
@@ -29,29 +31,26 @@ export const InputName = () => {
   ];
   const onClickSubmit = () => {
     updateUser();
-    // updateUserId(nickname);
     initWorld(user, characters[0] ?? types.defaultCharacter);
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
+  useEffect(() => {
+    const url = window.location.href;
+    if (url.includes("guest=true")) {
+      skipLoginProcess();
+      initWorld(user, characters[0] ?? types.defaultCharacter);
+    } else setNickname("");
+  }, []);
   return (
     <Container>
       <AdminModal />
       <div className="Title">AYIAS</div>
-
       {loginMethod === "none" ? (
         <>
-          <Kaikas onClick={connectKaikas}>
-            <KlaytnIcon />
-            <div style={{ marginLeft: 20 }}>Start to kaikas</div>
-          </Kaikas>
-          {/* <Metamask onClick={connectMetamask}>
-            <MetamaskIcon />
-            <div style={{ marginLeft: 20 }}>Login with Metamask</div>
-          </Metamask> */}
-          <Offline onClick={loginAsGuest}>
-            <div style={{ marginLeft: 50 }}>Start as a Guest</div>
-          </Offline>
+          {!isMobile && <KaikasButton onClick={connectKaikas} />}
+          {!isMobile && <MetamaskButton onClick={connectMetamask} />}
+          <GuestButton onClick={loginAsGuest} />
         </>
       ) : (
         <>
@@ -64,13 +63,8 @@ export const InputName = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          {/* <ChoiceBox>
-            {testImages.map((image, idx) => (
-              <button style={{ width: 20, height: 30, cursor: "pointer" }} onClick={() => console.log("hello")}>
-                <img index={idx} src={image} />
-              </button>
-            ))}
-          </ChoiceBox> */}
+          <CharacterBox characters={testImages} />
+
           <Goback onClick={logout}>Back</Goback>
         </>
       )}
@@ -94,9 +88,7 @@ const Container = styled.div`
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-
     -webkit-overflow-scrolling: none;
-
     /* 이외의 브라우저 */
     overscroll-behavior: none;
   }
@@ -108,26 +100,10 @@ const Container = styled.div`
       margin-bottom: 60px;
     }
   }
-  /* overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: hidden; */
 `;
 
-const ChoiceBox = styled.div`
-  display: flex;
-  max-width: 500px;
-
-  width: 500px;
-  height: 300px;
-  border-radius: 10px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-
-  background-color: white;
-`;
 const InputBox = styled.div`
   display: flex;
-  margin-top: 10px;
   margin-bottom: 10px;
   padding-left: 0px;
 `;
@@ -223,119 +199,6 @@ const Goback = styled(Button)`
     background-color: gray;
     color: white;
     border-color: white;
-    opacity: 0.8;
-  }
-`;
-
-const Kaikas = styled.button`
-  width: 500px;
-  height: auto;
-  padding-left: 30px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  font-size: 30px;
-  align-items: center;
-  justify-content: flex-start;
-  color: white;
-  background: #8f806a;
-  display: flex;
-  border-radius: 10px;
-
-  @media screen and (max-width: 800px) {
-    width: 260px;
-    height: 50px;
-    padding-left: 30px;
-    padding-right: 7px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    align-items: center;
-    justify-content: flex-start;
-    color: white;
-    background: #8f806a;
-    display: flex;
-    border-radius: 10px;
-  }
-
-  :hover {
-    opacity: 0.8;
-    /* background: #3ed06c; */
-  }
-`;
-const Metamask = styled.button`
-  width: 500px;
-  height: auto;
-  padding-left: 30px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  font-size: 30px;
-  align-items: center;
-  justify-content: flex-start;
-  color: white;
-  background: #f7a252;
-  display: flex;
-  border-radius: 10px;
-
-  @media screen and (max-width: 800px) {
-    width: 260px;
-    height: auto;
-    padding-left: 30px;
-    padding-right: 7px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    align-items: center;
-    justify-content: flex-start;
-    color: white;
-    background: #f7a252;
-    display: flex;
-    border-radius: 10px;
-  }
-
-  :hover {
-    opacity: 0.8;
-    /* background: #3ed06c; */
-  }
-`;
-const Offline = styled.button`
-  width: 500px;
-  height: auto;
-  padding-left: 30px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  justify-content: flex-start;
-  align-items: center;
-  font-size: 30px;
-  color: white;
-  background: gray;
-  display: flex;
-  align-self: center;
-  justify-self: center;
-  border-radius: 10px;
-  @media screen and (max-width: 800px) {
-    width: 260px;
-    height: 50px;
-    padding-left: 30px;
-    padding-right: 7px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    align-items: center;
-    justify-content: flex-start;
-    color: white;
-    background: gray;
-    display: flex;
-    border-radius: 10px;
-  }
-  :hover {
     opacity: 0.8;
   }
 `;
