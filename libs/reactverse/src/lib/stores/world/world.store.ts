@@ -20,7 +20,7 @@ export interface WorldState {
   otherPlayers: Map<string, types.OtherPlayer>;
   interaction: types.InteractionState;
   modalOpen: boolean;
-  initWorld: () => Promise<void>;
+  initWorld: (user: types.User, character: types.Character) => Promise<void>;
   accelMe: (keyboard: types.Keyboard) => void;
   moveMe: () => void;
   openModal: () => void;
@@ -124,60 +124,23 @@ export const useWorld = create<WorldState>((set, get) => ({
   },
   interaction: types.defaultInteractionState,
   status: "none",
-  openModal: () =>
-    set({
-      modalOpen: true,
-    }),
-  closeModal: () =>
-    set({
-      modalOpen: false,
-    }),
-  initWorld: async () => {
-    const state = get();
-    const {
-      maps,
-      // , characters
-    } = await gql.world();
+  openModal: () => set({ modalOpen: true }),
+  closeModal: () => set({ modalOpen: false }),
+  initWorld: async (user: types.User, character: types.Character) => {
+    const { maps } = await gql.world();
     const renderMe = {
-      id: "AAAA",
+      id: user.id,
       position: [5000, 5000],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
     } as any;
     const render = { tiles: maps[1].tiles, players: {} };
-    console.log(maps[1].tiles);
-    const status = "idle";
-    return set({ map: maps[1], renderMe, render, status });
+    return set((state) => ({ map: maps[1], renderMe, render, status: "idle", me: { ...state.me, character } }));
   },
   accelMe: (keyboard: types.Keyboard) => {
     const state: WorldState = get();
     if (!state.me) return;
-    // const decelSpeed = [
-    //   Math.min(Math.abs(state.me.render.velocity[0]), state.me.deceleration),
-    //   Math.min(Math.abs(state.me.render.velocity[1]), state.me.deceleration),
-    // ];
-    // const deceleration = [
-    //   state.me.render.velocity[0] > 0 ? -decelSpeed[0] : decelSpeed[0],
-    //   state.me.render.velocity[1] > 0 ? -decelSpeed[1] : decelSpeed[1],
-    // ];
-    // const acceleration = [
-    //   keyboard.right ? state.me.acceleration : keyboard.left ? -state.me.acceleration : deceleration[0],
-    //   keyboard.down ? state.me.acceleration : keyboard.up ? -state.me.acceleration : deceleration[1],
-    // ];
-    // const velocity = [state.me.render.velocity[0] + acceleration[0], state.me.render.velocity[1] + acceleration[1]];
-    // state.me.render.velocity = [
-    //   Math.abs(velocity[0]) < state.me.maxSpeed
-    //     ? velocity[0]
-    //     : velocity[0] > 0
-    //     ? state.me.maxSpeed
-    //     : -state.me.maxSpeed,
-    //   Math.abs(velocity[1]) < state.me.maxSpeed
-    //     ? velocity[1]
-    //     : velocity[1] > 0
-    //     ? state.me.maxSpeed
-    //     : -state.me.maxSpeed,
-    // ];
     const velocity = [
       keyboard.right ? state.me.maxSpeed : keyboard.left ? -state.me.maxSpeed : 0,
       keyboard.down ? state.me.maxSpeed : keyboard.up ? -state.me.maxSpeed : 0,

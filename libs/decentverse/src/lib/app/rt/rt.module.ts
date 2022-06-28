@@ -1,11 +1,5 @@
 import { Global, Module, DynamicModule } from "@nestjs/common";
-import { RtService } from "./rt.service";
-
-export interface RedisOptions {
-  url?: string;
-  username?: string;
-  password?: string;
-}
+import { RtService, RedisOptions } from "./rt.service";
 
 @Global()
 @Module({})

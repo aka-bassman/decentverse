@@ -5,7 +5,8 @@ import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text, Html } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
 import { Engine, World, Bodies, Vector, Body } from "matter-js";
-import { TextureLoader } from "three";
+import { isMobile } from "react-device-detect";
+
 export interface PlayerProp {
   sprite: MutableRefObject<Sprite | null>;
   animation: MutableRefObject<scalar.SpriteDef>;
@@ -16,7 +17,7 @@ export interface PlayerProp {
 
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get, set } = useThree();
-  const nickname = useUser((state) => state.nickname);
+  const nickname = useUser((state) => state.user.nickname);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
   const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
@@ -114,7 +115,7 @@ const MyChat = () => {
           maxWidth: 300,
           width: "max-content",
           borderRadius: 10,
-          bottom: 35,
+          bottom: isMobile ? 10 : 35,
           padding: 10,
           alignContent: "center",
           alignItems: "center",

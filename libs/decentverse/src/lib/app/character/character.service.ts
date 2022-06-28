@@ -22,8 +22,13 @@ export class CharacterService {
   async character(characterId: string) {
     return await this.Character.pickById(characterId);
   }
-  async characters() {
-    return await this.Character.find({ status: { $ne: "inactive" } });
+  async characters(query: db.Query<db.Character.Doc>, skip: number, limit: number) {
+    return await this.Character.find({ status: { $ne: "inactive" }, ...query })
+      .skip(skip)
+      .limit(limit);
+  }
+  async count(query: db.Query<db.Character.Doc>) {
+    return await this.Character.countDocuments({ status: { $ne: "inactive" }, ...query });
   }
   async createCharacter(data: Character.Input) {
     return await this.Character.create(data);
