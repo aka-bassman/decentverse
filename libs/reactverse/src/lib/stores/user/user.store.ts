@@ -19,7 +19,6 @@ export interface UserState {
   type: "user" | "admin";
   user: types.User;
   characters: types.Character[];
-  whoAmI: () => Promise<void>;
   connectMetamask: () => Promise<void>;
   connectKaikas: () => Promise<void>;
   loginAsGuest: () => void;
@@ -35,22 +34,6 @@ export const useUser = create<UserState>((set, get) => ({
   user: types.defaultUser,
   characters: [],
   status: "loading",
-  whoAmI: async () => {
-    if (typeof window.ethereum === "undefined") return;
-    const selectedAddress = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
-    if (selectedAddress) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-      const message = `test messgae\n timeStmap:${new Date().getTime()}`;
-      const params = [message, selectedAddress[0]];
-      const signAddress = await window.ethereum.request<string>({
-        method: "personal_sign",
-        params,
-      });
-      if (!signAddress || !selectedAddress[0]) return;
-      const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
-      set({ user: { ...user } });
-    }
-  },
   connectMetamask: async () => {
     if (typeof window.ethereum === "undefined") return;
     const selectedAddress = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
@@ -64,7 +47,7 @@ export const useUser = create<UserState>((set, get) => ({
       });
       if (!signAddress || !selectedAddress[0]) return;
       const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
-      set({ user: { ...user } });
+      set({ user, loginMethod: "metamask" });
     }
   },
   connectKaikas: async () => {

@@ -6,25 +6,19 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import * as modules from "./module";
+import { RedisOptions } from "./rt/rt.service";
+import { KlaytnOptions } from "./kas/kas.service";
+import { ObjectStorageOptions } from "./aws/aws.service";
+export interface MongoOptions {
+  uri: string;
+  dbName: string;
+  replSet?: string;
+}
 export interface DecentverseOptions {
-  objectStorage: {
-    region: "ap-northeast-2";
-    accessKey: string;
-    secretAccessKey: string;
-    bucket: string;
-    host?: string;
-    distributionId: string;
-  };
-  mongo?: {
-    uri: string;
-    dbName: string;
-    replSet?: string;
-  };
-  redis?: {
-    url: string;
-    username?: string;
-    password?: string;
-  };
+  objectStorage: ObjectStorageOptions;
+  mongo?: MongoOptions;
+  redis?: RedisOptions;
+  klaytn?: KlaytnOptions;
 }
 
 @Module({})
@@ -47,13 +41,9 @@ export class DecentverseModule {
             sortSchema: true,
             playground: true,
             uploads: false,
-            // ["development", "local.development"].includes(
-            //   config.get("ENVIRONMENT")
-            // ),
             debug: false,
           }),
           driver: ApolloDriver,
-          // inject: [],
         }),
         modules.AdminModule,
         modules.UserModule,
@@ -68,8 +58,9 @@ export class DecentverseModule {
         modules.RtModule.register(options?.redis),
         modules.ScalarModule,
         modules.BatchModule,
-        modules.KasModule,
-        modules.CaverModule,
+        ...(options?.klaytn
+          ? [modules.KasModule.register(options?.klaytn), modules.CaverModule.register(options?.redis, options?.klaytn)]
+          : []),
         ScheduleModule.forRoot(),
       ],
       controllers: [],

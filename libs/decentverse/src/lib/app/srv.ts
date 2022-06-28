@@ -5,6 +5,8 @@ export * from "./character/character.service";
 export * from "./dialog/dialog.service";
 export * from "./map/map.service";
 export * from "./rt/rt.service";
+export * from "./kas/kas.service";
+export * from "./caver/caver.service";
 export * from "./file/file.service";
 export * from "./batch/batch.service";
 export * from "./role/role.service";

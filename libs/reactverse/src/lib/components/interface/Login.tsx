@@ -9,7 +9,6 @@ export const Login = () => {
   const user = useUser((state) => state.user);
   const characters = useUser((state) => state.characters);
   const loginMethod = useUser((state) => state.loginMethod);
-  const whoAmI = useUser((state) => state.whoAmI);
   const logout = useUser((state) => state.logout);
   const skipLoginProcess = useUser((state) => state.skipLoginProcess);
   const connectMetamask = useUser((state) => state.connectMetamask);

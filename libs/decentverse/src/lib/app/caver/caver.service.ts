@@ -1,7 +1,5 @@
 import { ConfigService } from "@nestjs/config";
-// import * as Utils from "../../utils";
-// import caverUtils from "../../caverUtils";
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, Inject } from "@nestjs/common";
 import * as dto from "./caver.dto";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const KasCaver = require("caver-js-ext-kas");
@@ -10,7 +8,7 @@ const Caver = require("caver-js-latest");
 import { KeyringContainer, default as CaverJs } from "caver-js-latest";
 import { InjectQueue } from "@nestjs/bull";
 import { Queue } from "bull";
-
+import { KlaytnOptions } from "../kas/kas.service";
 @Injectable()
 export class CaverService {
   isActive = false;
@@ -18,17 +16,19 @@ export class CaverService {
   network: dto.NetworkInfo;
   caverWallet: KeyringContainer;
   caver: CaverJs;
-  constructor(@InjectQueue("caver") private caverQueue: Queue, configService: ConfigService) {
-    const klaytnEnv = configService.get("KLATYN_ENV") ?? "test";
+  constructor(
+    @Inject("KLAYTN_OPTIONS") private options: KlaytnOptions,
+    @InjectQueue("caver") private caverQueue: Queue
+  ) {
     this.wallet = {
-      address: configService.get("WALLET_ADDR"),
-      privateKey: configService.get("WALLET_PRIVATE_KEY"),
+      address: this.options.address,
+      privateKey: this.options.privateKey,
     };
     this.network = {
-      chainId: klaytnEnv === "production" ? "8217" : "1001",
-      accessKeyId: configService.get("KLAYTN_ACCESS_KEY_ID"),
-      secretAccessKey: configService.get("KLAYTN_SECRET_ACCESS_KEY"),
-      preset: klaytnEnv === "production" ? 214 : 215,
+      chainId: this.options.chainId,
+      accessKeyId: this.options.accessKeyId,
+      secretAccessKey: this.options.secretAccessKey,
+      preset: this.options.chainId === "8217" ? 214 : 215,
     };
     const option = {
       headers: [
@@ -48,10 +48,6 @@ export class CaverService {
       const keyring = this.caverWallet.keyring.createFromPrivateKey(this.wallet.privateKey);
       this.caverWallet.add(keyring);
       this.isActive = true;
-    }
-    for (const i of [1, 2, 3, 4, 5]) {
-      const privKey = configService.get(`TEST_REVEAL_WALLET_PRIVATE_KEY_${i}`);
-      if (privKey) this.caverWallet.add(this.caverWallet.keyring.createFromPrivateKey(privKey));
     }
   }
   async addJob(req: dto.ContractExeutionRequest): Promise<boolean> {

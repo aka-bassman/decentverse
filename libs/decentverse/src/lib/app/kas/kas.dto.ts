@@ -103,3 +103,8 @@ export interface NftTransfer {
   to: string;
   tokenId: string; //hexString
 }
+export interface NFTOwnershipChangeResponse {
+  from: string;
+  to: string;
+  timestamp: number;
+}
