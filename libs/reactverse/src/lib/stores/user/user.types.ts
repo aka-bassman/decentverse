@@ -9,10 +9,10 @@ export type UserInput = {
 export type User = {
   id: string;
   nickname: string;
-  address: string;
-  status: "active" | "inactive";
-  createdAt: Date;
-  updatedAt: Date;
+  address?: string;
+  status?: "active" | "inactive";
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 export const defaultUser: User = {
   id: "",

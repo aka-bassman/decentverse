@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { client, setLink } from "./stores";
-import { Stream, Game, Interface, InputName, ReactverseLayout, MapEditor } from "./components";
+import { Stream, Game, Interface, Login, ReactverseLayout, MapEditor } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
+import { Spin } from "antd";
 import disableScroll from "disable-scroll";
 import { isMobile } from "react-device-detect";
 
@@ -27,14 +28,32 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
       console.log("");
     };
   }, []);
-  if (!socket || !isConnected) return <>Connecting...</>;
+
+  if (!socket || !isConnected)
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Spin size="large" />
+          <p style={{}}>Connecting...</p>
+        </div>
+      </div>
+    );
   else
     return (
       <ReactverseLayout>
         {isMapEditorOpen ? (
           <MapEditor />
         ) : worldStatus === "none" ? (
-          <InputName />
+          <Login />
         ) : (
           <>
             <Interface socket={socket} />

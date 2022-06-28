@@ -1,5 +1,5 @@
 export * from "./Interface";
-export * from "./InputName";
+export * from "./Login";
 export * from "./AdminModal";
 export * from "./AdminSignIn";
 export * from "./AdminSignUp";

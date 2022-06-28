@@ -4,19 +4,19 @@ import styled, { keyframes } from "styled-components";
 import { AdminModal } from "./index";
 import { isMobile } from "react-device-detect";
 import { KlaytnIcon, MetamaskIcon } from "../common";
-import { Button, Input } from "antd";
-export const InputName = () => {
+import { Button, Input, Carousel } from "antd";
+export const Login = () => {
   const user = useUser((state) => state.user);
   const characters = useUser((state) => state.characters);
   const loginMethod = useUser((state) => state.loginMethod);
   const whoAmI = useUser((state) => state.whoAmI);
+  const logout = useUser((state) => state.logout);
+  const skipLoginProcess = useUser((state) => state.skipLoginProcess);
   const connectMetamask = useUser((state) => state.connectMetamask);
   const connectKaikas = useUser((state) => state.connectKaikas);
   const loginAsGuest = useUser((state) => state.loginAsGuest);
-  const logout = useUser((state) => state.logout);
   const setNickname = useUser((state) => state.setNickname);
   const updateUser = useUser((state) => state.updateUser);
-  const updateUserId = useWorld((state) => state.updateUserId);
   const initWorld = useWorld((state) => state.initWorld);
   const testImages = [
     "./images.png",
@@ -30,26 +30,32 @@ export const InputName = () => {
   ];
   const onClickSubmit = () => {
     updateUser();
-    // updateUserId(nickname);
     initWorld(user, characters[0] ?? types.defaultCharacter);
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
+  useEffect(() => {
+    const url = window.location.href;
+    console.log(url.includes("guest=true"));
+    if (url.includes("guest=true")) {
+      skipLoginProcess();
+      initWorld(user, characters[0] ?? types.defaultCharacter);
+    } else setNickname("");
+  }, []);
   return (
     <Container>
       <AdminModal />
       <div className="Title">AYIAS</div>
-
       {loginMethod === "none" ? (
         <>
           <Kaikas onClick={connectKaikas}>
             <KlaytnIcon />
-            <div style={{ marginLeft: 20 }}>Start to kaikas</div>
+            <div style={{ marginLeft: 20 }}>Login with kaikas</div>
           </Kaikas>
-          {/* <Metamask onClick={connectMetamask}>
+          <Metamask onClick={connectMetamask}>
             <MetamaskIcon />
             <div style={{ marginLeft: 20 }}>Login with Metamask</div>
-          </Metamask> */}
+          </Metamask>
           <Offline onClick={loginAsGuest}>
             <div style={{ marginLeft: 50 }}>Start as a Guest</div>
           </Offline>
@@ -65,13 +71,25 @@ export const InputName = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          {/* <ChoiceBox>
+          <ChoiceBox>
             {testImages.map((image, idx) => (
-              <button style={{ width: 20, height: 30, cursor: "pointer" }} onClick={() => console.log("hello")}>
-                <img index={idx} src={image} />
+              <button
+                style={{
+                  width: "33.3%",
+                  cursor: "pointer",
+                  marginTop: 10,
+                  marginBottom: 10,
+                  backgroundColor: "transparent",
+                  borderWidth: 1,
+                  borderColor: "#eece4b",
+                }}
+                onClick={() => console.log("hello")}
+              >
+                <img style={{ width: "100%", height: "100%" }} key={idx} src={image} />
               </button>
             ))}
-          </ChoiceBox> */}
+          </ChoiceBox>
+
           <Goback onClick={logout}>Back</Goback>
         </>
       )}
@@ -95,9 +113,7 @@ const Container = styled.div`
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-
     -webkit-overflow-scrolling: none;
-
     /* 이외의 브라우저 */
     overscroll-behavior: none;
   }
@@ -109,22 +125,19 @@ const Container = styled.div`
       margin-bottom: 60px;
     }
   }
-  /* overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: hidden; */
 `;
 
 const ChoiceBox = styled.div`
   display: flex;
   max-width: 500px;
-
   width: 500px;
+  flex-wrap: wrap;
   height: 300px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 20px;
-
   background-color: white;
+  overflow-y: scroll;
 `;
 const InputBox = styled.div`
   display: flex;

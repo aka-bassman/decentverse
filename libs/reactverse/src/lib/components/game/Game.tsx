@@ -45,7 +45,7 @@ export const Game = ({ socket }: GameProps) => {
 
   return (
     <GameContainer>
-      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.8 }} frameloop="always">
+      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />
           <TileMap player={player} scope={scope} />
