@@ -4,6 +4,8 @@ import * as Utils from "../../utils";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import * as dto from "./kas.dto";
 import { WalletInfo, NetworkInfo } from "../caver/caver.dto";
+import NewCaver from "caver-js-latest";
+
 export interface KlaytnOptions {
   address: string;
   privateKey: string;
@@ -60,12 +62,20 @@ export class KasService {
         };
         const result = await this.caver.kas.tokenHistory.getNFTListByOwner(contractAddress, address, query);
         res = { items: [...res.items, ...result.items], cursor: result.items.cursor };
-        console.log(res.items.length);
       } catch (err) {
         Logger.error("klaytn error :", err);
       }
     } while (res.cursor !== "" && res.cursor);
     return res.items.map((tokenItem) => this.translateToToken(tokenItem));
+  }
+  async getOwnershipHistory(contractAddr: string, tokenId: number): Promise<dto.NFTOwnershipChangeResponse[]> {
+    try {
+      const result = await this.caver.kas.tokenHistory.getNFTOwnershipHistory(contractAddr, tokenId);
+      return result.items;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
   translateToToken(tokenItem: dto.TokenItem) {
     return {
