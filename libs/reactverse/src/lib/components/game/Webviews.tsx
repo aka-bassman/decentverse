@@ -2,11 +2,14 @@ import React, { Suspense, useRef, MutableRefObject, useMemo, useEffect } from "r
 import { useFrame, useThree } from "@react-three/fiber";
 import { types, scalar, useWorld, RenderCharacter, useGame } from "../../stores";
 import { Group, Scene, Sprite, SpriteMaterial, Vector, Vector3, TextureLoader, MeshBasicMaterial } from "three";
-import { useTexture, Text } from "@react-three/drei";
+import { useTexture, Text, Html } from "@react-three/drei";
 import { useInterval } from "../../hooks";
 import { makeScope } from "../../utils";
 import { Tile } from "./Tile";
+import { InteractionIcon } from "..";
 import { Bodies, Engine, World } from "matter-js";
+import { isMobile } from "react-device-detect";
+
 export interface WebviewsProp {
   engine: MutableRefObject<Engine>;
   interaction: MutableRefObject<types.InteractionState>;
@@ -59,7 +62,9 @@ export interface WebviewProp {
 export const Webview = React.memo(({ webview }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
   const openWebview = useWorld((state) => state.openModal);
+  const isOpen = useWorld((state) => state.modalOpen);
   const keyboard = useGame((state) => state.keyboard);
+  const speechBubble = useTexture("./speechBubble.png");
 
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
@@ -77,14 +82,43 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
       <mesh position={position}>
         {/* <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent /> */}
-        {interaction && interaction.webview?.url === webview.url && (
-          <mesh position={[0, -120, 1]}>
-            <planeBufferGeometry attach="geometry" args={[380, 100]} />
-            <meshPhongMaterial attach="material" color="#000000" opacity={0.5} transparent={true} />
-            <Text lineHeight={0.8} position={[0, 0, 1]} fontSize={50} material-toneMapped={false}>
-              Press 'F'
-            </Text>
-          </mesh>
+        {interaction && interaction.webview?.url === webview.url && !isOpen && (
+          <>
+            {isMobile ? (
+              <Html
+                center
+                style={{
+                  backgroundColor: `rgba(0,0,0,${0.7})`,
+                  color: "white",
+                  borderRadius: 10,
+                  padding: 10,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div style={{ display: "block", marginRight: 10 }}>Press</div>
+                <InteractionIcon />
+              </Html>
+            ) : (
+              <Html
+                center
+                style={{
+                  backgroundColor: `rgba(0,0,0,${0.7})`,
+                  color: "white",
+                  width: "max-content",
+                  borderRadius: 10,
+                  padding: 10,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  wordWrap: "normal",
+                }}
+              >
+                Press 'F'
+              </Html>
+            )}
+          </>
         )}
       </mesh>
     </Suspense>
