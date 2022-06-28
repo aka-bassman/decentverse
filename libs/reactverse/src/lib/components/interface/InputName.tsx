@@ -9,7 +9,6 @@ export const InputName = () => {
   const user = useUser((state) => state.user);
   const characters = useUser((state) => state.characters);
   const loginMethod = useUser((state) => state.loginMethod);
-  const whoAmI = useUser((state) => state.whoAmI);
   const connectMetamask = useUser((state) => state.connectMetamask);
   const connectKaikas = useUser((state) => state.connectKaikas);
   const loginAsGuest = useUser((state) => state.loginAsGuest);
