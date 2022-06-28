@@ -4,12 +4,14 @@ import { EditorMapState, editorMapSlice } from "./editor.map.store";
 import { EditorTileState, editorTileSlice } from "./editor.tile.store";
 import { EditorInteractionState, editorInteractionSlice } from "./editor.interaction.store";
 import { EditorDialogState, editorDialogSlice } from "./editor.dialog.store";
+import { EditorCharacterState, editorCharacterSlice } from "./editor.character.store";
 
 export type EditorState = EditorBaseState &
   EditorMapState &
   EditorTileState &
   EditorInteractionState &
-  EditorDialogState;
+  EditorDialogState &
+  EditorCharacterState;
 
 export type EditorSlice<T> = (set: SetState<EditorState>, get: GetState<EditorState>) => T;
 
@@ -19,4 +21,5 @@ export const useEditor = create<EditorState>((set, get) => ({
   ...editorTileSlice(set, get),
   ...editorInteractionSlice(set, get),
   ...editorDialogSlice(set, get),
+  ...editorCharacterSlice(set, get),
 }));

@@ -3,25 +3,23 @@ import { useEditor, types } from "../../stores";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
-export const SelectInfoButtons = ({
+export const EditInfoButtons = ({
   modify,
-  remove,
+  close,
   placeId,
 }: {
-  modify?: (placeId: string) => void;
-  remove: (placeId: string) => void;
+  modify: (placeId: string) => void;
+  close: (placeId: string) => void;
   placeId: string;
 }) => {
   return (
     <ButtonsArea>
-      {modify && (
-        <Button icon={<EditOutlined />} onClick={() => modify(placeId)} size="small">
-          modify
-        </Button>
-      )}
+      <Button onClick={() => close(placeId)} size="small" type="text">
+        Close
+      </Button>
 
-      <Button icon={<DeleteOutlined />} onClick={() => remove(placeId)} size="small">
-        delete
+      <Button icon={<DeleteOutlined />} onClick={() => modify(placeId)} size="small">
+        Modify
       </Button>
     </ButtonsArea>
   );

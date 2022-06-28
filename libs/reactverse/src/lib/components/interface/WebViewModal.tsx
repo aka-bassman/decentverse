@@ -4,6 +4,9 @@ import { XButton } from "..";
 import styled from "styled-components";
 import { Spin } from "antd";
 import * as types from "../../stores/types";
+import { isMobile } from "react-device-detect";
+
+import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 export const WebViewModal = () => {
   const interaction = useWorld((state) => state.interaction);
@@ -15,30 +18,42 @@ export const WebViewModal = () => {
     setIsLoadiang(true);
     closeModal();
   };
-  return isOpen ? (
+
+  if (!isOpen) return null;
+
+  return (
     <ModalWrapper webview={interaction.webview} isOpen={isOpen}>
       <ButtonContainer>
         <CancelButton onClick={close}>
           <XButton />
         </CancelButton>
       </ButtonContainer>
-
       {isLoading && (
         <Spin
           size="large"
           style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}
         />
       )}
-      <Webview
-        id="foo"
-        // data="https://www.opensea.com"
-        data={interaction.webview?.url}
-        style={{ width: isLoading ? "0%" : "100%", height: isLoading ? "0%" : "80%" }}
-        onLoad={finishLoading}
-      />
+
+      {interaction.webview?.purpose === "twitter" ? (
+        <TwitterWrapper>
+          <TwitterTimelineEmbed
+            sourceType="profile"
+            screenName={interaction.webview?.url}
+            options={{ width: isMobile ? "100%" : "80%" }}
+            onLoad={finishLoading}
+          />
+        </TwitterWrapper>
+      ) : (
+        <Webview
+          id="foo"
+          // data="https://www.opensea.com"
+          data={interaction.webview?.url}
+          style={{ width: isLoading ? "0%" : "100%", height: isLoading ? "0%" : "80%" }}
+          onLoad={finishLoading}
+        />
+      )}
     </ModalWrapper>
-  ) : (
-    <></>
   );
 };
 
@@ -93,4 +108,15 @@ const Webview = styled.object`
   height: 80%;
   min-height: 80%;
   max-height: 80%;
+`;
+
+const TwitterWrapper = styled.div`
+  & > div {
+    overflow: auto;
+    height: 500px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;

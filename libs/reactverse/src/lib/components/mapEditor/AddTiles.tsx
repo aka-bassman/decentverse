@@ -3,7 +3,12 @@ import { Modal, Button, Space } from "antd";
 import { useEditor } from "../../stores";
 
 export const AddTiles = () => {
-  const { mapData, isTilesModalOpen, toggleTilesModalOpen, addMapFile, addTiles, validationTileCheck } = useEditor();
+  const mapData = useEditor((state) => state.mapData);
+  const isTilesModalOpen = useEditor((state) => state.isTilesModalOpen);
+  const toggleTilesModalOpen = useEditor((state) => state.toggleTilesModalOpen);
+  const addMapFile = useEditor((state) => state.addMapFile);
+  const addTiles = useEditor((state) => state.addTiles);
+  const validationTileCheck = useEditor((state) => state.validationTileCheck);
 
   const handleImageUpload = (e: any, type: "bottom" | "top" | "lighting") => {
     const files = e.target.files;

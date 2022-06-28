@@ -6,7 +6,7 @@ import { EditorSlice } from "./editor.store";
 
 export interface EditorInteractionState {
   urlInput: string;
-  inputCallRoomMaxNum?: number;
+  inputCallRoomMaxNum: number;
   webviewPurpose: types.TWebviewPurpose;
   interactionTool: types.TInteractionTool;
   collisionPreview: types.TInteractionPreview;
@@ -15,6 +15,10 @@ export interface EditorInteractionState {
   collisions: types.TCollision[];
   callRooms: types.TCallRoom[];
   webviews: types.TWebview[];
+  isEditCallRoom: boolean;
+  isEditWebview: boolean;
+  isUrlInputError: boolean;
+  selectedEditWebview?: types.TWebview;
   setUrlInput: (url: string) => void;
   setInputCallRoomMaxNum: (maxNum: number) => void;
   setWebviewPurpose: (purpose: types.TWebviewPurpose) => void;
@@ -35,6 +39,11 @@ export interface EditorInteractionState {
   isCollisionAddMode: () => boolean;
   isCallRoomAddMode: () => boolean;
   isWebviewAddMode: () => boolean;
+  isValidUrl: (url: string, purpose: types.TWebviewPurpose) => boolean;
+  toggleEditCallRoom: (placeId: string) => void;
+  toggleEditWebview: (placeId: string) => void;
+  modifyCallRoom: (placeId: string) => void;
+  modifyWebview: (placeId: string) => void;
 }
 
 export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set, get) => ({
@@ -60,18 +69,22 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   collisions: [],
   callRooms: [],
   webviews: [],
+  isUrlInputError: true,
+  isEditCallRoom: false,
+  isEditWebview: false,
+  selectedEditWebview: undefined,
   setUrlInput: (url) => {
-    set({ urlInput: url });
+    set({ urlInput: url, isUrlInputError: !get().isValidUrl(url, get().webviewPurpose) });
   },
   setInputCallRoomMaxNum: (maxNum) => {
     set({ inputCallRoomMaxNum: Number(maxNum) });
   },
   setWebviewPurpose: (purpose) => {
     const urlInput = get().checkIsInputUrl(purpose) ? "https://" : "";
-    set({ webviewPurpose: purpose, urlInput });
+    set({ webviewPurpose: purpose, urlInput, isUrlInputError: true });
   },
   checkIsInputUrl: (purpose) => {
-    return ["default", "image", "twitter"].includes(purpose);
+    return ["default", "image"].includes(purpose);
   },
   addCollision: () => {
     const { x, y, width, height } = get().collisionPreview;
@@ -267,7 +280,86 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       get().mainTool === "Interaction" &&
       get().interactionTool === "webview" &&
       get().urlInput &&
-      get().editMode === "Add"
+      get().editMode === "Add" &&
+      !get().isUrlInputError
     );
+  },
+  isValidUrl: (url, purpose) => {
+    if (!["default", "image"].includes(purpose)) return true;
+
+    const urlPattern = new RegExp(
+      "^(https?:\\/\\/)?" +
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
+        "((\\d{1,3}\\.){3}\\d{1,3}))" +
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+        "(\\?[;&a-z\\d%_.~+=-]*)?" +
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    );
+
+    return !!urlPattern.test(url);
+  },
+  toggleEditCallRoom: (placeId) => {
+    if (!get().isEditCallRoom) {
+      const currentCallRoom = get().callRooms.find((callRoom) => callRoom.placeId === placeId);
+      set({
+        isEditCallRoom: true,
+        inputCallRoomMaxNum: currentCallRoom?.maxNum,
+      });
+    } else {
+      set({ isEditCallRoom: false, inputCallRoomMaxNum: 100 });
+    }
+  },
+  toggleEditWebview: (placeId) => {
+    if (!get().isEditWebview) {
+      const currentWebview = get().webviews.find((webview) => webview.placeId === placeId);
+      set({
+        isEditWebview: true,
+        selectedEditWebview: currentWebview,
+        urlInput: currentWebview?.url,
+        webviewPurpose: currentWebview?.purpose,
+      });
+    } else {
+      set({ isEditWebview: false, selectedEditWebview: undefined, urlInput: "https://", webviewPurpose: "default" });
+    }
+  },
+  modifyCallRoom: (placeId: string) => {
+    if (!get().inputCallRoomMaxNum) return;
+    const newCallRooms = get().callRooms.map((callRoom) => {
+      if (callRoom.placeId === placeId) return { ...callRoom, maxNum: get().inputCallRoomMaxNum };
+      return callRoom;
+    });
+    const newViewItems = get().viewItems.map((viewItem) => {
+      if (viewItem.type === "callRoom" && viewItem.data.placeId === placeId)
+        return { ...viewItem, data: { ...viewItem.data, maxNum: get().inputCallRoomMaxNum } };
+      return viewItem;
+    });
+    set({
+      isEditCallRoom: false,
+      callRooms: newCallRooms,
+      inputCallRoomMaxNum: undefined,
+      viewItems: newViewItems,
+      isEdited: true,
+    });
+  },
+  modifyWebview: (placeId: string) => {
+    if (!get().urlInput || get().isUrlInputError) return;
+    const newWebviews = get().webviews.map((webview) => {
+      if (webview.placeId === placeId) return { ...webview, purpose: get().webviewPurpose, url: get().urlInput };
+      return webview;
+    });
+    const newViewItems = get().viewItems.map((viewItem) => {
+      if (viewItem.type === "webview" && viewItem.data.placeId === placeId)
+        return { ...viewItem, data: { ...viewItem.data, purpose: get().webviewPurpose, url: get().urlInput } };
+      return viewItem;
+    });
+    set({
+      isEditWebview: false,
+      webviews: newWebviews,
+      urlInput: "https://",
+      webviewPurpose: "default",
+      viewItems: newViewItems,
+      isEdited: true,
+    });
   },
 });

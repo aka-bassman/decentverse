@@ -8,10 +8,6 @@ import { EditorState, EditorSlice } from "./editor.store";
 
 export interface EditorDialogState {
   isDialogModalOpen: boolean;
-  characterNameInput: string;
-  characters: types.TCharacter[];
-  // selectedCharacter?: types.TCharacter;
-  selectedCharacterIndex: number;
   inputTitle: string;
   inputFlowText: string;
   inputAvatarPosition: types.TAvatarPosition;
@@ -20,19 +16,12 @@ export interface EditorDialogState {
   addFlow: () => void;
   addDialog: () => Promise<void>;
   setInputTitle: (title: string) => void;
-  setCharacterNameInput: (name: string) => void;
-  addCharacter: () => void;
-  // selectCharacter: (index: number) => void;
-  setSelectedCharacterIndex: (index: number) => void;
   setInputFlowText: (text: string) => void;
   setInputAvatarPosition: (position: types.TAvatarPosition) => void;
 }
 
 export const editorDialogSlice: EditorSlice<EditorDialogState> = (set, get) => ({
   isDialogModalOpen: false,
-  characterNameInput: "",
-  characters: [{ name: "None" }],
-  // selectedCharacter: undefined,
   inputTitle: "",
   inputFlowText: "",
   inputAvatarPosition: "left",
@@ -64,27 +53,10 @@ export const editorDialogSlice: EditorSlice<EditorDialogState> = (set, get) => (
     }));
 
     const dialogInput = { title, characters, flows };
-    await gql.createDialog(dialogInput);
+    // await gql.createDialog(dialogInput);
   },
   setInputTitle: (title) => {
     set({ inputTitle: title });
-  },
-  setCharacterNameInput: (name) => {
-    set({ characterNameInput: name });
-  },
-  addCharacter: () => {
-    if (!get().characterNameInput) return;
-    const newCharacter = { name: get().characterNameInput, image: undefined };
-    set((state) => ({
-      characters: [...state.characters, newCharacter],
-      characterNameInput: "",
-    }));
-  },
-  // selectCharacter: (index) => {
-  //   set((state) => ({ selectedCharacter: state.characters[index] }));
-  // },
-  setSelectedCharacterIndex: (index) => {
-    set((state) => ({ selectedCharacterIndex: index }));
   },
   setInputFlowText: (text) => {
     set({ inputFlowText: text });

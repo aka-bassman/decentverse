@@ -1,4 +1,4 @@
-import { Suspense, MutableRefObject } from "react";
+import { Suspense, MutableRefObject, useEffect } from "react";
 import styled from "styled-components";
 import { useLoader, useThree, useFrame } from "@react-three/fiber";
 import { useEditor, scalar } from "../../stores";
@@ -14,8 +14,13 @@ export const MapTiles = ({
   keyboard: MutableRefObject<scalar.Keyboard>;
 }) => {
   const { camera } = useThree();
-
   const { tileSize, pointerMoveOnTile, pointerDownOnTile } = useEditor();
+
+  useEffect(() => {
+    if (!mapData?.tiles.length) return;
+    camera.position.setX((tileSize * mapData?.tiles[0].length) / 2);
+    camera.position.setY((tileSize * mapData?.tiles.length) / 2);
+  }, [mapData]);
 
   useFrame(() => {
     const offest = 80;

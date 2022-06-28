@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Modal, Button, Space, Input, Radio, Col, Row, Select } from "antd";
 import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
+import { CharacterTool } from "./";
 
 export const DialogTool = () => {
   const isDialogModalOpen = useEditor((state) => state.isDialogModalOpen);
@@ -45,7 +46,8 @@ export const DialogTool = () => {
         <input />
         <Row gutter={10}>
           <Col span={8}>
-            <Input.Group compact style={{ width: "100%", marginBottom: 20 }}>
+            <CharacterTool />
+            {/* <Input.Group compact style={{ width: "100%", marginBottom: 20 }}>
               <Input
                 addonBefore="name"
                 style={{ width: "calc(100% - 40px)" }}
@@ -54,16 +56,6 @@ export const DialogTool = () => {
               />
               <Button onClick={addCharacter} type="primary" icon={<PlusOutlined />}></Button>
             </Input.Group>
-            {
-              // <Radio.Group onChange={(e) => selectUrl(e.target.value)} value={selectedUrl}>
-              // <Radio.Group>
-              //   <Space direction="vertical">
-              //     {characters.map((cur, index) => (
-              //       <Radio value={index}>{cur.name}</Radio>
-              //     ))}
-              //   </Space>
-              // </Radio.Group>
-            }
             {characters
               .filter((_, index) => index > 0)
               .map((cur, index) => (
@@ -73,6 +65,7 @@ export const DialogTool = () => {
                   <span style={{ marginLeft: 10 }}>디폴트 위치</span>
                 </div>
               ))}
+               */}
             <hr />
             <div>
               인물외 이미지 추가
@@ -83,6 +76,17 @@ export const DialogTool = () => {
                 }}
               />
             </div>
+            {/* 
+            <Modal
+              title="Add Character"
+              visible={isDialogModalOpen}
+              onOk={addDialog}
+              onCancel={toggleDialogModalOpen}
+              // okButtonProps={{ disabled: !validationTileCheck() }}
+              width={500}
+            >
+              hi!
+            </Modal> */}
           </Col>
           <Col span={16}>
             <div style={{ backgroundColor: "#eee", padding: 10, borderRadius: 10 }}>
