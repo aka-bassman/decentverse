@@ -118,7 +118,7 @@ const TwitterWrapper = styled.div`
     height: 500px;
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
   }
 `;
