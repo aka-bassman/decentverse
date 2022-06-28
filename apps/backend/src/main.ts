@@ -35,6 +35,13 @@ async function bootstrap() {
       dbName: process.env.DB_NAME,
       replSet: process.env.DB_REPLICA_SET,
     },
+    klaytn: {
+      address: process.env.WALLET_ADDR,
+      privateKey: process.env.WALLET_PRIVATE_KEY,
+      chainId: process.env.KLAYTN_CHAIN_ID,
+      accessKeyId: process.env.KLAYTN_ACCESS_KEY_ID,
+      secretAccessKey: process.env.KLAYTN_SECRET_ACCESS_KEY,
+    },
   });
 
   await decentverse.init();
