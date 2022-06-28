@@ -4,7 +4,12 @@ import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
 export const WebViewTool = () => {
-  const { urlInput, setWebviewPurpose, webviewPurpose, setUrlInput, checkIsInputUrl } = useEditor();
+  const urlInput = useEditor((state) => state.urlInput);
+  const setWebviewPurpose = useEditor((state) => state.setWebviewPurpose);
+  const webviewPurpose = useEditor((state) => state.webviewPurpose);
+  const setUrlInput = useEditor((state) => state.setUrlInput);
+  const checkIsInputUrl = useEditor((state) => state.checkIsInputUrl);
+  const isUrlInputError = useEditor((state) => state.isUrlInputError);
 
   return (
     <Space direction="vertical">
@@ -20,6 +25,14 @@ export const WebViewTool = () => {
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
       />
+      {isUrlInputError && (
+        <ErrorMessage>* That's not a valid {checkIsInputUrl(webviewPurpose) ? "URL" : "ID"}</ErrorMessage>
+      )}
     </Space>
   );
 };
+
+const ErrorMessage = styled.div`
+  color: #ff6666;
+  font-size: 12px;
+`;
