@@ -42,7 +42,6 @@ export const Game = ({ socket }: GameProps) => {
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
   const margin = 500;
-
   return (
     <GameContainer>
       <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
@@ -72,7 +71,6 @@ const GameContainer = styled.div`
     overflow: hidden;
     overflow-y: hidden;
     overflow-x: hidden;
-    background-color: red;
     /* flex-direction: column; */
   }
 `;

@@ -46,7 +46,7 @@ export const useUser = create<UserState>((set, get) => ({
         params,
       });
       if (!signAddress || !selectedAddress[0]) return;
-      const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
+      const user = await gql.whoAmI(selectedAddress[0]);
       set({ user, loginMethod: "metamask" });
     }
   },
@@ -61,7 +61,10 @@ export const useUser = create<UserState>((set, get) => ({
     const account = (await window.klaytn.enable())[0];
 
     if (account) {
-      console.log(account);
+      const user = await gql.whoAmI(account);
+      console.log(user);
+      set({ user, loginMethod: "kaikas" });
+
       // const option = {
       //   headers: [
       //     {
@@ -117,7 +120,8 @@ export const useUser = create<UserState>((set, get) => ({
   updateUser: async () => {
     const { user } = get();
     if (user.id === "") return;
-    await gql.updateUser(user.id, user);
+    console.log(user);
+    await gql.updateUser(user.id, { nickname: user.nickname, address: user.address });
   },
   setNickname: (nickname: string) => set((state) => ({ user: { ...state.user, nickname } })),
 }));

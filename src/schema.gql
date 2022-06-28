@@ -286,7 +286,7 @@ type Query {
   role(roldId: ID!): Admin!
   roles: [Admin!]!
   sayHello: String!
-  whoAmI(address: String!, message: String!, signAddress: String!): User!
+  whoAmI(address: String!): User!
 }
 
 input RoleInput {
