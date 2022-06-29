@@ -95,6 +95,7 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  fontSize: "1.2em",
                 }}
               >
                 <div style={{ display: "block", marginRight: 10 }}>Press</div>
@@ -113,6 +114,7 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
                   justifyContent: "center",
                   alignItems: "center",
                   wordWrap: "normal",
+                  fontSize: "1.2em",
                 }}
               >
                 Press 'F'

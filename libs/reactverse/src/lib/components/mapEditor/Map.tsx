@@ -19,7 +19,8 @@ export const Map = () => {
 
   return (
     <MapContainer>
-      <Canvas camera={{ fov: 75, near: 0.1, far: 4000, position: [0, 0, 2500] }}>
+      <Canvas camera={{ fov: 75, near: 0.1, far: 4000, position: [0, 0, 3900] }}>
+        {/* <Canvas camera={{ fov: 75, near: 0.1, far: 4000, position: [0, 0, 2500] }}> */}
         <MapTiles mapData={mapData} keyboard={keyState} />
         <MapAssetPreview />
         {isActiveViewMode("Assets") && <MapAssets />}

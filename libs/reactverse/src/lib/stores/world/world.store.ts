@@ -6,8 +6,6 @@ import { devtools } from "zustand/middleware";
 
 const METAMASK_NETWORK_MAINNET = "1";
 const METAMASK_NETWORK_ROPSTEN = "3";
-const NETWORK_VERSION =
-  process.env["NEXT_PUBLIC_ENVIRONMENT"] === "production" ? METAMASK_NETWORK_MAINNET : METAMASK_NETWORK_ROPSTEN;
 
 export interface WorldState {
   scope: types.WorldScope;
@@ -25,6 +23,7 @@ export interface WorldState {
   closeModal: () => void;
   isLoaded: () => boolean;
   loaded: () => void;
+  loadingStatus: () => void;
   selectCharacter: (character: types.Character) => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
@@ -86,10 +85,11 @@ export const useWorld = create<WorldState>((set, get) => ({
     });
     return loader === length;
   },
+
   loaded: () => set((state) => ({ loader: state.loader + 1 })),
+
   initWorld: async () => {
     const { maps } = await gql.world();
-    set({ status: "idle" });
     const renderMe = {
       position: [5000, 5000],
       velocity: [0, 0],
@@ -104,6 +104,9 @@ export const useWorld = create<WorldState>((set, get) => ({
       status: "idle",
       me: { ...state.me, character: state.me.character ?? types.defaultCharacter },
     }));
+  },
+  loadingStatus: () => {
+    set({ status: "loading" });
   },
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>

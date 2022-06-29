@@ -296,6 +296,8 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   isValidUrl: (url, purpose) => {
     if (!["default", "image"].includes(purpose)) return true;
 
+    return true;
+
     const urlPattern = new RegExp(
       "^(https?:\\/\\/)?" +
         "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +

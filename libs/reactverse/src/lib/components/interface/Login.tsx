@@ -19,6 +19,7 @@ export const Login = () => {
   const setNickname = useUser((state) => state.setNickname);
   const updateUser = useUser((state) => state.updateUser);
   const initWorld = useWorld((state) => state.initWorld);
+  const loadingStatus = useWorld((state) => state.loadingStatus);
   const testImages = [
     "./images.png",
     "./images.png",
@@ -30,6 +31,7 @@ export const Login = () => {
     "./images.png",
   ];
   const onClickSubmit = async () => {
+    loadingStatus();
     await initWorld();
     updateUser();
   };
@@ -47,11 +49,11 @@ export const Login = () => {
       <AdminModal />
       <div className="Title">AYIAS</div>
       {loginMethod === "none" ? (
-        <>
+        <div className="main-buttons">
           {!isMobile && <KaikasButton onClick={connectKaikas} />}
           {/* {!isMobile && <MetamaskButton onClick={connectMetamask} />} */}
           <GuestButton onClick={loginAsGuest} />
-        </>
+        </div>
       ) : (
         <>
           <InputBox onKeyPress={keyPress}>
@@ -72,7 +74,22 @@ export const Login = () => {
   );
 };
 
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 const Container = styled.div`
+  /* background-image: url(/main.jpg), linear-gradient(rgba(8, 50, 102, 0), rgba(8, 50, 102, 0)); */
+  /* background-blend-mode: overlay; */
+  background-image: url(/main.jpg);
+  background-size: cover;
+  background-position: center;
+
   position: relative;
   width: 100%;
   height: 100%;
@@ -83,7 +100,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: #083266;
+  /* background: #083266; */
   @media screen and (max-width: 800px) {
     overflow: hidden;
     overflow-x: hidden;
@@ -95,10 +112,16 @@ const Container = styled.div`
   .Title {
     font-size: 120px;
     margin-bottom: 300px;
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-in-out forwards;
     @media screen and (max-width: 800px) {
       font-size: 60px;
       margin-bottom: 60px;
     }
+  }
+  .main-buttons {
+    opacity: 0;
+    animation: ${fadeIn} 0.5s ease-in-out 0.5s forwards;
   }
 `;
 

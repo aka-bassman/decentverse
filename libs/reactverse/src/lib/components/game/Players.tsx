@@ -79,7 +79,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   }, animation);
   return (
     <sprite ref={sprite}>
-      <planeGeometry args={[120, 165]} />
+      <planeGeometry args={[player.character.size[0], player.character.size[1]]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={40} material-toneMapped={false}>
         {player.user.nickname}
