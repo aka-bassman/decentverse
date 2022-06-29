@@ -105,11 +105,11 @@ export const useUser = create<UserState>((set, get) => ({
       user: {
         ...state.user,
         id: `${Math.floor(Math.random() * 100000)}`,
-        nickname: `Guest#${Math.floor(Math.random() * 1000000)}`,
+        nickname: `Guest#${Math.floor(Math.random() * 1000)}`,
       },
     })),
   skipLoginProcess: () => {
-    const nickname = `Guest#${Math.floor(Math.random() * 1000000)}`;
+    const nickname = `Guest#${Math.floor(Math.random() * 1000)}`;
     set((state) => ({
       user: { ...state.user, nickname },
     }));

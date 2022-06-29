@@ -9,7 +9,7 @@ export interface CallProps {
   socket: Soc;
 }
 export const Call = ({ peer, socket }: CallProps) => {
-  const userId = useUser((state) => state.user.id);
+  const user = useUser((state) => state.user);
   const roomId = useGossip((state) => state.callRoom.roomId);
   const removePeer = useGossip((state) => state.removePeer);
   const peers = useGossip((state) => state.peers);
@@ -37,7 +37,7 @@ export const Call = ({ peer, socket }: CallProps) => {
 
   const enter = () => {
     peer.call.peer.on("signal", (data) => {
-      const signal = { socketId: peer.socketId, desc: data, roomId, nickName: userId, userId };
+      const signal = { socketId: peer.socketId, desc: data, roomId, nickName: user.nickname, userId: user.id };
       socket.emit("signal", signal);
     });
     peer.call.peer.on("stream", (stream) => {
