@@ -37,11 +37,8 @@ export const WebViewModal = () => {
           style={{
             width: "100%",
             height: "100%",
-            // borderWidth: 1,
             display: "flex",
-            // backgroundColor: "white",
             justifyContent: "center",
-            // alignItems: "center",
             borderRadius: 30,
           }}
         >

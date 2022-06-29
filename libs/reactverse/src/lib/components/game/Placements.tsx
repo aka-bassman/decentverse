@@ -38,11 +38,6 @@ export const Placement = React.memo(({ placement }: PlacementProp) => {
   const position = new Vector3(placement.position[0], placement.position[1], -0.00000005);
   const topPos = new Vector3(placement.position[0], placement.position[1], 0.00001);
   const [width, height] = [placement.position[2], placement.position[3]];
-  useEffect(() => {
-    return () => {
-      console.log();
-    };
-  }, []);
   return (
     <Suspense fallback={null}>
       {bottom && (

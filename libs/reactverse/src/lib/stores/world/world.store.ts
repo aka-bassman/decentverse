@@ -89,6 +89,7 @@ export const useWorld = create<WorldState>((set, get) => ({
   loaded: () => set((state) => ({ loader: state.loader + 1 })),
   initWorld: async () => {
     const { maps } = await gql.world();
+    set({ status: "idle" });
     const renderMe = {
       position: [5000, 5000],
       velocity: [0, 0],
@@ -96,7 +97,13 @@ export const useWorld = create<WorldState>((set, get) => ({
       direction: "right",
     } as any;
     const render = { tiles: maps[1].tiles, players: {} };
-    return set((state) => ({ map: maps[1], renderMe, render, status: "idle", me: { ...state.me } }));
+    return set((state) => ({
+      map: maps[1],
+      renderMe,
+      render,
+      status: "idle",
+      me: { ...state.me, character: state.me.character ?? types.defaultCharacter },
+    }));
   },
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>

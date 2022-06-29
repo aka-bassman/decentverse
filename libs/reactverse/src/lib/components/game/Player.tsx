@@ -18,6 +18,7 @@ export interface PlayerProp {
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get, set } = useThree();
   const user = useUser((state) => state.user);
+  const screen = useGame((state) => state.screen);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
   const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${user.id}`]);
@@ -77,10 +78,14 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const playerPosition = player.current.position;
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
-    console.log(playerPosition[1]);
+
     if (x === 0 && y === 0) return;
-    playerPosition[0] < 13000 && camera.translateX(x);
-    playerPosition[1] < 6400 && camera.translateY(y);
+    playerPosition[0] > window.outerWidth * 1.5 &&
+      playerPosition[0] < 14000 - window.outerWidth * 1.5 &&
+      camera.translateX(x);
+    playerPosition[1] > window.outerWidth * 1.5 &&
+      playerPosition[1] < 8000 - window.outerHeight * 1.5 &&
+      camera.translateY(y);
   });
   return (
     <Suspense fallback={null}>

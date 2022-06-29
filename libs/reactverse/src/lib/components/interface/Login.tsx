@@ -29,9 +29,9 @@ export const Login = () => {
     "./images.png",
     "./images.png",
   ];
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
+    await initWorld();
     updateUser();
-    initWorld();
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
@@ -49,7 +49,7 @@ export const Login = () => {
       {loginMethod === "none" ? (
         <>
           {!isMobile && <KaikasButton onClick={connectKaikas} />}
-          {!isMobile && <MetamaskButton onClick={connectMetamask} />}
+          {/* {!isMobile && <MetamaskButton onClick={connectMetamask} />} */}
           <GuestButton onClick={loginAsGuest} />
         </>
       ) : (
@@ -63,7 +63,7 @@ export const Login = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          {loginMethod !== "guest" && <CharacterBox characters={characters} />}
+          {!characters.length || (loginMethod !== "guest" && <CharacterBox characters={characters} />)}
 
           <Goback onClick={logout}>Back</Goback>
         </>

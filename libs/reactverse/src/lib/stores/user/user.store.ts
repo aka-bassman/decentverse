@@ -65,7 +65,7 @@ export const useUser = create<UserState>((set, get) => ({
       const user = await gql.whoAmI(account);
       set({ user, loginMethod: "kaikas" });
       const tokenList = await gql.getUserTokenList(account, DSC);
-      const characters = await gql.characters({ tokenId: { $in: [10, 20, 30, 40, 50, 60, 70, 80, 90] } }, 0, 0);
+      const characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
 
       set({ characters });
       // const option = {
@@ -113,15 +113,6 @@ export const useUser = create<UserState>((set, get) => ({
     set((state) => ({
       user: { ...state.user, nickname },
     }));
-    console.log(5);
-
-    const user: types.User = {
-      id: "",
-      nickname,
-    };
-
-    // if (user.id === "") return;
-    // await gql.updateUser(user.id, user);
   },
   logout: () => set((state) => ({ user: types.defaultUser, loginMethod: "none" })),
   updateUser: async () => {

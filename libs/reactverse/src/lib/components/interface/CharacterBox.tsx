@@ -13,16 +13,13 @@ export const CharacterBox = ({ characters }: CharacterBoxProps) => {
     <>
       <Title>Select Your Character!</Title>
       <ChoiceBox>
-        {characters.map((image, idx) => {
-          console.log(image);
-          return (
-            <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
-              <div className="ImageWrapper">
-                <Image src={image.file.url} />
-              </div>
-            </CharacaterImage>
-          );
-        })}
+        {characters.map((image, idx) => (
+          <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
+            <div className="ImageWrapper">
+              <Image src={image.file.url} />
+            </div>
+          </CharacaterImage>
+        ))}
       </ChoiceBox>
     </>
   );
