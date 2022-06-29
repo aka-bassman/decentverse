@@ -28,7 +28,7 @@ export interface OtherPlayerProp {
   player: types.OtherPlayer;
 }
 export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
-  const texture = useTexture(`ayias/decentverse/character/chinchin.png?id=${player.id}`);
+  const texture = useTexture(`${player.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${player.id}`);
   const animator = createTileTextureAnimator(texture, player.character.tileSize);
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>(player.character.right.idle);

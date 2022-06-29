@@ -20,7 +20,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   const user = useUser((state) => state.user);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
-  const [url] = useTexture([me.character.file.url.replace("https://asset.ayias.io", "ayias")]);
+  const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${user.id}`]);
   const body = useRef<Matter.Body>(
     Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
   );
