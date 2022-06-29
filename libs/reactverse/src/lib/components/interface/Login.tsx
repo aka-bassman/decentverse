@@ -47,11 +47,11 @@ export const Login = () => {
       <AdminModal />
       <div className="Title">AYIAS</div>
       {loginMethod === "none" ? (
-        <>
+        <div className="main-buttons">
           {!isMobile && <KaikasButton onClick={connectKaikas} />}
           {!isMobile && <MetamaskButton onClick={connectMetamask} />}
           <GuestButton onClick={loginAsGuest} />
-        </>
+        </div>
       ) : (
         <>
           <InputBox onKeyPress={keyPress}>
@@ -72,7 +72,21 @@ export const Login = () => {
   );
 };
 
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 const Container = styled.div`
+  /* background-image: url(/main.jpg), linear-gradient(rgba(8, 50, 102, 0), rgba(8, 50, 102, 0)); */
+  /* background-blend-mode: overlay; */
+  /* background-size: cover; */
+  /* background-position: top; */
+
   position: relative;
   width: 100%;
   height: 100%;
@@ -95,10 +109,16 @@ const Container = styled.div`
   .Title {
     font-size: 120px;
     margin-bottom: 300px;
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-in-out forwards;
     @media screen and (max-width: 800px) {
       font-size: 60px;
       margin-bottom: 60px;
     }
+  }
+  .main-buttons {
+    opacity: 0;
+    animation: ${fadeIn} 0.5s ease-in-out 0.5s forwards;
   }
 `;
 
