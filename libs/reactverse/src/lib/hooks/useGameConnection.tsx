@@ -49,10 +49,7 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   }, []);
   useInterval(() => {
     if (!socket) return;
-    const data = encodeProtocolV1(
-      { ...player.current, id: user.id, nickname: user.nickname, chatText: myChat, isTalk },
-      scope.current
-    );
+    const data = encodeProtocolV1({ ...player.current, id: user.id, chatText: myChat, isTalk }, scope.current);
     socket.emit("player", ...data);
   }, 250);
 };

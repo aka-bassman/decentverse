@@ -1,7 +1,6 @@
 import { types, scalar } from "../stores";
 export type PlayerProtocol = {
   id: string;
-  nickname: string;
   position: number[];
   velocity: number[];
   state: types.PlayerState;
@@ -17,22 +16,21 @@ export const encodeProtocolV1 = (p: PlayerProtocol, s: Scope) => {
   const encodedPosition = convToScore(Math.floor(p.position[0]), Math.floor(p.position[1]));
   const min = convToScore(s.min[0], s.min[1]);
   const max = convToScore(s.max[0], s.max[1]);
-  const encodedData = `${p.id}\t${p.nickname}\t${Math.floor(p.position[0])}\t${Math.floor(p.position[1])}\t${
-    p.velocity[0]
-  }\t${p.velocity[1]}\t${p.state}\t${p.direction}\t${p.chatText}\t${p.isTalk}`;
+  const encodedData = `${p.id}\t${Math.floor(p.position[0])}\t${Math.floor(p.position[1])}\t${p.velocity[0]}\t${
+    p.velocity[1]
+  }\t${p.state}\t${p.direction}\t${p.chatText}\t${p.isTalk}`;
   return [p.id, encodedPosition, encodedData, min, max];
 };
 export const decodeProtocolV1 = (data: string): PlayerProtocol => {
   const message = data.split("\t");
   return {
     id: message[0],
-    nickname: message[1],
-    position: [parseInt(message[2]), parseInt(message[3])],
-    velocity: [parseInt(message[4]), parseInt(message[5])],
-    state: message[6] as types.PlayerState,
-    direction: message[7] as types.Direction,
-    chatText: message[8],
-    isTalk: message[9] === "true",
+    position: [parseInt(message[1]), parseInt(message[2])],
+    velocity: [parseInt(message[3]), parseInt(message[4])],
+    state: message[5] as types.PlayerState,
+    direction: message[6] as types.Direction,
+    chatText: message[7],
+    isTalk: message[8] === "true",
   };
 };
 const convToScore = (x: number, y: number, maxDigits = 16) => {
