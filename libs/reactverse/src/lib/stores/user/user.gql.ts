@@ -23,6 +23,21 @@ export const whoAmI = async (address: string) =>
     })
   ).data.whoAmI;
 
+export type GetUserTokenListQuery = { getUserTokenList: [number] };
+export const getUserTokenListQuery = gql`
+  query getUserTokenList($address: String!, $contract: String!) {
+    getUserTokenList(address: $address, contract: $contract)
+  }
+`;
+
+export const getUserTokenList = async (address: string, contract: string) =>
+  (
+    await client.query<GetUserTokenListQuery>({
+      query: getUserTokenListQuery,
+      variables: { address, contract },
+    })
+  ).data.getUserTokenList;
+
 // * WhoAmI Query
 
 export type UpdateUserMutation = { updateUser: types.User };

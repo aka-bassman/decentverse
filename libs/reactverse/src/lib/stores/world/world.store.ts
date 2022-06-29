@@ -6,8 +6,6 @@ import { devtools } from "zustand/middleware";
 
 const METAMASK_NETWORK_MAINNET = "1";
 const METAMASK_NETWORK_ROPSTEN = "3";
-const NETWORK_VERSION =
-  process.env["NEXT_PUBLIC_ENVIRONMENT"] === "production" ? METAMASK_NETWORK_MAINNET : METAMASK_NETWORK_ROPSTEN;
 
 export interface WorldState {
   scope: types.WorldScope;
@@ -20,11 +18,12 @@ export interface WorldState {
   otherPlayers: Map<string, types.OtherPlayer>;
   interaction: types.InteractionState;
   modalOpen: boolean;
-  initWorld: (character: types.Character) => Promise<void>;
+  initWorld: () => Promise<void>;
   openModal: () => void;
   closeModal: () => void;
   isLoaded: () => boolean;
   loaded: () => void;
+  selectCharacter: (character: types.Character) => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   joinInteraction: (
@@ -66,6 +65,7 @@ export const useWorld = create<WorldState>((set, get) => ({
   loader: 0,
   openModal: () => set({ modalOpen: true }),
   closeModal: () => set({ modalOpen: false }),
+  selectCharacter: (character: types.Character) => set((state) => ({ me: { ...state.me, character } })),
   isLoaded: () => {
     const { loader, map } = get();
     if (!map) return false;
@@ -85,7 +85,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     return loader === length;
   },
   loaded: () => set((state) => ({ loader: state.loader + 1 })),
-  initWorld: async (character: types.Character) => {
+  initWorld: async () => {
     const { maps } = await gql.world();
     const renderMe = {
       position: [5000, 5000],
@@ -94,7 +94,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       direction: "right",
     } as any;
     const render = { tiles: maps[1].tiles, players: {} };
-    return set((state) => ({ map: maps[1], renderMe, render, status: "idle", me: { ...state.me, character } }));
+    return set((state) => ({ map: maps[1], renderMe, render, status: "idle", me: { ...state.me } }));
   },
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>

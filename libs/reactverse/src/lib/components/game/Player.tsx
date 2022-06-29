@@ -77,9 +77,10 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const playerPosition = player.current.position;
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
+    console.log(playerPosition[1]);
     if (x === 0 && y === 0) return;
-    camera.translateX(x);
-    camera.translateY(y);
+    playerPosition[0] < 13000 && camera.translateX(x);
+    playerPosition[1] < 6400 && camera.translateY(y);
   });
   return (
     <Suspense fallback={null}>

@@ -3,7 +3,6 @@ import { client, setLink } from "./stores";
 import { Stream, Game, Interface, Login, ReactverseLayout, MapEditor, FullScreenLoading } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
-import { Spin } from "antd";
 
 export interface ReactverseProps {
   uri: string;
@@ -20,6 +19,8 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const skipLogin = false; // 나중에 query params로 넘겨야함.
 
   useEffect(() => {
+    console.log("uri : ", uri);
+    console.log("ws : ", ws);
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
