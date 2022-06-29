@@ -65,9 +65,13 @@ export const useUser = create<UserState>((set, get) => ({
       const user = await gql.whoAmI(account);
       set({ user, loginMethod: "kaikas" });
       const tokenList = await gql.getUserTokenList(account, DSC);
-      const characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
-
+      let characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
+      if (!characters.length) {
+        const tokenId = Math.floor(Math.random() * 1000);
+        characters = await gql.characters({ tokenId: { $in: [tokenId, tokenId + 1] } }, 0, 3);
+      }
       set({ characters });
+
       // const option = {
       //   headers: [
       //     {
