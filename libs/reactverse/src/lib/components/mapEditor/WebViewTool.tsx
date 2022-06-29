@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Input, Select, Space } from "antd";
+import { Input, Select, Space, Switch } from "antd";
 import { useEditor } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -10,6 +10,10 @@ export const WebViewTool = () => {
   const setUrlInput = useEditor((state) => state.setUrlInput);
   const checkIsInputUrl = useEditor((state) => state.checkIsInputUrl);
   const isUrlInputError = useEditor((state) => state.isUrlInputError);
+  const webviewMessage = useEditor((state) => state.webviewMessage);
+  const webviewIsEmbed = useEditor((state) => state.webviewIsEmbed);
+  const setWebviewMessage = useEditor((state) => state.setWebviewMessage);
+  const setWebviewIsEmbed = useEditor((state) => state.setWebviewIsEmbed);
 
   return (
     <Space direction="vertical">
@@ -25,6 +29,10 @@ export const WebViewTool = () => {
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
       />
+      <Input addonBefore="Message" value={webviewMessage} onChange={(e) => setWebviewMessage(e.target.value)} />
+      <Space>
+        isEmbed <Switch checked={webviewIsEmbed} onChange={setWebviewIsEmbed} />
+      </Space>
       {isUrlInputError && (
         <ErrorMessage>* That's not a valid {checkIsInputUrl(webviewPurpose) ? "URL" : "ID"}</ErrorMessage>
       )}
