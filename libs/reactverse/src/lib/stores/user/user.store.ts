@@ -62,7 +62,6 @@ export const useUser = create<UserState>((set, get) => ({
 
     if (account) {
       const user = await gql.whoAmI(account);
-      console.log(user);
       set({ user, loginMethod: "kaikas" });
 
       // const option = {

@@ -73,7 +73,6 @@ export class KasService {
       const result = await this.caver.kas.tokenHistory.getNFTOwnershipHistory(contractAddr, tokenId);
       return result.items;
     } catch (err) {
-      console.log(err);
       return [];
     }
   }

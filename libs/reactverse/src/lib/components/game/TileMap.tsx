@@ -71,14 +71,8 @@ export const TileMap = ({ player, scope }: MapProp) => {
       min: [player.current.position[0] - screen.size[0], player.current.position[1] - screen.size[1] / 4],
       max: [player.current.position[0] + screen.size[0] / 4, player.current.position[1] + screen.size[1] / 4],
     };
-    // console.log(player.current.position, screen.size);
-
     scope.current = makeScope(showBox);
-
-    // console.log(player.current.position[0], screen.size[0], showBox.min);
-    // console.log(scope.current.min);
   }, 500);
-  console.log("tile render teset");
   return (
     <Suspense fallback={null}>
       {renderTiles

@@ -85,6 +85,7 @@ type Character {
   id: String!
   left: Sprite!
   right: Sprite!
+  size: [Int!]!
   status: String!
   tileSize: [Int!]!
   tokenId: Float!
@@ -94,13 +95,14 @@ type Character {
 }
 
 input CharacterInput {
-  contract: ID
+  contract: String
   down: SpriteInput
   file: ID!
   image: ID
   left: SpriteInput!
   name: String
   right: SpriteInput!
+  size: [Int!]!
   tileSize: [Int!]!
   tokenId: Float!
   totalSize: [Int!]!

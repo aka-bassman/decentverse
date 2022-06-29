@@ -17,17 +17,18 @@ export interface PlayerProp {
 
 export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
   const { camera, get, set } = useThree();
-  const nickname = useUser((state) => state.user.nickname);
+  const user = useUser((state) => state.user);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
-  const [url] = useTexture([`ayias/decentverse/character/chinchin.png?id=${player.current.id}`]);
-  const body = useRef<Matter.Body>(Bodies.rectangle(renderMe.position[0], renderMe.position[1], 120, 165));
+  const [url] = useTexture([me.character.file.url.replace("https://asset.ayias.io", "ayias")]);
+  const body = useRef<Matter.Body>(
+    Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
+  );
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
     const position = get().camera.position;
     const playerPosition = player.current.position;
-
     camera.position.setX(playerPosition[0]);
     camera.position.setY(playerPosition[1]);
     return () => {
@@ -54,7 +55,6 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
       : player.current.direction;
 
     player.current = {
-      id: player.current.id,
       position: [body.current.position.x, body.current.position.y],
       velocity,
       direction,
@@ -66,9 +66,8 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const character = me.character as any;
     animation.current = character[player.current.direction][player.current.state];
   });
-
-  // useInterval(() => {}, 5000);
-  const animator = createTileTextureAnimator(url, [240, 330]);
+  const animator = createTileTextureAnimator(url, [me.character.tileSize[0], me.character.tileSize[1]]);
+  //240 330
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
@@ -85,7 +84,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
   return (
     <Suspense fallback={null}>
       <sprite ref={sprite}>
-        <planeGeometry args={[120, 165]} />
+        <planeGeometry args={[me.character.size[0], me.character.size[1]]} />
         <spriteMaterial map={url} />
         <Text
           lineHeight={0.8}
@@ -95,7 +94,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
           overflowWrap="normal"
           material-toneMapped={false}
         >
-          {nickname}
+          {user.nickname}
         </Text>
         <MyChat />
       </sprite>
