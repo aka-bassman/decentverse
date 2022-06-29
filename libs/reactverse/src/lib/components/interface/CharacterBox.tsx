@@ -12,7 +12,7 @@ export const CharacterBox = ({ characters }: CharacterBoxProps) => {
       <Title>Select Your Character!</Title>
       <ChoiceBox>
         {characters.map((image, idx) => (
-          <CharacaterImage selected={selectNumber === idx} onClick={() => select(idx)}>
+          <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
             <img style={{ width: "100%" }} key={idx} src={image} />
           </CharacaterImage>
         ))}

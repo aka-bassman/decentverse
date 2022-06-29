@@ -77,12 +77,13 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
   useDuration((p) => {
     animator([animation.current.row, p]);
   }, animation);
+  console.log(player);
   return (
     <sprite ref={sprite}>
       <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={40} material-toneMapped={false}>
-        {player.id}
+        {movement.current.live.nickname}
       </Text>
       <PlayerChat id={player.id} />
     </sprite>

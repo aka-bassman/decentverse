@@ -35,7 +35,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
         <Login />
       ) : (
         <>
-          {!isLoaded() && <FullScreenLoading />}
+          {/* {!isLoaded() && <FullScreenLoading />} */}
           <Interface socket={socket} />
           <Game socket={socket} />
           <Stream socket={socket} />
