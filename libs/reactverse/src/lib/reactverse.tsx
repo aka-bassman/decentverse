@@ -24,13 +24,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     const socket = io(ws);
     setSocket(socket);
     socket.on("connect", () => setIsConnected(true));
-    return () => {
-      console.log("");
-    };
   }, []);
-  useEffect(() => {
-    console.log(loader);
-  }, [loader]);
   if (!socket || !isConnected) return <FullScreenLoading />;
 
   return (

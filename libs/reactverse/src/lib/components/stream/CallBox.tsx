@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, types } from "../../stores";
+import { useGossip, useWorld, types, useUser } from "../../stores";
 import { PeoplesIcon } from "..";
 import { Call } from "./Call";
 import styled from "styled-components";
@@ -13,15 +13,16 @@ export interface CallBoxProps {
 }
 
 export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxProps) => {
+  const userId = useUser((state) => state.user.id);
   const me = useWorld((state) => state.me);
   const peers = useGossip((state) => state.peers);
   const addPeer = useGossip((state) => state.addPeer);
 
   useEffect(() => {
     socket.on("init", (clientId: string, init: types.InitForm) => {
-      if (init.userId === me.userId) return;
+      if (init.userId === userId) return;
       addPeer(clientId, false, init, localStream, screenStream);
-      socket.emit("receive", { socketId: clientId, roomId, userId: me.userId, nickName: me.userId });
+      socket.emit("receive", { socketId: clientId, roomId, userId, nickName: userId });
     });
     socket.on("receive", (clientId: string, init: types.InitForm) => {
       addPeer(clientId, true, init, localStream, screenStream);

@@ -34,6 +34,9 @@ export class CharacterInput {
   @Field(() => [Int])
   totalSize: number[];
 
+  @Field(() => [Int])
+  size: number[];
+
   @Field(() => gql.SpriteInput)
   right: gql.SpriteInputType;
 
@@ -72,6 +75,9 @@ export class Character {
 
   @Field(() => [Int])
   totalSize: number[];
+
+  @Field(() => [Int])
+  size: number[];
 
   @Field(() => gql.Sprite)
   right: gql.SpriteType;

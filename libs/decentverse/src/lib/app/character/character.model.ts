@@ -37,6 +37,9 @@ export class Input {
   @Prop([{ type: Number, required: true }])
   totalSize: number[];
 
+  @Prop([{ type: Number, required: true }])
+  size: number[];
+
   @Prop({ type: gql.SpriteSchema })
   right: gql.SpriteType;
 

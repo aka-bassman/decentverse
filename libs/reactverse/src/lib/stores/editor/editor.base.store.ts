@@ -130,9 +130,6 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
         roomId: interaction.roomId,
       };
     });
-
-    console.log("webviews", webviews);
-
     set((state) => ({
       mapData,
       assetsData,
@@ -283,8 +280,6 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       webviews: newWebviews,
       callRooms: newCallRooms,
     };
-
-    console.log("data!!!!!!", data);
     await gql.updateMap(mapData.id, data);
     set({ isEdited: false });
   },

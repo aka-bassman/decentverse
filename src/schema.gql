@@ -85,6 +85,7 @@ type Character {
   id: String!
   left: Sprite!
   right: Sprite!
+  size: [Int!]!
   status: String!
   tileSize: [Int!]!
   tokenId: Float!
@@ -101,6 +102,7 @@ input CharacterInput {
   left: SpriteInput!
   name: String
   right: SpriteInput!
+  size: [Int!]!
   tileSize: [Int!]!
   tokenId: Float!
   totalSize: [Int!]!
