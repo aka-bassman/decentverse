@@ -6,8 +6,6 @@ import { devtools } from "zustand/middleware";
 
 const METAMASK_NETWORK_MAINNET = "1";
 const METAMASK_NETWORK_ROPSTEN = "3";
-const NETWORK_VERSION =
-  process.env["NEXT_PUBLIC_ENVIRONMENT"] === "production" ? METAMASK_NETWORK_MAINNET : METAMASK_NETWORK_ROPSTEN;
 
 export interface WorldState {
   scope: types.WorldScope;
