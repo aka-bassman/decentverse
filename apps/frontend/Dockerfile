@@ -15,4 +15,5 @@ ENV PORT 4200
 RUN npm i --production
 RUN npm i --save @nrwl/next
 RUN npm i -g next
-CMD next start -p $PORT
+# CMD next start -p $PORT
+CMD npm start
