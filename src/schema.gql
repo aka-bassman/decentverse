@@ -94,7 +94,7 @@ type Character {
 }
 
 input CharacterInput {
-  contract: ID
+  contract: String
   down: SpriteInput
   file: ID!
   image: ID
@@ -356,6 +356,7 @@ input UserInput {
 type Webview {
   bottomRight: [Int!]!
   errorMessage: String
+  isEmbed: Boolean!
   message: String
   purpose: String!
   size: [Int!]!
@@ -366,6 +367,7 @@ type Webview {
 input WebviewInput {
   bottomRight: [Int!]!
   errorMessage: String
+  isEmbed: Boolean!
   message: String
   purpose: String!
   size: [Int!]!

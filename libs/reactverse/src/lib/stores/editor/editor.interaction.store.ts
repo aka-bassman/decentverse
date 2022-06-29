@@ -8,6 +8,8 @@ export interface EditorInteractionState {
   urlInput: string;
   inputCallRoomMaxNum: number;
   webviewPurpose: types.TWebviewPurpose;
+  webviewMessage: string;
+  webviewIsEmbed: boolean;
   interactionTool: types.TInteractionTool;
   collisionPreview: types.TInteractionPreview;
   callRoomPreview: types.TInteractionPreview;
@@ -44,12 +46,16 @@ export interface EditorInteractionState {
   toggleEditWebview: (placeId: string) => void;
   modifyCallRoom: (placeId: string) => void;
   modifyWebview: (placeId: string) => void;
+  setWebviewMessage: (message: string) => void;
+  setWebviewIsEmbed: (isEmbed: boolean) => void;
 }
 
 export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set, get) => ({
   urlInput: "https://",
   inputCallRoomMaxNum: 100,
   webviewPurpose: "default",
+  webviewMessage: "",
+  webviewIsEmbed: true,
   interactionTool: "collision",
   collisionPreview: {
     ...types.initPreview,
@@ -183,8 +189,11 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       url: get().urlInput,
       purpose: get().webviewPurpose,
       placeId: get().getPlaceId("webview", x, y),
+      message: get().webviewMessage,
+      isEmbed: get().webviewIsEmbed,
     };
 
+    console.log("newWebView", newWebview);
     set((state) => ({
       webviews: [...state.webviews, newWebview],
       webviewPreview: {
@@ -313,11 +322,15 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   toggleEditWebview: (placeId) => {
     if (!get().isEditWebview) {
       const currentWebview = get().webviews.find((webview) => webview.placeId === placeId);
+      console.log("currentWebview", currentWebview);
+      if (!currentWebview) return;
       set({
         isEditWebview: true,
         selectedEditWebview: currentWebview,
         urlInput: currentWebview?.url,
         webviewPurpose: currentWebview?.purpose,
+        webviewMessage: currentWebview.message,
+        webviewIsEmbed: currentWebview.isEmbed,
       });
     } else {
       set({ isEditWebview: false, selectedEditWebview: undefined, urlInput: "https://", webviewPurpose: "default" });
@@ -344,13 +357,21 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   },
   modifyWebview: (placeId: string) => {
     if (!get().urlInput || get().isUrlInputError) return;
+
+    const currentInputs = {
+      purpose: get().webviewPurpose,
+      url: get().urlInput,
+      message: get().webviewMessage,
+      isEmbed: get().webviewIsEmbed,
+    };
+
     const newWebviews = get().webviews.map((webview) => {
-      if (webview.placeId === placeId) return { ...webview, purpose: get().webviewPurpose, url: get().urlInput };
+      if (webview.placeId === placeId) return { ...webview, ...currentInputs };
       return webview;
     });
     const newViewItems = get().viewItems.map((viewItem) => {
       if (viewItem.type === "webview" && viewItem.data.placeId === placeId)
-        return { ...viewItem, data: { ...viewItem.data, purpose: get().webviewPurpose, url: get().urlInput } };
+        return { ...viewItem, data: { ...viewItem.data, ...currentInputs } };
       return viewItem;
     });
     set({
@@ -361,5 +382,11 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       viewItems: newViewItems,
       isEdited: true,
     });
+  },
+  setWebviewMessage: (message) => {
+    set({ webviewMessage: message });
+  },
+  setWebviewIsEmbed: (isEmbed) => {
+    set({ webviewIsEmbed: isEmbed });
   },
 });
