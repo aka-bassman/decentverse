@@ -23,6 +23,7 @@ export interface WorldState {
   closeModal: () => void;
   isLoaded: () => boolean;
   loaded: () => void;
+  loadingStatus: () => void;
   selectCharacter: (character: types.Character) => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
@@ -84,7 +85,9 @@ export const useWorld = create<WorldState>((set, get) => ({
     });
     return loader === length;
   },
+
   loaded: () => set((state) => ({ loader: state.loader + 1 })),
+
   initWorld: async () => {
     const { maps } = await gql.world();
     const renderMe = {
@@ -94,7 +97,16 @@ export const useWorld = create<WorldState>((set, get) => ({
       direction: "right",
     } as any;
     const render = { tiles: maps[1].tiles, players: {} };
-    return set((state) => ({ map: maps[1], renderMe, render, status: "idle", me: { ...state.me } }));
+    return set((state) => ({
+      map: maps[1],
+      renderMe,
+      render,
+      status: "idle",
+      me: { ...state.me, character: state.me.character ?? types.defaultCharacter },
+    }));
+  },
+  loadingStatus: () => {
+    set({ status: "loading" });
   },
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>

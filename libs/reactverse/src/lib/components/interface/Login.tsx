@@ -19,6 +19,7 @@ export const Login = () => {
   const setNickname = useUser((state) => state.setNickname);
   const updateUser = useUser((state) => state.updateUser);
   const initWorld = useWorld((state) => state.initWorld);
+  const loadingStatus = useWorld((state) => state.loadingStatus);
   const testImages = [
     "./images.png",
     "./images.png",
@@ -29,9 +30,10 @@ export const Login = () => {
     "./images.png",
     "./images.png",
   ];
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
+    loadingStatus();
+    await initWorld();
     updateUser();
-    initWorld();
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
@@ -49,7 +51,7 @@ export const Login = () => {
       {loginMethod === "none" ? (
         <div className="main-buttons">
           {!isMobile && <KaikasButton onClick={connectKaikas} />}
-          {!isMobile && <MetamaskButton onClick={connectMetamask} />}
+          {/* {!isMobile && <MetamaskButton onClick={connectMetamask} />} */}
           <GuestButton onClick={loginAsGuest} />
         </div>
       ) : (
@@ -63,7 +65,7 @@ export const Login = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          {loginMethod !== "guest" && <CharacterBox characters={characters} />}
+          {!characters.length || (loginMethod !== "guest" && <CharacterBox characters={characters} />)}
 
           <Goback onClick={logout}>Back</Goback>
         </>
