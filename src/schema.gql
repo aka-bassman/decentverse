@@ -94,7 +94,7 @@ type Character {
 }
 
 input CharacterInput {
-  contract: ID
+  contract: String
   down: SpriteInput
   file: ID!
   image: ID
