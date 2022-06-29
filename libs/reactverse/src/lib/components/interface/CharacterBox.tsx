@@ -1,21 +1,28 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
-
+import { useWorld, useUser, types } from "../../stores";
 type CharacterBoxProps = {
-  characters: string[];
+  characters: types.Character[];
 };
 
 export const CharacterBox = ({ characters }: CharacterBoxProps) => {
   const [selectNumber, select] = useState<number>(0);
+  const selectCharacter = useWorld((state) => state.selectCharacter);
+  selectCharacter(characters[selectNumber]);
   return (
     <>
       <Title>Select Your Character!</Title>
       <ChoiceBox>
-        {characters.map((image, idx) => (
-          <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
-            <Image src={image} />
-          </CharacaterImage>
-        ))}
+        {characters.map((image, idx) => {
+          console.log(image);
+          return (
+            <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
+              <div className="ImageWrapper">
+                <Image src={image.file.url} />
+              </div>
+            </CharacaterImage>
+          );
+        })}
       </ChoiceBox>
     </>
   );
@@ -68,6 +75,13 @@ const CharacaterImage = styled.button<{ selected: boolean }>`
   border-color: ${(props) => (props.selected ? "#348fc4" : "transparent")};
   background: white;
   cursor: pointer;
+  overflow: hidden;
+
+  .ImageWrapper {
+    width: 600px;
+    height: 240px;
+    overflow: hidden;
+  }
   @media screen and (max-width: 800px) {
     width: 33%;
     height: 40%;
@@ -92,4 +106,5 @@ const Image = styled.img`
     width: auto;
     height: 80%;
   }
+  -webkit-user-drag: none;
 `;

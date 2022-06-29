@@ -13,6 +13,7 @@ export class KasModule {
           provide: "KLAYTN_OPTIONS",
           useValue: options,
         },
+        KasResolver,
         KasService,
       ],
       exports: [KasService],

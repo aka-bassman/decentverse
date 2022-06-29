@@ -23,25 +23,6 @@ export const WebViewModal = () => {
 
   return (
     <ModalWrapper webview={interaction.webview} isOpen={isOpen}>
-      {/* <ButtonContainer>
-        <CancelButton onClick={close}>
-          <XButton />
-        </CancelButton>
-      </ButtonContainer> */}
-      {/* {isLoading && (
-        <Spin
-          size="large"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "80%",
-            backgroundColor: "white",
-            height: "100%",
-          }}
-        />
-      )} */}
-
       {interaction.webview?.purpose === "twitter" ? (
         <TwitterWrapper>
           <TwitterTimelineEmbed

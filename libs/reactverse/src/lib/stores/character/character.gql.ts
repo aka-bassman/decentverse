@@ -25,7 +25,7 @@ export const character = async (characterId: string) =>
 export type CharactersQuery = { characters: types.Character[] };
 export const charactersQuery = gql`
   ${types.characterFragment}
-  query characters($query: JSONObject, $skip: Int, $limit: Int) {
+  query characters($query: JSON!, $skip: Int!, $limit: Int!) {
     characters(query: $query, skip: $skip, limit: $limit) {
       ...characterFragment
     }

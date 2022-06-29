@@ -31,7 +31,7 @@ export const Login = () => {
   ];
   const onClickSubmit = () => {
     updateUser();
-    initWorld(characters[0] ?? types.defaultCharacter);
+    initWorld();
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
@@ -39,7 +39,7 @@ export const Login = () => {
     const url = window.location.href;
     if (url.includes("guest=true")) {
       skipLoginProcess();
-      initWorld(characters[0] ?? types.defaultCharacter);
+      initWorld();
     } else setNickname("");
   }, []);
   return (
@@ -63,7 +63,7 @@ export const Login = () => {
             />
             <Submit onClick={onClickSubmit}>Next</Submit>
           </InputBox>
-          <CharacterBox characters={testImages} />
+          {loginMethod !== "guest" && <CharacterBox characters={characters} />}
 
           <Goback onClick={logout}>Back</Goback>
         </>
