@@ -84,8 +84,9 @@ const fadeIn = keyframes`
 const Container = styled.div`
   /* background-image: url(/main.jpg), linear-gradient(rgba(8, 50, 102, 0), rgba(8, 50, 102, 0)); */
   /* background-blend-mode: overlay; */
-  /* background-size: cover; */
-  /* background-position: top; */
+  background-image: url(/main.jpg);
+  background-size: cover;
+  background-position: center;
 
   position: relative;
   width: 100%;
@@ -97,7 +98,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: #083266;
+  /* background: #083266; */
   @media screen and (max-width: 800px) {
     overflow: hidden;
     overflow-x: hidden;
