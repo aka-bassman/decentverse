@@ -13,7 +13,7 @@ export const CharacterBox = ({ characters }: CharacterBoxProps) => {
       <ChoiceBox>
         {characters.map((image, idx) => (
           <CharacaterImage key={idx} selected={selectNumber === idx} onClick={() => select(idx)}>
-            <img style={{ width: "100%" }} key={idx} src={image} />
+            <Image src={image} />
           </CharacaterImage>
         ))}
       </ChoiceBox>
@@ -23,7 +23,6 @@ export const CharacterBox = ({ characters }: CharacterBoxProps) => {
 
 const Title = styled.p`
   font-size: 26px;
-
   margin-bottom: 0px;
 `;
 
@@ -40,9 +39,6 @@ const ChoiceBox = styled.div`
   background-color: white;
   overflow-y: scroll;
   color: black;
-  /* justify-content: center;
-  align-items: center; */
-  /* -ms-overflow-style: none; */
   ::-webkit-scrollbar {
     display: none;
   }
@@ -74,30 +70,26 @@ const CharacaterImage = styled.button<{ selected: boolean }>`
   cursor: pointer;
   @media screen and (max-width: 800px) {
     width: 33%;
-    height: 33%;
+    height: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 10px;
     margin-bottom: 10px;
-    /* margin-left: 1px;
-    margin-right: 1px; */
     background-color: transparent;
     border-radius: 10px;
     position: relative;
     justify-content: center;
     align-items: center;
     border-width: 5px;
-    /* background-color: red; */
     border-color: ${(props) => (props.selected ? "#348fc4" : "transparent")};
-    /* height: auto; */
   }
 `;
 
 const Image = styled.img`
   width: 100%;
   @media screen and (max-width: 800px) {
-    width: 100;
-    height: 100%;
+    width: auto;
+    height: 80%;
   }
 `;
