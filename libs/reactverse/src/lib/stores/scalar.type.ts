@@ -126,6 +126,7 @@ export type Webview = {
   url: string;
   size: number[];
   purpose: WebviewPurpose;
+  isEmbed: boolean;
 };
 export type WebviewInput = {
   message?: string;
@@ -135,6 +136,7 @@ export type WebviewInput = {
   url: string;
   size: number[];
   purpose: WebviewPurpose;
+  isEmbed: boolean;
 };
 export const webviewFragment = gql`
   fragment webviewFragment on Webview {
@@ -145,6 +147,7 @@ export const webviewFragment = gql`
     url
     size
     purpose
+    isEmbed
   }
 `;
 

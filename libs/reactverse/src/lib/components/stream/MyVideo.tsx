@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ShareScreenOnIcon, ShareScreenOffIcon, MicOnIcon, MicOffIcon, CamOnIcon, CamOffIcon } from "..";
 import { Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, types } from "../../stores";
+import { useGossip, useWorld, types, useUser } from "../../stores";
 import styled from "styled-components";
 
 export interface MyVideoProps {
@@ -13,7 +13,7 @@ export interface MyVideoProps {
 }
 
 export const MyVideo = ({ video, onToggleMic, onToggleCam, getDisplay }: MyVideoProps) => {
-  const userId = useWorld((state) => state.me.userId);
+  const userId = useUser((state) => state.user.id);
   const callRoom = useGossip((state) => state.callRoom);
 
   return (

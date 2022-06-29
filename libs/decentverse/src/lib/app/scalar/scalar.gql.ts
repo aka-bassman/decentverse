@@ -156,6 +156,10 @@ export class Webview {
   @Field(() => String)
   @Prop({ type: String, required: true, default: "default", enum: webviewPurposes })
   purpose: WebviewPurpose;
+
+  @Field(() => Boolean)
+  @Prop({ type: Boolean, required: true, default: true })
+  isEmbed: WebviewPurpose;
 }
 export type WebviewType = Webview;
 export const WebviewSchema = SchemaFactory.createForClass(Webview);
@@ -182,6 +186,9 @@ export class WebviewInput {
 
   @Field(() => String)
   purpose: WebviewPurpose;
+
+  @Field(() => Boolean)
+  isEmbed: WebviewPurpose;
 }
 export type WebviewInputType = WebviewInput;
 

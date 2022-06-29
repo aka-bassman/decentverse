@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { MicOnIcon, MicOffIcon, MicOffSmallIcon, CamOnIcon, CamOffIcon } from "..";
-import { types, useGossip, useWorld } from "../../stores";
+import { types, useGossip, useUser, useWorld } from "../../stores";
 import { Socket as Soc } from "socket.io-client";
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ export interface CallProps {
   socket: Soc;
 }
 export const Call = ({ peer, socket }: CallProps) => {
-  const userId = useWorld((state) => state.me.userId);
+  const userId = useUser((state) => state.user.id);
   const roomId = useGossip((state) => state.callRoom.roomId);
   const removePeer = useGossip((state) => state.removePeer);
   const peers = useGossip((state) => state.peers);

@@ -62,7 +62,6 @@ export const useUser = create<UserState>((set, get) => ({
 
     if (account) {
       const user = await gql.whoAmI(account);
-      console.log(user);
       set({ user, loginMethod: "kaikas" });
 
       // const option = {
@@ -99,7 +98,11 @@ export const useUser = create<UserState>((set, get) => ({
   loginAsGuest: () =>
     set((state) => ({
       loginMethod: "guest",
-      user: { ...state.user, nickname: `Guest#${Math.floor(Math.random() * 1000000)}` },
+      user: {
+        ...state.user,
+        id: `${Math.floor(Math.random() * 100000)}`,
+        nickname: `Guest#${Math.floor(Math.random() * 1000000)}`,
+      },
     })),
   skipLoginProcess: () => {
     const nickname = `Guest#${Math.floor(Math.random() * 1000000)}`;
@@ -118,9 +121,8 @@ export const useUser = create<UserState>((set, get) => ({
   },
   logout: () => set((state) => ({ user: types.defaultUser, loginMethod: "none" })),
   updateUser: async () => {
-    const { user } = get();
-    if (user.id === "") return;
-    console.log(user);
+    const { user, loginMethod } = get();
+    if (user.id === "" || loginMethod === "guest") return;
     await gql.updateUser(user.id, { nickname: user.nickname, address: user.address });
   },
   setNickname: (nickname: string) => set((state) => ({ user: { ...state.user, nickname } })),

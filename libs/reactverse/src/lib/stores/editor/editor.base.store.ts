@@ -110,6 +110,8 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
         height: Math.abs(interaction.bottomRight[1] - interaction.topLeft[1]),
         url,
         purpose: interaction.purpose,
+        message: interaction.message || "",
+        isEmbed: interaction.isEmbed,
         placeId: get().getPlaceId("webview", x, y),
       };
     });
@@ -128,9 +130,6 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
         roomId: interaction.roomId,
       };
     });
-
-    console.log("assets", assets);
-
     set((state) => ({
       mapData,
       assetsData,
@@ -239,6 +238,8 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       bottomRight: [Math.round(webview.x + webview.width / 2), Math.round(webview.y - webview.height / 2)],
       url: get().getWebviewUrl(webview.url, webview.purpose),
       size: [100, 100], //!
+      message: webview.message,
+      isEmbed: webview.isEmbed,
       purpose: webview.purpose,
     }));
 
@@ -261,6 +262,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
           top: tile.top?.id,
           webviews: tile.webviews,
           callRooms: tile.callRooms,
+          dialogues: [],
         };
       });
     });
@@ -278,8 +280,6 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       webviews: newWebviews,
       callRooms: newCallRooms,
     };
-
-    console.log("data!!!!!!", data);
     await gql.updateMap(mapData.id, data);
     set({ isEdited: false });
   },

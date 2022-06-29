@@ -23,12 +23,11 @@ export interface GameProps {
 }
 
 export const Game = ({ socket }: GameProps) => {
-  const nickname = useUser((state) => state.user.nickname);
+  const user = useUser((state) => state.user);
   const engine = useRef(Engine.create());
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const player = useRef<RenderCharacter>({
-    id: nickname,
     position: [5000, 5000],
     velocity: [0, 0],
     state: "idle",
@@ -41,14 +40,13 @@ export const Game = ({ socket }: GameProps) => {
   const interaction = useRef<types.InteractionState>(types.defaultInteractionState);
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
-  const margin = 500;
   return (
     <GameContainer>
       <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
         <Suspense fallback={null}>
           <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />
           <TileMap player={player} scope={scope} />
-          <Players playerId={player.current.id} />
+          <Players playerId={user.id} />
           <Placements />
           <Collisions engine={engine} />
           <Webviews engine={engine} interaction={interaction} player={player} keyboard={keyState} />

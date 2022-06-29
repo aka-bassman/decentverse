@@ -46,6 +46,8 @@ export type TCallRoom = TMapItem & {
 export type TWebview = TMapItem & {
   url: string;
   purpose: TWebviewPurpose;
+  message: string;
+  isEmbed: boolean;
 };
 export type TCharacter = { name: string; image?: string; avatarPosition?: TAvatarPosition };
 export type TFlow = {

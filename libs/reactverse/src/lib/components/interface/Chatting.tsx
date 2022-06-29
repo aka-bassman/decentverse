@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Socket as Soc } from "socket.io-client";
-import { useGossip, useWorld, types, useGame } from "../../stores";
+import { useGossip, useWorld, types, useGame, useUser } from "../../stores";
 import { Button, Input } from "antd";
 import { isMobile } from "react-device-detect";
 import { SendIcon } from "..";
@@ -11,7 +11,7 @@ export interface ChattingProps {
 }
 
 export const Chatting = ({ socket }: ChattingProps) => {
-  const userId = useWorld((state) => state.me.userId);
+  const userId = useUser((state) => state.user.id);
   const chats = useGossip((state) => state.chats);
   const receiveChat = useGossip((state) => state.receiveChat);
 
@@ -40,7 +40,7 @@ export const Chat = ({ chat }: ChatProps) => {
 };
 
 export const ChatInput = ({ socket }: ChattingProps) => {
-  const userId = useWorld((state) => state.me.userId);
+  const userId = useUser((state) => state.user.id);
   const chatText = useGossip((state) => state.chatText);
   const onChangeChatText = useGossip((state) => state.onChangeChatText);
   const sendChat = useGossip((state) => state.sendChat);
@@ -87,7 +87,7 @@ export const ChatInput = ({ socket }: ChattingProps) => {
   }
 };
 export const ChatInputMobile = ({ socket }: ChattingProps) => {
-  const userId = useWorld((state) => state.me.userId);
+  const userId = useUser((state) => state.user.id);
   const chatText = useGossip((state) => state.chatText);
   const onChangeChatText = useGossip((state) => state.onChangeChatText);
   const sendChat = useGossip((state) => state.sendChat);

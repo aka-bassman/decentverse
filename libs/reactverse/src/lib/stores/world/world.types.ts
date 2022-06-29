@@ -17,7 +17,6 @@ export type PlayerState = typeof playerStates[number];
 export const directions = ["left", "right", "up", "down"] as const;
 export type Direction = typeof directions[number];
 export type RenderCharacter = {
-  id: string;
   position: number[];
   velocity: number[];
   state: PlayerState;
@@ -25,6 +24,7 @@ export type RenderCharacter = {
 };
 export type RenderOtherPlayer = {
   id: string;
+  nickname: string;
   position: number[];
   velocity: number[];
   state: PlayerState;
@@ -33,7 +33,6 @@ export type RenderOtherPlayer = {
   isTalk: boolean;
 };
 export type Player = {
-  userId: string;
   character: Character;
   maxSpeed: number;
   acceleration: number;
@@ -45,6 +44,7 @@ export type WorldRender = {
 };
 export type OtherPlayer = {
   id: string;
+  user: types.User;
   character: Character;
   updatedAt: number;
 };
@@ -59,56 +59,57 @@ export const defaultCharacter = {
   status: "active",
   file: {
     id: "",
-    url: "/sprite5.png",
+    url: "https://asset.ayias.io/decentverse/character/chinchin.png",
   },
-  tileSize: [129, 194],
+  tileSize: [240, 330],
   totalSize: [388, 581],
+  size: [120, 165],
   right: {
     idle: {
-      row: 2,
+      row: 4,
       column: 1,
-      duration: 300,
+      duration: 500,
     },
     walk: {
-      row: 2,
-      column: 3,
-      duration: 300,
+      row: 5,
+      column: 4,
+      duration: 500,
     },
   },
   left: {
     idle: {
-      row: 2,
+      row: 6,
       column: 1,
-      duration: 300,
+      duration: 500,
     },
     walk: {
-      row: 2,
-      column: 3,
-      duration: 300,
+      row: 7,
+      column: 4,
+      duration: 500,
     },
   },
   up: {
     idle: {
-      row: 1,
+      row: 2,
       column: 1,
-      duration: 300,
+      duration: 500,
     },
     walk: {
-      row: 1,
-      column: 3,
-      duration: 300,
+      row: 3,
+      column: 4,
+      duration: 500,
     },
   },
   down: {
     idle: {
       row: 0,
       column: 1,
-      duration: 300,
+      duration: 500,
     },
     walk: {
-      row: 0,
-      column: 3,
-      duration: 300,
+      row: 1,
+      column: 4,
+      duration: 500,
     },
   },
 };

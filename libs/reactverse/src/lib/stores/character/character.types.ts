@@ -8,6 +8,7 @@ export type CharacterInput = {
   file: string;
   tileSize: number[];
   totalSize: number[];
+  size: number[];
   right: scalar.Sprite;
   left: scalar.Sprite;
   up?: scalar.Sprite;
@@ -21,6 +22,7 @@ export type Character = {
   file: scalar.File;
   tileSize: number[];
   totalSize: number[];
+  size: number[];
   right: scalar.Sprite;
   left: scalar.Sprite;
   up?: scalar.Sprite;
@@ -40,6 +42,7 @@ export const characterFragment = gql`
     }
     tileSize
     totalSize
+    size
     right {
       ...spriteFragment
     }

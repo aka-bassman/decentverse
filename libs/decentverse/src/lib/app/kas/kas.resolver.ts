@@ -8,7 +8,7 @@ import { UseGuards } from "@nestjs/common";
 export class KasResolver {
   constructor(private readonly kasService: KasService) {}
   @Query(() => [Int])
-  @UseGuards(Allow.Admin)
+  // @UseGuards(Allow.Admin)
   async getUserTokenList(
     @Args({ name: "contract", type: () => String }) contract: string,
     @Args({ name: "address", type: () => String }) address: string

@@ -72,7 +72,7 @@ export const DialogTool = () => {
               <input
                 type="file"
                 onChange={(e) => {
-                  console.log("e", e);
+                  console.log();
                 }}
               />
             </div>
