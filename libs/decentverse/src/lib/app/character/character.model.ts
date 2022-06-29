@@ -16,8 +16,8 @@ import * as gql from "../gql";
 
 @Schema()
 export class Input {
-  @Prop({ type: MongoSchema.Types.ObjectId, required: false, index: true })
-  contract?: Types.ObjectId;
+  @Prop({ type: String, required: false, index: true })
+  contract?: string;
 
   @Prop({ type: Number, required: true, index: true, default: -1 })
   tokenId: number;

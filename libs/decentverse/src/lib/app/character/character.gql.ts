@@ -13,8 +13,8 @@ import { Types, Schema as MongoSchema } from "mongoose";
 
 @InputType()
 export class CharacterInput {
-  @Field(() => ID, { nullable: true })
-  contract?: Types.ObjectId;
+  @Field(() => String, { nullable: true })
+  contract?: string;
 
   @Field()
   tokenId: number;
