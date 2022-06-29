@@ -3,7 +3,6 @@ import { client, setLink } from "./stores";
 import { Stream, Game, Interface, Login, ReactverseLayout, MapEditor, FullScreenLoading } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
-import { Spin } from "antd";
 
 export interface ReactverseProps {
   uri: string;

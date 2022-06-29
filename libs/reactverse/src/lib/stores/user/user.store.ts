@@ -51,6 +51,7 @@ export const useUser = create<UserState>((set, get) => ({
     }
   },
   connectKaikas: async () => {
+    const DSC = "0xe47e90c58f8336a2f24bcd9bcb530e2e02e1e8ae";
     if (isMobile) {
       return window.alert("PC로 진행해주세요.");
     }
@@ -63,7 +64,10 @@ export const useUser = create<UserState>((set, get) => ({
     if (account) {
       const user = await gql.whoAmI(account);
       set({ user, loginMethod: "kaikas" });
+      const tokenList = await gql.getUserTokenList(account, DSC);
+      const characters = await gql.characters({ tokenId: { $in: [10, 20, 30, 40, 50, 60, 70, 80, 90] } }, 0, 0);
 
+      set({ characters });
       // const option = {
       //   headers: [
       //     {
