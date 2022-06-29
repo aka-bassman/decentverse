@@ -4,6 +4,8 @@ import { XButton } from "..";
 import styled from "styled-components";
 import { Spin } from "antd";
 import * as types from "../../stores/types";
+import { LinkOutlined } from "@ant-design/icons";
+
 import { isMobile } from "react-device-detect";
 
 import { TwitterTimelineEmbed } from "react-twitter-embed";
@@ -18,81 +20,79 @@ export const WebViewModal = () => {
     setIsLoadiang(true);
     closeModal();
   };
+  const getIsWide = () => !(interaction.webview?.purpose === "twitter" || !interaction.webview?.isEmbed);
 
   if (!isOpen) return null;
 
   return (
-    <ModalWrapper webview={interaction.webview} isOpen={isOpen}>
-      {/* <ButtonContainer>
-        <CancelButton onClick={close}>
-          <XButton />
-        </CancelButton>
-      </ButtonContainer> */}
-      {/* {isLoading && (
-        <Spin
-          size="large"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "80%",
-            backgroundColor: "white",
-            height: "100%",
-          }}
-        />
-      )} */}
+    <ModalWrapper webview={interaction.webview} isOpen={isOpen} isWide={getIsWide()}>
+      {!interaction.webview?.isEmbed && (
+        <InnerModal>
+          <LinkView>
+            <h4>{interaction.webview?.message}</h4>
+            <div>
+              <a href={interaction.webview?.url} target="_blank" rel="noreferrer">
+                {interaction.webview?.url}
+                <LinkOutlined />
+              </a>
+            </div>
+          </LinkView>
 
-      {interaction.webview?.purpose === "twitter" ? (
-        <TwitterWrapper>
-          <TwitterTimelineEmbed
-            sourceType="profile"
-            screenName={interaction.webview?.url}
-            options={{ width: isMobile ? "100%" : "80%" }}
-            onLoad={finishLoading}
-          />
-        </TwitterWrapper>
-      ) : (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            // borderWidth: 1,
-            display: "flex",
-            // backgroundColor: "white",
-            justifyContent: "center",
-            // alignItems: "center",
-            borderRadius: 30,
-          }}
-        >
-          {isLoading && <Spiner size={"large"} />}
-          <Webview
-            id="foo"
-            // data="https://www.opensea.com"
-            data={interaction.webview?.url}
-            // style={{ width: isLoading ? "0%" : "100%", height: isLoading ? "0%" : "120%", borderRadius: 30 }}
-            onLoad={finishLoading}
-          />
           <ButtonContainer>
             <CancelButton onClick={close}>
               <XButton />
             </CancelButton>
           </ButtonContainer>
-        </div>
+        </InnerModal>
+      )}
+
+      {interaction.webview?.isEmbed && interaction.webview?.purpose === "twitter" && interaction.webview.url && (
+        <InnerModal>
+          {isLoading && <Spiner size={"large"} />}
+          <TwitterWrapper>
+            <TwitterTimelineEmbed
+              sourceType="profile"
+              screenName={interaction.webview.url}
+              options={{ width: "100%" }}
+              onLoad={finishLoading}
+            />
+          </TwitterWrapper>
+          <ButtonContainer>
+            <CancelButton onClick={close}>
+              <XButton />
+            </CancelButton>
+          </ButtonContainer>
+        </InnerModal>
+      )}
+
+      {interaction.webview?.isEmbed && interaction.webview?.purpose !== "twitter" && (
+        <InnerModal>
+          {isLoading && <Spiner size={"large"} />}
+          <Webview id="foo" data={interaction.webview?.url} onLoad={finishLoading} />
+          <ButtonContainer>
+            <CancelButton onClick={close}>
+              <XButton />
+            </CancelButton>
+          </ButtonContainer>
+        </InnerModal>
       )}
     </ModalWrapper>
   );
 };
 
-const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpen: boolean }>`
-  display: ${(props) => (props.webview && props.isOpen ? "inline" : "hidden")};
+const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpen: boolean; isWide: boolean }>`
   position: absolute;
-  width: 1200px;
-  height: 1000px;
+  display: ${(props) => (props.webview && props.isOpen ? "inline" : "hidden")};
+  width: ${(props) => (props.webview && props.isWide ? "1200px" : "700px")};
+  /* height: 1000px; */
+  height: 80vh;
+
   border-radius: 30px;
   /* background-color: white; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100;
 
   @media screen and (max-width: 800px) {
     width: 90%;
@@ -166,9 +166,7 @@ const Webview = styled.object`
   border-radius: 20px;
   @media screen and (max-width: 800px) {
     width: 95%;
-    height: 95%;
-
-    z-index: 1px;
+    height: 80vh;
   }
 `;
 
@@ -176,9 +174,45 @@ const TwitterWrapper = styled.div`
   & > div {
     overflow: auto;
     height: 500px;
-    width: 100%;
+    /* width: 100%; */
+    width: 600px;
+    height: 80vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    @media screen and (max-width: 800px) {
+      width: 95%;
+      height: 80vh;
+    }
   }
+`;
+
+const LinkView = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  width: 600px;
+  height: fit-content;
+  border-radius: 20px;
+  h4 {
+    font-size: 1.6em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  a {
+    font-size: 1.2em;
+  }
+  svg {
+    vertical-align: baseline;
+  }
+  @media screen and (max-width: 800px) {
+    width: 95%;
+  }
+`;
+
+const InnerModal = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 30;
 `;
