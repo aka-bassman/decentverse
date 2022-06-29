@@ -39,7 +39,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     getUserMedia().then(() => {
-      socket.emit("join", { roomId, userId: me.user.nickname, nickName: me.user.nickname });
+      socket.emit("join", { roomId, userId: me.user.id, nickName: me.user.nickname });
     });
     return () => {
       console.log("unmount my Call");
@@ -54,7 +54,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
     for (const peer of peers) {
       if (!peer.call.peer.connected) return;
       const callData = {
-        id: me.user.nickname,
+        id: me.user.id,
         cam: callRoom.cam,
         mic: callRoom.mic,
         isTalk: callRoom.mic && callRoom.isTalk,

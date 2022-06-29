@@ -13,17 +13,21 @@ export interface CallBoxProps {
 }
 
 export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxProps) => {
-  const userId = useUser((state) => state.user.id);
+  const user = useUser((state) => state.user);
   const me = useWorld((state) => state.me);
   const peers = useGossip((state) => state.peers);
   const addPeer = useGossip((state) => state.addPeer);
 
   useEffect(() => {
     socket.on("init", (clientId: string, init: types.InitForm) => {
+<<<<<<< HEAD
       if (init.userId === userId) return;
       console.log("init");
+=======
+      if (init.userId === user.id) return;
+>>>>>>> 128fc1b9cdf84a0d642fdb15b609ae3c506b3ade
       addPeer(clientId, false, init, localStream, screenStream);
-      socket.emit("receive", { socketId: clientId, roomId, userId, nickName: userId });
+      socket.emit("receive", { socketId: clientId, roomId, userId: user.id, nickName: user.nickname });
     });
     socket.on("receive", (clientId: string, init: types.InitForm) => {
       console.log("receive");

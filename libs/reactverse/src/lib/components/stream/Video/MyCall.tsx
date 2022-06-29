@@ -24,7 +24,7 @@ const videoHeight = 280;
 
 export const MyCall = ({ socket, roomId }: MyCallProps) => {
   // const me = useWorld((state) => state.me);
-  const me = useUser((state) => state);
+  const user = useUser((state) => state.user);
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
   const setMic = useGossip((state) => state.setMic);
@@ -122,7 +122,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
           <div style={{ visibility: !callRoom.mic ? "visible" : "hidden" }}>
             <MicOffSmallIcon />
           </div>
-          {me.nickname}
+          {user.nickname}
         </NameTag>
         <BackLight color={callRoom.isTalk ? "#9ACD32" : "transparent"} />
         {!callRoom.cam && <Bilind />}
