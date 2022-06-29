@@ -28,6 +28,8 @@ export const SelectwebviewInfo = ({ data }: { data: types.TWebview }) => {
             <div>
               {checkIsInputUrl(data.purpose) ? "url" : "id"} : {data.url}
             </div>
+            <div>message : {data.message}</div>
+            <div>isEmbed : {data.isEmbed.toString()}</div>
           </div>
           <SelectInfoButtons remove={removeWebview} modify={toggleEditWebview} placeId={data.placeId} />
         </>
