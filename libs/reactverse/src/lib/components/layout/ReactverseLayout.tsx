@@ -21,22 +21,12 @@ export const ReactverseLayout = ({ children }: Props) => {
 const AppContainer = styled.div`
   width: 100%;
   height: ${document.documentElement.clientHeight}px;
-  overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: hidden;
   @media screen and (max-width: 800px) {
     width: 100%;
     height: ${document.documentElement.clientHeight}px;
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-    /* touch-action: none; */
-    /* -webkit-overflow-scrolling: none; */
-
-    /* 이외의 브라우저 */
     overscroll-behavior: none;
   }
-  overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: hidden;
 `;

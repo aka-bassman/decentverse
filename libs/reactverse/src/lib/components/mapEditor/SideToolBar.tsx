@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Segmented } from "antd";
 import { useEditor, TMainTool, TEditMode } from "../../stores";
-import { MapTool, AssetTool, InteractionTool, SelectInfo } from "./index";
+import { MapTool, AssetTool, InteractionTool, SelectInfo, DialogTool } from "./index";
 
 export const SideToolBar = () => {
   const mainTool = useEditor((state) => state.mainTool);
@@ -27,13 +27,14 @@ export const SideToolBar = () => {
             <>
               <Segmented
                 block
-                options={["Assets", "Interaction"]}
+                options={["Assets", "Interaction", "Dialog"]}
                 value={mainTool}
                 onChange={(value) => setMainTool(value as TMainTool)}
               />
               <div className="tool-container">
                 {mainTool === "Assets" && <AssetTool />}
                 {mainTool === "Interaction" && <InteractionTool />}
+                {mainTool === "Dialog" && <DialogTool />}
               </div>
             </>
           ) : (

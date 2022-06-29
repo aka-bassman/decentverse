@@ -8,18 +8,18 @@ export type WhoAmIQuery = { whoAmI: types.User };
 
 export const whoAmIQuery = gql`
   ${types.userFragment}
-  query whoAmI($address: String!, $message: String!, $signAddress: String!) {
-    whoAmI(address: $address, message: $message, signAddress: $signAddress) {
+  query whoAmI($address: String!) {
+    whoAmI(address: $address) {
       ...userFragment
     }
   }
 `;
 
-export const whoAmI = async (address: string, message: string, signAddress: string) =>
+export const whoAmI = async (address: string) =>
   (
     await client.query<WhoAmIQuery>({
       query: whoAmIQuery,
-      variables: { address, message, signAddress },
+      variables: { address },
     })
   ).data.whoAmI;
 

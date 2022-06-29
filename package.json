@@ -79,6 +79,7 @@
     "react-router-dom": "^6.3.0",
     "react-three-fiber": "^6.0.13",
     "react-toastify": "^9.0.4",
+    "react-twitter-embed": "4.0.4",
     "redis": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",

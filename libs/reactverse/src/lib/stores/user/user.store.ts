@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { isMobile } from "react-device-detect";
+import { useWorld } from "../world";
 
 declare global {
   interface Window {
@@ -21,6 +22,7 @@ export interface UserState {
   connectMetamask: () => Promise<void>;
   connectKaikas: () => Promise<void>;
   loginAsGuest: () => void;
+  skipLoginProcess: () => void;
   logout: () => void;
   updateUser: () => Promise<void>;
   setNickname: (nickname: string) => void;
@@ -44,7 +46,7 @@ export const useUser = create<UserState>((set, get) => ({
         params,
       });
       if (!signAddress || !selectedAddress[0]) return;
-      const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
+      const user = await gql.whoAmI(selectedAddress[0]);
       set({ user, loginMethod: "metamask" });
     }
   },
@@ -56,16 +58,28 @@ export const useUser = create<UserState>((set, get) => ({
       // return window.alert(t("exception_kaikas-not-found"));
       return window.alert("Kaikas를 다운로드 해주세요.");
     }
-    // if (window.klaytn.networkVersion.toString() !== process.env.NEXT_PUBLIC_KLAYTN_CHAIN_ID) {
-    //   // check baobab // 8217
-    //   return window.alert(t("reveal.exception_network"));
-    // }
-    // if (typeof window.ethereum === "undefined") return;
-    // const selectedAddress = await window.klaytn.request<string[]>({ method: "eth_requestAccounts" });
     const account = (await window.klaytn.enable())[0];
 
     if (account) {
-      console.log(account);
+      const user = await gql.whoAmI(account);
+      console.log(user);
+      set({ user, loginMethod: "kaikas" });
+
+      // const option = {
+      //   headers: [
+      //     {
+      //       name: "Authorization",
+      //       value: `Basic ${Buffer.from(`${this.network.accessKeyId}:${this.network.secretAccessKey}`).toString(
+      //         "base64"
+      //       )}`,
+      //     },
+      //     { name: "x-chain-id", value: this.network.chainId },
+      //   ],
+      //   keepAlive: false,
+      // };
+      // this.caver = new Caver(new Caver.providers.HttpProvider("https://node-api.klaytnapi.com/v1/klaytn", option));
+      // const caver = new Caver();
+
       // const provider = new ethers.providers.Web3Provider(window.klaytn as any);
       // const message = `test messgae\n timeStmap:${new Date().getTime()}`;
       // const params = [message, selectedAddress[0]];
@@ -87,11 +101,27 @@ export const useUser = create<UserState>((set, get) => ({
       loginMethod: "guest",
       user: { ...state.user, nickname: `Guest#${Math.floor(Math.random() * 1000000)}` },
     })),
+  skipLoginProcess: () => {
+    const nickname = `Guest#${Math.floor(Math.random() * 1000000)}`;
+    set((state) => ({
+      user: { ...state.user, nickname },
+    }));
+    console.log(5);
+
+    const user: types.User = {
+      id: "",
+      nickname,
+    };
+
+    // if (user.id === "") return;
+    // await gql.updateUser(user.id, user);
+  },
   logout: () => set((state) => ({ user: types.defaultUser, loginMethod: "none" })),
   updateUser: async () => {
     const { user } = get();
     if (user.id === "") return;
-    await gql.updateUser(user.id, user);
+    console.log(user);
+    await gql.updateUser(user.id, { nickname: user.nickname, address: user.address });
   },
   setNickname: (nickname: string) => set((state) => ({ user: { ...state.user, nickname } })),
 }));

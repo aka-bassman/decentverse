@@ -4,13 +4,21 @@ import { Card, Button, Modal } from "antd";
 import { useEditor } from "../../stores";
 
 export const LoadMap = () => {
-  const { init, isLoadModalOpen, toggleLoadModalOpen, loadMapList, mapList } = useEditor();
+  const init = useEditor((state) => state.init);
+  const isLoadModalOpen = useEditor((state) => state.isLoadModalOpen);
+  const toggleLoadModalOpen = useEditor((state) => state.toggleLoadModalOpen);
+  const loadMapList = useEditor((state) => state.loadMapList);
+  const mapList = useEditor((state) => state.mapList);
 
   useEffect(() => {
     if (!isLoadModalOpen) return;
     loadMapList();
   }, [isLoadModalOpen]);
 
+  // useEffect(() => {
+  //   //! TODO: 삭제
+  //   init("62a3482360cb6ba7fa50e65c");
+  // }, []);
   const loadMap = (mapId: string) => {
     init(mapId);
   };

@@ -25,6 +25,8 @@ export interface WorldState {
   moveMe: () => void;
   openModal: () => void;
   closeModal: () => void;
+  isLoaded: () => boolean;
+  loaded: () => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   updateUserId: (userId: string) => void;
@@ -34,6 +36,7 @@ export interface WorldState {
   ) => void;
   leaveInteraction: (type: types.scalar.InteractionType) => void;
   speakChat: (chatText: string) => void;
+  loader: number;
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -124,8 +127,29 @@ export const useWorld = create<WorldState>((set, get) => ({
   },
   interaction: types.defaultInteractionState,
   status: "none",
+  loader: 0,
   openModal: () => set({ modalOpen: true }),
   closeModal: () => set({ modalOpen: false }),
+  isLoaded: () => {
+    const { loader, map } = get();
+    if (!map) return false;
+    let length = 0;
+    map.tiles.map((tileArr) =>
+      tileArr.map((tile) => {
+        tile.top && (length = length + 2);
+        tile.bottom && (length = length + 2);
+        tile.lighting && (length = length + 2);
+      })
+    );
+    map?.placements.map((placement) => {
+      placement.asset.top !== null && (length = length + 2);
+      placement.asset.lighting !== null && (length = length + 2);
+      placement.asset.bottom !== null && (length = length + 2);
+    });
+    console.log(loader, length);
+    return loader === length;
+  },
+  loaded: () => set((state) => ({ loader: state.loader + 1 })),
   initWorld: async (user: types.User, character: types.Character) => {
     const { maps } = await gql.world();
     const renderMe = {

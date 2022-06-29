@@ -18,12 +18,13 @@ loader.setCrossOrigin("*");
 
 export const Tile = React.memo(({ x, y, offsetX, offsetY }: TileProp) => {
   const renderTiles = useWorld((state) => state.render.tiles);
-  const bottom = loader.load(renderTiles[y][x].bottom.url.replace("https://asset.ayias.io", "ayias"));
+  const loaded = useWorld((state) => state.loaded);
+  const bottom = loader.load(renderTiles[y][x].bottom.url.replace("https://asset.ayias.io", "ayias"), loaded);
   const top =
-    renderTiles[y][x].top && loader.load(renderTiles[y][x].top.url.replace("https://asset.ayias.io", "ayias"));
+    renderTiles[y][x].top && loader.load(renderTiles[y][x].top.url.replace("https://asset.ayias.io", "ayias"), loaded);
   const lighting =
     renderTiles[y][x].lighting &&
-    loader.load(renderTiles[y][x].lighting?.url.replace("https://asset.ayias.io", "ayias") ?? "");
+    loader.load(renderTiles[y][x].lighting?.url.replace("https://asset.ayias.io", "ayias") ?? "", loaded);
   const position = new Vector3(offsetX, offsetY, -0.0000001);
   return (
     <Suspense fallback={null}>

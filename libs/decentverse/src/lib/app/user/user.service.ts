@@ -40,7 +40,7 @@ export class UserService {
     return await this.loader.loadMany(_ids);
   }
 
-  async whoAmI(address: string, message: string, signAddress: string) {
+  async whoAmI(address: string) {
     return (
       (await this.User.findOne({ address: address.toLowerCase() })) ??
       (await this.User.create({
