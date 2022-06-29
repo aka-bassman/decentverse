@@ -42,7 +42,6 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
       socket.emit("join", { roomId, userId: me.user.id, nickName: me.user.nickname });
     });
     return () => {
-      console.log("unmount my Call");
       setIsTalk(false);
       socket.emit("leave");
       peers.map((peer) => peer.call.peer.destroy());
