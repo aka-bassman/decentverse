@@ -19,6 +19,8 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const skipLogin = false; // 나중에 query params로 넘겨야함.
 
   useEffect(() => {
+    console.log("uri : ", uri, ws);
+    console.log("uri : ", ws);
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
