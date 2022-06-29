@@ -20,8 +20,8 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
   const myChat = useWorld((state) => state.myChat);
   const isTalk = useGossip((state) => state.callRoom.isTalk);
   useEffect(() => {
-    socket.emit("register", user.id, makeCharacterMessage(character));
-    window.addEventListener("focus", () => socket.emit("register", user.id, makeCharacterMessage(character)));
+    socket.emit("register", user.id, makeCharacterMessage(user, character));
+    window.addEventListener("focus", () => socket.emit("register", user.id, makeCharacterMessage(user, character)));
     socket.on("players", (data) => {
       const players = data.map((dat: string) => dat && decodeProtocolV1(dat)).filter((d: any) => !!d);
       const ids = players.map((player: types.RenderOtherPlayer) => {
@@ -37,8 +37,8 @@ export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
         .map((data: string, idx: number) => {
           if (!data) return null;
           const id = ids[idx];
-          const character: types.Character = JSON.parse(data);
-          return { id, character, updatedAt: now };
+          const { user, character }: { user: types.User; character: types.Character } = JSON.parse(data);
+          return { id, user, character, updatedAt: now };
         })
         .filter((player: types.OtherPlayer) => !!player?.character);
       if (otherPlayers.length) addOtherPlayers(otherPlayers);

@@ -24,6 +24,7 @@ export type RenderCharacter = {
 };
 export type RenderOtherPlayer = {
   id: string;
+  nickname: string;
   position: number[];
   velocity: number[];
   state: PlayerState;
@@ -43,6 +44,7 @@ export type WorldRender = {
 };
 export type OtherPlayer = {
   id: string;
+  user: types.User;
   character: Character;
   updatedAt: number;
 };

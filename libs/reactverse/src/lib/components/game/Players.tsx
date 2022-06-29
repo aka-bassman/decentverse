@@ -82,7 +82,7 @@ export const OtherPlayer = React.memo(({ player }: OtherPlayerProp) => {
       <planeGeometry args={[120, 165]} />
       <spriteMaterial map={texture} />
       <Text lineHeight={0.8} position={[0, -120, 1]} fontSize={40} material-toneMapped={false}>
-        {player.id}
+        {player.user.nickname}
       </Text>
       <PlayerChat id={player.id} />
     </sprite>

@@ -23,17 +23,24 @@ export const WebViewModal = () => {
 
   return (
     <ModalWrapper webview={interaction.webview} isOpen={isOpen}>
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <CancelButton onClick={close}>
           <XButton />
         </CancelButton>
-      </ButtonContainer>
-      {isLoading && (
+      </ButtonContainer> */}
+      {/* {isLoading && (
         <Spin
           size="large"
-          style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "80%",
+            backgroundColor: "white",
+            height: "100%",
+          }}
         />
-      )}
+      )} */}
 
       {interaction.webview?.purpose === "twitter" ? (
         <TwitterWrapper>
@@ -45,13 +52,32 @@ export const WebViewModal = () => {
           />
         </TwitterWrapper>
       ) : (
-        <Webview
-          id="foo"
-          // data="https://www.opensea.com"
-          data={interaction.webview?.url}
-          style={{ width: isLoading ? "0%" : "100%", height: isLoading ? "0%" : "80%" }}
-          onLoad={finishLoading}
-        />
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            // borderWidth: 1,
+            display: "flex",
+            // backgroundColor: "white",
+            justifyContent: "center",
+            // alignItems: "center",
+            borderRadius: 30,
+          }}
+        >
+          {isLoading && <Spiner size={"large"} />}
+          <Webview
+            id="foo"
+            // data="https://www.opensea.com"
+            data={interaction.webview?.url}
+            // style={{ width: isLoading ? "0%" : "100%", height: isLoading ? "0%" : "120%", borderRadius: 30 }}
+            onLoad={finishLoading}
+          />
+          <ButtonContainer>
+            <CancelButton onClick={close}>
+              <XButton />
+            </CancelButton>
+          </ButtonContainer>
+        </div>
       )}
     </ModalWrapper>
   );
@@ -60,56 +86,90 @@ export const WebViewModal = () => {
 const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpen: boolean }>`
   display: ${(props) => (props.webview && props.isOpen ? "inline" : "hidden")};
   position: absolute;
-  width: 1000px;
-  height: 600px;
+  width: 1200px;
+  height: 1000px;
   border-radius: 30px;
-  background-color: white;
+  /* background-color: white; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  justify-content: "center";
-  align-items: "center";
+
   @media screen and (max-width: 800px) {
     width: 90%;
     height: 80%;
-    border-radius: 30px;
+    /* height: 306px; */
+    border-radius: 0px;
     /* border-width: 10px; */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
-    justify-content: "center";
-    align-items: "center";
+    z-index: 10;
+    /* justify-content: "center";
+    align-items: "center"; */
+  }
+`;
+
+const Spiner = styled(Spin)`
+  position: absolute;
+  background-color: white;
+  top: 0;
+  // right: 0;
+  display: flex;
+  /* border-width: 1; */
+  width: 90%;
+  height: 100%;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 800px) {
+    position: absolute;
+    background-color: white;
+    top: 0;
+    // right: 0;
+    display: flex;
+    /* border-width: 1; */
+    width: 95%;
+    height: 95%;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
 const ButtonContainer = styled.div`
   background-color: transparent;
-  display: flex;
-  justify-self: flex-end;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+
   @media screen and (max-width: 800px) {
-    margin-top: 3px;
-    margin-bottom: 3px;
+    top: -10px;
+    right: 0;
+
     z-index: 1px;
   }
 `;
 
 const CancelButton = styled.button`
-  background-color: transparent;
-  margin-right: 10px;
-  margin-top: 10px;
+  background-color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
 `;
 
 const Webview = styled.object`
-  display: inline-flex;
-  width: 100%;
-  height: 80%;
-  min-height: 80%;
-  max-height: 80%;
+  width: 90%;
+  height: 100%;
+  border-radius: 20px;
+  @media screen and (max-width: 800px) {
+    width: 95%;
+    height: 95%;
+
+    z-index: 1px;
+  }
 `;
 
 const TwitterWrapper = styled.div`
