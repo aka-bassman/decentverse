@@ -54,6 +54,6 @@ export const makeScope = (scope: types.WorldScope): types.WorldScope => {
   // return { min: [45000, 45000], max: [50000, 50000] };
 };
 
-export const makeCharacterMessage = (character: types.Character) => {
-  return JSON.stringify(character);
+export const makeCharacterMessage = (user: types.User, character: types.Character) => {
+  return JSON.stringify({ user, character });
 };

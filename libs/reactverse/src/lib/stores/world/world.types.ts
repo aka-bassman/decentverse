@@ -44,7 +44,7 @@ export type WorldRender = {
 };
 export type OtherPlayer = {
   id: string;
-  nickname: string;
+  user: types.User;
   character: Character;
   updatedAt: number;
 };
