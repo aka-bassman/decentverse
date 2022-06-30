@@ -23,6 +23,7 @@ export interface WorldState {
   closeModal: () => void;
   isLoaded: () => boolean;
   loaded: () => void;
+  percentage: () => number;
   loadingStatus: () => void;
   selectCharacter: (character: types.Character) => void;
   setOtherPlayerIds: (ids: string[]) => void;
@@ -33,7 +34,8 @@ export interface WorldState {
   ) => void;
   leaveInteraction: (type: types.scalar.InteractionType) => void;
   speakChat: (chatText: string) => void;
-  loader: number;
+  loader: types.LoadManager;
+
   status: "none" | "loading" | "failed" | "idle";
 }
 export const useWorld = create<WorldState>((set, get) => ({
@@ -63,45 +65,61 @@ export const useWorld = create<WorldState>((set, get) => ({
   },
   interaction: types.defaultInteractionState,
   status: "none",
-  loader: 0,
+  loader: {
+    loaded: 0,
+    totalLoad: 0,
+  },
   openModal: () => set({ modalOpen: true }),
   closeModal: () => set({ modalOpen: false }),
   selectCharacter: (character: types.Character) => set((state) => ({ me: { ...state.me, character } })),
   isLoaded: () => {
-    const { loader, map } = get();
-    if (!map) return false;
+    const { loader } = get();
+    console.log(loader.loaded, loader.totalLoad);
+    if (!loader.totalLoad) return false;
+    return loader.loaded === loader.totalLoad;
+  },
+  percentage: () => {
+    const { loader } = get();
+    const percentage = Math.floor((loader.loaded / loader.totalLoad) * 100);
+    console.log(percentage);
+    return percentage;
+  },
+  loaded: () => set((state) => ({ loader: { ...state.loader, loaded: state.loader.loaded + 1 } })),
+
+  initWorld: async () => {
+    const { maps } = await gql.world();
+
     let length = 0;
-    map.tiles.map((tileArr) =>
+    maps[1].tiles.map((tileArr) =>
       tileArr.map((tile) => {
         tile.top && (length = length + 2);
         tile.bottom && (length = length + 2);
         tile.lighting && (length = length + 2);
       })
     );
-    map?.placements.map((placement) => {
+    maps[1]?.placements.map((placement) => {
       placement.asset.top !== null && (length = length + 2);
       placement.asset.lighting !== null && (length = length + 2);
       placement.asset.bottom !== null && (length = length + 2);
     });
-    return loader === length;
-  },
 
-  loaded: () => set((state) => ({ loader: state.loader + 1 })),
-
-  initWorld: async () => {
-    const { maps } = await gql.world();
     const renderMe = {
       position: [5000, 5000],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
     } as any;
+
     const render = { tiles: maps[1].tiles, players: {} };
     return set((state) => ({
       map: maps[1],
       renderMe,
       render,
       status: "idle",
+      loader: {
+        loaded: 0,
+        totalLoad: length,
+      },
       me: { ...state.me, character: state.me.character ?? types.defaultCharacter },
     }));
   },

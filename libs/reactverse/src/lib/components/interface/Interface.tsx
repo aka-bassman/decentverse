@@ -57,6 +57,10 @@ const InterfaceContainer = styled.div`
       z-index: 1;
     }
   }
+  @supports (-webkit-touch-callout: none) { 
+  height: -webkit-fill-available;
+}
+
 `;
 const ChattingContainer = styled.div`
   position: absolute;

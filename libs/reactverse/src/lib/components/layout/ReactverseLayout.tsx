@@ -25,10 +25,14 @@ const AppContainer = styled.div`
 
   @media screen and (max-width: 800px) {
     width: 100%;
+    
     /* height: ${document.documentElement.clientHeight}px; */
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-    overscroll-behavior: none;
+    /* overscroll-behavior: none; */
   }
+  @supports (-webkit-touch-callout: none) { 
+  height: -webkit-fill-available;
+}
 `;

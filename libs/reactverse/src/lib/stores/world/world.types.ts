@@ -48,6 +48,11 @@ export type OtherPlayer = {
   character: Character;
   updatedAt: number;
 };
+
+export type LoadManager = {
+  loaded: number;
+  totalLoad: number;
+};
 export type InteractionState = {
   collision: scalar.Collision | null;
   webview: scalar.Webview | null;
