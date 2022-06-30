@@ -38,7 +38,7 @@ export const Login = () => {
   return (
     <Container>
       <AdminModal />
-      <img src="logo.svg" width="400" className="logo" />
+      <img src="logo.svg" className="logo" />
       {/* <div className="Title">AYIAS</div> */}
       {loginMethod === "none" ? (
         <div className="main-buttons">
@@ -108,8 +108,9 @@ const Container = styled.div`
     margin-bottom: 30px;
     opacity: 0;
     animation: ${fadeIn} 1s ease-in-out forwards;
+    width: 400px;
     @media screen and (max-width: 800px) {
-      font-size: 60px;
+      width: 60%;
       margin-bottom: 60px;
     }
   }
