@@ -34,6 +34,7 @@ const ChoiceBox = styled.div`
   display: flex;
   width: 500px;
   height: 300px;
+  min-height: 300px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -48,7 +49,7 @@ const ChoiceBox = styled.div`
   }
   @media screen and (max-width: 800px) {
     width: 95%;
-    /* height: 50%; */
+    /* height: 900; */
     margin-top: 0px;
     margin-bottom: 10px;
     /* height: auto; */

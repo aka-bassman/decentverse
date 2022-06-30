@@ -92,7 +92,7 @@ const Container = styled.div`
 
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   font-size: 50px;
   color: white;
   display: flex;
@@ -111,7 +111,7 @@ const Container = styled.div`
   }
   .Title {
     font-size: 120px;
-    margin-bottom: 300px;
+    margin-bottom: 30px;
     opacity: 0;
     animation: ${fadeIn} 1s ease-in-out forwards;
     @media screen and (max-width: 800px) {
@@ -121,7 +121,11 @@ const Container = styled.div`
   }
   .main-buttons {
     opacity: 0;
+    margin-top: 300px;
     animation: ${fadeIn} 0.5s ease-in-out 0.5s forwards;
+    @media screen and (max-width: 800px) {
+      margin-top: 30px;
+    }
   }
 `;
 
