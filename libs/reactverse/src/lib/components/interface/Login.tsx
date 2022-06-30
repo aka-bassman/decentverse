@@ -47,6 +47,7 @@ export const Login = () => {
   return (
     <Container>
       <AdminModal />
+      <img src="logo.svg" width="400" className="logo" />
       <div className="Title">AYIAS</div>
       {loginMethod === "none" ? (
         <div className="main-buttons">
@@ -109,9 +110,15 @@ const Container = styled.div`
     /* 이외의 브라우저 */
     overscroll-behavior: none;
   }
+  .logo {
+    /* -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7)); */
+    -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.7));
+    /* filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7)); */
+  }
   .Title {
     font-size: 120px;
-    margin-bottom: 300px;
+    /* margin-bottom: 300px; */
     opacity: 0;
     animation: ${fadeIn} 1s ease-in-out forwards;
     @media screen and (max-width: 800px) {
