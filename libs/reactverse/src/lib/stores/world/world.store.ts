@@ -74,14 +74,12 @@ export const useWorld = create<WorldState>((set, get) => ({
   selectCharacter: (character: types.Character) => set((state) => ({ me: { ...state.me, character } })),
   isLoaded: () => {
     const { loader } = get();
-    console.log(loader.loaded, loader.totalLoad);
     if (!loader.totalLoad) return false;
     return loader.loaded === loader.totalLoad;
   },
   percentage: () => {
     const { loader } = get();
     const percentage = Math.floor((loader.loaded / loader.totalLoad) * 100);
-    console.log(percentage);
     return percentage;
   },
   loaded: () => set((state) => ({ loader: { ...state.loader, loaded: state.loader.loaded + 1 } })),
@@ -92,15 +90,15 @@ export const useWorld = create<WorldState>((set, get) => ({
     let length = 0;
     maps[1].tiles.map((tileArr) =>
       tileArr.map((tile) => {
-        tile.top && (length = length + 2);
-        tile.bottom && (length = length + 2);
-        tile.lighting && (length = length + 2);
+        tile.top && (length = length + 1);
+        tile.bottom && (length = length + 1);
+        tile.lighting && (length = length + 1);
       })
     );
     maps[1]?.placements.map((placement) => {
-      placement.asset.top !== null && (length = length + 2);
-      placement.asset.lighting !== null && (length = length + 2);
-      placement.asset.bottom !== null && (length = length + 2);
+      placement.asset.top !== null && (length = length + 1);
+      placement.asset.lighting !== null && (length = length + 1);
+      placement.asset.bottom !== null && (length = length + 1);
     });
 
     const renderMe = {
