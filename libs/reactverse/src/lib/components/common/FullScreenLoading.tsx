@@ -35,7 +35,7 @@ const AppContainer = styled.div`
   align-items: center;
   z-index: 10px;
   @media screen and (max-width: 800px) {
-    height: ${document.documentElement.clientHeight}px;
+    /* height: ${document.documentElement.clientHeight}px; */
     /* overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;

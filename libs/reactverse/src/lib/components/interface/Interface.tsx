@@ -39,7 +39,7 @@ const InterfaceContainer = styled.div`
   z-index: 1;
   @media screen and (max-width: 800px) {
     width: 100%;
-    height: ${document.documentElement.clientHeight}px;
+    /* height: ${document.documentElement.clientHeight}px; */
 
     overflow: hidden;
     overflow-x: hidden;

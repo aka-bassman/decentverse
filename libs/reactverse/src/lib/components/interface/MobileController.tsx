@@ -68,7 +68,8 @@ export const MobileController = ({}) => {
         <Container>
           <Joystick
             size={document.documentElement.clientWidth / 5}
-            baseColor="#656565"
+            // baseColor="#656565"
+            baseColor="rgba(101,101,101,0.85)"
             stickColor="#adadad"
             move={handleMove}
             stop={handleStop}
