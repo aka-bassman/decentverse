@@ -25,6 +25,8 @@ const Button = styled.button`
   align-self: center;
   justify-self: center;
   border-radius: 10px;
+  transition: 0.3s;
+
   @media screen and (max-width: 800px) {
     width: 260px;
     height: 50px;

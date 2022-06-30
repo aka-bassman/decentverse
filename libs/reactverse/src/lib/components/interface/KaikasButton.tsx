@@ -25,6 +25,7 @@ const Button = styled.button`
   background: #8f806a;
   display: flex;
   border-radius: 10px;
+  transition: 0.3s;
 
   @media screen and (max-width: 800px) {
     width: 260px;

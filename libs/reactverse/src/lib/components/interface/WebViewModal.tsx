@@ -6,8 +6,6 @@ import { Spin } from "antd";
 import * as types from "../../stores/types";
 import { LinkOutlined } from "@ant-design/icons";
 
-import { isMobile } from "react-device-detect";
-
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 export const WebViewModal = () => {
@@ -83,12 +81,10 @@ export const WebViewModal = () => {
 const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpen: boolean; isWide: boolean }>`
   position: absolute;
   display: ${(props) => (props.webview && props.isOpen ? "inline" : "hidden")};
-  width: ${(props) => (props.webview && props.isWide ? "1200px" : "700px")};
-  /* height: 1000px; */
+  width: ${(props) => (props.webview && props.isWide ? "1200px" : "900px")};
   height: 80vh;
 
   border-radius: 30px;
-  /* background-color: white; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -97,15 +93,11 @@ const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpe
   @media screen and (max-width: 800px) {
     width: 90%;
     height: 80%;
-    /* height: 306px; */
     border-radius: 0px;
-    /* border-width: 10px; */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-    /* justify-content: "center";
-    align-items: "center"; */
   }
 `;
 
@@ -171,17 +163,18 @@ const Webview = styled.object`
 `;
 
 const TwitterWrapper = styled.div`
+  width: 90%;
+  height: 80vh;
+  border-radius: 20px;
+  overflow: hidden;
   & > div {
     overflow: auto;
-    height: 500px;
-    /* width: 100%; */
-    width: 600px;
     height: 80vh;
+    width: 100%;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     @media screen and (max-width: 800px) {
-      width: 95%;
       height: 80vh;
     }
   }
@@ -190,7 +183,7 @@ const TwitterWrapper = styled.div`
 const LinkView = styled.div`
   background-color: #fff;
   padding: 20px;
-  width: 600px;
+  width: 760px;
   height: fit-content;
   border-radius: 20px;
   h4 {

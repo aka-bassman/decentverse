@@ -20,10 +20,12 @@ export const ReactverseLayout = ({ children }: Props) => {
 
 const AppContainer = styled.div`
   width: 100%;
-  height: ${document.documentElement.clientHeight}px;
+  /* height: ${document.documentElement.clientHeight}px; */
+  height: 100vh;
+
   @media screen and (max-width: 800px) {
     width: 100%;
-    height: ${document.documentElement.clientHeight}px;
+    /* height: ${document.documentElement.clientHeight}px; */
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
