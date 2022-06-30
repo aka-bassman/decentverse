@@ -39,7 +39,7 @@ export const Login = () => {
     <Container>
       <AdminModal />
       <img src="logo.svg" width="400" className="logo" />
-      <div className="Title">AYIAS</div>
+      {/* <div className="Title">AYIAS</div> */}
       {loginMethod === "none" ? (
         <div className="main-buttons">
           {!isMobile && <KaikasButton onClick={connectKaikas} />}
@@ -76,9 +76,10 @@ const fadeIn = keyframes`
 `;
 
 const Container = styled.div`
-  /* background-image: url(/main.jpg), linear-gradient(rgba(8, 50, 102, 0), rgba(8, 50, 102, 0)); */
+  /* background-image: url(/back.jpg), linear-gradient(rgba(8, 50, 102, 0.2), rgba(8, 50, 102, 0.2)); */
+  /* background-image: url(/back.jpg), linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.01)); */
   /* background-blend-mode: overlay; */
-  background-image: url(/main.jpg);
+  background-image: url(/back.jpg);
   background-size: cover;
   background-position: center;
 
@@ -92,6 +93,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  background-color: #36c7c6;
   /* background: #083266; */
   @media screen and (max-width: 800px) {
     overflow: hidden;
@@ -102,13 +104,7 @@ const Container = styled.div`
     overscroll-behavior: none;
   }
   .logo {
-    /* -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7)); */
-    -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.7));
-    /* filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7)); */
-  }
-  .Title {
-    font-size: 120px;
+    -webkit-filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.7));
     margin-bottom: 30px;
     opacity: 0;
     animation: ${fadeIn} 1s ease-in-out forwards;
@@ -117,6 +113,16 @@ const Container = styled.div`
       margin-bottom: 60px;
     }
   }
+  /* .Title {
+    font-size: 120px;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-in-out forwards;
+    @media screen and (max-width: 800px) {
+      font-size: 60px;
+      margin-bottom: 60px;
+    }
+  } */
   .main-buttons {
     opacity: 0;
     margin-top: 300px;
