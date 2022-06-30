@@ -66,7 +66,7 @@ export const WebViewModal = () => {
       {interaction.webview?.isEmbed && interaction.webview?.purpose !== "twitter" && (
         <InnerModal>
           {isLoading && <Spiner size={"large"} />}
-          <Webview id="foo" data={interaction.webview?.url} onLoad={finishLoading} />
+          <Webview data={interaction.webview?.url} onLoad={finishLoading} />
           <ButtonContainer>
             <CancelButton onClick={close}>
               <XButton />
@@ -91,8 +91,8 @@ const ModalWrapper = styled("div")<{ webview: types.scalar.Webview | null; isOpe
   z-index: 100;
 
   @media screen and (max-width: 800px) {
-    width: 90%;
-    height: 80%;
+    width: 95%;
+    height: 95%;
     border-radius: 0px;
     top: 50%;
     left: 50%;
@@ -156,6 +156,8 @@ const Webview = styled.object`
   width: 90%;
   height: 100%;
   border-radius: 20px;
+  overflow-x: hidden;
+
   @media screen and (max-width: 800px) {
     width: 95%;
     height: 80vh;

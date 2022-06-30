@@ -62,7 +62,16 @@ export const ChatInput = ({ socket }: ChattingProps) => {
     timeout.current = setTimeout(() => speakChat(""), 3000);
   };
   return (
-    <div style={{ backgroundColor: "#4b46467f", width: "90%", borderRadius: 20, height: 50, marginBottom: 10 }}>
+    <div
+      style={{
+        backgroundColor: "#4b46467f",
+        width: "90%",
+        maxWidth: 2000,
+        borderRadius: 20,
+        height: 50,
+        marginBottom: 10,
+      }}
+    >
       <Input
         onFocus={() => !isMobile && lockKey(true)}
         onBlur={() => !isMobile && lockKey(false)}

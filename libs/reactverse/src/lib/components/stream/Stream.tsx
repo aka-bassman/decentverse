@@ -10,7 +10,6 @@ export interface StreamProps {
 export const Stream = ({ socket }: StreamProps) => {
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
-  console.log(callRoom.roomId);
   return (
     <>
       {callRoom.roomId && <MyCall socket={socket} roomId={callRoom.roomId} />}

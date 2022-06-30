@@ -79,4 +79,7 @@ const GameContainer = styled.div`
     overflow-x: hidden;
     /* flex-direction: column; */
   }
+  @supports (-webkit-touch-callout: none) { 
+  height: -webkit-fill-available;
+}
 `;
