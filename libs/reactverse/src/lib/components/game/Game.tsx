@@ -40,11 +40,19 @@ export const Game = ({ socket }: GameProps) => {
   const interaction = useRef<types.InteractionState>(types.defaultInteractionState);
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
+  const zoom = isMobile ? 0.3 : 0.5;
   return (
     <GameContainer>
-      <Canvas orthographic camera={{ zoom: isMobile ? 0.3 : 0.5 }} frameloop="always">
+      <Canvas orthographic camera={{ zoom: zoom }} frameloop="always">
         <Suspense fallback={null}>
-          <Player sprite={sprite} animation={animation} keyboard={keyState} player={player} engine={engine} />
+          <Player
+            sprite={sprite}
+            animation={animation}
+            keyboard={keyState}
+            player={player}
+            engine={engine}
+            zoom={zoom}
+          />
           <TileMap player={player} scope={scope} />
           <Players playerId={user.id} />
           <Placements />
