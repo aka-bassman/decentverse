@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
-import { Spin } from "antd";
+import { Spin, Progress } from "antd";
+import { useGossip, useWorld, useEditor, useUser, types } from "../../stores";
 import styled from "styled-components";
 
-export const FullScreenLoading = ({}) => {
+export const GameLoading = ({}) => {
+  const percentage = useWorld((state) => state.percentage);
+
   return (
     <div
       style={{
@@ -20,6 +23,7 @@ export const FullScreenLoading = ({}) => {
       <div>
         <Spin size="large" />
         <p style={{}}>Connecting...</p>
+        <Progress percent={percentage()} />
       </div>
     </div>
   );

@@ -20,16 +20,7 @@ export const Login = () => {
   const updateUser = useUser((state) => state.updateUser);
   const initWorld = useWorld((state) => state.initWorld);
   const loadingStatus = useWorld((state) => state.loadingStatus);
-  const testImages = [
-    "./images.png",
-    "./images.png",
-    "./images.png",
-    "./images.png",
-    "./images.png",
-    "./images.png",
-    "./images.png",
-    "./images.png",
-  ];
+
   const onClickSubmit = async () => {
     loadingStatus();
     await initWorld();

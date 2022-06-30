@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { client, setLink } from "./stores";
-import { Stream, Game, Interface, Login, ReactverseLayout, MapEditor, FullScreenLoading } from "./components";
+import { Stream, Game, Interface, Login, ReactverseLayout, MapEditor, GameLoading } from "./components";
 import { io, Socket as Soc } from "socket.io-client";
 import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
 
@@ -34,7 +34,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
       initWorld();
     }
   }, []);
-  if (!socket || !isConnected) return <FullScreenLoading />;
+  if (!socket || !isConnected) return;
 
   return (
     <ReactverseLayout>
@@ -44,7 +44,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
         <Login />
       ) : (
         <>
-          {!isLoaded() && <FullScreenLoading />}
+          {!isLoaded() && <GameLoading />}
           <Interface socket={socket} />
           <Game socket={socket} />
           <Stream socket={socket} />
