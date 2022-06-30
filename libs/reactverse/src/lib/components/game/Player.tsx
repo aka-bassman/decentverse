@@ -13,9 +13,10 @@ export interface PlayerProp {
   keyboard: MutableRefObject<scalar.Keyboard>;
   player: MutableRefObject<RenderCharacter>;
   engine: MutableRefObject<Engine>;
+  zoom: number;
 }
 
-export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerProp) => {
+export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: PlayerProp) => {
   const { camera, get, set } = useThree();
   const user = useUser((state) => state.user);
   const screen = useGame((state) => state.screen);
@@ -79,13 +80,23 @@ export const Player = ({ sprite, animation, keyboard, player, engine }: PlayerPr
     const x = Math.floor((playerPosition[0] - position.x) / 10);
     const y = Math.floor((playerPosition[1] - position.y) / 10);
 
+    const tileSize = 2000;
+    const tileNums = [7, 4];
+
     if (x === 0 && y === 0) return;
-    playerPosition[0] > window.outerWidth * 1.5 &&
-      playerPosition[0] < 14000 - window.outerWidth * 1.5 &&
+    if (
+      (x < 0 && camera.position.x > window.innerWidth / 2 / zoom) ||
+      (x > 0 && tileSize * tileNums[0] - window.innerWidth / 2 / zoom > camera.position.x)
+    ) {
       camera.translateX(x);
-    playerPosition[1] > window.outerWidth * 1.5 &&
-      playerPosition[1] < 8000 - window.outerHeight * 1.5 &&
+    }
+
+    if (
+      (y < 0 && camera.position.y > window.innerHeight / 2 / zoom) ||
+      (y > 0 && tileSize * tileNums[1] - window.innerHeight / 2 / zoom > camera.position.y)
+    ) {
       camera.translateY(y);
+    }
   });
   return (
     <Suspense fallback={null}>
