@@ -23,7 +23,7 @@ export const GameLoading = ({}) => {
       <div>
         <Spin size="large" />
         <p style={{}}>Connecting...</p>
-        <Progress percent={percentage()} />
+        {/* <Progress percent={percentage()} /> */}
       </div>
     </div>
   );
