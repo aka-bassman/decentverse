@@ -8,7 +8,7 @@ export const AssetTool = () => {
   const setSelectedAssetId = useEditor((state) => state.setSelectedAssetId);
 
   return (
-    <Card title="Assets" size="small">
+    <StyledCard title="Assets" size="small">
       <AssetList>
         {assetsData?.map((asset) => (
           <AssetItem
@@ -22,14 +22,17 @@ export const AssetTool = () => {
           </AssetItem>
         ))}
       </AssetList>
-    </Card>
+    </StyledCard>
   );
 };
 
-const AssetList = styled.div`
-  max-height: 800px;
+const StyledCard = styled(Card)`
+  height: auto;
+  flex-grow: 1;
   overflow: scroll;
 `;
+
+const AssetList = styled.div``;
 
 const AssetItem = styled.div`
   position: relative;
