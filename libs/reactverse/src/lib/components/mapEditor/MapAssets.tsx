@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { useLoader } from "@react-three/fiber";
-import { useEditor, types } from "../../stores";
+import { useEditor, types, useGame } from "../../stores";
 import { TextureLoader } from "three";
 
 import * as THREE from "three";
@@ -21,10 +21,16 @@ export const MapAsset = React.memo(({ asset }: { asset: types.TAsset }) => {
   const loader = new TextureLoader();
   const topTexture = asset.top && loader.load(asset.top);
   const bottomTexture = asset.bottom && loader.load(asset.bottom);
+  const lockKey = useGame((state) => state.lockKey);
+
+  const selectItem = (placeId: string) => {
+    lockKey(false);
+    clickOnItem(placeId);
+  };
 
   return (
     <Suspense fallback={null}>
-      <mesh position={[asset.x, asset.y, 1]} onClick={(e) => clickOnItem(e, asset.placeId)}>
+      <mesh position={[asset.x, asset.y, 1]} onClick={(e) => selectItem(asset.placeId)}>
         <planeBufferGeometry attach="geometry" args={[asset.width, asset.height]} />
         {bottomTexture && <meshBasicMaterial attach="material" map={bottomTexture} transparent={true} />}
       </mesh>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Segmented, Card, Radio } from "antd";
+import { Card, Radio } from "antd";
 import { useEditor } from "../../stores";
 import { WebViewTool, CallRoomTool } from "./";
 
@@ -15,6 +15,7 @@ export const InteractionTool = () => {
           onChange={(e) => setInteractionTool(e.target.value)}
           size="small"
           buttonStyle="solid"
+          className="radio-buttons"
         >
           <Radio.Button value="collision">Collision</Radio.Button>
           <Radio.Button value="webview">WebPage</Radio.Button>
@@ -31,5 +32,13 @@ const OptionArea = styled.div`
   margin-top: 20px;
   .ant-radio-group {
     margin-bottom: 10px;
+  }
+  .radio-buttons {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .ant-radio-button-wrapper {
+    width: 33.3333%;
+    text-align: center;
   }
 `;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Segmented } from "antd";
+import { Segmented, Menu, Radio, Button } from "antd";
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEditor, TMainTool, TEditMode } from "../../stores";
 import { MapTool, AssetTool, InteractionTool, SelectInfo, DialogTool } from "./index";
 
@@ -15,22 +16,33 @@ export const SideToolBar = () => {
       <MapTool />
       {!!mapData?.tiles?.length && (
         <>
-          <Segmented
+          <Menu
             className="edit-mode-button"
-            block
-            options={["Select", "Add"]}
-            value={editMode}
-            onChange={(value) => setEditMode(value as TEditMode)}
-          />
+            mode="horizontal"
+            defaultSelectedKeys={["Select"]}
+            onSelect={({ key }) => setEditMode(key as TEditMode)}
+          >
+            <Menu.Item key="Select" icon={<SearchOutlined />}>
+              Select
+            </Menu.Item>
+            <Menu.Item key="Add" icon={<EditOutlined />}>
+              Add
+            </Menu.Item>
+          </Menu>
 
           {editMode === "Add" ? (
             <>
-              <Segmented
-                block
-                options={["Assets", "Interaction", "Dialog"]}
-                value={mainTool}
-                onChange={(value) => setMainTool(value as TMainTool)}
-              />
+              <Menu
+                className="main-tool"
+                mode="horizontal"
+                defaultSelectedKeys={["Assets"]}
+                onSelect={({ key }) => setMainTool(key as TMainTool)}
+              >
+                <Menu.Item key="Assets">Assets</Menu.Item>
+                <Menu.Item key="Interaction">Interaction</Menu.Item>
+                <Menu.Item key="Dialog">Dialog</Menu.Item>
+              </Menu>
+
               <div className="tool-container">
                 {mainTool === "Assets" && <AssetTool />}
                 {mainTool === "Interaction" && <InteractionTool />}
@@ -47,10 +59,20 @@ export const SideToolBar = () => {
 };
 
 const SideToolBarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 10px;
+
   .edit-mode-button {
     margin-bottom: 10px;
   }
   .tool-container {
     margin-top: 10px;
+    flex-grow: 1;
+    align-self: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 `;

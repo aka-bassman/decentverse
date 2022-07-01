@@ -23,11 +23,27 @@ export const MapTiles = ({
   }, [mapData]);
 
   useFrame(() => {
-    const offest = 80;
-    keyboard.current.right && camera.translateX(offest);
-    keyboard.current.left && camera.translateX(-1 * offest);
-    keyboard.current.up && camera.translateY(offest);
-    keyboard.current.down && camera.translateY(-1 * offest);
+    const width = tileSize * mapData?.tiles[0].length;
+    const height = tileSize * mapData?.tiles.length;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const offset = 80;
+
+    if (
+      (keyboard.current.left && camera.position.x > centerX - width / 2) ||
+      (keyboard.current.right && camera.position.x < centerX + width / 2)
+    ) {
+      keyboard.current.right && camera.translateX(offset);
+      keyboard.current.left && camera.translateX(-1 * offset);
+    }
+
+    if (
+      (keyboard.current.down && camera.position.y > centerY - height / 2) ||
+      (keyboard.current.up && camera.position.y < centerY + height / 2)
+    ) {
+      keyboard.current.up && camera.translateY(offset);
+      keyboard.current.down && camera.translateY(-1 * offset);
+    }
   });
 
   const tileImages: string[] = [];

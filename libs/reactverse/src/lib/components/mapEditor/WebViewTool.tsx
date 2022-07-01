@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Input, Select, Space, Switch } from "antd";
-import { useEditor } from "../../stores";
+import { useEditor, useGame } from "../../stores";
 import { PlusOutlined } from "@ant-design/icons";
 
 export const WebViewTool = () => {
@@ -14,6 +14,7 @@ export const WebViewTool = () => {
   const webviewIsEmbed = useEditor((state) => state.webviewIsEmbed);
   const setWebviewMessage = useEditor((state) => state.setWebviewMessage);
   const setWebviewIsEmbed = useEditor((state) => state.setWebviewIsEmbed);
+  const lockKey = useGame((state) => state.lockKey);
 
   return (
     <Space direction="vertical">
@@ -28,8 +29,16 @@ export const WebViewTool = () => {
         addonBefore={checkIsInputUrl(webviewPurpose) ? "URL" : "ID"}
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
+        onFocus={() => lockKey(true)}
+        onBlur={() => lockKey(false)}
       />
-      <Input addonBefore="Message" value={webviewMessage} onChange={(e) => setWebviewMessage(e.target.value)} />
+      <Input
+        addonBefore="Message"
+        value={webviewMessage}
+        onChange={(e) => setWebviewMessage(e.target.value)}
+        onFocus={() => lockKey(true)}
+        onBlur={() => lockKey(false)}
+      />
       <Space>
         isEmbed <Switch checked={webviewIsEmbed} onChange={setWebviewIsEmbed} />
       </Space>

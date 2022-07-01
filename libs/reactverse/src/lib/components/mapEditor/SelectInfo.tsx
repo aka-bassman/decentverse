@@ -7,6 +7,7 @@ export const SelectInfo = () => {
 
   return (
     <SelectInfoContainer>
+      {!viewItems?.length && <EmptyMessage>Not Selected</EmptyMessage>}
       {viewItems.map((viewItem) => (
         <div key={viewItem.data.placeId}>
           {viewItem.type === "asset" && <SelectAssetInfo data={viewItem.data as types.TAsset} />}
@@ -21,4 +22,13 @@ export const SelectInfo = () => {
 
 const SelectInfoContainer = styled.div`
   overflow: scroll;
+`;
+
+const EmptyMessage = styled.div`
+  background-color: #ccc;
+  color: #999;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

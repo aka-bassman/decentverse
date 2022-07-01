@@ -23,7 +23,7 @@ export const SelectCallRoomInfo = ({ data }: { data: types.TCallRoom }) => {
         ) : (
           <>
             <div className="info">
-              <div>maxNum : {data.maxNum}</div>
+              <p>maxNum : {data.maxNum}</p>
             </div>
             <SelectInfoButtons remove={removeCallRoom} modify={toggleEditCallRoom} placeId={data.placeId} />
           </>
@@ -40,5 +40,9 @@ const StyledCard = styled(Card)`
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    p {
+      margin-bottom: 0;
+      word-wrap: break-word;
+    }
   }
 `;

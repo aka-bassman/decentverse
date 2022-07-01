@@ -24,12 +24,12 @@ export const SelectwebviewInfo = ({ data }: { data: types.TWebview }) => {
       ) : (
         <>
           <div className="info">
-            <div>purpose : {data.purpose}</div>
-            <div>
+            <p>purpose : {data.purpose}</p>
+            <p>
               {checkIsInputUrl(data.purpose) ? "url" : "id"} : {data.url}
-            </div>
-            <div>message : {data.message}</div>
-            <div>isEmbed : {data.isEmbed.toString()}</div>
+            </p>
+            <p>message : {data.message}</p>
+            <p>isEmbed : {data.isEmbed.toString()}</p>
           </div>
           <SelectInfoButtons remove={removeWebview} modify={toggleEditWebview} placeId={data.placeId} />
         </>
@@ -45,5 +45,9 @@ const StyledCard = styled(Card)`
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    p {
+      margin-bottom: 0;
+      word-wrap: break-word;
+    }
   }
 `;

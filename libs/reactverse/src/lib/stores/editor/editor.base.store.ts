@@ -41,13 +41,13 @@ export interface EditorBaseState {
   getWebviewUrl: (url: string, purpose: types.TWebviewPurpose) => string;
   pointerMoveOnTile: (e: any) => void;
   pointerDownOnTile: (e: any) => void;
-  clickOnItem: (e: any, placeId: string) => void;
+  clickOnItem: (placeId: string) => void;
   toggleMapEditorOpen: () => void;
 }
 
 export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
-  isMapEditorOpen: false,
-  // isMapEditorOpen: true, //! todo
+  // isMapEditorOpen: false,
+  isMapEditorOpen: true, //! todo
   assetPlacements: [],
   tileSize: 2000,
   mapWidth: 2000,
@@ -300,7 +300,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
     get().isCallRoomAddMode() && get().previewCallRoom(e.point.x, e.point.y);
     get().isWebviewAddMode() && get().previewWebview(e.point.x, e.point.y);
   },
-  clickOnItem: (e, placeId) => {
+  clickOnItem: (placeId) => {
     if (get().editMode !== "Select" || get().viewItems.find((cur) => cur.data.placeId === placeId)) return;
 
     if (placeId.includes("asset")) {

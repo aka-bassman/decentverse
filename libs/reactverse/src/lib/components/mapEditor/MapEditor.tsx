@@ -27,8 +27,8 @@ const MapEditorLayout = styled(Layout)`
 
 const StyledSider = styled(Sider)`
   background-color: #ddd;
-  padding: 10px;
   min-width: 310px !important;
   max-width: 310px !important;
   width: 310px !important;
+  height: 100vh;
 `;
