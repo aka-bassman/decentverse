@@ -14,7 +14,6 @@ export const MapCollisions = () => {
 
   return (
     <Suspense fallback={null}>
-      <ambientLight />
       {collisionPreview.isPreview && (
         <mesh position={[collisionPreview.x, collisionPreview.y, 0]}>
           <planeBufferGeometry attach="geometry" args={[collisionPreview.width, collisionPreview.height]} />
@@ -25,7 +24,7 @@ export const MapCollisions = () => {
       {collisions.map((collision, index) => (
         <mesh key={index} position={[collision.x, collision.y, 0]} onClick={() => selectItem(collision.placeId)}>
           <planeBufferGeometry attach="geometry" args={[collision.width, collision.height]} />
-          <meshPhongMaterial attach="material" color="#FF6666" opacity={0.9} transparent={true} />
+          <meshPhongMaterial attach="material" color="#FF6666" opacity={0.7} transparent={true} />
         </mesh>
       ))}
     </Suspense>
