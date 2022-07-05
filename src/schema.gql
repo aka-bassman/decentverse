@@ -131,6 +131,7 @@ type Dialog {
   createdAt: DateTime!
   flows: [Flow!]!
   id: String!
+  position: [Float!]!
   status: String!
   title: String!
   updatedAt: DateTime!
@@ -139,6 +140,7 @@ type Dialog {
 input DialogInput {
   characters: [ID!]!
   flows: [FlowInput!]!
+  position: [Float!]!
   title: String!
 }
 
@@ -171,11 +173,11 @@ type Flow {
   character: ID
   image: File
   name: String
-  next: String
+  next: [String!]
   position: [Int!]!
   style: String!
   subject: String!
-  text: String!
+  texts: [String!]!
 }
 
 input FlowInput {
@@ -186,7 +188,7 @@ input FlowInput {
   position: [Int!]!
   style: String!
   subject: String!
-  text: String!
+  texts: [String!]!
 }
 
 """

@@ -24,6 +24,7 @@ export class CharacterResolver {
   ) {
     return this.characterService.characters(query, skip, limit);
   }
+
   @Query(() => Int)
   @UseGuards(Allow.Every)
   async count(@Args({ name: "query", type: () => gql.JSON }) query: db.Query<db.Character.Doc>) {

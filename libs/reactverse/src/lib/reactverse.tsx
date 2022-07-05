@@ -11,7 +11,6 @@ export interface ReactverseProps {
 
 export const Reactverse = ({ uri, ws }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [isSkip, setIsSkip] = useState(true);
   const [socket, setSocket] = useState<Soc>();
   const worldStatus = useWorld((state) => state.status);
   const isLoaded = useWorld((state) => state.isLoaded);
