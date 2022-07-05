@@ -14,7 +14,6 @@ export const MapCallRooms = () => {
 
   return (
     <Suspense fallback={null}>
-      <ambientLight />
       {callRoomPreview.isPreview && (
         <mesh position={[callRoomPreview.x, callRoomPreview.y, 0]}>
           <planeBufferGeometry attach="geometry" args={[callRoomPreview.width, callRoomPreview.height]} />
@@ -25,7 +24,7 @@ export const MapCallRooms = () => {
       {callRooms.map((callRoom, index) => (
         <mesh key={index} position={[callRoom.x, callRoom.y, 0]} onClick={(e) => selectItem(callRoom.placeId)}>
           <planeBufferGeometry attach="geometry" args={[callRoom.width, callRoom.height]} />
-          <meshPhongMaterial attach="material" color="#36B3A0" opacity={0.9} transparent={true} />
+          <meshPhongMaterial attach="material" color="#36B3A0" opacity={0.7} transparent={true} />
         </mesh>
       ))}
     </Suspense>

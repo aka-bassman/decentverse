@@ -14,7 +14,6 @@ export const MapWebViews = () => {
 
   return (
     <Suspense fallback={null}>
-      <ambientLight />
       {webviewPreview.isPreview && (
         <mesh position={[webviewPreview.x, webviewPreview.y, 0]}>
           <planeBufferGeometry attach="geometry" args={[webviewPreview.width, webviewPreview.height]} />
@@ -25,7 +24,7 @@ export const MapWebViews = () => {
       {webviews.map((webview, index) => (
         <mesh key={index} position={[webview.x, webview.y, 0]} onClick={() => selectItem(webview.placeId)}>
           <planeBufferGeometry attach="geometry" args={[webview.width, webview.height]} />
-          <meshPhongMaterial attach="material" color="#6666FF" opacity={0.9} transparent={true} />
+          <meshPhongMaterial attach="material" color="#6666FF" opacity={0.7} transparent={true} />
         </mesh>
       ))}
     </Suspense>

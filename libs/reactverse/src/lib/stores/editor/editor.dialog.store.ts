@@ -40,7 +40,6 @@ export const editorDialogSlice: EditorSlice<EditorDialogState> = (set, get) => (
     set((state) => ({ flows: [...state.flows, newFLow], inputFlowText: "" }));
   },
   addDialog: async () => {
-    console.log("addDialog");
     const title = get().inputTitle;
     const characters = ["627ab7b50438d4ceae0f2f56"];
     const flows: scalar.Flow[] = get().flows.map((cur, index) => ({
