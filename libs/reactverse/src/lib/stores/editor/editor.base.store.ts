@@ -31,6 +31,8 @@ export interface EditorBaseState {
   setEditMode: (item: types.TEditMode) => void;
   setMainTool: (item: types.TMainTool) => void;
   setInteractionTool: (item: types.TInteractionTool) => void;
+  isShowAllInteractions: () => boolean;
+  isShowAllAssets: () => boolean;
   toggleViewMode: (item: string) => void;
   isActiveViewMode: (item: string) => boolean;
   setSelectedAssetId: (id: string) => void;
@@ -57,7 +59,7 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
   mapData: undefined,
   assetsData: [], //
   assets: [],
-  viewMode: ["Interaction", "Assets"],
+  viewMode: ["Collision", "WebPage", "CallRoom", "AssetTop", "AssetBottom"],
   viewItems: [],
   isEdited: false,
   preview: {
@@ -199,16 +201,45 @@ export const editorBaseSlice: EditorSlice<EditorBaseState> = (set, get) => ({
       isEdited: true,
     }));
   },
-
+  isShowAllInteractions: () => {
+    return ["Collision", "WebPage", "CallRoom"].every((val) => get().viewMode.includes(val));
+  },
+  isShowAllAssets: () => {
+    return ["AssetTop", "AssetBottom"].every((val) => get().viewMode.includes(val));
+  },
   toggleViewMode: (item) => {
-    set((state) => ({
-      viewMode: state.viewMode.includes(item)
-        ? state.viewMode.filter((cur) => cur !== item)
-        : [...state.viewMode, item],
-    }));
+    const allInteractions = ["Collision", "WebPage", "CallRoom"];
+    const allAssets = ["AssetTop", "AssetBottom"];
+    if (item === "Interaction" && get().isShowAllInteractions()) {
+      set((state) => ({
+        viewMode: state.viewMode.filter((cur) => !allInteractions.includes(cur)),
+      }));
+    } else if (item === "Interaction") {
+      set((state) => ({
+        viewMode: [...state.viewMode.filter((cur) => !allInteractions.includes(cur)), ...allInteractions],
+      }));
+    } else if (item === "Assets" && get().isShowAllAssets()) {
+      set((state) => ({
+        viewMode: state.viewMode.filter((cur) => !allAssets.includes(cur)),
+      }));
+    } else if (item === "Assets") {
+      set((state) => ({
+        viewMode: [...state.viewMode.filter((cur) => !allAssets.includes(cur)), ...allAssets],
+      }));
+    } else {
+      set((state) => ({
+        viewMode: state.viewMode.includes(item)
+          ? state.viewMode.filter((cur) => cur !== item)
+          : [...state.viewMode, item],
+      }));
+    }
   },
   isActiveViewMode: (item) => {
-    return get().viewMode.includes(item);
+    return (
+      (item === "Interaction" && get().isShowAllInteractions()) ||
+      (item === "Assets" && get().isShowAllAssets()) ||
+      get().viewMode.includes(item)
+    );
   },
   setSelectedAssetId: (id) => {
     get().clearPreview();

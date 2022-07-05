@@ -193,7 +193,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
       isEmbed: get().webviewIsEmbed,
     };
 
-    console.log("newWebView", newWebview);
     set((state) => ({
       webviews: [...state.webviews, newWebview],
       webviewPreview: {
@@ -324,7 +323,6 @@ export const editorInteractionSlice: EditorSlice<EditorInteractionState> = (set,
   toggleEditWebview: (placeId) => {
     if (!get().isEditWebview) {
       const currentWebview = get().webviews.find((webview) => webview.placeId === placeId);
-      console.log("currentWebview", currentWebview);
       if (!currentWebview) return;
       set({
         isEditWebview: true,

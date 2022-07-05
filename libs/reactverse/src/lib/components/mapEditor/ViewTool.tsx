@@ -12,7 +12,7 @@ export const ViewTool = () => {
           Interaction
         </Checkbox>
       </div>
-      {/* <div className="sub-list">
+      <div className="sub-list">
         <div>
           <Checkbox onChange={() => toggleViewMode("Collision")} checked={isActiveViewMode("Collision")}>
             Collision
@@ -28,12 +28,23 @@ export const ViewTool = () => {
             CallRoom
           </Checkbox>
         </div>
-      </div> */}
-
+      </div>
       <div>
         <Checkbox onChange={() => toggleViewMode("Assets")} checked={isActiveViewMode("Assets")}>
           Assets
         </Checkbox>
+        <div className="sub-list">
+          <div>
+            <Checkbox onChange={() => toggleViewMode("AssetTop")} checked={isActiveViewMode("AssetTop")}>
+              top
+            </Checkbox>
+          </div>
+          <div>
+            <Checkbox onChange={() => toggleViewMode("AssetBottom")} checked={isActiveViewMode("AssetBottom")}>
+              bottom
+            </Checkbox>
+          </div>
+        </div>
       </div>
     </ViewToolContainer>
   );
