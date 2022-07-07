@@ -32,6 +32,14 @@ export class UserService {
     return ethers.utils.recoverAddress(msgHashBytes, signAddress).toLowerCase();
   }
 
+  async signinUser(id: string) {
+    const user = await this.User.findOne({ id });
+    if (!user) throw new Error("No User");
+    if (user.status !== "active") throw new Error(`not match`);
+    const token = jwt.sign({ _id: user._id, role: "user" }, secret);
+    return { accessToken: token };
+  }
+
   async load(_id?: db.ID) {
     return _id && (await this.loader.load(_id));
   }

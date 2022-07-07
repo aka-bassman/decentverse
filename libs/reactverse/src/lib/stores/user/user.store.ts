@@ -51,7 +51,9 @@ export const useUser = create<UserState>((set, get) => ({
     }
   },
   connectKaikas: async () => {
-    const DSC = "0xe47e90c58f8336a2f24bcd9bcb530e2e02e1e8ae";
+    const kaskas = useWorld((state) => state.configuration?.kaikas);
+    if (!kaskas) return window.alert("유효한 컨트랙 주소가 없습니다.");
+
     if (isMobile) {
       return window.alert("PC로 진행해주세요.");
     }
@@ -64,7 +66,7 @@ export const useUser = create<UserState>((set, get) => ({
     if (account) {
       const user = await gql.whoAmI(account);
       set({ user, loginMethod: "kaikas" });
-      const tokenList = await gql.getUserTokenList(account, DSC);
+      const tokenList = await gql.getUserTokenList(account, kaskas.address);
       let characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
       if (!characters.length) {
         const tokenId = Math.floor(Math.random() * 1000);

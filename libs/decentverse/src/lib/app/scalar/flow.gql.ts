@@ -80,5 +80,8 @@ export class FlowInput {
 
   @Field(() => [Int])
   position: number[];
+
+  @Field(() => [String], { nullable: true })
+  next?: string[];
 }
 export type FlowInputType = FlowInput;

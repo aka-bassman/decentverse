@@ -33,10 +33,14 @@ export type RenderOtherPlayer = {
   isTalk: boolean;
 };
 export type Player = {
+  id: string;
+  nickname: string;
+  address?: string;
   character: Character;
   maxSpeed: number;
   acceleration: number;
   deceleration: number;
+  type: "guest" | "user" | "admin";
 };
 export type WorldRender = {
   tiles: scalar.Tile[][];
@@ -58,6 +62,27 @@ export type InteractionState = {
   webview: scalar.Webview | null;
   callRoom: scalar.CallRoom | null;
 };
+
+export type Contract = {
+  address: string;
+};
+
+export type Login = {
+  logoImage?: string;
+  backgroundImage?: string;
+};
+
+export type Configuration = {
+  login?: Login;
+  kaikas?: Contract;
+  metamask?: Contract;
+};
+
+export const defaultUser: types.User = {
+  id: `${Math.floor(Math.random() * 100000)}`,
+  nickname: `Guest#${Math.floor(Math.random() * 1000)}`,
+};
+
 export const defaultCharacter = {
   id: "",
   tokenId: 0,
@@ -135,3 +160,4 @@ export const defaultInteractionState = {
   webview: null,
   callRoom: null,
 };
+export const defaultConfiguration: Configuration = {};

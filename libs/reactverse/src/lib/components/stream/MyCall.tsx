@@ -25,7 +25,7 @@ const videoHeight = 280;
 
 export const MyCall = ({ socket, roomId }: MyCallProps) => {
   // const me = useWorld((state) => state.me);
-  const me = useUser((state) => state);
+  const me = useWorld((state) => state.me);
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
   const setMic = useGossip((state) => state.setMic);
@@ -39,7 +39,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
   const screenVideo = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     getUserMedia().then(() => {
-      socket.emit("join", { roomId, userId: me.user.id, nickName: me.user.nickname });
+      socket.emit("join", { roomId, userId: me.id, nickName: me.nickname });
     });
     return () => {
       setIsTalk(false);
@@ -53,7 +53,7 @@ export const MyCall = ({ socket, roomId }: MyCallProps) => {
     for (const peer of peers) {
       if (!peer.call.peer.connected) return;
       const callData = {
-        id: me.user.id,
+        id: me.id,
         cam: callRoom.cam,
         mic: callRoom.mic,
         isTalk: callRoom.mic && callRoom.isTalk,

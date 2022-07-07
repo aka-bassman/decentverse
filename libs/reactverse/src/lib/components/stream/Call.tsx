@@ -9,7 +9,7 @@ export interface CallProps {
   socket: Soc;
 }
 export const Call = ({ peer, socket }: CallProps) => {
-  const user = useUser((state) => state.user);
+  const user = useWorld((state) => state.me);
   const roomId = useGossip((state) => state.callRoom.roomId);
   const removePeer = useGossip((state) => state.removePeer);
   const peers = useGossip((state) => state.peers);

@@ -261,9 +261,9 @@ export type Flow = {
   background?: File;
   avatarPosition: AvatarPosition;
   name?: string;
-  text: string;
+  texts: string[];
   position: number[];
-  next?: string;
+  next?: string[];
 };
 
 export type FlowInput = {
@@ -274,9 +274,9 @@ export type FlowInput = {
   background?: string;
   avatarPosition: AvatarPosition;
   name?: string;
-  text: string;
+  texts: string[];
   position: number[];
-  next?: string;
+  next?: string[];
 };
 
 export const flowFragment = gql`

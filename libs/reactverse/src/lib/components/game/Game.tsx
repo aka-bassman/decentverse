@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { types, useWorld, useDialog, RenderCharacter, scalar, useGame, useUser } from "../../stores";
+import { types, useWorld, useDialog, RenderCharacter, scalar } from "../../stores";
 import { Sprite, SpriteMaterial, Vector3 } from "three";
 import {
   TileMap,
@@ -23,7 +23,7 @@ export interface GameProps {
 }
 
 export const Game = ({ socket }: GameProps) => {
-  const user = useUser((state) => state.user);
+  const user = useWorld((state) => state.me);
   const engine = useRef(Engine.create());
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });

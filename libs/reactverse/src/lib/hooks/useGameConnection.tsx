@@ -13,7 +13,7 @@ export interface SocketProp {
 
 // 소켓 데이터 처리를 주로 진행
 export const useGameConnection = ({ player, scope, socket }: SocketProp) => {
-  const user = useUser((state) => state.user);
+  const user = useWorld((state) => state.me);
   const addOtherPlayers = useWorld((state) => state.addOtherPlayers);
   const setOtherPlayerIds = useWorld((state) => state.setOtherPlayerIds);
   const character = useWorld((state) => state.me.character);

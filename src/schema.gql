@@ -185,6 +185,7 @@ input FlowInput {
   character: ID
   image: ID
   name: String
+  next: [String!]
   position: [Int!]!
   style: String!
   subject: String!
@@ -240,6 +241,7 @@ type Mutation {
   removeMap(mapId: String!): Map!
   removeRole(roleId: String!): Admin!
   signinAdmin(accountId: String!, password: String!): AccessToken!
+  signinUser(userId: String!): AccessToken!
   updateAdmin(adminId: String!, data: AdminInput!): Admin!
   updateAsset(assetId: String!, data: AssetInput!): Asset!
   updateCharacter(characterId: String!, data: CharacterInput!): Character!

@@ -13,7 +13,7 @@ export interface CallBoxProps {
 }
 
 export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxProps) => {
-  const user = useUser((state) => state.user);
+  const user = useWorld((state) => state.me);
   const me = useWorld((state) => state.me);
   const peers = useGossip((state) => state.peers);
   const addPeer = useGossip((state) => state.addPeer);

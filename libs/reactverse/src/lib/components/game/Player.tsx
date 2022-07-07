@@ -1,6 +1,6 @@
 import { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useWorld, RenderCharacter, scalar, useGame, world, useGossip, useUser } from "../../stores";
+import { useWorld, RenderCharacter, scalar, useGame, world, useGossip } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
 import { useTexture, Text, Html } from "@react-three/drei";
 import { useDuration, createTileTextureAnimator, useInterval } from "../../hooks";
@@ -18,11 +18,11 @@ export interface PlayerProp {
 
 export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: PlayerProp) => {
   const { camera, get, set } = useThree();
-  const user = useUser((state) => state.user);
+
   const screen = useGame((state) => state.screen);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
-  const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${user.id}`]);
+  const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${me.id}`]);
   const body = useRef<Matter.Body>(
     Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
   );
@@ -111,7 +111,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: Pl
           overflowWrap="normal"
           material-toneMapped={false}
         >
-          {user.nickname}
+          {me.nickname}
         </Text>
         <MyChat />
       </sprite>

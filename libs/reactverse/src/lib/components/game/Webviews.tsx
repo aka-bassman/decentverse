@@ -18,7 +18,7 @@ export interface WebviewsProp {
 }
 export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp) => {
   const webviews = useWorld((state) => state.map?.webviews);
-  const closeWebview = useWorld((state) => state.closeModal);
+  const closeWebview = useWorld((state) => state.closeWebview);
   const joinInteraction = useWorld((state) => state.joinInteraction);
   const leaveInteraction = useWorld((state) => state.leaveInteraction);
   useInterval(() => {
@@ -61,8 +61,8 @@ export interface WebviewProp {
 }
 export const Webview = React.memo(({ webview }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
-  const openWebview = useWorld((state) => state.openModal);
-  const isOpen = useWorld((state) => state.modalOpen);
+  const openWebview = useWorld((state) => state.openWebview);
+  const isOpen = useWorld((state) => state.isWebviewOpen);
   const keyboard = useGame((state) => state.keyboard);
   const speechBubble = useTexture("./speechBubble.png");
 

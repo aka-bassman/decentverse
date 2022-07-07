@@ -1,5 +1,6 @@
 import client from "../apollo";
-import * as types from "./user.types";
+// import * as types from "./user.types";
+import * as types from "../types";
 import * as scalar from "../scalar.type";
 import gql from "graphql-tag";
 
@@ -58,3 +59,21 @@ export const updateUser = async (userId: string, data: types.UserInput) =>
       variables: { userId, data },
     })
   ).data?.updateUser;
+
+export type SigninUserMutation = { signinUser: { accessToken: string } };
+
+export const signinUserMutation = gql`
+  mutation signinUser($userId: String!) {
+    signinUser(userId: $userId) {
+      accessToken
+    }
+  }
+`;
+
+export const signinUser = async (userId: string) =>
+  (
+    await client.mutate<SigninUserMutation>({
+      mutation: signinUserMutation,
+      variables: { userId },
+    })
+  ).data?.signinUser.accessToken;

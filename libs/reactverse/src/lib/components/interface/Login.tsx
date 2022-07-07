@@ -6,44 +6,40 @@ import { isMobile } from "react-device-detect";
 import { KlaytnIcon, MetamaskIcon } from "../common";
 import { Button, Input, Carousel } from "antd";
 import { CharacterBox, GuestButton, KaikasButton, MetamaskButton } from "./";
+import { url } from "inspector";
 
-export const Login = () => {
-  const user = useUser((state) => state.user);
-  const characters = useUser((state) => state.characters);
-  const loginMethod = useUser((state) => state.loginMethod);
-  const logout = useUser((state) => state.logout);
-  const skipLoginProcess = useUser((state) => state.skipLoginProcess);
-  const connectMetamask = useUser((state) => state.connectMetamask);
-  const connectKaikas = useUser((state) => state.connectKaikas);
-  const loginAsGuest = useUser((state) => state.loginAsGuest);
-  const setNickname = useUser((state) => state.setNickname);
-  const updateUser = useUser((state) => state.updateUser);
+export interface LoginProps {
+  style?: any;
+}
+export const Login = ({ style }: LoginProps) => {
+  const user = useWorld((state) => state.me);
+  const characters = useWorld((state) => state.characterList);
+  const loginMethod = useWorld((state) => state.loginMethod);
+  const goBackSelectLoginMethod = useWorld((state) => state.goBackSelectLoginMethod);
+  const connectMetamask = useWorld((state) => state.connectMetamask);
+  const connectKaikas = useWorld((state) => state.connectKaikas);
+  const loginAsGuest = useWorld((state) => state.loginAsGuest);
+  const setNickname = useWorld((state) => state.setNickname);
   const initWorld = useWorld((state) => state.initWorld);
+  const configuration = useWorld((state) => state.configuration);
   const loadingStatus = useWorld((state) => state.loadingStatus);
 
   const onClickSubmit = async () => {
     loadingStatus();
     await initWorld();
-    updateUser();
   };
   const keyPress = (e: React.KeyboardEvent<HTMLDivElement>) => e.key === "Enter" && onClickSubmit();
 
   useEffect(() => {
-    const url = window.location.href;
-    if (url.includes("guest=true")) {
-      skipLoginProcess();
-      initWorld();
-    } else setNickname("");
+    setNickname("");
   }, []);
   return (
-    <Container>
-      <AdminModal />
-      <img src="logo.svg" className="logo" />
-      {/* <div className="Title">AYIAS</div> */}
+    <Container backgroundImage={configuration?.login?.backgroundImage ?? undefined}>
+      <img src={configuration?.login?.logoImage ?? undefined} className="logo" />
       {loginMethod === "none" ? (
         <div className="main-buttons">
-          {!isMobile && <KaikasButton onClick={connectKaikas} />}
-          {/* {!isMobile && <MetamaskButton onClick={connectMetamask} />} */}
+          {!isMobile && configuration?.kaikas && <KaikasButton onClick={connectKaikas} />}
+          {!isMobile && configuration?.metamask && <MetamaskButton onClick={connectMetamask} />}
           <GuestButton onClick={loginAsGuest} />
         </div>
       ) : (
@@ -59,7 +55,7 @@ export const Login = () => {
           </InputBox>
           {!characters.length || (loginMethod !== "guest" && <CharacterBox characters={characters} />)}
 
-          <Goback onClick={logout}>Back</Goback>
+          <Goback onClick={goBackSelectLoginMethod}>Back</Goback>
         </>
       )}
     </Container>
@@ -75,11 +71,12 @@ const fadeIn = keyframes`
   }
 `;
 
-const Container = styled.div`
+const Container = styled("div")<{ backgroundImage?: string }>`
+  /* background-image: url(/back.jpg), */
   /* background-image: url(/back.jpg), linear-gradient(rgba(8, 50, 102, 0.2), rgba(8, 50, 102, 0.2)); */
   /* background-image: url(/back.jpg), linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.01)); */
   /* background-blend-mode: overlay; */
-  background-image: url(/back.jpg);
+  background-image: url(${(props) => props.backgroundImage ?? "null"});
   background-size: cover;
   background-position: center;
 

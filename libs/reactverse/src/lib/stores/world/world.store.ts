@@ -1,6 +1,8 @@
 import create from "zustand";
 import * as types from "../types";
 import * as gql from "../gql";
+import { ethers } from "ethers";
+import { isMobile } from "react-device-detect";
 
 import { devtools } from "zustand/middleware";
 
@@ -8,6 +10,7 @@ const METAMASK_NETWORK_MAINNET = "1";
 const METAMASK_NETWORK_ROPSTEN = "3";
 
 export interface WorldState {
+  characterList: types.Character[];
   scope: types.WorldScope;
   render: types.WorldRender;
   map?: types.Map;
@@ -17,15 +20,22 @@ export interface WorldState {
   otherPlayerIds: string[];
   otherPlayers: Map<string, types.OtherPlayer>;
   interaction: types.InteractionState;
-  modalOpen: boolean;
+  loginMethod: "metamask" | "kaikas" | "guest" | "none";
+  isWebviewOpen: boolean;
+  configuration: types.Configuration;
+  loader: types.LoadManager;
+  status: "none" | "loading" | "failed" | "idle";
   initWorld: () => Promise<void>;
-  openModal: () => void;
-  closeModal: () => void;
+  setupConfiguration: (configuration: types.Configuration) => void;
+  openWebview: () => void;
+  closeWebview: () => void;
   isLoaded: () => boolean;
   loaded: () => void;
   percentage: () => number;
   loadingStatus: () => void;
+  goBackSelectLoginMethod: () => void;
   selectCharacter: (character: types.Character) => void;
+  setNickname: (nickname: string) => void;
   setOtherPlayerIds: (ids: string[]) => void;
   addOtherPlayers: (players: types.OtherPlayer[]) => void;
   joinInteraction: (
@@ -34,12 +44,15 @@ export interface WorldState {
   ) => void;
   leaveInteraction: (type: types.scalar.InteractionType) => void;
   speakChat: (chatText: string) => void;
-  loader: types.LoadManager;
-
-  status: "none" | "loading" | "failed" | "idle";
+  connectKaikas: () => Promise<void>;
+  connectMetamask: () => Promise<void>;
+  loginAsGuest: () => void;
 }
 export const useWorld = create<WorldState>((set, get) => ({
   me: {
+    id: "",
+    nickname: "",
+    type: "guest",
     character: types.defaultCharacter,
     maxSpeed: 10,
     acceleration: 1,
@@ -51,7 +64,7 @@ export const useWorld = create<WorldState>((set, get) => ({
     state: "idle" as "idle" | "walk",
     direction: "right",
   },
-  modalOpen: false,
+  isWebviewOpen: false,
   myChat: "",
   otherPlayerIds: [],
   otherPlayers: new Map(),
@@ -69,8 +82,11 @@ export const useWorld = create<WorldState>((set, get) => ({
     loaded: 0,
     totalLoad: 0,
   },
-  openModal: () => set({ modalOpen: true }),
-  closeModal: () => set({ modalOpen: false }),
+  characterList: [],
+  configuration: types.defaultConfiguration,
+  loginMethod: "none",
+  openWebview: () => set({ isWebviewOpen: true }),
+  closeWebview: () => set({ isWebviewOpen: false }),
   selectCharacter: (character: types.Character) => set((state) => ({ me: { ...state.me, character } })),
   isLoaded: () => {
     const { loader } = get();
@@ -86,16 +102,20 @@ export const useWorld = create<WorldState>((set, get) => ({
 
   initWorld: async () => {
     const { maps } = await gql.world();
+    const { me } = get();
 
+    const token = await gql.signinUser(me.id);
+    localStorage.setItem("currentUser", token ?? "null");
+    me.id && (await gql.updateUser(me.id, { nickname: me.nickname, address: me.address }));
     let length = 0;
-    maps[1].tiles.map((tileArr) =>
+    maps[0].tiles.map((tileArr) =>
       tileArr.map((tile) => {
         tile.top && (length = length + 1);
         tile.bottom && (length = length + 1);
         tile.lighting && (length = length + 1);
       })
     );
-    maps[1]?.placements.map((placement) => {
+    maps[0]?.placements.map((placement) => {
       placement.asset.top !== null && (length = length + 1);
       placement.asset.lighting !== null && (length = length + 1);
       placement.asset.bottom !== null && (length = length + 1);
@@ -124,6 +144,10 @@ export const useWorld = create<WorldState>((set, get) => ({
   loadingStatus: () => {
     set({ status: "loading" });
   },
+
+  goBackSelectLoginMethod: () =>
+    set((state) => ({ me: { ...state.me, nickname: "", id: "", address: undefined }, loginMethod: "none" })),
+  setNickname: (nickname: string) => set((state) => ({ me: { ...state.me, nickname } })),
   setOtherPlayerIds: (ids: string[]) => set({ otherPlayerIds: ids }),
   addOtherPlayers: (players: types.OtherPlayer[]) =>
     set((state) => {
@@ -149,4 +173,85 @@ export const useWorld = create<WorldState>((set, get) => ({
       return { interaction: { ...interaction } };
     }),
   speakChat: (chatText: string) => set((state) => ({ myChat: chatText })),
+  setupConfiguration: (configuration: types.Configuration) => set((state) => ({ configuration })),
+
+  connectMetamask: async () => {
+    if (typeof window.ethereum === "undefined") return;
+    const selectedAddress = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
+    if (selectedAddress) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+      const message = `test messgae\n timeStmap:${new Date().getTime()}`;
+      const params = [message, selectedAddress[0]];
+      const signAddress = await window.ethereum.request<string>({
+        method: "personal_sign",
+        params,
+      });
+      if (!signAddress || !selectedAddress[0]) return;
+      const user = await gql.whoAmI(selectedAddress[0]);
+      set((state) => ({ me: { ...state.me, ...user, type: "user" }, loginMethod: "metamask" }));
+    }
+  },
+  connectKaikas: async () => {
+    const { configuration } = get();
+    if (!configuration.kaikas) return window.alert("유효한 컨트랙 주소가 없습니다.");
+
+    if (isMobile) {
+      return window.alert("PC로 진행해주세요.");
+    }
+    if (!window.klaytn) {
+      // return window.alert(t("exception_kaikas-not-found"));
+      return window.alert("Kaikas를 다운로드 해주세요.");
+    }
+    const account = (await window.klaytn.enable())[0];
+
+    if (account) {
+      const user = await gql.whoAmI(account);
+      set((state) => ({ me: { ...state.me, ...user, type: "user" }, loginMethod: "kaikas" }));
+      const tokenList = await gql.getUserTokenList(account, configuration.kaikas.address);
+      let characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
+      if (!characters.length) {
+        const tokenId = Math.floor(Math.random() * 1000);
+        characters = await gql.characters({ tokenId: { $in: [tokenId, tokenId + 1] } }, 0, 3);
+      }
+      set((state) => ({ characterList: characters }));
+
+      // const option = {
+      //   headers: [
+      //     {
+      //       name: "Authorization",
+      //       value: `Basic ${Buffer.from(`${this.network.accessKeyId}:${this.network.secretAccessKey}`).toString(
+      //         "base64"
+      //       )}`,
+      //     },
+      //     { name: "x-chain-id", value: this.network.chainId },
+      //   ],
+      //   keepAlive: false,
+      // };
+      // this.caver = new Caver(new Caver.providers.HttpProvider("https://node-api.klaytnapi.com/v1/klaytn", option));
+      // const caver = new Caver();
+
+      // const provider = new ethers.providers.Web3Provider(window.klaytn as any);
+      // const message = `test messgae\n timeStmap:${new Date().getTime()}`;
+      // const params = [message, selectedAddress[0]];
+      // const signAddress = await window.klaytn.request<string>({
+      //   method: "personal_sign",
+      //   params,
+      // });
+      // console.log(window.klaytn);
+      // const signedAddress = window.klaytn.sign("test", account);
+      // console.log(signedAddress);
+      // if (!signAddress || !selectedAddress[0]) return;
+      // const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
+      // set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
+    }
+  },
+
+  loginAsGuest: () =>
+    set((state) => ({
+      loginMethod: "guest",
+      me: {
+        ...state.me,
+        nickname: `Guest#${Math.floor(Math.random() * 1000)}`,
+      },
+    })),
 }));

@@ -15,6 +15,12 @@ export class UserResolver {
     return await this.userService.whoAmI(address);
   }
 
+  @Mutation(() => gql.AccessToken)
+  @UseGuards(Allow.Every)
+  async signinUser(@Args({ name: "userId", type: () => String }) userId: string) {
+    return await this.userService.signinUser(userId);
+  }
+
   @Mutation(() => gql.User)
   @UseGuards(Allow.User)
   async updateUser(

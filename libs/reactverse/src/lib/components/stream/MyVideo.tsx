@@ -13,7 +13,7 @@ export interface MyVideoProps {
 }
 
 export const MyVideo = ({ video, onToggleMic, onToggleCam, getDisplay }: MyVideoProps) => {
-  const userId = useUser((state) => state.user.id);
+  const userId = useWorld((state) => state.me.id);
   const callRoom = useGossip((state) => state.callRoom);
 
   return (
