@@ -1,0 +1,350 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccessToken {
+  accessToken: String!
+}
+
+type Admin {
+  accountId: String!
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  password: String
+  role: String!
+  status: String!
+  updatedAt: DateTime!
+}
+
+input AdminInput {
+  accountId: ID!
+  email: String!
+  password: String
+}
+
+type Area {
+  bottomRight: [Int!]!
+  map: ID!
+  topLeft: [Int!]!
+}
+
+input AreaInput {
+  bottomRight: [Int!]!
+  map: ID!
+  topLeft: [Int!]!
+}
+
+type Asset {
+  bottom: File
+  collisions: [Collision!]!
+  createdAt: DateTime!
+  id: ID!
+  lighting: File
+  name: String!
+  status: String!
+  top: File
+  updatedAt: DateTime!
+  webviews: [Webview!]!
+}
+
+input AssetInput {
+  bottom: ID
+  collisions: [CollisionInput!]!
+  lighting: ID
+  name: String!
+  top: ID
+  webviews: [WebviewInput!]!
+}
+
+type CallRoom {
+  bottomRight: [Int!]!
+  errorMessage: String
+  maxNum: Int!
+  message: String
+  roomId: String!
+  topLeft: [Int!]!
+}
+
+input CallRoomInput {
+  bottomRight: [Int!]!
+  errorMessage: String
+  maxNum: Int!
+  message: String
+  roomId: String!
+  topLeft: [Int!]!
+}
+
+type Character {
+  contract: String
+  createdAt: DateTime!
+  down: Sprite
+  file: File!
+  id: String!
+  left: Sprite!
+  right: Sprite!
+  status: String!
+  tileSize: [Int!]!
+  tokenId: Float!
+  totalSize: [Int!]!
+  up: Sprite
+  updatedAt: DateTime!
+}
+
+input CharacterInput {
+  contract: ID
+  down: SpriteInput
+  file: ID!
+  left: SpriteInput!
+  right: SpriteInput!
+  tileSize: [Int!]!
+  tokenId: Float!
+  totalSize: [Int!]!
+  up: SpriteInput
+}
+
+type Collision {
+  bottomRight: [Int!]!
+  message: String
+  topLeft: [Int!]!
+}
+
+input CollisionInput {
+  bottomRight: [Int!]!
+  message: String
+  topLeft: [Int!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Dialog {
+  characters: [Character!]!
+  createdAt: DateTime!
+  flows: [Flow!]!
+  id: String!
+  status: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input DialogInput {
+  characters: [ID!]!
+  flows: [FlowInput!]!
+  title: String!
+}
+
+type File {
+  createdAt: DateTime!
+  encoding: String!
+  filename: String!
+  id: String!
+  mimetype: String!
+  status: String!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type Flow {
+  avatarPosition: String!
+  background: File
+  character: ID
+  image: File
+  name: String
+  next: String
+  position: [Int!]!
+  style: String!
+  subject: String!
+  text: String!
+}
+
+input FlowInput {
+  avatarPosition: String!
+  character: ID
+  image: ID
+  name: String
+  position: [Int!]!
+  style: String!
+  subject: String!
+  text: String!
+}
+
+type Map {
+  callRooms: [CallRoom!]!
+  collisions: [Collision!]!
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  placements: [Placement!]!
+  status: String!
+  tileSize: Int!
+  tiles: [[Tile!]!]!
+  totalHeight: Int!
+  totalWidth: Int!
+  updatedAt: DateTime!
+  webviews: [Webview!]!
+}
+
+input MapInput {
+  callRooms: [CallRoomInput!]
+  collisions: [CollisionInput!]!
+  name: String!
+  placements: [PlacementInput!]
+  tileSize: Int
+  tiles: [[TileInput!]!]
+  webviews: [WebviewInput!]!
+}
+
+type Mutation {
+  addAssetFiles(assetId: String!, files: [Upload!]!): [File!]!
+  addCharacterFiles(characterId: String!, files: [Upload!]!): [File!]!
+  addMapFile(file: Upload!, mapId: String!): [File!]!
+  addMapFiles(files: [Upload!]!, mapId: String!, subGroup: String!): [File!]!
+  createAdmin(data: AdminInput!): Admin!
+  createAsset(data: AssetInput!): Asset!
+  createCharacter(data: CharacterInput!): Character!
+  createDialog(data: DialogInput!): Dialog!
+  createMap(data: MapInput!): Map!
+  createRole(data: RoleInput!): Admin!
+  removeAdmin(adminId: String!): Admin!
+  removeAsset(assetId: String!): Asset!
+  removeCharacter(characterId: String!): Character!
+  removeDialog(dialogId: String!): Dialog!
+  removeMap(mapId: String!): Map!
+  removeRole(roleId: String!): Admin!
+  signinAdmin(accountId: String!, password: String!): AccessToken!
+  updateAdmin(adminId: String!, data: AdminInput!): Admin!
+  updateAsset(assetId: String!, data: AssetInput!): Asset!
+  updateCharacter(characterId: String!, data: CharacterInput!): Character!
+  updateDialog(data: DialogInput!, dialogId: String!): Dialog!
+  updateMap(data: MapInput!, mapId: ID!): Map!
+  updateRole(data: RoleInput!, roleId: String!): Admin!
+  updateUser(data: UserInput!, userId: String!): User!
+}
+
+type OpenSeaAttribute {
+  display_type: String
+  trait_type: String!
+  value: String!
+}
+
+type OpenSeaMeta {
+  attributes: [OpenSeaAttribute!]!
+  description: String!
+  external_url: String!
+  image: String!
+  name: String!
+}
+
+type Placement {
+  asset: Asset!
+  position: [Int!]!
+}
+
+input PlacementInput {
+  asset: ID!
+  position: [Int!]!
+}
+
+type Query {
+  admin(adminId: ID!): Admin!
+  admins: [Admin!]!
+  asset(assetId: String!): Asset!
+  assets: [Asset!]!
+  character(characterId: String!): Character!
+  characters: [Character!]!
+  dialog(dialogId: ID!): Admin!
+  dialogs: [Dialog!]!
+  map(mapId: String!): Map!
+  maps: [Map!]!
+  me: Admin!
+  ping: String!
+  role(roldId: ID!): Admin!
+  roles: [Admin!]!
+  sayHello: String!
+  whoAmI(address: String!, message: String!, signAddress: String!): User!
+}
+
+input RoleInput {
+  areas: [AreaInput!]!
+  name: String!
+}
+
+type Sprite {
+  idle: SpriteDef!
+  walk: SpriteDef!
+}
+
+type SpriteDef {
+  column: Int!
+  duration: Int!
+  row: Int!
+}
+
+input SpriteDefInput {
+  column: Int!
+  duration: Int!
+  row: Int!
+}
+
+input SpriteInput {
+  idle: SpriteDefInput!
+  walk: SpriteDefInput!
+}
+
+type Tile {
+  bottom: File!
+  callRooms: [CallRoom!]!
+  collisions: [Collision!]!
+  lighting: File
+  top: File
+  webviews: [Webview!]!
+}
+
+input TileInput {
+  bottom: ID!
+  callRooms: [CallRoomInput!]!
+  collisions: [CollisionInput!]!
+  lighting: ID
+  top: ID
+  webviews: [WebviewInput!]!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type User {
+  address: String!
+  createdAt: DateTime!
+  id: String!
+  nickname: String
+  status: String!
+  updatedAt: DateTime!
+}
+
+input UserInput {
+  address: String
+  nickname: String
+}
+
+type Webview {
+  bottomRight: [Int!]!
+  errorMessage: String
+  message: String
+  purpose: String!
+  size: [Int!]!
+  topLeft: [Int!]!
+  url: String!
+}
+
+input WebviewInput {
+  bottomRight: [Int!]!
+  errorMessage: String
+  message: String
+  purpose: String!
+  size: [Int!]!
+  topLeft: [Int!]!
+  url: String!
+}

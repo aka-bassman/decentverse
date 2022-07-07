@@ -6,11 +6,8 @@ import { CharacterResolver } from "./character.resolver";
 
 @Global()
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Character.Character.name, schema: Character.schema },
-    ]),
-  ],
+  imports: [MongooseModule.forFeatureAsync([{ name: Character.Character.name, useFactory: () => Character.schema }])],
   providers: [CharacterService, CharacterResolver],
+  exports: [CharacterService],
 })
 export class CharacterModule {}

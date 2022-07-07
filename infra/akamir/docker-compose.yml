@@ -1,0 +1,20 @@
+version: "3.2"
+services:
+  backend:
+    container_name: decentverse-backend
+    network_mode: host
+    command: node main.js --max-old-space-size=8192
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=akamir
+    deploy:
+      replicas: 1
+
+  frontend: 
+    container_name: decentverse-frontend
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=akamir
+    deploy:
+      replicas: 1

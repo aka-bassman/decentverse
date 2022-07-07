@@ -1,48 +1,44 @@
 import { Module, DynamicModule } from "@nestjs/common";
-import { RtModule } from "./rt/rt.module";
-import { AssetModule } from "./asset/asset.module";
-// import { AwsModule } from "./rt/rt.module";
-import { CharacterModule } from "./character/character.module";
-import { MapModule } from "./map/map.module";
-
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { MongooseModule } from "@nestjs/mongoose";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
-
-export interface RedisOptions {
-  url?: string;
-  username?: string;
-  password?: string;
+import * as modules from "./module";
+export interface DecentverseOptions {
+  objectStorage: {
+    region: "ap-northeast-2";
+    accessKey: string;
+    secretAccessKey: string;
+    bucket: string;
+    host?: string;
+    distributionId: string;
+  };
+  mongo?: {
+    uri: string;
+    dbName: string;
+    replSet?: string;
+  };
+  redis?: {
+    url: string;
+    username?: string;
+    password?: string;
+  };
 }
 
 @Module({})
 export class DecentverseModule {
-  static register(options?: RedisOptions): DynamicModule {
+  static register(options: DecentverseOptions): DynamicModule {
     return {
       module: DecentverseModule,
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
           useFactory: async () => ({
-            uri: "mongodb://localhost:27017",
-            // uri: `mongodb://${config.get("DB_USER")}:${config.get(
-            //   "DB_PASS"
-            // )}@${config.get("DB_HOST")}`,
-            // dbName: config.get("DB_NAME"),
-            // authSource: "admin",
-            // // // ...(connection === "replicaSet" ? { replicaSet } : {}),
-            // ssl: false,
-            // useNewUrlParser: true,
-            // directConnection: true,
-            // useUnifiedTopology: true,
-            // readPreference: "primary",
-            // connectTimeoutMS: 30000,
-            // retryWrites: true,
+            uri: options?.mongo?.uri ?? "mongodb://localhost:27017",
+            dbName: options?.mongo?.dbName ?? "test",
           }),
-          // inject: [],
         }),
         GraphQLModule.forRootAsync<ApolloDriverConfig>({
           imports: [ConfigModule],
@@ -50,6 +46,7 @@ export class DecentverseModule {
             autoSchemaFile: join(process.cwd(), "src/schema.gql"),
             sortSchema: true,
             playground: true,
+            uploads: false,
             // ["development", "local.development"].includes(
             //   config.get("ENVIRONMENT")
             // ),
@@ -58,10 +55,19 @@ export class DecentverseModule {
           driver: ApolloDriver,
           // inject: [],
         }),
-        AssetModule,
-        CharacterModule,
-        MapModule,
-        RtModule.register(options),
+        modules.AdminModule,
+        modules.UserModule,
+        modules.EventsModule,
+        modules.AssetModule,
+        modules.CharacterModule,
+        modules.MapModule,
+        modules.RoleModule,
+        modules.AwsModule.register(options.objectStorage),
+        modules.FileModule,
+        modules.DialogModule,
+        modules.RtModule.register(options?.redis),
+        modules.ScalarModule,
+        modules.BatchModule,
         ScheduleModule.forRoot(),
       ],
       controllers: [],

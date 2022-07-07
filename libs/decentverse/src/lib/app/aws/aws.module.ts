@@ -1,9 +1,19 @@
-import { Global, Module } from "@nestjs/common";
-import { AwsService } from "./aws.service";
-
+import { Global, Module, DynamicModule } from "@nestjs/common";
+import { AwsService, ObjectStorageOptions } from "./aws.service";
 @Global()
-@Module({
-  providers: [AwsService],
-  exports: [AwsService],
-})
-export class AwsModule {}
+@Module({})
+export class AwsModule {
+  static register(options?: ObjectStorageOptions): DynamicModule {
+    return {
+      module: AwsModule,
+      providers: [
+        {
+          provide: "OBJECT_STORAGE_OPTIONS",
+          useValue: options,
+        },
+        AwsService,
+      ],
+      exports: [AwsService],
+    };
+  }
+}

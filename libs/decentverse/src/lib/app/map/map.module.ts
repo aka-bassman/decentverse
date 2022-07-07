@@ -6,9 +6,8 @@ import { MapResolver } from "./map.resolver";
 
 @Global()
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Map.Map.name, schema: Map.schema }]),
-  ],
+  imports: [MongooseModule.forFeatureAsync([{ name: Map.Map.name, useFactory: () => Map.schema }])],
   providers: [MapService, MapResolver],
+  exports: [MapService],
 })
 export class MapModule {}

@@ -1,12 +1,13 @@
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
 import { AssetService } from "./asset.service";
 import { Allow, Account } from "../../middlewares";
-import * as gql from "../../gql";
+import * as gql from "../../app/gql";
 import { UseGuards } from "@nestjs/common";
-
-@Resolver()
+import * as db from "../db";
+import * as srv from "../srv";
+@Resolver(() => gql.Asset)
 export class AssetResolver {
-  constructor(private readonly assetService: AssetService) {}
+  constructor(private readonly assetService: AssetService, private readonly fileService: srv.FileService) {}
   @Query(() => String)
   sayHello(): string {
     return "Hello World!";
@@ -19,7 +20,8 @@ export class AssetResolver {
   }
 
   @Query(() => [gql.Asset])
-  @UseGuards(Allow.Admin)
+  // @UseGuards(Allow.Admin)
+  @UseGuards(Allow.Every) //! TODO
   async assets() {
     return this.assetService.assets();
   }
@@ -41,9 +43,21 @@ export class AssetResolver {
 
   @Mutation(() => gql.Asset)
   @UseGuards(Allow.SuperAdmin)
-  async removeAsset(
-    @Args({ name: "assetId", type: () => String }) assetId: string
-  ) {
+  async removeAsset(@Args({ name: "assetId", type: () => String }) assetId: string) {
     return await this.assetService.removeAsset(assetId);
+  }
+
+  // * Resolve Fields
+  @ResolveField()
+  async top(@Parent() asset: db.Asset.Asset) {
+    return await this.fileService.load(asset.top);
+  }
+  @ResolveField()
+  async bottom(@Parent() asset: db.Asset.Asset) {
+    return await this.fileService.load(asset.bottom);
+  }
+  @ResolveField()
+  async lighting(@Parent() asset: db.Asset.Asset) {
+    return await this.fileService.load(asset.lighting);
   }
 }

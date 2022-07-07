@@ -3,6 +3,8 @@
   "projects": {
     "backend": "apps/backend",
     "decentverse": "libs/decentverse",
+    "frontend": "apps/frontend",
+    "frontend-e2e": "apps/frontend-e2e",
     "reactverse": "libs/reactverse"
   }
 }

@@ -9,7 +9,8 @@
         "outputPath": "dist/apps/backend",
         "main": "apps/backend/src/main.ts",
         "tsConfig": "apps/backend/tsconfig.app.json",
-        "assets": ["apps/backend/src/assets"]
+        "assets": ["apps/backend/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
@@ -23,6 +24,16 @@
             }
           ]
         }
+      }
+    },
+    "script": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "cross-env  SERVICE_ENV=script ENVIRONMENT={args.env} ts-node  -r tsconfig-paths/register ./{args.name}.ts "
+        ],
+        "cwd": "apps/backend/src",
+        "parallel": false
       }
     },
     "serve": {

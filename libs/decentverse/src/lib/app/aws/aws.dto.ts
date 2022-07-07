@@ -1,7 +1,7 @@
 export interface GetObjectRequest {
   bucket: string;
   path: string;
-  fileName: string;
+  filename: string;
 }
 export interface DownloadRequest extends GetObjectRequest {
   localPath: string;
@@ -9,16 +9,15 @@ export interface DownloadRequest extends GetObjectRequest {
 }
 export interface LocalFilePath {
   localPath: string;
-  fileName: string;
+  filename: string;
 }
 export interface LocalTokenPath {
   metaPath: LocalFilePath;
   assetPath: LocalFilePath;
 }
 export interface AwsUploadRequest {
-  bucket: string;
   path: string;
-  fileName: string;
+  filename: string;
   localPath: string;
   meta?: Record<string, any>;
   rename?: string;
@@ -28,7 +27,7 @@ export interface CopyRequest {
   bucket: string;
   copyPath: string;
   pastePath: string;
-  fileName: string;
+  filename: string;
   host?: string;
 }
 export interface Bucket {
