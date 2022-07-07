@@ -10,8 +10,8 @@ import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 export const WebViewModal = () => {
   const interaction = useWorld((state) => state.interaction);
-  const isOpen = useWorld((state) => state.modalOpen);
-  const closeModal = useWorld((state) => state.closeModal);
+  const isOpen = useWorld((state) => state.isWebviewOpen);
+  const closeModal = useWorld((state) => state.closeWebview);
   const [isLoading, setIsLoadiang] = useState<boolean>(true);
   const finishLoading = () => setIsLoadiang(false);
   const close = () => {

@@ -18,6 +18,9 @@ export class DialogInput {
   @Field(() => [ID])
   characters: Types.ObjectId[];
 
+  @Field(() => [Number])
+  position: number[];
+
   @Field(() => [gql.FlowInput])
   flows: gql.FlowInputType[];
 }
@@ -41,6 +44,9 @@ export class Dialog {
 
   @Field(() => [gql.Flow])
   flows: gql.FlowType[];
+
+  @Field(() => [Number])
+  position: number[];
 
   @Field()
   status: "active" | "inactive";

@@ -40,11 +40,11 @@ export class Input {
   @Prop([{ type: Number, required: true }])
   size: number[];
 
-  @Prop({ type: gql.SpriteSchema })
-  right: gql.SpriteType;
+  @Prop({ type: gql.SpriteSchema, required: false })
+  right?: gql.SpriteType;
 
-  @Prop({ type: gql.SpriteSchema })
-  left: gql.SpriteType;
+  @Prop({ type: gql.SpriteSchema, required: false })
+  left?: gql.SpriteType;
 
   @Prop({ type: gql.SpriteSchema, required: false })
   up?: gql.SpriteType;

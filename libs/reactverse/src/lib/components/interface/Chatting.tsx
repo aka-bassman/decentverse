@@ -11,7 +11,7 @@ export interface ChattingProps {
 }
 
 export const Chatting = ({ socket }: ChattingProps) => {
-  const userId = useUser((state) => state.user.id);
+  const userId = useWorld((state) => state.me.id);
   const chats = useGossip((state) => state.chats);
   const receiveChat = useGossip((state) => state.receiveChat);
 
@@ -40,7 +40,7 @@ export const Chat = ({ chat }: ChatProps) => {
 };
 
 export const ChatInput = ({ socket }: ChattingProps) => {
-  const userId = useUser((state) => state.user.id);
+  const userId = useWorld((state) => state.me.id);
   const chatText = useGossip((state) => state.chatText);
   const onChangeChatText = useGossip((state) => state.onChangeChatText);
   const sendChat = useGossip((state) => state.sendChat);
@@ -96,7 +96,7 @@ export const ChatInput = ({ socket }: ChattingProps) => {
   }
 };
 export const ChatInputMobile = ({ socket }: ChattingProps) => {
-  const userId = useUser((state) => state.user.id);
+  const userId = useWorld((state) => state.me.id);
   const chatText = useGossip((state) => state.chatText);
   const onChangeChatText = useGossip((state) => state.onChangeChatText);
   const sendChat = useGossip((state) => state.sendChat);

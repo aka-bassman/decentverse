@@ -14,14 +14,6 @@ export type User = {
   createdAt?: Date;
   updatedAt?: Date;
 };
-export const defaultUser: User = {
-  id: "",
-  nickname: "",
-  address: "",
-  status: "active",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
 
 export const userFragment = gql`
   fragment userFragment on User {

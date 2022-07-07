@@ -7,22 +7,23 @@ import { useGossip, useWorld, useEditor, useUser, types } from "./stores";
 export interface ReactverseProps {
   uri: string;
   ws: string;
+  config?: types.Configuration;
 }
 
-export const Reactverse = ({ uri, ws }: ReactverseProps) => {
+export const Reactverse = ({ uri, ws, config }: ReactverseProps) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [isSkip, setIsSkip] = useState(true);
   const [socket, setSocket] = useState<Soc>();
   const worldStatus = useWorld((state) => state.status);
-  const isLoaded = useWorld((state) => state.isLoaded);
-  const loader = useWorld((state) => state.loader);
-  const skipLoginProcess = useUser((state) => state.skipLoginProcess);
-  const initWorld = useWorld((state) => state.initWorld);
-  const loadingStatus = useWorld((state) => state.loadingStatus);
-  const updateUser = useUser((state) => state.updateUser);
   const isMapEditorOpen = useEditor((state) => state.isMapEditorOpen);
+  const loader = useWorld((state) => state.loader);
+  const isLoaded = useWorld((state) => state.isLoaded);
+  const initWorld = useWorld((state) => state.initWorld);
+  const setupConfiguration = useWorld((state) => state.setupConfiguration);
+  const loadingStatus = useWorld((state) => state.loadingStatus);
+  const loginAsGuest = useWorld((state) => state.loginAsGuest);
 
   useEffect(() => {
+    config && setupConfiguration(config);
     setLink(uri);
     const socket = io(ws);
     setSocket(socket);
@@ -30,7 +31,7 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
     const url = window.location.href;
     if (url.includes("guest=true")) {
       loadingStatus();
-      skipLoginProcess();
+      loginAsGuest();
       initWorld();
     }
   }, []);
@@ -38,13 +39,11 @@ export const Reactverse = ({ uri, ws }: ReactverseProps) => {
 
   return (
     <ReactverseLayout>
-      {isMapEditorOpen ? (
-        <MapEditor />
-      ) : worldStatus === "none" ? (
+      {worldStatus === "none" ? (
         <Login />
       ) : (
         <>
-          {!isLoaded() && <GameLoading />}
+          {/* {!isLoaded() && <GameLoading />} */}
           <Interface socket={socket} />
           <Game socket={socket} />
           <Stream socket={socket} />

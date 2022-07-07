@@ -3,7 +3,7 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types, Schema as MongoSchema } from "mongoose";
 import * as gql from "../gql";
 
-export const flowStyles = ["speak"] as const;
+export const flowStyles = ["speak", "question"] as const;
 export type FlowStyle = typeof flowStyles[number];
 
 export const avatarPositions = ["left", "right", "center"] as const;
@@ -40,17 +40,17 @@ export class Flow {
   @Prop({ type: String, required: false })
   name?: string;
 
-  @Field(() => String)
-  @Prop({ type: String, required: true })
-  text: string;
+  @Field(() => [String])
+  @Prop([{ type: String, required: true }])
+  texts: string[];
 
   @Field(() => [Int])
   @Prop([{ type: Number, required: true }])
   position: number[];
 
-  @Field(() => String, { nullable: true })
-  @Prop({ type: String, required: false })
-  next?: string;
+  @Field(() => [String], { nullable: true })
+  @Prop([{ type: String, required: false }])
+  next?: string[];
 }
 export type FlowType = Flow;
 export const FlowSchema = SchemaFactory.createForClass(Flow);
@@ -75,10 +75,13 @@ export class FlowInput {
   @Field(() => String, { nullable: true })
   name?: string;
 
-  @Field(() => String)
-  text: string;
+  @Field(() => [String])
+  texts: string[];
 
   @Field(() => [Int])
   position: number[];
+
+  @Field(() => [String], { nullable: true })
+  next?: string[];
 }
 export type FlowInputType = FlowInput;

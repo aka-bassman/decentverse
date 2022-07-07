@@ -42,16 +42,16 @@ export const editorDialogSlice: EditorSlice<EditorDialogState> = (set, get) => (
   addDialog: async () => {
     const title = get().inputTitle;
     const characters = ["627ab7b50438d4ceae0f2f56"];
-    const flows: scalar.Flow[] = get().flows.map((cur, index) => ({
-      avatarPosition: cur.avatarPositions,
-      name: get().characters[cur.characterIndex].name,
-      position: [0, 0],
-      style: "speak" as scalar.FlowStyle,
-      subject: "",
-      text: cur.text,
-    }));
+    // const flows: scalar.Flow[] = get().flows.map((cur, index) => ({
+    //   avatarPosition: cur.avatarPositions,
+    //   name: get().characters[cur.characterIndex].name,
+    //   position: [0, 0],
+    //   style: "speak" as scalar.FlowStyle,
+    //   subject: "",
+    //   texts: cur.text,
+    // }));
 
-    const dialogInput = { title, characters, flows };
+    // const dialogInput = { title, characters, flows };
     // await gql.createDialog(dialogInput);
   },
   setInputTitle: (title) => {

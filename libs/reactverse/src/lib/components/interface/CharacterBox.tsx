@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { useWorld, useUser, types } from "../../stores";
+import { useWorld, types } from "../../stores";
 type CharacterBoxProps = {
   characters: types.Character[];
 };

@@ -24,7 +24,7 @@ const videoHeight = 280;
 
 export const MyCall = ({ socket, roomId }: MyCallProps) => {
   // const me = useWorld((state) => state.me);
-  const user = useUser((state) => state.user);
+  const user = useWorld((state) => state.me);
   const callRoom = useGossip((state) => state.callRoom);
   const peers = useGossip((state) => state.peers);
   const setMic = useGossip((state) => state.setMic);
