@@ -18,6 +18,12 @@ export class UserInput {
 
   @Field(() => String, { nullable: true })
   nickname: string;
+
+  @Field(() => [Number], { nullable: true })
+  currentPosition?: number[];
+
+  @Field(() => String, { nullable: true })
+  currentMap?: string;
 }
 
 /**
@@ -45,4 +51,10 @@ export class User {
 
   @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => [Number], { nullable: true })
+  currentPosition?: number[];
+
+  @Field(() => String, { nullable: true })
+  currentMap?: string;
 }

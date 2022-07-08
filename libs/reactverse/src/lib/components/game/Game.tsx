@@ -24,11 +24,12 @@ export interface GameProps {
 
 export const Game = ({ socket }: GameProps) => {
   const user = useWorld((state) => state.me);
+  const renderMe = useWorld((state) => state.renderMe);
   const engine = useRef(Engine.create());
   const sprite = useRef<Sprite>(null);
   const animation = useRef<scalar.SpriteDef>({ row: 0, column: 1, duration: 1000 });
   const player = useRef<RenderCharacter>({
-    position: [5000, 5000],
+    position: renderMe.position,
     velocity: [0, 0],
     state: "idle",
     direction: "right",

@@ -5,10 +5,14 @@ import gql from "graphql-tag";
 export type UserInput = {
   nickname?: string;
   address?: string;
+  currentPosition?: number[];
+  currentMap?: string;
 };
 export type User = {
   id: string;
   nickname: string;
+  currentPosition?: number[];
+  currentMap?: string;
   address?: string;
   status?: "active" | "inactive";
   createdAt?: Date;
@@ -21,6 +25,8 @@ export const userFragment = gql`
     nickname
     address
     status
+    currentPosition
+    currentMap
     createdAt
     updatedAt
   }

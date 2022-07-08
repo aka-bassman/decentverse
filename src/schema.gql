@@ -349,6 +349,8 @@ scalar Upload
 type User {
   address: String!
   createdAt: DateTime!
+  currentMap: String
+  currentPosition: [Float!]
   id: String!
   nickname: String
   status: String!
@@ -357,6 +359,8 @@ type User {
 
 input UserInput {
   address: String
+  currentMap: String
+  currentPosition: [Float!]
   nickname: String
 }
 

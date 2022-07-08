@@ -13,7 +13,7 @@ export interface WorldState {
   characterList: types.Character[];
   scope: types.WorldScope;
   render: types.WorldRender;
-  map?: types.Map;
+  map: types.Map;
   me: types.Player;
   renderMe: types.RenderCharacter;
   myChat: string;
@@ -25,13 +25,13 @@ export interface WorldState {
   configuration: types.Configuration;
   loader: types.LoadManager;
   status: "none" | "loading" | "failed" | "idle";
+  isLoaded: () => boolean;
+  percentage: () => number;
   initWorld: () => Promise<void>;
   setupConfiguration: (configuration: types.Configuration) => void;
   openWebview: () => void;
   closeWebview: () => void;
-  isLoaded: () => boolean;
   loaded: () => void;
-  percentage: () => number;
   loadingStatus: () => void;
   goBackSelectLoginMethod: () => void;
   selectCharacter: (character: types.Character) => void;
@@ -44,9 +44,10 @@ export interface WorldState {
   ) => void;
   leaveInteraction: (type: types.scalar.InteractionType) => void;
   speakChat: (chatText: string) => void;
+  loginAsGuest: () => void;
   connectKaikas: () => Promise<void>;
   connectMetamask: () => Promise<void>;
-  loginAsGuest: () => void;
+  saveBeforeExit: (position: number[]) => Promise<void>;
 }
 export const useWorld = create<WorldState>((set, get) => ({
   me: {
@@ -57,6 +58,19 @@ export const useWorld = create<WorldState>((set, get) => ({
     maxSpeed: 10,
     acceleration: 1,
     deceleration: 1,
+  },
+  map: {
+    id: "",
+    name: "",
+    callRooms: [],
+    collisions: [],
+    placements: [],
+    webviews: [],
+    tiles: [],
+    tileSize: 0,
+    totalHeight: 0,
+    totalWidth: 0,
+    status: "active",
   },
   renderMe: {
     position: [5000, 5000],
@@ -85,6 +99,10 @@ export const useWorld = create<WorldState>((set, get) => ({
   characterList: [],
   configuration: types.defaultConfiguration,
   loginMethod: "none",
+  saveBeforeExit: async (position: number[]) => {
+    const { me, map } = get();
+    await gql.updateUser(me.id, { currentMap: map?.name ?? undefined, currentPosition: position });
+  },
   openWebview: () => set({ isWebviewOpen: true }),
   closeWebview: () => set({ isWebviewOpen: false }),
   selectCharacter: (character: types.Character) => set((state) => ({ me: { ...state.me, character } })),
@@ -102,7 +120,7 @@ export const useWorld = create<WorldState>((set, get) => ({
 
   initWorld: async () => {
     const { maps } = await gql.world();
-    const { me } = get();
+    const { me, renderMe, map } = get();
 
     const token = await gql.signinUser(me.id);
     localStorage.setItem("currentUser", token ?? "null");
@@ -120,18 +138,20 @@ export const useWorld = create<WorldState>((set, get) => ({
       placement.asset.lighting !== null && (length = length + 1);
       placement.asset.bottom !== null && (length = length + 1);
     });
-
-    const renderMe = {
-      position: [5000, 5000],
+    const newMap = maps.find((m) => m.name === map?.name);
+    const newRenderMe = {
+      position: renderMe.position ?? [5000, 5000],
       velocity: [0, 0],
       state: "idle",
       direction: "right",
     } as any;
-
-    const render = { tiles: maps[1].tiles, players: {} };
+    console.log(renderMe.position);
+    console.log(newRenderMe);
+    const render = { tiles: newMap?.tiles ?? maps[1].tiles, players: {} };
+    console.log(newMap);
     return set((state) => ({
-      map: maps[1],
-      renderMe,
+      map: newMap ?? maps[1],
+      renderMe: newRenderMe,
       render,
       status: "idle",
       loader: {
@@ -188,7 +208,13 @@ export const useWorld = create<WorldState>((set, get) => ({
       });
       if (!signAddress || !selectedAddress[0]) return;
       const user = await gql.whoAmI(selectedAddress[0]);
-      set((state) => ({ me: { ...state.me, ...user, type: "user" }, loginMethod: "metamask" }));
+      console.log("user position : ", user.currentPosition);
+      set((state) => ({
+        renderMe: { ...state.renderMe, position: user.currentPosition ?? [5000, 5000] },
+        map: { ...state.map, name: user.currentMap ?? "" },
+        me: { ...state.me, ...user, type: "user" },
+        loginMethod: "metamask",
+      }));
     }
   },
   connectKaikas: async () => {
@@ -206,14 +232,21 @@ export const useWorld = create<WorldState>((set, get) => ({
 
     if (account) {
       const user = await gql.whoAmI(account);
-      set((state) => ({ me: { ...state.me, ...user, type: "user" }, loginMethod: "kaikas" }));
       const tokenList = await gql.getUserTokenList(account, configuration.kaikas.address);
       let characters = await gql.characters({ tokenId: { $in: tokenList } }, 0, 0);
       if (!characters.length) {
         const tokenId = Math.floor(Math.random() * 1000);
         characters = await gql.characters({ tokenId: { $in: [tokenId, tokenId + 1] } }, 0, 3);
       }
-      set((state) => ({ characterList: characters }));
+      console.log("user position : ", user);
+
+      set((state) => ({
+        map: { ...state?.map, name: user.currentMap ?? "" },
+        renderMe: { ...state.renderMe, position: user.currentPosition ?? [5000, 5000] },
+        me: { ...state.me, ...user, type: "user" },
+        loginMethod: "kaikas",
+        characterList: characters,
+      }));
 
       // const option = {
       //   headers: [
