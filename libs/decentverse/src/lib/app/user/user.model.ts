@@ -21,11 +21,11 @@ export class Input {
   @Prop({ type: String, required: true })
   address: string;
 
-  @Prop([{ type: Number, required: false }])
-  currentPosition?: number[];
+  @Prop({ type: [Number], required: false, default: undefined })
+  currentPosition: number[];
 
   @Prop({ type: String, required: false })
-  currentMap?: string;
+  currentMap: string;
 }
 @Schema()
 export class User extends Input {
