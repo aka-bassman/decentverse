@@ -25,7 +25,6 @@ export const CallBox = ({ localStream, screenStream, socket, roomId }: CallBoxPr
       socket.emit("receive", { socketId: clientId, roomId, userId: user.id, nickName: user.nickname });
     });
     socket.on("receive", (clientId: string, init: types.InitForm) => {
-      console.log("receive");
       addPeer(clientId, true, init, localStream, screenStream);
     });
     return () => {

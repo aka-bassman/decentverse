@@ -49,6 +49,12 @@ export class UserService {
   }
 
   async whoAmI(address: string) {
+    const user =
+      (await this.User.findOne({ address: address.toLowerCase() })) ??
+      (await this.User.create({
+        address: address.toLowerCase(),
+      }));
+
     return (
       (await this.User.findOne({ address: address.toLowerCase() })) ??
       (await this.User.create({
@@ -66,7 +72,6 @@ export class UserService {
   }
 
   async updateUser(UserId: string, data: Partial<User.Raw>) {
-    console.log(data);
     return await this.User.pickAndWrite(UserId, data);
   }
 

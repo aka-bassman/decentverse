@@ -108,7 +108,10 @@ export const useWorld = create<WorldState>((set, get) => ({
   loginMethod: "none",
   saveBeforeExit: async (position: number[]) => {
     const { me, map } = get();
-    await gql.updateUser(me.id, { currentMap: map?.name ?? undefined, currentPosition: position });
+    await gql.updateUser(me.id, {
+      currentMap: map?.name ?? undefined,
+      currentPosition: position.length > 0 ? position : undefined,
+    });
   },
   openWebview: () => set({ isWebviewOpen: true }),
   closeWebview: () => set({ isWebviewOpen: false }),
@@ -152,10 +155,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       state: "idle",
       direction: "right",
     } as any;
-    console.log(renderMe.position);
-    console.log(newRenderMe);
     const render = { tiles: newMap?.tiles ?? maps[1].tiles, players: {} };
-    console.log(newMap);
     return set((state) => ({
       map: newMap ?? maps[1],
       renderMe: newRenderMe,
@@ -215,7 +215,6 @@ export const useWorld = create<WorldState>((set, get) => ({
       });
       if (!signAddress || !selectedAddress[0]) return;
       const user = await gql.whoAmI(selectedAddress[0]);
-      console.log("user position : ", user.currentPosition);
       set((state) => ({
         renderMe: { ...state.renderMe, position: user.currentPosition ?? [5000, 5000] },
         map: { ...state.map, name: user.currentMap ?? "" },
@@ -245,7 +244,6 @@ export const useWorld = create<WorldState>((set, get) => ({
         const tokenId = Math.floor(Math.random() * 1000);
         characters = await gql.characters({ tokenId: { $in: [tokenId, tokenId + 1] } }, 0, 3);
       }
-      console.log("user position : ", user);
 
       set((state) => ({
         map: { ...state?.map, name: user.currentMap ?? "" },
@@ -277,9 +275,7 @@ export const useWorld = create<WorldState>((set, get) => ({
       //   method: "personal_sign",
       //   params,
       // });
-      // console.log(window.klaytn);
       // const signedAddress = window.klaytn.sign("test", account);
-      // console.log(signedAddress);
       // if (!signAddress || !selectedAddress[0]) return;
       // const user = await gql.whoAmI(selectedAddress[0], message, signAddress);
       // set({ id: user.id, address: user.address, nickname: user.nickname, isGuest: false });
