@@ -18,14 +18,16 @@ export interface PlayerProp {
 
 export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: PlayerProp) => {
   const { camera, get, set } = useThree();
-
   const screen = useGame((state) => state.screen);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
+  const saveBeforeExit = useWorld((state) => state.saveBeforeExit);
   const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${me.id}`]);
   const body = useRef<Matter.Body>(
     Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
   );
+
+  const abc = async () => await saveBeforeExit(player.current.position);
   useEffect(() => {
     World.add(engine.current.world, body.current);
     engine.current.gravity.scale = 0;
@@ -33,6 +35,11 @@ export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: Pl
     const playerPosition = player.current.position;
     camera.position.setX(playerPosition[0]);
     camera.position.setY(playerPosition[1]);
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      abc();
+      return (ev.returnValue = "Are you sure you want to close?");
+    });
     return () => {
       World.remove(engine.current.world, body.current);
     };
@@ -62,6 +69,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: Pl
       direction,
       state: characterState,
     };
+
     sprite.current.position.x = body.current.position.x;
     sprite.current.position.y = body.current.position.y;
 

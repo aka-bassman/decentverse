@@ -66,6 +66,7 @@ export class UserService {
   }
 
   async updateUser(UserId: string, data: Partial<User.Raw>) {
+    console.log(data);
     return await this.User.pickAndWrite(UserId, data);
   }
 

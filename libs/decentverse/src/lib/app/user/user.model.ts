@@ -20,6 +20,12 @@ const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || "") || 10;
 export class Input {
   @Prop({ type: String, required: true })
   address: string;
+
+  @Prop([{ type: Number, required: false }])
+  currentPosition?: number[];
+
+  @Prop({ type: String, required: false })
+  currentMap?: string;
 }
 @Schema()
 export class User extends Input {

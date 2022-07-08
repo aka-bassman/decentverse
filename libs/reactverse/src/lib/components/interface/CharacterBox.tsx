@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useWorld, types } from "../../stores";
 type CharacterBoxProps = {
@@ -8,7 +8,10 @@ type CharacterBoxProps = {
 export const CharacterBox = ({ characters }: CharacterBoxProps) => {
   const [selectNumber, select] = useState<number>(0);
   const selectCharacter = useWorld((state) => state.selectCharacter);
-  selectCharacter(characters[selectNumber]);
+  useEffect(() => {
+    selectCharacter(characters[selectNumber]);
+  }, []);
+
   return (
     <>
       <Title>Select Your Character!</Title>
