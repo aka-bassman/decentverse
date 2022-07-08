@@ -3,11 +3,18 @@ import * as types from "../types";
 import * as gql from "../gql";
 import { ethers } from "ethers";
 import { isMobile } from "react-device-detect";
-
+import { MetaMaskInpageProvider } from "@metamask/providers";
 import { devtools } from "zustand/middleware";
 
 const METAMASK_NETWORK_MAINNET = "1";
 const METAMASK_NETWORK_ROPSTEN = "3";
+
+declare global {
+  interface Window {
+    ethereum?: MetaMaskInpageProvider;
+    klaytn?: any;
+  }
+}
 
 export interface WorldState {
   characterList: types.Character[];
