@@ -56,7 +56,7 @@ export const Game = ({ socket }: GameProps) => {
           />
           <TileMap player={player} scope={scope} />
           <Players playerId={user.id} />
-          {/* <Placements /> */}
+          <Placements />
           <Collisions engine={engine} />
           <Webviews engine={engine} interaction={interaction} player={player} keyboard={keyState} />
           <CallRooms socket={socket} engine={engine} interaction={interaction} player={player} />
