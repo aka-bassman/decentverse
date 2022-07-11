@@ -1,4 +1,4 @@
-import { Suspense, useRef, MutableRefObject, useEffect } from "react";
+import React, { Suspense, useRef, MutableRefObject, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useWorld, RenderCharacter, scalar, useGame, world, useGossip } from "../../stores";
 import { Sprite, SpriteMaterial, Renderer } from "three";
@@ -16,11 +16,11 @@ export interface PlayerProp {
   zoom: number;
 }
 
-export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: PlayerProp) => {
+export const Player = React.memo(({ sprite, animation, keyboard, player, engine, zoom }: PlayerProp) => {
   const { camera, get, set } = useThree();
-  const screen = useGame((state) => state.screen);
   const me = useWorld((state) => state.me);
   const renderMe = useWorld((state) => state.renderMe);
+
   const saveBeforeExit = useWorld((state) => state.saveBeforeExit);
   const [url] = useTexture([`${me.character.file.url.replace("https://asset.ayias.io", "ayias")}?id=${me.id}`]);
   const body = useRef<Matter.Body>(
@@ -125,7 +125,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: Pl
       </sprite>
     </Suspense>
   );
-};
+});
 const MyChat = () => {
   const myChat = useWorld((state) => state.myChat);
   const isTalk = useGossip((state) => state.callRoom.isTalk);

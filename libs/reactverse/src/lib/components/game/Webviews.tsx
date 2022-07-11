@@ -35,7 +35,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
       interaction.current.webview = null;
 
       leaveInteraction("webview");
-      // closeWebview();
+      closeWebview();
     } else {
       webviews?.map((webview) => {
         if (
