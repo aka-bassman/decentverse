@@ -34,7 +34,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
       console.log("webview leave interval");
       interaction.current.webview = null;
 
-      // leaveInteraction("webview");
+      leaveInteraction("webview");
       // closeWebview();
     } else {
       webviews?.map((webview) => {
@@ -45,7 +45,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
           player.current.position[1] > webview.bottomRight[1]
         ) {
           interaction.current.webview = webview;
-          // joinInteraction("webview", webview);
+          joinInteraction("webview", webview);
         }
       });
     }
