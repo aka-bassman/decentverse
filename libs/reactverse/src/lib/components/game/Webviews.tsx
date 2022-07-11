@@ -45,6 +45,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
           player.current.position[1] > webview.bottomRight[1]
         ) {
           interaction.current.webview = webview;
+          console.log("webview join interval");
           // joinInteraction("webview", webview);
         }
       });
