@@ -67,7 +67,6 @@ export const Webview = React.memo(({ webview }: WebviewProp) => {
   const openWebview = useWorld((state) => state.openWebview);
   const isOpen = useWorld((state) => state.isWebviewOpen);
   const keyboardInteraction = useGame((state) => state.keyboard.interaction);
-  console.log("webview render");
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,
