@@ -12,6 +12,10 @@ import * as gql from "../gql";
 
 @InputType()
 export class MapInput {
+  // @Prop({ type: String, enum: ["map", "scene"], required: true, unique: true })
+  @Field(() => String)
+  type: "map" | "scene";
+
   @Field(() => String)
   name: string;
 

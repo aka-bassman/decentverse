@@ -220,6 +220,7 @@ input MapInput {
   placements: [PlacementInput!]
   tileSize: Int
   tiles: [[TileInput!]!]
+  type: String!
   webviews: [WebviewInput!]!
 }
 

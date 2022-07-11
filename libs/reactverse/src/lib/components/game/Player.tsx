@@ -26,7 +26,7 @@ export const Player = ({ sprite, animation, keyboard, player, engine, zoom }: Pl
   const body = useRef<Matter.Body>(
     Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
   );
-
+  console.log("player render");
   const abc = async () => await saveBeforeExit(player.current.position);
   useEffect(() => {
     World.add(engine.current.world, body.current);

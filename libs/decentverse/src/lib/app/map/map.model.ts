@@ -16,14 +16,15 @@ import * as gql from "../gql";
 
 @Schema()
 export class Input {
+  @Prop({ type: String, enum: ["map", "scene"], required: true, unique: true })
+  type: string;
+
   @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: Number, required: true, default: 2000 })
   tileSize: number;
-}
-@Schema(dbConfig.defaultSchemaOptions)
-export class Map extends Input {
+
   @Prop([[{ type: gql.TileSchema }]])
   tiles: gql.TileType[][];
 
@@ -38,7 +39,9 @@ export class Map extends Input {
 
   @Prop([{ type: gql.CallRoomSchema }])
   callRooms: gql.CallRoomType[];
-
+}
+@Schema(dbConfig.defaultSchemaOptions)
+export class Map extends Input {
   @Prop({ type: Number, required: true, default: 0 })
   totalWidth: number;
 
