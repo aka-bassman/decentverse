@@ -42,6 +42,7 @@ export const Game = ({ socket }: GameProps) => {
   const keyState = useRef(scalar.keyboard);
   const lockState = useRef(false);
   const zoom = isMobile ? 0.3 : 0.5;
+  console.log("game render");
   return (
     <GameContainer>
       <Canvas orthographic camera={{ zoom: zoom }} frameloop="always">
