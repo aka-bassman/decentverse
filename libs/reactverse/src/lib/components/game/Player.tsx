@@ -26,7 +26,7 @@ export const Player = React.memo(({ sprite, animation, keyboard, player, engine,
   const body = useRef<Matter.Body>(
     Bodies.rectangle(renderMe.position[0], renderMe.position[1], me.character.size[0], me.character.size[1])
   );
-  console.log("player render");
+  console.log("player render", me, renderMe);
   const abc = async () => await saveBeforeExit(player.current.position);
   useEffect(() => {
     World.add(engine.current.world, body.current);
