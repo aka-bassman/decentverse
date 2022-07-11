@@ -34,7 +34,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
       console.log("webview leave interval");
       interaction.current.webview = null;
 
-      // leaveInteraction("webview");
+      leaveInteraction("webview");
       closeWebview();
     } else {
       webviews?.map((webview) => {
@@ -45,8 +45,7 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
           player.current.position[1] > webview.bottomRight[1]
         ) {
           interaction.current.webview = webview;
-          console.log("webview join interval");
-          // joinInteraction("webview", webview);
+          joinInteraction("webview", webview);
         }
       });
     }
@@ -64,8 +63,8 @@ export interface WebviewProp {
   webview: scalar.Webview;
   interaction: MutableRefObject<types.InteractionState>;
 }
-export const Webview = React.memo(({ webview, interaction }: WebviewProp) => {
-  // const interaction = useWorld((state) => state.interaction);
+export const Webview = React.memo(({ webview }: WebviewProp) => {
+  const interaction = useWorld((state) => state.interaction);
   const openWebview = useWorld((state) => state.openWebview);
   const isOpen = useWorld((state) => state.isWebviewOpen);
   const keyboardInteraction = useGame((state) => state.keyboard.interaction);
@@ -76,7 +75,7 @@ export const Webview = React.memo(({ webview, interaction }: WebviewProp) => {
   );
 
   useInterval(() => {
-    if (keyboardInteraction && interaction.current.webview) openWebview();
+    if (keyboardInteraction && interaction.webview) openWebview();
   }, 100);
   const [width, height] = [webview.topLeft[0] - webview.bottomRight[0], webview.bottomRight[1] - webview.topLeft[1]];
 
@@ -85,7 +84,7 @@ export const Webview = React.memo(({ webview, interaction }: WebviewProp) => {
       <mesh position={position}>
         {/* <planeGeometry args={[width, height]} />
         <meshBasicMaterial color={0xff0000} transparent /> */}
-        {interaction && interaction.current.webview?.url === webview.url && !isOpen && (
+        {interaction && interaction.webview?.url === webview.url && !isOpen && (
           <>
             {isMobile ? (
               <Html
