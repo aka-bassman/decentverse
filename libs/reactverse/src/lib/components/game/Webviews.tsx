@@ -33,7 +33,6 @@ export const Webviews = ({ engine, interaction, player, keyboard }: WebviewsProp
       if (interaction.current.webview === null) return;
       console.log("webview leave interval");
       interaction.current.webview = null;
-
       leaveInteraction("webview");
       closeWebview();
     } else {
@@ -65,9 +64,9 @@ export interface WebviewProp {
 }
 export const Webview = React.memo(({ webview }: WebviewProp) => {
   const interaction = useWorld((state) => state.interaction);
-  const openWebview = useWorld((state) => state.openWebview);
   const isOpen = useWorld((state) => state.isWebviewOpen);
   const keyboardInteraction = useGame((state) => state.keyboard.interaction);
+  const openWebview = useWorld((state) => state.openWebview);
   const position = new Vector3(
     (webview.bottomRight[0] + webview.topLeft[0]) / 2,
     (webview.bottomRight[1] + webview.topLeft[1]) / 2,
